@@ -1,4 +1,8 @@
+inspired by https://tonedear.com/
+
 Earking out = ear | working out;
+
+Brief description:
 
 Just pet app to train perfect pitch. there're billions of similar apps, but this one is the best in my honest opinion, because i can modify it on my own and do whatever i want.
 I also develop it in learning purposes - Java(and FX), DDD, TDD, PSQL
@@ -14,3 +18,10 @@ Ubiquitous langauge:
 
 
 P.S. points 2 and 3 are made-up-by-me terms actually, cuz dunno how to correctly name these actions/phenomena - there're no any definitions for them in natural english language (neither in russian though). so they are kind of not obvious without definition.
+
+domains/subdomain:
+1. Training ear for music
+   a) ear training via exercises
+   b) statistics dashboard
+
+P.S. yep, the sole domain cuz i ain't gonna difficulty (the ending is pronounced like in simplify) things with separating it in two different domains (the training itself and statistics)
