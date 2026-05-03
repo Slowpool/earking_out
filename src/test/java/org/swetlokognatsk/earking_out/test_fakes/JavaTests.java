@@ -2,6 +2,11 @@ package org.swetlokognatsk.earking_out.test_fakes;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.function.Function;
+
 import org.junit.*;
 
 public class JavaTests {
@@ -94,8 +99,37 @@ public class JavaTests {
     }
 
     @Test
-    public void waitWhat() {
+    public void recordsInheritingTest() {
         assertTrue(java.lang.Record.class.isAssignableFrom(Rectangle.class));
         assertFalse(java.lang.Record.class.isAssignableFrom(Foo.class));
     }
+
+    @Test
+    public void instanceInitializer() {
+        var obj = new InstanceInitializer();
+        assertEquals(obj.value, 1);
+    }
+
+    @Test
+    public void rawTypeTest() {
+        var rawType = new SomeGenericClass();
+        var variable = rawType.variable;
+    }
+
+    void toCommandHandler(Executor executor) {
+        var _this = this;
+        // Function test = () -> executor.supplyAsync(() -> _this.doSomething());
+    }
+
+    @Test
+    public void javaTypeHole() {
+        var ring = new Ring() {};
+        try {
+            var bring = (Bring)ring;
+            fail();
+        }
+        catch (ClassCastException e) {
+        }
+    }
 }
+
