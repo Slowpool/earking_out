@@ -10,4 +10,8 @@ public record NoteWithAccidental(NoteNames noteName, Accidentals accidental, Oct
     public byte normalize() {
         return 0;
     }
+
+    public NoteWithAccidental withOctave(Octaves octave) {
+        return new NoteWithAccidental(noteName, accidental, octave);
+    }
 }
