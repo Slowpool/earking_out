@@ -1,0 +1,8 @@
+services:
+  mongodb:
+    container_name: mongo
+    image: mongo:8.0.21
+    restart: on-failure
+    env_file: env/mongo/.env
+    ports:
+      - "27017:27017"
