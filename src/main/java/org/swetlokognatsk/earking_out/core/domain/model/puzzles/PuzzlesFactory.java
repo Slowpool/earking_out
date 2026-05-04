@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.
 
 public final class PuzzlesFactory {
     public static Puzzle create(Exercise exercise, UserRestrictions restrictions) {
-        var puzzle = new PerfectPitchPuzzle();
+        var puzzle = new PerfectPitchPuzzle(exercise, restrictions);
         return (Puzzle) puzzle;
     }
 }

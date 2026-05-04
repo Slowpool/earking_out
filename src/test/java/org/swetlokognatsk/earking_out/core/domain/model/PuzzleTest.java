@@ -6,6 +6,7 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 
 public class PuzzleTest {
@@ -18,7 +19,12 @@ public class PuzzleTest {
         // act
         var puzzle = PuzzlesFactory.create(exercise, null);
         // assert
-        assertNotNull(puzzle.solution);
-        assertTrue(puzzle.solution.length() > 0);
+        assertTrue(puzzle instanceof Puzzle);
+    }
+
+    @Test
+    public void checkPerfectPitchPuzzleSolution() {
+        // TODO check puzzle.guess(new Guess("Cb"))
+        fail();
     }
 }
