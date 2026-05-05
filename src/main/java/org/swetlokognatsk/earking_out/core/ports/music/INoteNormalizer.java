@@ -10,8 +10,8 @@ public interface INoteNormalizer {
      * 2. To keep key numbers in "canonical" way. @see https://en.wikipedia.org/wiki/Piano_key_frequencies ctrl+f `Piano key number`
      * 
     */
-    public static final int SHIFT = 3;
-    
+    public static final byte SHIFT = 3;
+
     byte normalize(NoteWithAccidental noteWithAccidental);
     /**
      * Normalizes the note, ignoring the octave of note - instead, it takes Octave.FIRST as octave always.

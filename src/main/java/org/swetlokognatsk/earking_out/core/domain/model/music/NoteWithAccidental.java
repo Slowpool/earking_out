@@ -14,4 +14,8 @@ public record NoteWithAccidental(NoteNames noteName, Accidentals accidental, Oct
     public NoteWithAccidental withOctave(Octaves octave) {
         return new NoteWithAccidental(noteName, accidental, octave);
     }
+
+    public NoteWithAccidental withAccidental(Accidentals accidental) {
+        return new NoteWithAccidental(noteName, accidental, octave);
+    }
 }

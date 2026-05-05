@@ -49,7 +49,8 @@ public class NoteWithAccidentalTest {
         for (int i = 0; i < notesWithAccidental.length; i++) {
             var normalizedValue = noteNormalizer.normalizeInOctave(notesWithAccidental[i]);
             // normalizedValues are defined for FIRST octave, whereas this test checks for octave-scoped value
-            expected = (byte) (normalizedValues[i] - INoteNormalizer.SHIFT);
+            expected = normalizedValues[i];
+            expected -= INoteNormalizer.SHIFT;
             assertEquals(expected, normalizedValue);
         }
     }
@@ -59,23 +60,51 @@ public class NoteWithAccidentalTest {
     public void normalizingFirstAndSecondOctave() {
         var octaves = new Octaves[] { Octaves.FIRST, Octaves.SECOND };
         var octaveShifts = new byte[] { 0, 12 };
-
-        NoteWithAccidental noteWithAccidental;
-        byte normalizedValue;
-        byte correctNormalizedValue;
         for (int octave = 0; octave < octaves.length; octave++) {
-            for (int i = 0; i < notesWithAccidental.length; i++) {
-                noteWithAccidental = notesWithAccidental[i].withOctave(octaves[octave]);
-                normalizedValue = noteNormalizer.normalize(noteWithAccidental);
-                correctNormalizedValue = (byte)(normalizedValues[i] + octaveShifts[octave]);
-                assertEquals(correctNormalizedValue, normalizedValue);
-            }
+            checkOctaveNormalizing(octaves[octave], octaveShifts[octave], null, (byte) 0);
         }
     }
 
     @Test
     public void normalizingWithAccidentals() {
+        var accidentals = new Accidentals[] { Accidentals.SHARP, Accidentals.FLAT, Accidentals.NATURAL };
+        // TODO pretty sure more elegant way exists
+        var accidentalShifts = new byte[] { 1, -1, 0 };
 
+        for (int accidentalNumber = 0; accidentalNumber < accidentals.length; accidentalNumber++) {
+            checkOctaveNormalizing(null, (byte) 0, accidentals[accidentalNumber], accidentalShifts[accidentalNumber]);
+        }
+    }
+
+    private void checkOctaveNormalizing(Octaves octave, byte octaveShift, Accidentals accidental, byte accidentalShift) {
+        NoteWithAccidental noteWithAccidental;
+        byte correctNormalizedValue;
+        for (int i = 0; i < notesWithAccidental.length; i++) {
+            noteWithAccidental = applyOctaveAndAccidentals(notesWithAccidental[i], octave, accidental);
+            correctNormalizedValue = adjustCorrectNoteValue(normalizedValues[i], octaveShift, accidentalShift);
+            checkNoteNormalizing(noteWithAccidental, correctNormalizedValue);
+        }
+    }
+
+    private NoteWithAccidental applyOctaveAndAccidentals(NoteWithAccidental noteWithAccidental, Octaves octave, Accidentals accidental) {
+        if (octave != null) {
+            noteWithAccidental = noteWithAccidental.withOctave(octave);
+        }
+        if (accidental != null) {
+            noteWithAccidental = noteWithAccidental.withAccidental(accidental);
+        }
+        return noteWithAccidental;
+    }
+       
+    private byte adjustCorrectNoteValue(byte correctNormalizedValue, byte octaveShift, byte accidentalShift) {
+        correctNormalizedValue += octaveShift;
+        correctNormalizedValue += accidentalShift;
+        return correctNormalizedValue;
+    }
+
+    private void checkNoteNormalizing(NoteWithAccidental noteWithAccidental, byte correctNormalizedValue) {
+        var normalizedValue = noteNormalizer.normalize(noteWithAccidental);
+        assertEquals(correctNormalizedValue, normalizedValue);
     }
 
     @Test
