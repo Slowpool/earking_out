@@ -2,19 +2,20 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.UserRestrictions;
+import org.swetlokognatsk.earking_out.core.domain.model.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.IPuzzleGenerator;
 
 public abstract class Puzzle {
-    final Solution solution;
+    protected final Solution solution;
     public final Exercise exercise;
-    public final UserRestrictions restrictions;
+    public final PuzzleConfig config;
 
-    public Puzzle(Exercise exercise, UserRestrictions restrictions, IPuzzleGenerator puzzleGenerator) {
+    public Puzzle(Exercise exercise, PuzzleConfig config, IPuzzleGenerator puzzleGenerator) {
         this.exercise = exercise;
-        this.restrictions = restrictions;
+        this.config = config;
         this.solution = puzzleGenerator.generateSolution();
+        // this.hint = attachHint();
     }
 
     public boolean guess(Guess guess) {

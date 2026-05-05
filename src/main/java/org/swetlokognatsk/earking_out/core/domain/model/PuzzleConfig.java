@@ -1,5 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.model;
 
-public abstract class UserRestrictions {
+public abstract class PuzzleConfig {
 
 }
