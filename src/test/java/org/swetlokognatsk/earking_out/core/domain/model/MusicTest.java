@@ -15,7 +15,7 @@ public class MusicTest {
         var noteWithAccidental = new NoteWithAccidental(NoteNames.C, Accidentals.SHARP, Octaves.FIRST);
         // TODO mark somewhere skipping 
         int shift = 3;
-        int selectedNote = 0;
+        int selectedNote = 1;
         int octave = 1;
         // adds one semitone
         int sharp = 1;

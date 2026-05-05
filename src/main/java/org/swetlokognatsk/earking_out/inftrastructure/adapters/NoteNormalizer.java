@@ -10,7 +10,7 @@ import org.swetlokognatsk.earking_out.core.ports.music.INoteNormalizer;
 public class NoteNormalizer implements INoteNormalizer {
 
     public byte normalize(NoteWithAccidental noteWithAccidental) {
-        byte value = SHIFT; // 3 skipped notes on the left
+        byte value = SHIFT;
         value += getOctavesShift(noteWithAccidental.octave());
         value += normalizeInOctave(noteWithAccidental);
         return value;
@@ -41,6 +41,7 @@ public class NoteNormalizer implements INoteNormalizer {
         }
     }
 
+    // TODO does better way exist?
     private static byte normalizeNoteName(NoteNames noteName) {
         return switch (noteName) {
             case NoteNames.C -> 1;
