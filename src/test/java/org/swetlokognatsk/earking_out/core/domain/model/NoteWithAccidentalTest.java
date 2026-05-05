@@ -10,15 +10,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.music.INoteNormalizer;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizer;
 
 public class NoteWithAccidentalTest {
-    static NoteWithAccidental[] notesWithAccidental;
-    static byte[] normalizedValues;
-    static INoteNormalizer noteNormalizer;
+    public static NoteWithAccidental[] notesWithAccidental;
+    public static byte[] normalizedValues;
 
-    @BeforeClass
-    public static void setup() {
+    static {
         // TODO fix auto-formatting
         notesWithAccidental = new NoteWithAccidental[] { new NoteWithAccidental(NoteNames.C, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.E, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.F, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.G, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.A, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.B, null, Octaves.FIRST) };
 
@@ -30,29 +27,6 @@ public class NoteWithAccidentalTest {
                 13, // A1
                 15 // B1
         };
-        noteNormalizer = getNoteNormalizer();
-    }
-
-    static INoteNormalizer getNoteNormalizer() {
-        return DI.get(INoteNormalizer.class);
-    }
-
-    @Test
-    public void gettingNoteNormalizer() {
-        assertNotNull(getNoteNormalizer());
-        assertTrue(noteNormalizer instanceof INoteNormalizer);
-    }
-
-    @Test
-    public void normalizingInOctave() {
-        byte expected;
-        for (int i = 0; i < notesWithAccidental.length; i++) {
-            var normalizedValue = noteNormalizer.normalizeInOctave(notesWithAccidental[i]);
-            // normalizedValues are defined for FIRST octave, whereas this test checks for octave-scoped value
-            expected = normalizedValues[i];
-            expected -= INoteNormalizer.SHIFT;
-            assertEquals(expected, normalizedValue);
-        }
     }
 
     // TODO checks normalizing for first and second octave. i feel mathematically that's sufficient (induction), but proofs are welcomed
@@ -103,31 +77,12 @@ public class NoteWithAccidentalTest {
     }
 
     private void checkNoteNormalizing(NoteWithAccidental noteWithAccidental, byte correctNormalizedValue) {
-        var normalizedValue = noteNormalizer.normalize(noteWithAccidental);
+        var normalizedValue = noteWithAccidental.normalize();
         assertEquals(correctNormalizedValue, normalizedValue);
     }
 
     @Test
     public void normalizingWithAccidentalsOverOctaves() {
 
-    }
-
-    // TODO implementation tests further. isn't it awkward?
-    @Test
-    public void gettingAccidentalShiftSharp() {
-        var accidentalShift = NoteNormalizer.getAccidentalShift(Accidentals.SHARP);
-        assertEquals(1, accidentalShift);
-    }
-
-    @Test
-    public void gettingAccidentalShiftNatural() {
-        var accidentalShift = NoteNormalizer.getAccidentalShift(Accidentals.NATURAL);
-        assertEquals(0, accidentalShift);
-    }
-
-    @Test
-    public void gettingAccidentalShiftFlat() {
-        var accidentalShift = NoteNormalizer.getAccidentalShift(Accidentals.FLAT);
-        assertEquals(-1, accidentalShift);
     }
 }
