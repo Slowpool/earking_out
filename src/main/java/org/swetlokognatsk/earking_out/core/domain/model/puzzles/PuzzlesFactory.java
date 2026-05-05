@@ -9,11 +9,17 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.IPuzzleGenerator;
 
 // TODO all factories need refactoring
 public final class PuzzlesFactory {
-    public static Puzzle create(Exercise exercise, PuzzleConfig puzzleConfig) {
-        Puzzle puzzle = null;
+    public static <T extends Puzzle<?, ?, ?>, PC extends PuzzleConfig> T create(Exercise exercise, PC puzzleConfig) {
+        T puzzle;
         if (exercise.name == ExerciseNames.PERFECT_PITCH) {
-            puzzle = new PerfectPitchPuzzle(exercise, puzzleConfig, DI.get(IPuzzleGenerator.class));
+            var puzzleGenerator = DI.get(IPuzzleGenerator.class);
+            // TODO how to put away this yellow warning
+            puzzle = (T)new PerfectPitchPuzzle(exercise, puzzleConfig, puzzleGenerator);
+        }
+        else {
+            throw new RuntimeException("unknown exercise");
         }
         return puzzle;
+        
     }
 }

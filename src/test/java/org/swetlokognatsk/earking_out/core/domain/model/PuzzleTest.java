@@ -9,13 +9,13 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFacto
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IHintMapper;
+import org.swetlokognatsk.earking_out.core.ports.hints.IHintMapper;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.FakePuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 
 public class PuzzleTest {
 
-    private Puzzle createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType) {
+    private <T extends Puzzle<?, ?, ?>> T createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType) {
         var exercise = ExercisesFactory.create(exerciseName, exerciseType);
         assertNotNull(exercise);
         return PuzzlesFactory.create(exercise, null);
@@ -29,7 +29,7 @@ public class PuzzleTest {
     }
 
     @Test
-    public void perfectPitchPositivePuzzleGuess() {
+    public void perfectPitchCorrectPuzzleGuess() {
         var solution = "4";
         FakePuzzleGenerator.fakeSolution = solution;
         var puzzle = createPuzzle(ExerciseNames.PERFECT_PITCH, ExerciseTypes.AUDIO);
@@ -55,7 +55,7 @@ public class PuzzleTest {
         var hint = puzzle.getHint();
 
         var hintMapper = DI.get(IHintMapper.class);
-        var correctFileName = hintMapper.map(puzzle).getFileName();
-        assertEquals(correctFileName, hint.getFileName());
+        var correctHintName = hintMapper.map(puzzle).getName();
+        assertEquals(correctHintName, hint.getName());
     }
 }

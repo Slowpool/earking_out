@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IHintMapper;
+import org.swetlokognatsk.earking_out.core.ports.hints.IHintMapper;
 import org.swetlokognatsk.earking_out.core.ports.music.INoteNormalizer;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.IPuzzleGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizer;
