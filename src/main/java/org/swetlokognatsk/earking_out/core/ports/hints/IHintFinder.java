@@ -4,6 +4,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 
 public interface IHintFinder {
-    // TODO using `Puzzle<?, ?, ?>` everywhere is awkward, isn't it?
+    // TODO consider using generic inside every IHintFinder for `Puzzle<?, ?, ?>` wherever possible
     <T extends Hint> T find(Puzzle<?, ?, ?> puzzle);
 }

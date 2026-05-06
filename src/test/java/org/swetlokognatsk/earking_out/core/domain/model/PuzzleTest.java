@@ -14,12 +14,12 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.FakePuzzl
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 
 public class PuzzleTest {
-    public static <T extends Puzzle<?, ?, ?>> T createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType, String fakeSolution) {
+    public static Puzzle<?, ?, ?> createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType, String fakeSolution) {
         FakePuzzleGenerator.fakeSolution = fakeSolution;
         return createPuzzle(exerciseName, exerciseType);
     }
 
-    public static <T extends Puzzle<?, ?, ?>> T createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType) {
+    public static Puzzle<?, ?, ?> createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType) {
         var exercise = ExercisesFactory.create(exerciseName, exerciseType);
         assertNotNull(exercise);
         return PuzzlesFactory.create(exercise, null);

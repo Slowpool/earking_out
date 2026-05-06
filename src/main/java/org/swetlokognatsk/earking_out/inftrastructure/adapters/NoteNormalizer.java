@@ -19,72 +19,48 @@ public class NoteNormalizer implements INoteNormalizer {
     public byte normalizeInOctave(NoteWithAccidental noteWithAccidental) {
         byte octaveScopedNoteValue = normalizeNoteName(noteWithAccidental.noteName());
         byte accidentalShift = getAccidentalShift(noteWithAccidental.accidental());
-        return (byte)(octaveScopedNoteValue + accidentalShift);
+        return (byte) (octaveScopedNoteValue + accidentalShift);
     }
 
     public static byte getAccidentalShift(Accidentals accidental) {
-        // TODO how to switch (enum) in java
-        // return switch(accidental.name()) {
-        //     case Accidentals.SHARP.name() -> 1;
-        // };
-        if (accidental == Accidentals.SHARP) {
-            return 1;
-        }
-        else if (accidental == Accidentals.NATURAL || accidental == null) {
-            return 0;
-        }
-        else if (accidental == Accidentals.FLAT) {
-            return -1;
-        }
-        else {
-            throw new RuntimeException("unkown accidental value " + accidental.name());
-        }
+        return switch (accidental) {
+        case SHARP -> 1;
+        case NATURAL -> 0;
+        case null -> 0;
+        case FLAT -> -1;
+        };
     }
 
     // TODO does better way exist?
     private static byte normalizeNoteName(NoteNames noteName) {
         return switch (noteName) {
-            case NoteNames.C -> 1;
-            case NoteNames.D -> 3;
-            case NoteNames.E -> 5;
-            case NoteNames.F -> 6;
-            case NoteNames.G -> 8;
-            case NoteNames.A -> 10;
-            case NoteNames.B -> 12;
+        case C -> 1;
+        case D -> 3;
+        case E -> 5;
+        case F -> 6;
+        case G -> 8;
+        case A -> 10;
+        case B -> 12;
         };
     }
 
     private static byte getOctavesShift(Octaves octave) {
         int octaveNumber = getOctaveNumber(octave);
-        return (byte)((octaveNumber - 1) * Invariants.OCTAVE_SIZE);
+        return (byte) ((octaveNumber - 1) * Invariants.OCTAVE_SIZE);
     }
 
+    // TODO encapsulate it into Octaves somehow?
     private static int getOctaveNumber(Octaves octave) {
-        // TODO made in a hurry, refactoring
-        if (octave == Octaves.FIRST) {
-            return 1;
-        }
-        if (octave == Octaves.SECOND) {
-            return 2;
-        }
-        if (octave == Octaves.THIRD) {
-            return 3;
-        }
-        if (octave == Octaves.FOURTH) {
-            return 4;
-        }
-        if (octave == Octaves.FIFTH) {
-            return 5;
-        }
-        if (octave == Octaves.SIXTH) {
-            return 6;
-        }
-        if (octave == Octaves.SEVENTH) {
-            return 7;
-        }
-        if (octave == Octaves.EIGHTH) {
-            return 8;
-        }
-        throw new RuntimeException("unknown octave");
+        return switch (octave) {
+        case FIRST -> 1;
+        case SECOND -> 2;
+        case THIRD -> 3;
+        case FOURTH -> 4;
+        case FIFTH -> 5;
+        case SIXTH -> 6;
+        case SEVENTH -> 7;
+        case EIGHTH -> 8;
+        default -> throw new RuntimeException("unknown octave");
+        };
     }
 }

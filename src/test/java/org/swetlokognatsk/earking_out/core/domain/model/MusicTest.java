@@ -13,13 +13,14 @@ public class MusicTest {
     @Test
     public void createNoteWithAccidental() {
         var noteWithAccidental = new NoteWithAccidental(NoteNames.C, Accidentals.SHARP, Octaves.FIRST);
-        // TODO mark somewhere skipping 
+
         int shift = 3;
         int selectedNote = 1;
-        int octave = 1;
-        // adds one semitone
         int sharp = 1;
+        int octave = 1;
+        byte correctNormalizedValue = (byte)(shift + selectedNote + 12 * (octave - 1) + sharp);
+        assertEquals(correctNormalizedValue, 5);
 
-        assertEquals(noteWithAccidental.normalize(), shift + selectedNote + 12 * (octave - 1) + sharp);
+        assertEquals(noteWithAccidental.normalize(), correctNormalizedValue);
     }
 }
