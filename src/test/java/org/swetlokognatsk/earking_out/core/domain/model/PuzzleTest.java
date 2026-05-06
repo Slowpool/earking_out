@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFacto
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.IHintMapper;
+import org.swetlokognatsk.earking_out.core.ports.hints.IHintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.FakePuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 
@@ -52,10 +52,10 @@ public class PuzzleTest {
         FakePuzzleGenerator.fakeSolution = fakeSolution;
 
         var puzzle = createPuzzle(ExerciseNames.PERFECT_PITCH, ExerciseTypes.AUDIO);
-        var hint = puzzle.getHint();
+        var hint = puzzle.hint;
 
-        var hintMapper = DI.get(IHintMapper.class);
-        var correctHintName = hintMapper.map(puzzle).getName();
-        assertEquals(correctHintName, hint.getName());
+        var hintFinder = DI.get(IHintFinder.class);
+        var correctHint = hintFinder.find(puzzle).getValue();
+        assertEquals(correctHint, hint.getValue());
     }
 }
