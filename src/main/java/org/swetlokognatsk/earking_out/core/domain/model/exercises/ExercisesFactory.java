@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.
 
 public final class ExercisesFactory {
     public static Exercise create(ExerciseNames name, ExerciseTypes exerciseType) {
-        if (name == ExerciseNames.PERFECT_PITCH && exerciseType == ExerciseTypes.AUDIO) {
+        if (name == ExerciseNames.PERFECT_PITCH) {
             return new PerfectPitchExercise(name, exerciseType);
         }
         throw new RuntimeException("unknown exercise");
