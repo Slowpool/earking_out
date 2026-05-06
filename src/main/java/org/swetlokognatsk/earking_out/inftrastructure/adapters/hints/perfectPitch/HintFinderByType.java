@@ -22,7 +22,7 @@ public abstract class HintFinderByType implements IHintFinder {
 
     protected abstract Class<? extends IFiniteHintFinder> getAudioHintFinderClass();
 
-    public <T extends Hint> T find(Puzzle<?, ?, ?> puzzle) {
+    public Hint find(Puzzle<?, ?, ?> puzzle) {
         return switch (puzzle.exercise.type) {
         case VISUAL -> findVisualHint(puzzle);
         case AUDIO -> findAudioHint(puzzle);
@@ -30,11 +30,11 @@ public abstract class HintFinderByType implements IHintFinder {
         };
     }
 
-    private <T extends Hint> T findVisualHint(Puzzle<?, ?, ?> puzzle) {
+    private Hint findVisualHint(Puzzle<?, ?, ?> puzzle) {
         return visualHintFinder.find(puzzle.solution);
     }
 
-    private <T extends Hint> T findAudioHint(Puzzle<?, ?, ?> puzzle) {
+    private Hint findAudioHint(Puzzle<?, ?, ?> puzzle) {
         return audioHintFinder.find(puzzle.solution);
     }
 }

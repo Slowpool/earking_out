@@ -19,10 +19,11 @@ public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig, H exte
         this.exercise = exercise;
         this.config = config;
         this.solution = puzzleGenerator.generateSolution();
-        this.hint = findHint();
+        // TODO it should be guaranted by underlying IHintFinder.find(this), then supress warning
+        this.hint = (H)findHint();
     }
 
-    private H findHint() {
+    private Hint findHint() {
         var hintFinder = DI.get(IHintFinder.class);
         return hintFinder.find(this);
     }

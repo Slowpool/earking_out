@@ -5,5 +5,5 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 
 public interface IHintFinder {
     // TODO consider using generic inside every IHintFinder for `Puzzle<?, ?, ?>` wherever possible
-    <T extends Hint> T find(Puzzle<?, ?, ?> puzzle);
+    Hint find(Puzzle<?, ?, ?> puzzle);
 }

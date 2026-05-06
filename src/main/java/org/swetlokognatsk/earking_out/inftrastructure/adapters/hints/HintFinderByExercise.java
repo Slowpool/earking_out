@@ -8,13 +8,12 @@ import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IPerfectPitc
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.puzzles.PerfectPitchPuzzle;
 
 public class HintFinderByExercise implements IHintFinder {
-    public <T extends Hint> T find(Puzzle<?, ?, ?> puzzle) {
+    public Hint find(Puzzle<?, ?, ?> puzzle) {
         var specificHintFinder = findSpecificHintFinder(puzzle);
         return specificHintFinder.find(puzzle);
     }
 
     private IHintFinder findSpecificHintFinder(Puzzle<?, ?, ?> puzzle) {
-        // TODO this way or by exercise?
         var specificHintFinder = switch (puzzle) {
         case PerfectPitchPuzzle perfectPitchPuzzle -> IPerfectPitchHintFinder.class;
         default -> throw new RuntimeException("unknown puzzle on looking for specificHintFinder");
