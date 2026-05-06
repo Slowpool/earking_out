@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
-
 import org.junit.*;
 
 public class JavaTests {
@@ -92,8 +91,7 @@ public class JavaTests {
         try {
             var rectangle = new Rectangle(-1, 1);
             fail();
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             assertEquals("width cannot be negative", e.getMessage());
         }
     }
@@ -123,13 +121,134 @@ public class JavaTests {
 
     @Test
     public void javaTypeHole() {
-        var ring = new Ring() {};
+        var ring = new Ring() {
+        };
         try {
-            var bring = (Bring)ring;
+            var bring = (Bring) ring;
             fail();
-        }
-        catch (ClassCastException e) {
+        } catch (ClassCastException e) {
         }
     }
-}
 
+    @Test
+    public void switchTest1() {
+        var day = Day.Mon;
+        boolean value = doSwitch(day);
+        assertTrue(value);
+    }
+
+    @Test
+    public void switchTest2() {
+        var day = Day.Thu;
+        boolean value = doSwitch(day);
+        assertFalse(value);
+    }
+
+    @Test
+    public void switchTest3() {
+        var day = Day.Sun;
+        try {
+            doSwitch(day);
+            fail();
+        } catch (RuntimeException e) {
+        }
+
+    }
+
+    private boolean doSwitch(Day day) {
+        return switch (day) {
+        case Mon, Tue -> true;
+        case Sun -> throw new RuntimeException();
+        default -> false;
+        };
+    }
+
+    @Test
+    public void switchTest4() {
+        int number1;
+        var day = Day.Mon;
+        var result = switch (day) {
+        case Mon, Tue -> number1 = 1;
+        case Sun -> throw new RuntimeException();
+        default -> number1 = 2;
+        };
+        assertEquals(result, number1);
+
+        int number2;
+        switch (day) {
+        case Mon, Tue -> number2 = 1;
+        case Sun -> throw new RuntimeException();
+        default -> number2 = 2;
+        }
+        assertEquals(number1, number2);
+        assertEquals(1, number1);
+        assertEquals(1, number2);
+    }
+
+    @Test
+    public void switchTest5() {
+        int number1;
+        Day day = null;
+        var result = switch (day) {
+        case Mon, Tue, Wed, Thu, Fri, Sat, Sun -> 1;
+        case null -> 2;
+        default -> 3;
+        };
+        assertEquals(result, 2);
+    }
+
+    @Test
+    public void returningPolymorphObjectViaGeneric() {
+        var result = polymorphing();
+    }
+
+    private BaseClass polymorphing() {
+        return new DerivedClass();
+    }
+
+    @Test
+    public void oneMoreGenericsQuestion1() {
+        var genericString1 = gettingTheValue1(new MyGenericString());
+        assertEquals(MyGenericString.class.getName(), genericString1);
+
+        var genericString2 = gettingTheValue2(new MyGenericString());
+        assertEquals(MyGenericString.class.getName(), genericString2);
+
+        var generic1 = gettingTheValue1(new MyGeneric<String>());
+        assertEquals(MyGeneric.class.getName(), generic1);
+
+        var generic2 = gettingTheValue2(new MyGeneric<String>());
+        assertEquals(MyGeneric.class.getName(), generic2);
+    }
+
+    private String gettingTheValue1(MyGeneric<?> someClass) {
+        return someClass.getClass().getName();
+    }
+
+    private <T extends MyGeneric<?>> String gettingTheValue2(T someClass) {
+        return someClass.getClass().getName();
+    }
+
+    @Test
+    public void oneMoreGenericsQuestion2() {
+        var genericString1 = gettingTheValue3(new MyGenericString());
+        assertEquals(MyGenericString.class, genericString1.getClass());
+
+        var genericString2 = gettingTheValue4(new MyGenericString());
+        assertEquals(MyGenericString.class, genericString2.getClass());
+
+        var generic1 = gettingTheValue3(new MyGeneric<String>());
+        assertEquals(MyGeneric.class, generic1.getClass());
+
+        var generic2 = gettingTheValue4(new MyGeneric<String>());
+        assertEquals(MyGeneric.class, generic2.getClass());
+    }
+
+    private MyGeneric<?> gettingTheValue3(MyGeneric<?> someClass) {
+        return someClass;
+    }
+
+    private <T extends MyGeneric<?>> T gettingTheValue4(T someClass) {
+        return someClass;
+    }
+}
