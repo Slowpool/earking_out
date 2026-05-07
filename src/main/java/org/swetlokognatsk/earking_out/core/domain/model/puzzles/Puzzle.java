@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
+import java.util.Objects;
+
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
@@ -16,6 +18,8 @@ public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig, H exte
     public final H hint;
 
     public Puzzle(E exercise, PC config, IPuzzleGenerator puzzleGenerator) {
+        Objects.requireNonNull(exercise, "Exercise cannot be null");
+        Objects.requireNonNull(puzzleGenerator, "PuzzleGenerator cannot be null");
         this.exercise = exercise;
         this.config = config;
         this.solution = puzzleGenerator.generateSolution();
