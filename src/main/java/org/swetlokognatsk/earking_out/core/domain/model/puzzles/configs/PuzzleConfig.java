@@ -10,6 +10,7 @@ public abstract class PuzzleConfig<E extends Exercise> {
     public final E exercise = getExercise();
 
     protected E getExercise() {
+        // TODO suppress warning? factory must guarantee that returning type is E
         return (E)ExercisesFactory.create(getExerciseName(), getExerciseType());
     }
 

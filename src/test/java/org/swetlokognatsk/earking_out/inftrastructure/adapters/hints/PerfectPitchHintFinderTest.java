@@ -19,7 +19,7 @@ public class PerfectPitchHintFinderTest {
         for (var exerciseType : ExerciseTypes.values()) {
             var expectedSubstring = exerciseType == ExerciseTypes.AUDIO ? FakeAudioPerfectPitchHints.TYPE : FakeVisualPerfectPitchHints.TYPE;
             for (Integer i = 4; i < 90; i++) {
-                // TODO is it a good idea to depent on other test suites' static methods?
+                // TODO is it a good idea to depend on other test suites' static methods?
                 fakeSolution = i.toString();
                 var puzzle = PuzzleTest.createPuzzle(ExerciseNames.PERFECT_PITCH, exerciseType, fakeSolution);
                 var hint = hintFinder.find(puzzle).getValue();

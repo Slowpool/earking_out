@@ -6,8 +6,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.IPuzzleGenerator;
 
-public class PerfectPitchPuzzle extends Puzzle<Exercise, PuzzleConfig, Hint> {
-    public PerfectPitchPuzzle(Exercise exercise, PuzzleConfig config, IPuzzleGenerator puzzleGenerator) {
+public class PerfectPitchPuzzle<E extends Exercise, PC extends PuzzleConfig<E>> extends Puzzle<E, PC, Hint> {
+    public PerfectPitchPuzzle(E exercise, PC config, IPuzzleGenerator puzzleGenerator) {
         super(exercise, config, puzzleGenerator);
     }
 }

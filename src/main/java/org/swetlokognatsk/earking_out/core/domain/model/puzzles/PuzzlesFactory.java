@@ -9,11 +9,11 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.IPuzzleGenerator;
 
 // TODO all factories need refactoring
 public final class PuzzlesFactory {
-    public static <PC extends PuzzleConfig> Puzzle<?, ?, ?> create(Exercise exercise, PC puzzleConfig) {
-        Puzzle<?, ?, ?> puzzle;
+    public static <E extends Exercise, PC extends PuzzleConfig<E>> Puzzle<E, PC, ?> create(E exercise, PC puzzleConfig) {
+        Puzzle<E, PC, ?> puzzle;
         if (exercise.name == ExerciseNames.PERFECT_PITCH) {
             var puzzleGenerator = DI.get(IPuzzleGenerator.class);
-            puzzle = new PerfectPitchPuzzle(exercise, puzzleConfig, puzzleGenerator);
+            puzzle = new PerfectPitchPuzzle<>(exercise, puzzleConfig, puzzleGenerator);
         }
         else {
             throw new RuntimeException("unknown exercise");

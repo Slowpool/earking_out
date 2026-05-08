@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.IHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.IPuzzleGenerator;
 
-public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig, H extends Hint> {
+public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig<E>, H extends Hint> {
     public final Solution solution;
     public final E exercise;
     public final PC config;

@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.events.puzzleconfigs.perfectpitch;
+package org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs.perfectpitch;
 
 import java.time.LocalDateTime;
 
