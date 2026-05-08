@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch;
 
-import org.swetlokognatsk.earking_out.core.domain.model.Hint;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.IFiniteHintFinder;

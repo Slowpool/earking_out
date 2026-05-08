@@ -1,11 +1,11 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints;
 
-import org.swetlokognatsk.earking_out.core.domain.model.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.IHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IPerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.puzzles.PerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 
 public class HintFinderByExercise implements IHintFinder {
     public Hint find(Puzzle<?, ?, ?> puzzle) {

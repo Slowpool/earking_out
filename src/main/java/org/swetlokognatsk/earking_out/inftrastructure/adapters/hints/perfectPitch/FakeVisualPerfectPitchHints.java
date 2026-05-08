@@ -1,8 +1,8 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch;
 
-import org.swetlokognatsk.earking_out.core.domain.model.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.UsualHint;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.ports.hints.IFiniteHintFinder;
 
 public class FakeVisualPerfectPitchHints implements IFiniteHintFinder {
