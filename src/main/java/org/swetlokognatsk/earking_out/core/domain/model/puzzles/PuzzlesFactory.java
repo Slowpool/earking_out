@@ -1,9 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
-import org.swetlokognatsk.earking_out.core.domain.model.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.puzzles.PerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.IPuzzleGenerator;
 
