@@ -14,11 +14,12 @@ Ubiquitous langauge:
 3. Guess - assumption of user about the correct solution to the previously proposed Puzzle (see p.2). E.g.: in perfect pitch exercise (see p.1) app generated `Java` note (oops, typo. actually i meant `app generated C# note`. but who cares, they are almost the same visually) note and user thought it's `C` note and pressed `C`, here the `C` is guess (of user)
 4. Hint - some multimedia item (sound, picture, video), that is used by user to make guesses. e.g., consider this situation: perfect pitch exercise. audio format. app gives to user a puzzle to guess the note and the solution is `C#1` note, the hint here would be is .mp3 sound of `C#1` - by this hint user is supposed to approach the right solution - that is why it's a hint.
 // TODO
-5. achievement
-6. puzzle config
+5. Puzzle config - user-configured settings, specific for concrete exercise. e.g. in perfect pitch exercise user can pick on which notes to train.
+6. Session - after picking the exercise and setting up the puzzle config, the exercise is started and session is started also. it has info about current puzzle config. // TODO dunno yet: ~~technically session is UUID, assigned to all events, that happen until the end of the exercise~~
 
+x. Achievement
 
-P.S. points 2 and 3 are made-up-by-me terms actually, cuz dunno how to correctly name these actions/phenomena - there're no any definitions for them in natural english language (neither in russian though). so they are kind of not obvious without definition.
+P.S. most points are are made-up-by-me terms actually, cuz dunno how to correctly name those actions/phenomena - there're no any definitions for them in natural english language (neither in russian though). so they are kind of not obvious without definition.
 
 domains/subdomain:
 1. Training ear for music
