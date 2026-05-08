@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model;
+package org.swetlokognatsk.earking_out.core.domain.model.hints;
 
 public class UsualHint extends Hint {
     final String hint;

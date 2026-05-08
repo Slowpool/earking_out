@@ -3,9 +3,9 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 import java.util.Objects;
 
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
-import org.swetlokognatsk.earking_out.core.domain.model.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.IHintFinder;

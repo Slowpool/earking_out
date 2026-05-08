@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch;
 
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.UsualHint;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.ports.hints.IFiniteHintFinder;
 
 // TODO move to tests project somehow. upd: that's DI issue, fix after setting up DI, setup Fake classes on tests setup stage
