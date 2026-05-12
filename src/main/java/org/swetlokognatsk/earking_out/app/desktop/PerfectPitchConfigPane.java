@@ -1,6 +1,10 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.ExerciseStarted;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.typed.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
@@ -75,12 +79,20 @@ class PerfectPitchConfigPane extends VBox {
     }
 
     private void startClicked(ActionEvent e) {
+        // TODO validate
         var puzzleConfig = mapToDomainConfig();
-        var exerciseStartedEvent = new ExerciseStartedEvent(EXERCISE_STARTED, puzzleConfig);
+        var exercise = mapToExercise();
+        var exerciseStartedEvent = new ExerciseStartedEvent(EXERCISE_STARTED, puzzleConfig, exercise);
         fireEvent(exerciseStartedEvent);
     }
 
     private PuzzleConfig mapToDomainConfig() {
+        // TODO
         return new AudioPerfectPitchConfig();
+    }
+
+    private Exercise mapToExercise() {
+        // TODO
+        return new AudioPerfectPitchExercise();
     }
 }

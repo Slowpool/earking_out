@@ -1,7 +1,19 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.AudioPerfectPitchPane;
+import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.VisualPerfectPitchPane;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
+
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,15 +35,18 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public final class EarkingOutApplication extends Application {
+    public static final int LABEL_FIELD_SPACING = 10;
     private static final int WIDTH = 1500;
     private static final int HEIGHT = 700;
-    public static final int LABEL_FIELD_SPACING = 10;
 
     private BorderPane contentPane;
+    // TODO generalize
     private PerfectPitchConfigPane perfectPitchConfigPane;
-    // private Pane perfectPitchConfigPane;
+
+    private AppState state;
 
     public void start(Stage primaryStage) throws Exception {
+        state = AppState.HOME;
         var scene = buildScene();
 
         configurePrimaryStage(primaryStage, scene);
@@ -39,22 +54,22 @@ public final class EarkingOutApplication extends Application {
     }
 
     private Scene buildScene() {
-        var borderPane = new BorderPane();
-        this.contentPane = borderPane;
-        buildMenu(borderPane);
-        var scene = new Scene(borderPane, WIDTH, HEIGHT);
+        contentPane = new BorderPane();
+        buildMenu();
+        var scene = new Scene(contentPane, WIDTH, HEIGHT);
         return scene;
     }
 
-    private void buildMenu(BorderPane borderPane) {
-        // TODO refactor it via a new MenuBuilder class
+    private void buildMenu() {
+        // TODO refactor it via a new MenuBuilder class p.s. or create ExercisesMenu?
         var exercises = new Menu("exercises");
         var exercisesItems = exercises.getItems();
 
         var perfectPitch = new Menu("perfect pitch");
         var perfectPitchItems = perfectPitch.getItems();
+        // TODO speicfy node id? to identify to which configuring scene to go
         perfectPitch.setOnAction((e) -> {
-            borderPane.setCenter(getPerfectPitchConfigPane());
+            contentPane.setCenter(getPerfectPitchConfigPane());
         });
 
         var audioPerfectPitch = new MenuItem("audio");
@@ -77,7 +92,7 @@ public final class EarkingOutApplication extends Application {
         exercisesItems.add(melodicIntervals);
 
         var menu = new MenuBar(exercises);
-        borderPane.setTop(menu);
+        contentPane.setTop(menu);
     }
 
     private PerfectPitchConfigPane getPerfectPitchConfigPane() {
@@ -90,8 +105,27 @@ public final class EarkingOutApplication extends Application {
     }
 
     private void startExercise(ExerciseStartedEvent e) {
-        // TODO 1. add app state 2. change the sceneContent to exercise, corresponding to state, not corresponding to some data in `e` variable (it can lie so it's error-prone)
-        switch(e.config)
+        var exercisePane = buildExercisePane(e.exercise, e.config);
+        contentPane.setCenter(exercisePane);
+    }
+
+    // TODO generics seems to be redundant here, this is just factory-like steering method
+    private <E extends Exercise, PC extends PuzzleConfig<E>> Pane buildExercisePane(E exercise, PC config) {
+        return switch (exercise.type) {
+            case VISUAL -> switch (exercise.name) {
+                // TODO optimization via get method
+                case PERFECT_PITCH -> new VisualPerfectPitchPane((VisualPerfectPitchConfig)config);
+                case MELODIC_INTERVALS -> null;
+                case HARMONIC_INTERVALS -> null;
+                case KEYS -> null;
+            };
+            case AUDIO -> switch (exercise.name) {
+                case PERFECT_PITCH -> new AudioPerfectPitchPane((AudioPerfectPitchConfig)config);
+                case MELODIC_INTERVALS -> null;
+                case HARMONIC_INTERVALS -> null;
+                case KEYS -> null;
+            };
+        };
     }
 
     private void configurePrimaryStage(Stage primaryStage, Scene scene) {
