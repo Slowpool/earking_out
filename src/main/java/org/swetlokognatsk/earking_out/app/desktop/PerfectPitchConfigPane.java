@@ -65,7 +65,7 @@ class PerfectPitchConfigPane extends VBox {
         statisticsRecording.setSelected(true);
 
         start = new Button("start");
-        start.setOnAction(this::startClicked);
+        start.setOnAction(this::fireExerciseStartedEvent);
     }
 
     public PerfectPitchConfigPane() {
@@ -80,13 +80,12 @@ class PerfectPitchConfigPane extends VBox {
         setAlignment(Pos.CENTER);
     }
 
-    private void startClicked(ActionEvent e) {
+    private void fireExerciseStartedEvent(ActionEvent e) {
         // TODO should it be here or after fireEvent()? how it works at all, i mean events flow - like middleware in both directions?
         e.consume();
         // TODO validate
         var puzzleConfig = mapToDomainConfig();
-        var exercise = mapToExercise();
-        var exerciseStartedEvent = new ExerciseStartedEvent(EXERCISE_STARTED, puzzleConfig, exercise);
+        var exerciseStartedEvent = new ExerciseStartedEvent(EXERCISE_STARTED, puzzleConfig);
         fireEvent(exerciseStartedEvent);
     }
 
@@ -95,10 +94,5 @@ class PerfectPitchConfigPane extends VBox {
         // TODO ParsingException?
         var targetNumberOfPuzzles = Integer.valueOf(numberOfPuzzlesField.getText());
         return new AudioPerfectPitchConfig(targetNumberOfPuzzles);
-    }
-
-    private Exercise mapToExercise() {
-        // TODO
-        return new AudioPerfectPitchExercise();
     }
 }

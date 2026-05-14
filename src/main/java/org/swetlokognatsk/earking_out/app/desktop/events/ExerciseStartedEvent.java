@@ -7,14 +7,12 @@ import javafx.event.*;
 
 // TODO use generics
 public class ExerciseStartedEvent extends Event {
-    public final PuzzleConfig config;
-    public final Exercise exercise;
+    public final PuzzleConfig puzzleConfig;
 
     // TODO why to NamedArg and how to use it?
     // TODO why to have eventType if there're no of the in examples in internet
-    public ExerciseStartedEvent(final @NamedArg("eventType") EventType<? extends Event> eventType, final PuzzleConfig config, final Exercise exercise) {
+    public ExerciseStartedEvent(final @NamedArg("eventType") EventType<? extends Event> eventType, final PuzzleConfig puzzleConfig) {
         super(eventType);
-        this.config = config;
-        this.exercise = exercise;
+        this.puzzleConfig = puzzleConfig;
     }
 }

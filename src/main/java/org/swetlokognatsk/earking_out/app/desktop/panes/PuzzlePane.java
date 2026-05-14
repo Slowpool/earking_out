@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseFinishedEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import javafx.event.ActionEvent;
@@ -14,21 +14,24 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>> extends BorderPane {
+public abstract class PuzzlePane<PC extends PuzzleConfig<? extends Exercise>> extends BorderPane {
     // TODO why it's so awkward? do i use it in a wrong way?
     public static final EventType<ExerciseFinishedEvent> EXERCISE_FINISHED = new EventType<ExerciseFinishedEvent>("EXERCISE_FINISHED");
 
-    protected final PC config;
+    protected final Session<PC> session;
+    protected final PC puzzleConfig;
+
     protected final Pane puzzlePane;
     protected final ProgressBar puzzlesProgressBar;
     protected final Button finishButton;
 
     protected abstract Pane buildPuzzlePane();
 
-    public PuzzlePane(PC config) {
-        this.config = config;
+    public PuzzlePane(final Session<PC> session) {
+        this.session = session;
+        this.puzzleConfig = session.puzzleConfig();
 
-        var puzzleProgressLabel = new Label(interpolatePuzzleProgress(0, config.targetNumberOfPuzzles));
+        var puzzleProgressLabel = new Label(interpolatePuzzleProgress(0, puzzleConfig.targetNumberOfPuzzles));
         puzzlesProgressBar = new ProgressBar(0.0);
         var puzzlesProgress = new VBox(puzzleProgressLabel, puzzlesProgressBar);
         puzzlesProgress.setAlignment(Pos.CENTER);
