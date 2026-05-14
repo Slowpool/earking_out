@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch;
+package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;

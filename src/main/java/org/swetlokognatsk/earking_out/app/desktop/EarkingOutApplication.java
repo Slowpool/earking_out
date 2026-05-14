@@ -4,11 +4,13 @@ import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedOverEvent;
+import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.SessionStatsPane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.AudioPerfectPitchPane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.PerfectPitchStatsPane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.VisualPerfectPitchPane;
+import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config.AudioPerfectPitchConfigPane;
+import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
+import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.VisualPerfectPitchPane;
+import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.PerfectPitchStatsPane;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
@@ -31,8 +33,6 @@ public final class EarkingOutApplication extends Application {
     private static final int HEIGHT = 700;
 
     private BorderPane contentPane;
-    // TODO generalize
-    private PerfectPitchConfigPane perfectPitchConfigPane;
 
     private AppState state;
     private Session<?> session;
@@ -59,9 +59,10 @@ public final class EarkingOutApplication extends Application {
 
         var perfectPitch = new Menu("perfect pitch");
         var perfectPitchItems = perfectPitch.getItems();
-        // TODO speicfy node id? to identify to which configuring scene to go
+        // TODO make menu item mapping to specific configPane class
         perfectPitch.setOnAction((e) -> {
-            contentPane.setCenter(getPerfectPitchConfigPane());
+            var configPane = getConfigPane();
+            contentPane.setCenter(configPane);
         });
 
         var audioPerfectPitch = new MenuItem("audio");
@@ -87,16 +88,16 @@ public final class EarkingOutApplication extends Application {
         contentPane.setTop(menu);
     }
 
-    private PerfectPitchConfigPane getPerfectPitchConfigPane() {
-        if (perfectPitchConfigPane == null) {
-            perfectPitchConfigPane = new PerfectPitchConfigPane();
-            // TODO decouple
-            perfectPitchConfigPane.addEventHandler(PerfectPitchConfigPane.EXERCISE_STARTED, this::startExercise);
-        }
+    // TODO redo via some ActionEvent parameter, this method must be factory
+    private ConfigPane<?> getConfigPane() {
+        // TODO take config from storage
+        var puzzleConfig = new AudioPerfectPitchConfig(9);
+        var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig);
+        perfectPitchConfigPane.addEventHandler(ConfigPane.EXERCISE_STARTED, this::startExercise);
         return perfectPitchConfigPane;
     }
 
-    private void startExercise(ExerciseStartedEvent e) {
+    private void startExercise(ExerciseStartedEvent<?> e) {
         session = startSession((AudioPerfectPitchConfig) e.puzzleConfig);
 
         var exercisePane = buildExercisePane(session);
@@ -106,9 +107,9 @@ public final class EarkingOutApplication extends Application {
     }
 
     // TODO why warning?
-    private void startExerciseOver(ExerciseStartedOverEvent e) {
+    private void startExerciseOver(ExerciseStartedOverEvent<?> e) {
         // TODO maybe redirecting user to configuring is better?
-        startExercise(new ExerciseStartedEvent(e.getEventType(), e.puzzleConfig));
+        startExercise(new ExerciseStartedEvent<>(e.getEventType(), e.puzzleConfig));
     }
 
     // TODO replace with service call

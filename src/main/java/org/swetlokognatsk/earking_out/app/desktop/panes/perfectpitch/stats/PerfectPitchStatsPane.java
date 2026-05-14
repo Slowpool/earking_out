@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch;
+package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats;
 
 import org.swetlokognatsk.earking_out.app.desktop.panes.SessionStatsPane;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
