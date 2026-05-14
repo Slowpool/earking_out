@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.app.desktop;
+package org.swetlokognatsk.earking_out.app.desktop.events;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
@@ -6,7 +6,7 @@ import javafx.beans.NamedArg;
 import javafx.event.*;
 
 // TODO use generics
-class ExerciseStartedEvent extends Event {
+public class ExerciseStartedEvent extends Event {
     public final PuzzleConfig config;
     public final Exercise exercise;
 

@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
+import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.ExerciseStarted;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
@@ -8,7 +9,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
 import javafx.geometry.Pos;
@@ -21,11 +21,12 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+// TODO generalize into abstract class
 class PerfectPitchConfigPane extends VBox {
-    // TODO generalize into abstract class
     static final EventType<ExerciseStartedEvent> EXERCISE_STARTED = new EventType<ExerciseStartedEvent>("EXERCISE_STARTED");
 
     final HBox numberOfPuzzles;
+    final TextField numberOfPuzzlesField;
     final VBox notes;
     final VBox inputMode;
     final CheckBox statisticsRecording;
@@ -34,6 +35,7 @@ class PerfectPitchConfigPane extends VBox {
     {
         var numberOfPuzzlesLabel = new Label("number of puzzles");
         var numberOfPuzzlesTextField = new TextField();
+        numberOfPuzzlesField = numberOfPuzzlesTextField;
         numberOfPuzzles = new HBox(numberOfPuzzlesLabel, numberOfPuzzlesTextField);
         numberOfPuzzles.setAlignment(Pos.CENTER);
         numberOfPuzzles.setSpacing(EarkingOutApplication.LABEL_FIELD_SPACING);
@@ -79,6 +81,8 @@ class PerfectPitchConfigPane extends VBox {
     }
 
     private void startClicked(ActionEvent e) {
+        // TODO should it be here or after fireEvent()? how it works at all, i mean events flow - like middleware in both directions?
+        e.consume();
         // TODO validate
         var puzzleConfig = mapToDomainConfig();
         var exercise = mapToExercise();
@@ -86,9 +90,11 @@ class PerfectPitchConfigPane extends VBox {
         fireEvent(exerciseStartedEvent);
     }
 
-    private PuzzleConfig mapToDomainConfig() {
-        // TODO
-        return new AudioPerfectPitchConfig();
+    // TODO generalize
+    private AudioPerfectPitchConfig mapToDomainConfig() {
+        // TODO ParsingException?
+        var targetNumberOfPuzzles = Integer.valueOf(numberOfPuzzlesField.getText());
+        return new AudioPerfectPitchConfig(targetNumberOfPuzzles);
     }
 
     private Exercise mapToExercise() {

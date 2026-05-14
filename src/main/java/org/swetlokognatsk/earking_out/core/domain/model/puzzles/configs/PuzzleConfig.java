@@ -8,12 +8,18 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFacto
 // TODO store it in database as json
 public abstract class PuzzleConfig<E extends Exercise> {
     public final E exercise = getExercise();
+    public final int targetNumberOfPuzzles;
+
+    public PuzzleConfig(final int targetNumberOfPuzzles) {
+        this.targetNumberOfPuzzles = targetNumberOfPuzzles;
+    }
 
     protected E getExercise() {
         // TODO suppress warning? factory must guarantee that returning type is E
-        return (E)ExercisesFactory.create(getExerciseName(), getExerciseType());
+        return (E) ExercisesFactory.create(getExerciseName(), getExerciseType());
     }
 
     protected abstract ExerciseNames getExerciseName();
+
     protected abstract ExerciseTypes getExerciseType();
 }

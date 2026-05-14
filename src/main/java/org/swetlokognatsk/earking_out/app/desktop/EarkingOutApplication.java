@@ -2,7 +2,9 @@ package org.swetlokognatsk.earking_out.app.desktop;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
-
+import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseFinishedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.AudioPerfectPitchPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.VisualPerfectPitchPane;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
@@ -11,7 +13,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
-
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.geometry.Pos;
@@ -106,26 +107,42 @@ public final class EarkingOutApplication extends Application {
 
     private void startExercise(ExerciseStartedEvent e) {
         var exercisePane = buildExercisePane(e.exercise, e.config);
+        exercisePane.addEventHandler(PuzzlePane.EXERCISE_FINISHED, this::finishExercise);
         contentPane.setCenter(exercisePane);
     }
 
     // TODO generics seems to be redundant here, this is just factory-like steering method
     private <E extends Exercise, PC extends PuzzleConfig<E>> Pane buildExercisePane(E exercise, PC config) {
         return switch (exercise.type) {
-            case VISUAL -> switch (exercise.name) {
-                // TODO optimization via get method
-                case PERFECT_PITCH -> new VisualPerfectPitchPane((VisualPerfectPitchConfig)config);
-                case MELODIC_INTERVALS -> null;
-                case HARMONIC_INTERVALS -> null;
-                case KEYS -> null;
-            };
-            case AUDIO -> switch (exercise.name) {
-                case PERFECT_PITCH -> new AudioPerfectPitchPane((AudioPerfectPitchConfig)config);
-                case MELODIC_INTERVALS -> null;
-                case HARMONIC_INTERVALS -> null;
-                case KEYS -> null;
-            };
+        case VISUAL -> switch (exercise.name) {
+        // TODO optimization via get method
+        case PERFECT_PITCH -> new VisualPerfectPitchPane((VisualPerfectPitchConfig) config);
+        case MELODIC_INTERVALS -> null;
+        case HARMONIC_INTERVALS -> null;
+        case KEYS -> null;
         };
+        case AUDIO -> switch (exercise.name) {
+        case PERFECT_PITCH -> new AudioPerfectPitchPane((AudioPerfectPitchConfig) config);
+        case MELODIC_INTERVALS -> null;
+        case HARMONIC_INTERVALS -> null;
+        case KEYS -> null;
+        };
+        };
+    }
+
+    private void finishExercise(ExerciseFinishedEvent e) {
+        var sessionStatisticsPane = buildSessionStatisticsPane();
+        contentPane.setCenter(sessionStatisticsPane);
+
+    }
+
+    private Pane buildSessionStatisticsPane() {
+        var titleLabel = new Label("finished");
+        bazinga
+        var titleLabelBox = new VBox(titleLabel);
+        titleLabelBox.setAlignment(Pos.CENTER);
+
+        return new VBox(titleLabelBox,);
     }
 
     private void configurePrimaryStage(Stage primaryStage, Scene scene) {
