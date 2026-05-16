@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import javafx.beans.NamedArg;
 import javafx.event.*;
 
-// TODO use generics
+// TODO do generics make sense here? anyway PC is dynamic, it seems replacing it with just PuzzleConfig will do the same
 public class ExerciseStartedEvent<PC extends PuzzleConfig<?>> extends Event {
     public final PC puzzleConfig;
 

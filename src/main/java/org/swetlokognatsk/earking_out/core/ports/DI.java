@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
+import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.hints.IHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IPerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.music.INoteNormalizer;
@@ -10,6 +11,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitc
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.PerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.FakePuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.FakeReadPuzzleConfigService;
 
 // TODO for now this class was made strictly in test purposes, to postpone DI in java
 final public class DI {
@@ -37,6 +39,9 @@ final public class DI {
         }
         else if (className == FakeAudioPerfectPitchHints.class.getName()) {
             return (T)new FakeAudioPerfectPitchHints();
+        }
+        else if (className == ReadPuzzleConfigService.class.getName()) {
+            return (T)new FakeReadPuzzleConfigService();
         }
         else {
             return null;
