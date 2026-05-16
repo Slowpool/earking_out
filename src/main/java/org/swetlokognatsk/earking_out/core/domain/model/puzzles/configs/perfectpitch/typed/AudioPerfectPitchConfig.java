@@ -5,6 +5,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 
 public class AudioPerfectPitchConfig extends PerfectPitchConfig<AudioPerfectPitchExercise> {
+
+    public AudioPerfectPitchConfig(final int targetNumberOfPuzzles) {
+        super(targetNumberOfPuzzles);
+
+    }
+
     protected final ExerciseTypes getExerciseType() {
         return ExerciseTypes.AUDIO;
     }
