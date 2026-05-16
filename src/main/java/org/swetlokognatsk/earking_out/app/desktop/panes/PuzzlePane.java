@@ -53,7 +53,7 @@ public abstract class PuzzlePane<PC extends PuzzleConfig<? extends Exercise>> ex
     }
 
     protected void finishExercise(ActionEvent e) {
-        var exerciseFinishedEvent = new ExerciseFinishedEvent(EXERCISE_FINISHED);
+        var exerciseFinishedEvent = new ExerciseFinishedEvent(EXERCISE_FINISHED, session);
         fireEvent(exerciseFinishedEvent);
     }
 }

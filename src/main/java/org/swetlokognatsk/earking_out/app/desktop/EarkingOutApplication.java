@@ -14,11 +14,15 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.Perfe
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.typed.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -36,6 +40,8 @@ public final class EarkingOutApplication extends Application {
 
     private AppState state;
     private Session<?> session;
+
+    private Menu perfectPitch;
 
     public void start(Stage primaryStage) throws Exception {
         state = AppState.HOME;
@@ -57,13 +63,10 @@ public final class EarkingOutApplication extends Application {
         var exercises = new Menu("exercises");
         var exercisesItems = exercises.getItems();
 
-        var perfectPitch = new Menu("perfect pitch");
+        perfectPitch = new Menu("perfect pitch");
         var perfectPitchItems = perfectPitch.getItems();
         // TODO make menu item mapping to specific configPane class
-        perfectPitch.setOnAction((e) -> {
-            var configPane = getConfigPane();
-            contentPane.setCenter(configPane);
-        });
+        perfectPitch.setOnAction(this::openConfigPane);
 
         var audioPerfectPitch = new MenuItem("audio");
         perfectPitchItems.add(audioPerfectPitch);
@@ -88,28 +91,43 @@ public final class EarkingOutApplication extends Application {
         contentPane.setTop(menu);
     }
 
+    private void show(Pane pane) {
+        contentPane.setCenter(pane);
+    }
+
+    private void openConfigPane(ActionEvent e) {
+        // TODO take exercise from e
+        showConfigPane(new AudioPerfectPitchExercise());
+    }
+
+    private void showConfigPane(Exercise exercise) {
+        var configPane = buildConfigPane(exercise);
+        show(configPane);
+    }
+
     // TODO redo via some ActionEvent parameter, this method must be factory
-    private ConfigPane<?> getConfigPane() {
+    private ConfigPane<?> buildConfigPane(Exercise exercise) {
         // TODO take config from storage
         var puzzleConfig = new AudioPerfectPitchConfig(9);
         var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig);
-        perfectPitchConfigPane.addEventHandler(ConfigPane.EXERCISE_STARTED, this::startExercise);
+        perfectPitchConfigPane.addEventHandler(ConfigPane.EXERCISE_STARTED, this::openPuzzlePane);
         return perfectPitchConfigPane;
     }
 
-    private void startExercise(ExerciseStartedEvent<?> e) {
+    private void openPuzzlePane(ExerciseStartedEvent<?> e) {
         session = startSession((AudioPerfectPitchConfig) e.puzzleConfig);
 
-        var exercisePane = buildExercisePane(session);
-        exercisePane.addEventHandler(PuzzlePane.EXERCISE_FINISHED, this::finishExercise);
-        contentPane.setCenter(exercisePane);
-
+        showPuzzlePane(session);
     }
 
-    // TODO why warning?
-    private void startExerciseOver(ExerciseStartedOverEvent<?> e) {
-        // TODO maybe redirecting user to configuring is better?
-        startExercise(new ExerciseStartedEvent<>(e.getEventType(), e.puzzleConfig));
+    private void showPuzzlePane(Session<?> session) {
+        var puzzlePane = buildPuzzlePane(session);
+        show(puzzlePane);
+    }
+
+    private void openConfigPaneOver(ExerciseStartedOverEvent<?> e) {
+        // TODO click menu item depending on e
+        perfectPitch.fire();
     }
 
     // TODO replace with service call
@@ -119,11 +137,11 @@ public final class EarkingOutApplication extends Application {
     }
 
     // TODO generics seems to be redundant here, this is just factory-like steering method
-    private Pane buildExercisePane(Session<? extends PuzzleConfig<? extends Exercise>> session) {
+    // TODO maybe just passing only config/exercise?
+    private Pane buildPuzzlePane(Session<? extends PuzzleConfig<? extends Exercise>> session) {
         var exercise = session.puzzleConfig().exercise;
-        return switch (exercise.type) {
+        var puzzlePane = switch (exercise.type) {
         case VISUAL -> switch (exercise.name) {
-        // TODO optimization via get method
         // TODO what to do with warning
         case PERFECT_PITCH -> new VisualPerfectPitchPane((Session<VisualPerfectPitchConfig>) session);
         case MELODIC_INTERVALS -> null;
@@ -137,12 +155,21 @@ public final class EarkingOutApplication extends Application {
         case KEYS -> null;
         };
         };
+
+        puzzlePane.addEventHandler(PuzzlePane.EXERCISE_FINISHED, this::openExerciseFinish);
+
+        return puzzlePane;
     }
 
-    private void finishExercise(ExerciseFinishedEvent e) {
-        var sessionStatsPane = buildSessionStatsPane();
+    private void openExerciseFinish(ExerciseFinishedEvent e) {
+        // TODO don't pass session, replace with something narrowed (e.g. only exercise or stats)
+        showExerciseFinishPane(e.session);
         closeSession();
-        contentPane.setCenter(sessionStatsPane);
+    }
+
+    private void showExerciseFinishPane(Session<?> session) {
+        var sessionStatsPane = buildSessionStatsPane();
+        show(sessionStatsPane);
     }
 
     private void closeSession() {
@@ -154,7 +181,7 @@ public final class EarkingOutApplication extends Application {
     private Pane buildSessionStatsPane() {
         // TODO factory method? this warning bothers a lot
         var sessionStatsPane = new PerfectPitchStatsPane(session);
-        sessionStatsPane.addEventHandler(SessionStatsPane.EXERCISE_STARTED_OVER, this::startExerciseOver);
+        sessionStatsPane.addEventHandler(SessionStatsPane.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
         return sessionStatsPane;
     }
 

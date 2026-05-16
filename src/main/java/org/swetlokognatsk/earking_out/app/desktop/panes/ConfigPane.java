@@ -26,6 +26,7 @@ public abstract class ConfigPane<PC extends PuzzleConfig<? extends Exercise>> ex
     protected final Button start;
 
     protected abstract PC mapToDomainConfig();
+
     protected abstract void addCustomSettings();
 
     {
@@ -44,12 +45,18 @@ public abstract class ConfigPane<PC extends PuzzleConfig<? extends Exercise>> ex
     }
 
     public ConfigPane(final PC puzzleConfig) {
+        // TODO what's the difference between calling super() and not doing so here?
         super();
         this.puzzleConfig = puzzleConfig;
 
+        addCommonComponents();
+    }
+
+    private void addCommonComponents() {
         getChildren().addAll(numberOfPuzzles, statisticsRecording);
-        // adding custom settings in such an interrupting way in order to keep the layout structure so that the start button is at the end
-        addCustomSettings();
+    }
+
+    protected void addStartButton() {
         getChildren().add(start);
     }
 

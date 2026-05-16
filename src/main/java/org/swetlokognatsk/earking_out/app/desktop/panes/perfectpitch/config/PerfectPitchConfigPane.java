@@ -40,13 +40,14 @@ abstract class PerfectPitchConfigPane<PC extends PerfectPitchConfig<? extends Pe
 
     public PerfectPitchConfigPane(final PC puzzleConfig) {
         super(puzzleConfig);
+        addCustomSettings();
+        addStartButton();
 
         setSpacing(20);
         setAlignment(Pos.CENTER);
     }
 
     protected void addCustomSettings() {
-        nice trap, it's being executed before the initializer above!
         getChildren().addAll(notes, inputMode);
     }
 }

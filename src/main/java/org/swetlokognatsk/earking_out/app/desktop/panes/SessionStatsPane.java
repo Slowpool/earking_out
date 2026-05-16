@@ -3,16 +3,16 @@ package org.swetlokognatsk.earking_out.app.desktop.panes;
 import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class  SessionStatsPane<PC extends PuzzleConfig<?>> extends VBox {
+public abstract class SessionStatsPane<PC extends PuzzleConfig<?>> extends BorderPane {
     // TODO how 'bout inheritance from EXERCISE_STARTED?
     public static EventType<ExerciseStartedOverEvent<?>> EXERCISE_STARTED_OVER = new EventType<>("EXERCISE_STARTED_OVER");
     // TODO generics seem weird
@@ -26,23 +26,26 @@ public abstract class  SessionStatsPane<PC extends PuzzleConfig<?>> extends VBox
         this.session = session;
 
         var titleLabel = new Label("finished");
+        var titleLabelBox = new VBox(titleLabel);
+        titleLabelBox.setAlignment(Pos.CENTER);
+
         var stats = session.stats();
         var briefResultsText = interpolateBriefResult(stats.puzzlesCompletedCorrectly, stats.puzzlesCompleted);
         var briefResultLabel = new Label(briefResultsText);
         var briefResultBox = new VBox(briefResultLabel);
         briefResultBox.setAlignment(Pos.CENTER);
 
-        var titleLabelBox = new VBox(titleLabel);
-        titleLabelBox.setAlignment(Pos.CENTER);
+        var topPane = new VBox(titleLabelBox, briefResultBox);
+        setTop(topPane);
 
         var startOverButton = new Button("start over");
         startOverButton.setOnAction(this::fireExerciseStartOverEvent);
         var startOverBox = new VBox(startOverButton);
         startOverBox.setAlignment(Pos.CENTER);
+        setBottom(startOverBox);
 
         var statsPane = buildStatsPane();
-
-        getChildren().addAll(titleLabelBox, briefResultBox, statsPane, startOverBox);
+        setCenter(statsPane);
     }
 
     private static String interpolateBriefResult(int puzzlesCompleted, int targetNumberOfPuzzles) {
