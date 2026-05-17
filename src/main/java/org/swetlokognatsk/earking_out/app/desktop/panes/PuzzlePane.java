@@ -14,7 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class PuzzlePane<PC extends PuzzleConfig<? extends Exercise>> extends BorderPane {
+public abstract class PuzzlePane<PC extends PuzzleConfig<?>> extends BorderPane {
     // TODO why it's so awkward? do i use it in a wrong way?
     public static final EventType<ExerciseFinishedEvent> EXERCISE_FINISHED = new EventType<ExerciseFinishedEvent>("EXERCISE_FINISHED");
 

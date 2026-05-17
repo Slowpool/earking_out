@@ -142,9 +142,8 @@ public final class EarkingOutApplication extends Application {
         return new Session<AudioPerfectPitchConfig>(UUID.randomUUID(), puzzleConfig, new SessionStats(5, puzzleConfig.targetNumberOfPuzzles));
     }
 
-    // TODO generics seems to be redundant here, this is just factory-like steering method
     // TODO maybe just passing only config/exercise?
-    private Pane buildPuzzlePane(Session<? extends PuzzleConfig<? extends Exercise>> session) {
+    private Pane buildPuzzlePane(Session<?> session) {
         var exercise = session.puzzleConfig().exercise;
         var puzzlePane = switch (exercise.type) {
         case VISUAL -> switch (exercise.name) {
