@@ -9,10 +9,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 
-public class FakeReadPuzzleConfigService implements ReadPuzzleConfigService {
-    public <E extends Exercise> PuzzleConfig<E> fetch(E exercise) {
+public class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigService {
+    public static AudioPerfectPitchConfig puzzleConfig;
+
+    static {
         var notes = new NoteWithAccidental[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST) };
-        var puzzleConfig = new AudioPerfectPitchConfig(1, false, notes, null, PerfectPitchInputMode.NOTES_AS_CHARACTERS);
+        puzzleConfig = new AudioPerfectPitchConfig(100, false, notes, null, PerfectPitchInputMode.NOTES_AS_CHARACTERS);
+    }
+
+    public <E extends Exercise> PuzzleConfig<E> fetch(E exercise) {
         return (PuzzleConfig<E>) puzzleConfig;
     }
 }

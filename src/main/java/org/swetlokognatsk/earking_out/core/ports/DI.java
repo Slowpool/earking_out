@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IPerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
@@ -11,7 +12,8 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitc
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.PerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.FakePuzzleGenerator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.FakeReadPuzzleConfigService;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryReadPuzzleConfigService;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryWritePuzzleConfigService;
 
 // TODO for now this class was made strictly in test purposes, to postpone DI in java
 final public class DI {
@@ -35,7 +37,9 @@ final public class DI {
         } else if (className == FakeAudioPerfectPitchHints.class.getName()) {
             return (T) new FakeAudioPerfectPitchHints();
         } else if (className == ReadPuzzleConfigService.class.getName()) {
-            return (T) new FakeReadPuzzleConfigService();
+            return (T) new InMemoryReadPuzzleConfigService();
+        } else if (className == WritePuzzleConfigService.class.getName()) {
+            return (T) new InMemoryWritePuzzleConfigService();
         } else {
             return null;
         }

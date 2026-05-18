@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports.config;
 
-public interface WritePuzzleConfigService {
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 
+public interface WritePuzzleConfigService {
+    void updateProperty(Exercise e, String configProperty, String newValue);
 }

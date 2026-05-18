@@ -1,12 +1,12 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
 import java.util.UUID;
+import org.swetlokognatsk.earking_out.app.desktop.events.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.SessionStatsPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config.AudioPerfectPitchConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.VisualPerfectPitchPane;
@@ -16,16 +16,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
-
+import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -115,21 +111,35 @@ public final class EarkingOutApplication extends Application {
     // private <E extends Exercise, PC extends PuzzleConfig<E>> ConfigPane<E, PC> buildConfigPane(E exercise) {
     private <E extends Exercise, PC extends PuzzleConfig<E>> ConfigPane<AudioPerfectPitchExercise, AudioPerfectPitchConfig> buildConfigPane(E exercise) {
         var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
-        var puzzleConfig = (AudioPerfectPitchConfig)puzzleConfigService.fetch(exercise);
+        var puzzleConfig = (AudioPerfectPitchConfig) puzzleConfigService.fetch(exercise);
         var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig);
         perfectPitchConfigPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::openPuzzlePane);
+        perfectPitchConfigPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
         return perfectPitchConfigPane;
     }
 
     private void openPuzzlePane(ExerciseStartedEvent<?> e) {
-        // TODO generalize
-        session = startSession((AudioPerfectPitchConfig) e.puzzleConfig);
-        showPuzzlePane(session);
+        var readPuzzleConfigService = DI.get(ReadPuzzleConfigService.class);
+        var puzzleConfig = readPuzzleConfigService.fetch(e.exercise);
+
+        if (puzzleConfig.isValid()) {
+            // TODO generalize
+            session = startSession((AudioPerfectPitchConfig) puzzleConfig);
+            showPuzzlePane(session);
+        } else {
+            // TODO message
+            // DialogPane.
+        }
     }
 
     private void showPuzzlePane(Session<?> session) {
         var puzzlePane = buildPuzzlePane(session);
         show(puzzlePane);
+    }
+
+    private void updateConfigProperty(ConfigPropertyUpdatingEvent e) {
+        var writePuzzleConfigService = DI.get(WritePuzzleConfigService.class);
+        writePuzzleConfigService.updateProperty(e.exercise, e.configProperty, e.newValue);
     }
 
     private void openConfigPaneOver(ExerciseStartedOverEvent<?> e) {

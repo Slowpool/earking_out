@@ -15,6 +15,8 @@ import javafx.scene.layout.VBox;
 
 // TODO generalize into abstract class
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
+    // public final String 
+    
     protected final VBox notesBox;
     protected final VBox rootNoteBox;
     protected final ToggleGroup inputModeToggleGroup;
@@ -103,5 +105,12 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         else if (selectedRadioButtonId == PerfectPitchInputMode.NOTES_AS_CHARACTERS.name()) {
             rootNoteBox.setVisible(false);
         }
+    }
+
+    protected String castCustomConfigPropertyNewValue(String configProperty, Object newValue) {
+        return switch (configProperty) {
+            case "test" -> "";
+        default -> throw new IllegalArgumentException();
+        };
     }
 }

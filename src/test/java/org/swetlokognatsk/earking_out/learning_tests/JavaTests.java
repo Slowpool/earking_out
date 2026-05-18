@@ -259,6 +259,11 @@ public class JavaTests {
         assertEquals("parent", child.parentFooViaSuper(child));
         assertEquals("parent", child.parentFooViaCast(child));
     }
+
+    @Test
+    public void toStringTest1() {
+        assertEquals(String.valueOf(true), "true");
+    }
 }
 
 class Parent {
