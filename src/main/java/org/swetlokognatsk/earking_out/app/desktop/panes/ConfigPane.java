@@ -52,8 +52,10 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
         start.setOnAction(this::fireExerciseStartedEvent);
     }
 
-    public ConfigPane(final PC puzzleConfig) {
+    public ConfigPane(final PC puzzleConfig, double width, double height) {
         this.exercise = puzzleConfig.exercise;
+        setWidth(width);
+        setHeight(height);
 
         addCommonFields(puzzleConfig);
     }

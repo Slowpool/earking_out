@@ -46,7 +46,7 @@ public class NoteNormalizerImpl implements NoteNormalizer {
 
     private static byte getOctavesShift(Octaves octave) {
         int octaveNumber = getOctaveNumber(octave);
-        return (byte) ((octaveNumber - 1) * Invariants.OCTAVE_SIZE);
+        return (byte) ((octaveNumber - 1) * Invariants.KEYS_IN_OCTAVE);
     }
 
     // TODO encapsulate it into Octaves somehow?

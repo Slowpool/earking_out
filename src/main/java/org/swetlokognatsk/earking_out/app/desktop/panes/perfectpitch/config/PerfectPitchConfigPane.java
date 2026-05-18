@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
+import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
+import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboardMode;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
@@ -25,8 +27,8 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
     {
         var notesLabel = new Label("notes");
         // TODO replace with interactive piano keys box
-        var tempNotes = new Label("notes are here");
-        notesBox = new VBox(notesLabel, tempNotes);
+        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getWidth(), getHeight() / 4);
+        notesBox = new VBox(notesLabel, pianoKeyboard);
         notesBox.setAlignment(Pos.CENTER);
 
         var rootNoteLabel = new Label("root note");
@@ -46,8 +48,8 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         inputModeBox.setAlignment(Pos.CENTER);
     }
 
-    public PerfectPitchConfigPane(final PC puzzleConfig) {
-        super(puzzleConfig);
+    public PerfectPitchConfigPane(final PC puzzleConfig, double width, double height) {
+        super(puzzleConfig, width, height);
 
         addCustomFields();
         setFieldsValuesFromConfig(puzzleConfig);

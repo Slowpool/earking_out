@@ -34,7 +34,8 @@ import javafx.stage.Stage;
 
 public final class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
-    private static final int WIDTH = 1500;
+    // TODO make minimalWidth property to be equal to maximum screen width
+    private static final int WIDTH = 1920;
     private static final int HEIGHT = 700;
 
     private BorderPane contentPane;
@@ -112,7 +113,7 @@ public final class EarkingOutApplication extends Application {
     private <E extends Exercise, PC extends PuzzleConfig<E>> ConfigPane<AudioPerfectPitchExercise, AudioPerfectPitchConfig> buildConfigPane(E exercise) {
         var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
         var puzzleConfig = (AudioPerfectPitchConfig) puzzleConfigService.fetch(exercise);
-        var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig);
+        var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig, WIDTH, HEIGHT);
         perfectPitchConfigPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::openPuzzlePane);
         perfectPitchConfigPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
         return perfectPitchConfigPane;

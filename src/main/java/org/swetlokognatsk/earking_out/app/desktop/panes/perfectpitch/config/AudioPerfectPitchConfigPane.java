@@ -6,8 +6,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 
 public class AudioPerfectPitchConfigPane extends PerfectPitchConfigPane<AudioPerfectPitchExercise, AudioPerfectPitchConfig> {
 
-    public AudioPerfectPitchConfigPane(final AudioPerfectPitchConfig puzzleConfig) {
-        super(puzzleConfig);
+    public AudioPerfectPitchConfigPane(final AudioPerfectPitchConfig puzzleConfig, double width, double height) {
+        super(puzzleConfig, width, height);
 
     }
 
