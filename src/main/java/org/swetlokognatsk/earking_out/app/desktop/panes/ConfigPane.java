@@ -7,7 +7,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
 import javafx.geometry.Pos;
@@ -19,8 +18,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>> extends VBox {
-    // TODO where it should be?
-    public static final EventType<ExerciseStartedEvent> EXERCISE_STARTED = new EventType<ExerciseStartedEvent>("EXERCISE_STARTED");
 
     protected final E exercise;
     protected final WritePuzzleConfigService writePuzzleConfigService;
@@ -57,8 +54,6 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     }
 
     public ConfigPane(final PC puzzleConfig) {
-        // TODO what's the difference between calling super() and not doing so here?
-        super();
         this.exercise = puzzleConfig.exercise;
         this.readPuzzleConfigService = DI.get(ReadPuzzleConfigService.class);
         this.writePuzzleConfigService = DI.get(WritePuzzleConfigService.class);
@@ -85,7 +80,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
         e.consume();
         var puzzleConfig = readPuzzleConfigService.fetch(exercise);
         if (puzzleConfig.isValid()) {
-            var exerciseStartedEvent = new ExerciseStartedEvent<>(EXERCISE_STARTED, puzzleConfig);
+            var exerciseStartedEvent = new ExerciseStartedEvent<>(ExerciseStartedEvent.EXERCISE_STARTED, puzzleConfig);
             fireEvent(exerciseStartedEvent);
         } else {
             // TODO message

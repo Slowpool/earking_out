@@ -14,7 +14,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.Perfe
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.typed.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
@@ -117,11 +117,12 @@ public final class EarkingOutApplication extends Application {
         var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
         var puzzleConfig = (AudioPerfectPitchConfig)puzzleConfigService.fetch(exercise);
         var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig);
-        perfectPitchConfigPane.addEventHandler(ConfigPane.EXERCISE_STARTED, this::openPuzzlePane);
+        perfectPitchConfigPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::openPuzzlePane);
         return perfectPitchConfigPane;
     }
 
     private void openPuzzlePane(ExerciseStartedEvent<?> e) {
+        // TODO generalize
         session = startSession((AudioPerfectPitchConfig) e.puzzleConfig);
         showPuzzlePane(session);
     }
@@ -186,7 +187,7 @@ public final class EarkingOutApplication extends Application {
     private Pane buildSessionStatsPane() {
         // TODO factory method? this warning bothers a lot
         var sessionStatsPane = new PerfectPitchStatsPane(session);
-        sessionStatsPane.addEventHandler(SessionStatsPane.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
+        sessionStatsPane.addEventHandler(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
         return sessionStatsPane;
     }
 

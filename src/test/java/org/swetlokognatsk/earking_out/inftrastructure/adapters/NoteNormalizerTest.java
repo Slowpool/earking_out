@@ -8,10 +8,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.NoteWithAccidentalTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.music.INoteNormalizer;
+import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
 public class NoteNormalizerTest {
-    static INoteNormalizer noteNormalizer;
+    static NoteNormalizer noteNormalizer;
     static NoteWithAccidental[] notesWithAccidental = NoteWithAccidentalTest.notesWithAccidental;
     static byte[] normalizedValues = NoteWithAccidentalTest.normalizedValues;
 
@@ -20,14 +20,14 @@ public class NoteNormalizerTest {
         noteNormalizer = getNoteNormalizer();
     }
 
-    static INoteNormalizer getNoteNormalizer() {
-        return DI.get(INoteNormalizer.class);
+    static NoteNormalizer getNoteNormalizer() {
+        return DI.get(NoteNormalizer.class);
     }
 
     @Test
     public void gettingNoteNormalizer() {
         assertNotNull(getNoteNormalizer());
-        assertTrue(noteNormalizer instanceof INoteNormalizer);
+        assertTrue(noteNormalizer instanceof NoteNormalizer);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class NoteNormalizerTest {
             var normalizedValue = noteNormalizer.normalizeInOctave(notesWithAccidental[i]);
             // normalizedValues are defined for FIRST octave, whereas this test checks for octave-scoped value
             expected = normalizedValues[i];
-            expected -= INoteNormalizer.SHIFT;
+            expected -= NoteNormalizer.SHIFT;
             assertEquals(expected, normalizedValue);
         }
     }
@@ -45,19 +45,19 @@ public class NoteNormalizerTest {
     // TODO implementation tests further. isn't it awkward?
     @Test
     public void gettingAccidentalShiftSharp() {
-        var accidentalShift = NoteNormalizer.getAccidentalShift(Accidentals.SHARP);
+        var accidentalShift = NoteNormalizerImpl.getAccidentalShift(Accidentals.SHARP);
         assertEquals(1, accidentalShift);
     }
 
     @Test
     public void gettingAccidentalShiftNatural() {
-        var accidentalShift = NoteNormalizer.getAccidentalShift(Accidentals.NATURAL);
+        var accidentalShift = NoteNormalizerImpl.getAccidentalShift(Accidentals.NATURAL);
         assertEquals(0, accidentalShift);
     }
 
     @Test
     public void gettingAccidentalShiftFlat() {
-        var accidentalShift = NoteNormalizer.getAccidentalShift(Accidentals.FLAT);
+        var accidentalShift = NoteNormalizerImpl.getAccidentalShift(Accidentals.FLAT);
         assertEquals(-1, accidentalShift);
     }
 }

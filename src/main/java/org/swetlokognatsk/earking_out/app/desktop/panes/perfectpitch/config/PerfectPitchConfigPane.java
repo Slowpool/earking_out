@@ -1,11 +1,12 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
+import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -15,7 +16,7 @@ import javafx.scene.layout.VBox;
 // TODO generalize into abstract class
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
     protected final VBox notesBox;
-    // TODO add rootNode
+    protected final VBox rootNoteBox;
     protected final ToggleGroup inputModeToggleGroup;
     protected final VBox inputModeBox;
 
@@ -26,19 +27,17 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         notesBox = new VBox(notesLabel, tempNotes);
         notesBox.setAlignment(Pos.CENTER);
 
+        var rootNoteLabel = new Label("root note");
+        var oneKeyChoicePiano = new Label("notes are here, but only one key can be chosen");
+        rootNoteBox = new VBox(rootNoteLabel, oneKeyChoicePiano);
+        rootNoteBox.setAlignment(Pos.CENTER);
+        rootNoteBox.setVisible(false);
+
         var inputModeLabel = new Label("input mode");
         inputModeToggleGroup = new ToggleGroup();
 
-        // TODO it can be automated
-        var keyboardAsPianoRadio = new RadioButton("keyboard as piano");
-        keyboardAsPianoRadio.setId(PerfectPitchInputMode.KEYBOARD_AS_PIANO.name());
-        keyboardAsPianoRadio.setToggleGroup(inputModeToggleGroup);
-
-        var notesAsCharactersRadio = new RadioButton("notes as characters");
-        notesAsCharactersRadio.setId(PerfectPitchInputMode.NOTES_AS_CHARACTERS.name());
-        notesAsCharactersRadio.setToggleGroup(inputModeToggleGroup);
-
-        var inputModeOptions = new VBox(keyboardAsPianoRadio, notesAsCharactersRadio);
+        var inputModeradioButtons = RadioButtonHelper.makeList(PerfectPitchInputMode.class, inputModeToggleGroup, this::handleRadioButtonSelected);
+        var inputModeOptions = new VBox(inputModeradioButtons);
         inputModeOptions.setAlignment(Pos.CENTER);
 
         inputModeBox = new VBox(inputModeLabel, inputModeOptions);
@@ -58,7 +57,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
     }
 
     protected void addCustomFields() {
-        getChildren().addAll(notesBox, inputModeBox);
+        getChildren().addAll(notesBox, rootNoteBox, inputModeBox);
     }
 
     protected final void setFieldsValuesFromConfig(PerfectPitchConfig<?> puzzleConfig) {
@@ -93,5 +92,16 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         var selectedInputMode = (RadioButton) inputModeToggleGroup.getSelectedToggle();
         var id = selectedInputMode.getId();
         var inputMode = PerfectPitchInputMode.valueOf(id);
+    }
+
+    protected void handleRadioButtonSelected(ActionEvent e) {
+        var selectedRadioButton = (RadioButton) inputModeToggleGroup.getSelectedToggle();
+        var selectedRadioButtonId = selectedRadioButton.getId();
+        if (selectedRadioButtonId == PerfectPitchInputMode.KEYBOARD_AS_PIANO.name()) {
+            rootNoteBox.setVisible(true);
+        }
+        else if (selectedRadioButtonId == PerfectPitchInputMode.NOTES_AS_CHARACTERS.name()) {
+            rootNoteBox.setVisible(false);
+        }
     }
 }

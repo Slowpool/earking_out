@@ -1,9 +1,8 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.typed.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
 
 public class AudioPerfectPitchConfigPane extends PerfectPitchConfigPane<AudioPerfectPitchExercise, AudioPerfectPitchConfig> {
 
@@ -13,9 +12,7 @@ public class AudioPerfectPitchConfigPane extends PerfectPitchConfigPane<AudioPer
     }
 
     protected void setFieldsValuesFromConfig(AudioPerfectPitchConfig puzzleConfig) {
-        // TODO it seems awkward. what opts?
-        var parent = ((PerfectPitchConfigPane<AudioPerfectPitchExercise, AudioPerfectPitchConfig>) this);
-        parent.setFieldsValuesFromConfig(puzzleConfig);
+        super.setFieldsValuesFromConfig((PerfectPitchConfig<AudioPerfectPitchExercise>)puzzleConfig);
     }
 
     // TODO it's not needed anymore, but remained for backward mapping (from pane to config store)

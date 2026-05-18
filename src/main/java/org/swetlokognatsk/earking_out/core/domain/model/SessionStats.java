@@ -4,9 +4,9 @@ package org.swetlokognatsk.earking_out.core.domain.model;
 // TODO how 'bout renaming it to SessionProgress?
 public class SessionStats {
     public int puzzlesCompletedCorrectly;
-    public int puzzlesCompleted;
+    public final int puzzlesCompleted;
 
-    public SessionStats(int puzzlesCompletedCorrectly, int puzzlesCompleted) {
+    public SessionStats(final int puzzlesCompletedCorrectly, final int puzzlesCompleted) {
         this.puzzlesCompletedCorrectly = puzzlesCompletedCorrectly;
         this.puzzlesCompleted = puzzlesCompleted;
     }

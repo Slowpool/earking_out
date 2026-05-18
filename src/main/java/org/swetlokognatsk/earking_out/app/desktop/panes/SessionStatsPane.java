@@ -13,16 +13,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public abstract class SessionStatsPane<PC extends PuzzleConfig<?>> extends BorderPane {
-    // TODO how 'bout inheritance from EXERCISE_STARTED?
-    public static EventType<ExerciseStartedOverEvent<?>> EXERCISE_STARTED_OVER = new EventType<>("EXERCISE_STARTED_OVER");
-    // TODO generics seem weird
-    protected Session<PC> session;
+    protected final Session<PC> session;
 
     protected abstract Pane buildStatsPane();
 
     // TODO passing Session domain model is a crime against good code - use dto instead
     public SessionStatsPane(Session<PC> session) {
-        super();
         this.session = session;
 
         var titleLabel = new Label("finished");
@@ -57,7 +53,7 @@ public abstract class SessionStatsPane<PC extends PuzzleConfig<?>> extends Borde
         e.consume();
 
         var config = session.puzzleConfig();
-        var exerciseStartedOverEvent = new ExerciseStartedOverEvent<>(EXERCISE_STARTED_OVER, config);
+        var exerciseStartedOverEvent = new ExerciseStartedOverEvent<>(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, config);
         fireEvent(exerciseStartedOverEvent);
     }
 }

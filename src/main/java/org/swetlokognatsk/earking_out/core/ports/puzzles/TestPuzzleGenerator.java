@@ -1,7 +1,9 @@
 package org.swetlokognatsk.earking_out.core.ports.puzzles;
 
-public class TestPuzzleGenerator implements IPuzzleGenerator {
-    public String generateSolution() {
-        return "bazinga";
+import org.swetlokognatsk.earking_out.core.domain.model.Solution;
+
+public class TestPuzzleGenerator implements PuzzleGenerator {
+    public Solution generateSolution() {
+        return new Solution("");
     }
 }

@@ -27,5 +27,3 @@ public class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchCon
         return pane;
     }
 }
-
-// TODO check that all project package names do not contain _ (those that were added by me)

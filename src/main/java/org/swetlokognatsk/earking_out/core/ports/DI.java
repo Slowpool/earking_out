@@ -1,11 +1,11 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.ports.hints.IHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IPerfectPitchHintFinder;
-import org.swetlokognatsk.earking_out.core.ports.music.INoteNormalizer;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.IPuzzleGenerator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizer;
+import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizerImpl;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.HintFinderByExercise;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.PerfectPitchHintFinder;
@@ -22,28 +22,21 @@ final public class DI {
     public static <T> T get(Class<T> someClass) {
         var className = someClass.getName();
         // case IPuzzleGenerator.class.getName() -> new TestPuzzleGenerator();
-        if (className == INoteNormalizer.class.getName()) {
-            return (T)new NoteNormalizer();
-        }
-        else if (className == IPuzzleGenerator.class.getName()) {
-            return (T)new FakePuzzleGenerator();
-        }
-        else if (className == IHintFinder.class.getName()) {
-            return (T)new HintFinderByExercise();
-        }
-        else if (className == IPerfectPitchHintFinder.class.getName()) {
-            return (T)new PerfectPitchHintFinder();
-        }
-        else if (className == FakeVisualPerfectPitchHints.class.getName()) {
-            return (T)new FakeVisualPerfectPitchHints();
-        }
-        else if (className == FakeAudioPerfectPitchHints.class.getName()) {
-            return (T)new FakeAudioPerfectPitchHints();
-        }
-        else if (className == ReadPuzzleConfigService.class.getName()) {
-            return (T)new FakeReadPuzzleConfigService();
-        }
-        else {
+        if (className == NoteNormalizer.class.getName()) {
+            return (T) new NoteNormalizerImpl();
+        } else if (className == PuzzleGenerator.class.getName()) {
+            return (T) new FakePuzzleGenerator();
+        } else if (className == HintFinder.class.getName()) {
+            return (T) new HintFinderByExercise();
+        } else if (className == IPerfectPitchHintFinder.class.getName()) {
+            return (T) new PerfectPitchHintFinder();
+        } else if (className == FakeVisualPerfectPitchHints.class.getName()) {
+            return (T) new FakeVisualPerfectPitchHints();
+        } else if (className == FakeAudioPerfectPitchHints.class.getName()) {
+            return (T) new FakeAudioPerfectPitchHints();
+        } else if (className == ReadPuzzleConfigService.class.getName()) {
+            return (T) new FakeReadPuzzleConfigService();
+        } else {
             return null;
         }
     }

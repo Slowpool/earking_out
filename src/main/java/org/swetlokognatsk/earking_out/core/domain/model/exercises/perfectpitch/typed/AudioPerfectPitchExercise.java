@@ -1,7 +1,7 @@
-package org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.typed;
+package org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 
 public class AudioPerfectPitchExercise extends PerfectPitchExercise {
 

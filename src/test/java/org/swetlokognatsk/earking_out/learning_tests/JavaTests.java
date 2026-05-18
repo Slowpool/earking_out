@@ -251,4 +251,32 @@ public class JavaTests {
     private <T extends MyGeneric<?>> T gettingTheValue4(T someClass) {
         return someClass;
     }
+
+    @Test
+    public void polymorphismTest1() {
+        Child child = new Child();
+        assertEquals("child", child.foo(child));
+        assertEquals("parent", child.parentFooViaSuper(child));
+        assertEquals("parent", child.parentFooViaCast(child));
+    }
+}
+
+class Parent {
+    public String foo(Parent parent) {
+        return "parent";
+    }
+}
+
+class Child extends Parent {
+    public String foo(Child child) {
+        return "child";
+    }
+
+    public String parentFooViaSuper(Child child) {
+        return super.foo(child);
+    }
+
+    public String parentFooViaCast(Child child) {
+        return ((Parent)this).foo(child);
+    }
 }
