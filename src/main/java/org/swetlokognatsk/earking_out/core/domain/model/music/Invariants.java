@@ -21,6 +21,7 @@ public final class Invariants {
      */
     public static final byte ACTIVE_OCTAVES_NUMBER = (byte) (PIANO_KEYS_NUMBER / KEYS_IN_OCTAVE);
     public static final byte WHITE_PIANO_KEYS_NUMBER = ACTIVE_OCTAVES_NUMBER * WHITE_KEYS_IN_OCTAVE;
+    public static final byte BLACK_PIANO_KEYS_NUMBER = ACTIVE_OCTAVES_NUMBER * BLACK_KEYS_IN_OCTAVE;
 
     // source: https://www.reddit.com/r/piano/comments/wkofm/what_are_the_dimension_of_the_piano_keys/
     private static final double WHITE_KEY_WIDTH_CM = 2.357142857;

@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedOverEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import javafx.event.ActionEvent;

@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseFinishedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;

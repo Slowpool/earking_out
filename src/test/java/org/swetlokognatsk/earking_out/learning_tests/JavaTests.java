@@ -264,6 +264,16 @@ public class JavaTests {
     public void toStringTest1() {
         assertEquals(String.valueOf(true), "true");
     }
+
+    @Test
+    public void invalidationListenerTest1() {
+        var lol = "bazingalol";
+        var result = Child.doSomething((firstArg, secondArg) -> {
+            return firstArg + secondArg;
+        });
+
+        assertEquals(lol, result);
+    }
 }
 
 class Parent {
@@ -282,6 +292,15 @@ class Child extends Parent {
     }
 
     public String parentFooViaCast(Child child) {
-        return ((Parent)this).foo(child);
+        return ((Parent) this).foo(child);
     }
+
+    public static String doSomething(CustomInvalidationListener listener) {
+        return listener.something("bazinga", "lol");
+    }
+}
+
+@FunctionalInterface
+interface CustomInvalidationListener {
+    public String something(String firstArg, String secondArg);
 }

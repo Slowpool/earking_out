@@ -19,7 +19,8 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
     protected final double blackKeyHeight;
 
     protected byte currentKeyIndex = 0;
-    protected byte currentWhiteX = 0;
+    protected double currentWhiteX = 0;
+    protected double currentBlackX;
 
     public PianoKeysBuilder(double keyboardWidth, double keyboardHeight) {
         this.keyboardWidth = keyboardWidth;
@@ -30,6 +31,8 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
 
         blackKeyWidth = calculateBlackKeyWidth();
         blackKeyHeight = calculateBlackKeyHeight();
+
+        currentBlackX = initBlackX();
     }
 
     private double calculateWhiteKeyWidth() {
@@ -48,26 +51,8 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
         return whiteKeyHeight * Invariants.BLACK_KEY_LENGTH_RELATIVELY_TO_WHITE_KEY_LENGTH;
     }
 
-    public boolean hasNext() {
-        return currentKeyIndex < Invariants.PIANO_KEYS_NUMBER - 1;
-    }
-
-    public PianoKey next() {
-        var pianoKey = new PianoKey(getCurrentKeyNumber());
-        var x = calculateX();
-        // TODO why Translate?
-        pianoKey.setTranslateX(x);
-        // TODO event handler
-
-        var keyWidth = calculateWidth();
-        pianoKey.setPrefWidth(keyWidth);
-
-        var keyHeight = calculateHeight();
-        pianoKey.setPrefHeight(keyHeight);
-
-        currentKeyIndex++;
-
-        return pianoKey;
+    private double initBlackX() {
+        return whiteKeyWidth - (blackKeyWidth / 2);
     }
 
     private byte getCurrentKeyNumber() {
@@ -83,8 +68,37 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
         return (byte) ((getShiftedKeyNumber() - 1) % Invariants.KEYS_IN_OCTAVE + 1);
     }
 
+    public boolean hasNext() {
+        return currentKeyIndex < Invariants.PIANO_KEYS_NUMBER;
+    }
+
+    public PianoKey next() {
+        var pianoKey = new PianoKey(getCurrentKeyNumber(), isWhite());
+        calculatePosition(pianoKey);
+        calculateDimensions(pianoKey);
+        // TODO event handler
+
+        currentKeyIndex++;
+
+        return pianoKey;
+    }
+
+    private void calculatePosition(PianoKey pianoKey) {
+        var x = calculateX();
+        // TODO why Translate?
+        pianoKey.setTranslateX(x);
+    }
+
+    private void calculateDimensions(final PianoKey pianoKey) {
+        var keyWidth = calculateWidth();
+        pianoKey.setPrefWidth(keyWidth);
+
+        var keyHeight = calculateHeight();
+        pianoKey.setPrefHeight(keyHeight);
+    }
+
     private double calculateX() {
-        double x = isWhite() ? nextWhiteX() : calculateBlackX();
+        double x = isWhite() ? nextWhiteX() : nextBlackX();
         return x;
     }
 
@@ -102,14 +116,19 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
         return x;
     }
 
-    private double calculateBlackX() {
-        // TODO the only thing remained to do
-        byte shiftedKeyNumber = (byte) (getCurrentKeyNumber() - NoteNormalizer.SHIFT);
-        // if (shiftedKeyNumber <= Invariants.KEYS_IN_OCTAVE) {
-        return whiteKeyWidth - (blackKeyWidth / 2);
-        // }
-
-        // return Invariants.WHITE_KEYS_IN_OCTAVE * whiteKeyWidth + calculateBlackX((byte) (keyNumber - Invariants.KEYS_IN_OCTAVE), keyboardWidth);
+    private double nextBlackX() {
+        var x = currentBlackX;
+        switch (getCurrentKeyNumberInOctave()) {
+        case 2, 7, 9:
+            currentBlackX += whiteKeyWidth;
+            break;
+        case 4, 11:
+            currentBlackX += whiteKeyWidth * 2;
+            break;
+        default:
+            throw new RuntimeException("calling nextBlackX for not black key");
+        }
+        return x;
     }
 
     private double calculateWidth() {

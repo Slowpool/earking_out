@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.app.desktop.events;
+package org.swetlokognatsk.earking_out.app.desktop.events.exercises;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import javafx.event.*;

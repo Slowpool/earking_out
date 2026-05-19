@@ -1,34 +1,80 @@
 package org.swetlokognatsk.earking_out.app.desktop.components;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import org.swetlokognatsk.earking_out.app.desktop.builders.PianoKeysBuilder;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.scene.layout.Region;
 
 public class PianoKeyboard extends Region {
+    private static final int WHITE_KEYS = 0;
+    private static final int BLACK_KEYS = 1;
+
     public final PianoKeyboardMode mode;
-    protected final PianoKey[] pianoKeys;
+    protected final PianoKey[] whitePianoKeys;
+    protected final PianoKey[] blackPianoKeys;
+
+    // TODO what's the difference between observable and property?
+    protected ObservableSet<Byte> selectedKeys = FXCollections.observableSet(new HashSet<Byte>());
+
+    public ObservableSet<Byte> selectedKeysProperty() {
+        return selectedKeys;
+    }
 
     public PianoKeyboard(final PianoKeyboardMode mode, double width, double height) {
         this.mode = mode;
-        this.setHeight(height);
-        this.setWidth(width);
+        setHeight(height);
+        setWidth(width);
 
-        this.pianoKeys = buildPianoKeys();
+        var pianoKeys = buildPianoKeys();
+        whitePianoKeys = pianoKeys[WHITE_KEYS];
+        blackPianoKeys = pianoKeys[BLACK_KEYS];
         addPianoKeys();
     }
 
-    private PianoKey[] buildPianoKeys() {
-        var pianoKeys = new PianoKey[Invariants.PIANO_KEYS_NUMBER];
+    private PianoKey[][] buildPianoKeys() {
+        var pianoKeys = new PianoKey[2][];
+        pianoKeys[WHITE_KEYS] = new PianoKey[Invariants.WHITE_PIANO_KEYS_NUMBER];
+        pianoKeys[BLACK_KEYS] = new PianoKey[Invariants.BLACK_PIANO_KEYS_NUMBER];
 
         var pianoKeysBuilder = new PianoKeysBuilder(getWidth(), getHeight());
-        for (byte i = 0; pianoKeysBuilder.hasNext(); i++) {
-            pianoKeys[i] = pianoKeysBuilder.next();
+        // TODO dirty, dirty code, refactoring
+        PianoKey pianoKey;
+        int pianoKeyColor;
+        int i;
+        for (byte whiteI = 0, blackI = 0; pianoKeysBuilder.hasNext();) {
+            pianoKey = pianoKeysBuilder.next();
+            addEventHandlers(pianoKey);
+            pianoKeyColor = pianoKey.isWhite() ? WHITE_KEYS : BLACK_KEYS;
+            i = pianoKey.isWhite() ? whiteI++ : blackI++;
+            pianoKeys[pianoKeyColor][i] = pianoKey;
         }
         return pianoKeys;
     }
 
     private void addPianoKeys() {
-        this.getChildren().addAll(pianoKeys);
+        getChildren().addAll(whitePianoKeys);
+        getChildren().addAll(blackPianoKeys);
+    }
+
+    private void addEventHandlers(PianoKey pianoKey) {
+        pianoKey.setOnMousePressed(e -> {
+            pianoKey.toggleSelection();
+
+            if (pianoKey.isSelected()) {
+                selectedKeys.add(pianoKey.keyNumber);
+            } else {
+                selectedKeys.remove(pianoKey.keyNumber);
+            }
+        });
     }
 
 }

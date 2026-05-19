@@ -9,6 +9,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 
 public abstract class PerfectPitchConfig<E extends PerfectPitchExercise> extends PuzzleConfig<E> {
+    public static final String NOTES_FOR_PUZZLE_PROP = "notesForPuzzle";
+    
     public final NoteWithAccidental[] notesForPuzzle;
     public final NoteWithAccidental rootNote;
     public final PerfectPitchInputMode inputMode;

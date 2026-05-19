@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboardMode;
+import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.pianokeyboard.SelectedNotesUpdatedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
@@ -17,19 +19,20 @@ import javafx.scene.layout.VBox;
 
 // TODO generalize into abstract class
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
-    // public final String 
-    
-    protected final VBox notesBox;
+    protected final VBox pianoKeyboardBox;
     protected final VBox rootNoteBox;
     protected final ToggleGroup inputModeToggleGroup;
     protected final VBox inputModeBox;
 
     {
         var notesLabel = new Label("notes");
-        // TODO replace with interactive piano keys box
         var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getWidth(), getHeight() / 4);
-        notesBox = new VBox(notesLabel, pianoKeyboard);
-        notesBox.setAlignment(Pos.CENTER);
+        // TODO remove later
+        // pianoKeyboard.addEventHandler(SelectedNotesUpdatedEvent.SELECTED_KEYS_UPDATED, this::fireSelectedNotesUpdated);
+        // TODO do it somehow
+        pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NOTES_FOR_PUZZLE_PROP));
+        pianoKeyboardBox = new VBox(notesLabel, pianoKeyboard);
+        pianoKeyboardBox.setAlignment(Pos.CENTER);
 
         var rootNoteLabel = new Label("root note");
         var oneKeyChoicePiano = new Label("notes are here, but only one key can be chosen");
@@ -61,7 +64,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
     }
 
     protected void addCustomFields() {
-        getChildren().addAll(notesBox, rootNoteBox, inputModeBox);
+        getChildren().addAll(pianoKeyboardBox, rootNoteBox, inputModeBox);
     }
 
     protected final void setFieldsValuesFromConfig(PerfectPitchConfig<?> puzzleConfig) {
@@ -93,6 +96,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
     }
 
     protected void chagneInputMode() {
+        // TODO
         var selectedInputMode = (RadioButton) inputModeToggleGroup.getSelectedToggle();
         var id = selectedInputMode.getId();
         var inputMode = PerfectPitchInputMode.valueOf(id);
@@ -103,16 +107,22 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         var selectedRadioButtonId = selectedRadioButton.getId();
         if (selectedRadioButtonId == PerfectPitchInputMode.KEYBOARD_AS_PIANO.name()) {
             rootNoteBox.setVisible(true);
-        }
-        else if (selectedRadioButtonId == PerfectPitchInputMode.NOTES_AS_CHARACTERS.name()) {
+        } else if (selectedRadioButtonId == PerfectPitchInputMode.NOTES_AS_CHARACTERS.name()) {
             rootNoteBox.setVisible(false);
         }
     }
 
     protected String castCustomConfigPropertyNewValue(String configProperty, Object newValue) {
         return switch (configProperty) {
-            case "test" -> "";
+        case PerfectPitchConfig.NOTES_FOR_PUZZLE_PROP -> "";
         default -> throw new IllegalArgumentException();
         };
     }
+
+    // protected void fireSelectedNotesUpdated(SelectedNotesUpdatedEvent e) {
+
+    //     var configPropertyUpdatedEvent = new ConfigPropertyUpdatingEvent(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, exercise, PerfectPitchConfig.NOTES_FOR_PUZZLE_PROP, );
+    //     fireEvent(configPropertyUpdatedEvent);
+    // }
+
 }

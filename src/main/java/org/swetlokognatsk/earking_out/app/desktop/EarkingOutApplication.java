@@ -1,10 +1,11 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
 import java.util.UUID;
-import org.swetlokognatsk.earking_out.app.desktop.events.ConfigPropertyUpdatingEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseFinishedEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedOverEvent;
+
+import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config.AudioPerfectPitchConfigPane;

@@ -1,8 +1,8 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.EarkingOutApplication;
-import org.swetlokognatsk.earking_out.app.desktop.events.ConfigPropertyUpdatingEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import javafx.beans.value.ChangeListener;
