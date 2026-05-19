@@ -1,25 +1,22 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 
 public abstract class PerfectPitchConfig<E extends PerfectPitchExercise> extends PuzzleConfig<E> {
-    public static final String NOTES_FOR_PUZZLE_PROP = "notesForPuzzle";
-    
-    public final NoteWithAccidental[] notesForPuzzle;
-    public final NoteWithAccidental rootNote;
+    public static final String NORMALIZED_NOTES_FOR_PUZZLE_PROP = "normalizedNotesForPuzzle";
+
+    public final byte[] normalizedNotesForPuzzle;
+    public final Byte normalizedRootNote;
     public final PerfectPitchInputMode inputMode;
 
-    public PerfectPitchConfig(final int targetNumberOfPuzzles, final boolean statsRecording, final NoteWithAccidental[] notesForPuzzle, final NoteWithAccidental rootNote, final PerfectPitchInputMode inputMode) {
+    public PerfectPitchConfig(final int targetNumberOfPuzzles, final boolean statsRecording, final byte[] normalizedNotesForPuzzle, final Byte normalizedRootNote, final PerfectPitchInputMode inputMode) {
         super(targetNumberOfPuzzles, statsRecording);
 
-        this.notesForPuzzle = notesForPuzzle;
-        this.rootNote = rootNote;
+        this.normalizedNotesForPuzzle = normalizedNotesForPuzzle;
+        this.normalizedRootNote = normalizedRootNote;
         this.inputMode = inputMode;
     }
 

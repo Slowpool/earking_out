@@ -29,8 +29,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getWidth(), getHeight() / 4);
         // TODO remove later
         // pianoKeyboard.addEventHandler(SelectedNotesUpdatedEvent.SELECTED_KEYS_UPDATED, this::fireSelectedNotesUpdated);
-        // TODO do it somehow
-        pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NOTES_FOR_PUZZLE_PROP));
+        pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
         pianoKeyboardBox = new VBox(notesLabel, pianoKeyboard);
         pianoKeyboardBox.setAlignment(Pos.CENTER);
 
@@ -69,9 +68,9 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected final void setFieldsValuesFromConfig(PerfectPitchConfig<?> puzzleConfig) {
         setInputMode(puzzleConfig.inputMode);
-        setNotes(puzzleConfig.notesForPuzzle);
+        setNotes(puzzleConfig.normalizedNotesForPuzzle);
         if (puzzleConfig.inputMode == PerfectPitchInputMode.KEYBOARD_AS_PIANO) {
-            setRootNote(puzzleConfig.rootNote);
+            setRootNote(puzzleConfig.normalizedRootNote);
         }
     }
 
@@ -87,11 +86,11 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         }
     }
 
-    protected void setNotes(NoteWithAccidental[] notes) {
+    protected void setNotes(byte[] normalizedNotes) {
         // TODO
     }
 
-    protected void setRootNote(NoteWithAccidental rootNote) {
+    protected void setRootNote(Byte normalizedRootNote) {
         // TODO
     }
 
@@ -114,7 +113,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected String castCustomConfigPropertyNewValue(String configProperty, Object newValue) {
         return switch (configProperty) {
-        case PerfectPitchConfig.NOTES_FOR_PUZZLE_PROP -> "";
+        case PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP -> "";
         default -> throw new IllegalArgumentException();
         };
     }

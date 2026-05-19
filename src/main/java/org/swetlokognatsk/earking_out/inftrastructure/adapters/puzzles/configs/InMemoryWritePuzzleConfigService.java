@@ -14,16 +14,16 @@ public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigServic
      * @param configProperty
      * @param newValue
      */
-    public void updateProperty(Exercise exercise, String configProperty, String newValue) {
+    public void updateProperty(Exercise exercise, String configProperty, Object newValue) {
         var oldConfig = InMemoryReadPuzzleConfigService.puzzleConfig;
         switch (configProperty) {
         case PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP:
             // TODO casting Object to String and then String to Integer is a little awkward, but probably that's how the cookies crumbles
-            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(Integer.valueOf(newValue), oldConfig.statsRecording, oldConfig.notesForPuzzle, oldConfig.rootNote, oldConfig.inputMode);
+            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(Integer.valueOf(newValue), oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, oldConfig.inputMode);
             break;
         case PuzzleConfig.STATS_RECORDING_PROP:
             var newStatsRecording = Boolean.valueOf(newValue);
-            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, newStatsRecording, oldConfig.notesForPuzzle, oldConfig.rootNote, oldConfig.inputMode);
+            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, newStatsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, oldConfig.inputMode);
             break;
         default:
             break;

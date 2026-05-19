@@ -1,17 +1,10 @@
 package org.swetlokognatsk.earking_out.app.desktop.components;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 import org.swetlokognatsk.earking_out.app.desktop.builders.PianoKeysBuilder;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.scene.layout.Region;
 
 public class PianoKeyboard extends Region {
@@ -23,9 +16,9 @@ public class PianoKeyboard extends Region {
     protected final PianoKey[] blackPianoKeys;
 
     // TODO what's the difference between observable and property?
-    protected ObservableSet<Byte> selectedKeys = FXCollections.observableSet(new HashSet<Byte>());
+    protected SetProperty<Byte> selectedKeys = new SimpleSetProperty<>(FXCollections.observableSet());
 
-    public ObservableSet<Byte> selectedKeysProperty() {
+    public SetProperty<Byte> selectedKeysProperty() {
         return selectedKeys;
     }
 

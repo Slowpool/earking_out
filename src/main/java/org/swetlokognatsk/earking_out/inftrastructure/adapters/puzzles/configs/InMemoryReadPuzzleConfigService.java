@@ -13,7 +13,7 @@ public class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigService 
     public static AudioPerfectPitchConfig puzzleConfig;
 
     static {
-        var notes = new NoteWithAccidental[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST) };
+        var notes = new byte[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST).normalize() };
         puzzleConfig = new AudioPerfectPitchConfig(100, false, notes, null, PerfectPitchInputMode.NOTES_AS_CHARACTERS);
     }
 
