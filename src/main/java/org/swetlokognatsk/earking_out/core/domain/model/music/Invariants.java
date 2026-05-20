@@ -15,7 +15,8 @@ public final class Invariants {
     /**
      * 3 left and 1 right keys are omitted
      */
-    public static final byte PIANO_KEYS_NUMBER = 84;
+    // TODO why WHITE_PIANO_KEYS_NUMBER gives error when the expression is used here?
+    public static final byte PIANO_KEYS_NUMBER = 84;//(byte)(KEYS_IN_OCTAVE * Octaves.values().length);
     /**
      * Active octave is octave, that may be used in exercises
      */

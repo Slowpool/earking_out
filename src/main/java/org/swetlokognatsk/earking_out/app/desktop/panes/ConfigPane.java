@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStart
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -24,40 +25,56 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     protected final Button start;
 
     protected abstract void addCustomFields();
-
     protected abstract void setFieldsValuesFromConfig(PC puzzleConfig);
-
     protected abstract Object castCustomConfigPropertyNewValue(String configProperty, Object newValue);
 
     {
-        var numberOfPuzzlesLabel = new Label("number of puzzles");
-        numberOfPuzzlesField = new TextField();
-        var numberOfPuzzlesProperty = numberOfPuzzlesField.textProperty();
-        numberOfPuzzlesProperty.addListener((prop, oldValue, newValue) -> {
-            var containsOnlyDigits = newValue.matches("\\d*");
-            if (!containsOnlyDigits) {
-                numberOfPuzzlesField.setText(oldValue);
-            }
-        });
-        numberOfPuzzlesProperty.addListener(createConfigPropertyUpadtingEvent(PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP));
-        numberOfPuzzlesBox = new HBox(numberOfPuzzlesLabel, numberOfPuzzlesField);
-        numberOfPuzzlesBox.setAlignment(Pos.CENTER);
-        numberOfPuzzlesBox.setSpacing(EarkingOutApplication.LABEL_FIELD_SPACING);
-
-        statisticsRecordingField = new CheckBox("statistics recording");
-        statisticsRecordingField.setSelected(true);
-        statisticsRecordingField.selectedProperty().addListener(createConfigPropertyUpadtingEvent(PuzzleConfig.STATS_RECORDING_PROP));
-
         start = new Button("start");
         start.setOnAction(this::fireExerciseStartedEvent);
     }
 
     public ConfigPane(final PC puzzleConfig, double width, double height) {
-        this.exercise = puzzleConfig.exercise;
+        exercise = puzzleConfig.exercise;
+
+        numberOfPuzzlesField = buildNumberOfPuzzlesField(puzzleConfig.targetNumberOfPuzzles);
+        numberOfPuzzlesBox = buildNumberOfPuzzlesBox(numberOfPuzzlesField);
+
+        statisticsRecordingField = initStatisticsRecordingField(puzzleConfig.statsRecording);
+
         setWidth(width);
         setHeight(height);
 
         addCommonFields(puzzleConfig);
+    }
+
+    private TextField buildNumberOfPuzzlesField(int numberOfPuzzles) {
+        var numberOfPuzzlesField = new TextField(String.valueOf(numberOfPuzzles));
+        var numberOfPuzzlesProperty = numberOfPuzzlesField.textProperty();
+        numberOfPuzzlesProperty.addListener(this::restrictInputToNumbers);
+        numberOfPuzzlesProperty.addListener(createConfigPropertyUpadtingEvent(PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP));
+        return numberOfPuzzlesField;
+    }
+
+    protected void restrictInputToNumbers(ObservableValue<?> observable, String oldValue, String newValue) {
+        var containsOnlyDigits = newValue.matches("\\d*");
+        if (!containsOnlyDigits) {
+            numberOfPuzzlesField.setText(oldValue);
+        }
+    }
+
+    private HBox buildNumberOfPuzzlesBox(TextField numberOfPuzzlesField) {
+        var numberOfPuzzlesLabel = new Label("number of puzzles");
+        var numberOfPuzzlesBox = new HBox(numberOfPuzzlesLabel, numberOfPuzzlesField);
+        numberOfPuzzlesBox.setAlignment(Pos.CENTER);
+        numberOfPuzzlesBox.setSpacing(EarkingOutApplication.LABEL_FIELD_SPACING);
+        return numberOfPuzzlesBox;
+    }
+
+    private CheckBox initStatisticsRecordingField(boolean isSelected) {
+        var statisticsRecordingField = new CheckBox("statistics recording");
+        statisticsRecordingField.setSelected(isSelected);
+        statisticsRecordingField.selectedProperty().addListener(createConfigPropertyUpadtingEvent(PuzzleConfig.STATS_RECORDING_PROP));
+        return statisticsRecordingField;
     }
 
     protected ChangeListener<Object> createConfigPropertyUpadtingEvent(String configProperty) {
@@ -91,9 +108,8 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
         getChildren().addAll(numberOfPuzzlesBox, statisticsRecordingField);
     }
 
+    // TODO it's being set in constructor, do we need it?
     private void setCommonFieldsValuesFromConfig(PC puzzleConfig) {
-        numberOfPuzzlesField.setText("" + puzzleConfig.targetNumberOfPuzzles);
-        statisticsRecordingField.setSelected(puzzleConfig.statsRecording);
     }
 
     protected void addStartButton() {
