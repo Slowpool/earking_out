@@ -31,16 +31,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         rootNoteBox = new VBox(rootNoteLabel, oneKeyChoicePiano);
         rootNoteBox.setAlignment(Pos.CENTER);
         rootNoteBox.setVisible(false);
-
-        var inputModeLabel = new Label("input mode");
-        inputModeToggleGroup = new ToggleGroup();
-
-        var inputModeradioButtons = RadioButtonHelper.makeList(PerfectPitchInputMode.class, inputModeToggleGroup, this::handleRadioButtonSelected);
-        var inputModeOptions = new VBox(inputModeradioButtons);
-        inputModeOptions.setAlignment(Pos.CENTER);
-
-        inputModeBox = new VBox(inputModeLabel, inputModeOptions);
-        inputModeBox.setAlignment(Pos.CENTER);
     }
 
     public PerfectPitchConfigPane(final PC puzzleConfig, double width, double height) {
@@ -49,12 +39,34 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         pianoKeyboard = buildPianoKeyboard(puzzleConfig.normalizedNotesForPuzzle);
         pianoKeyboardBox = buildPianoKeyboardBox(pianoKeyboard);
 
+        inputModeToggleGroup = new ToggleGroup();
+        var inputModeRadioButtons = buildInputModeRadioButtons(inputModeToggleGroup, puzzleConfig.inputMode);
+        inputModeBox = buildInputModeBox(inputModeRadioButtons);
+
         addCustomFields();
         setFieldsValuesFromConfig(puzzleConfig);
         addStartButton();
 
         setSpacing(20);
         setAlignment(Pos.CENTER);
+    }
+
+    protected RadioButton[] buildInputModeRadioButtons(ToggleGroup inputModeToggleGroup, PerfectPitchInputMode selectedInputMode) {
+        var inputModeRadioButtons = RadioButtonHelper.makeList(PerfectPitchInputMode.class, inputModeToggleGroup, selectedInputMode, this::handleRadioButtonSelected);
+        inputModeToggleGroup.selectedToggleProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.INPUT_MODE_PROP));
+
+        return inputModeRadioButtons;
+    }
+
+    protected static VBox buildInputModeBox(RadioButton[] inputModeRadioButtons) {
+        var inputModeLabel = new Label("input mode");
+
+        var inputModeOptions = new VBox(inputModeRadioButtons);
+        inputModeOptions.setAlignment(Pos.CENTER);
+
+        var inputModeBox = new VBox(inputModeLabel, inputModeOptions);
+        inputModeBox.setAlignment(Pos.CENTER);
+        return inputModeBox;
     }
 
     protected void addCustomFields() {
@@ -122,6 +134,12 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             var objArray = set.toArray(new Byte[0]);
             var primitiveArray = ArrayUtils.toPrimitive(objArray);
             yield primitiveArray;
+        }
+        case PerfectPitchConfig.INPUT_MODE_PROP -> {
+            var radioButton = (RadioButton)newValue;
+            var enumValue = radioButton.getId();
+            var enumElement = PerfectPitchInputMode.valueOf(enumValue);
+            yield enumElement;
         }
         default -> throw new IllegalArgumentException();
         };

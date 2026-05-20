@@ -25,9 +25,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     protected final Button start;
 
     protected abstract void addCustomFields();
-
     protected abstract void setFieldsValuesFromConfig(PC puzzleConfig);
-
     protected abstract Object castCustomConfigPropertyNewValue(String configProperty, Object newValue);
 
     {

@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 
@@ -30,6 +31,10 @@ public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigServic
         case PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP:
             var newNormalizedNotes = (byte[]) newValue;
             InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, newNormalizedNotes, oldConfig.normalizedRootNote, oldConfig.inputMode);
+            break;
+        case PerfectPitchConfig.INPUT_MODE_PROP:
+            var newInputMode = (PerfectPitchInputMode)newValue;
+            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, newInputMode);
             break;
         default:
             break;
