@@ -42,13 +42,17 @@ public final class PianoKey extends Button {
     }
 
     public void toggleSelection() {
-        setSelected(!isSelected());
-        toggleColor();
+        toggleSelection(!isSelected());
     }
 
-    protected void toggleColor() {
+    public void toggleSelection(boolean value) {
+        setSelected(value);
+        toggleColor(value);
+    }
+
+    protected void toggleColor(boolean newIsSelected) {
         Background background;
-        if (isSelected) {
+        if (newIsSelected) {
             if (isWhite()) {
                 background = selectedWhiteBackground;
             } else {

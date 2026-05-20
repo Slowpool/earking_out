@@ -18,20 +18,14 @@ import javafx.scene.layout.VBox;
 
 // TODO generalize into abstract class
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
+    protected final PianoKeyboard pianoKeyboard;
+
     protected final VBox pianoKeyboardBox;
     protected final VBox rootNoteBox;
     protected final ToggleGroup inputModeToggleGroup;
     protected final VBox inputModeBox;
 
     {
-        var notesLabel = new Label("notes");
-        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getWidth(), getHeight() / 4);
-        // TODO remove later
-        // pianoKeyboard.addEventHandler(SelectedNotesUpdatedEvent.SELECTED_KEYS_UPDATED, this::fireSelectedNotesUpdated);
-        pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
-        pianoKeyboardBox = new VBox(notesLabel, pianoKeyboard);
-        pianoKeyboardBox.setAlignment(Pos.CENTER);
-
         var rootNoteLabel = new Label("root note");
         var oneKeyChoicePiano = new Label("notes are here, but only one key can be chosen");
         rootNoteBox = new VBox(rootNoteLabel, oneKeyChoicePiano);
@@ -52,9 +46,11 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
     public PerfectPitchConfigPane(final PC puzzleConfig, double width, double height) {
         super(puzzleConfig, width, height);
 
+        pianoKeyboard = buildPianoKeyboard(puzzleConfig.normalizedNotesForPuzzle);
+        pianoKeyboardBox = buildPianoKeyboardBox(pianoKeyboard);
+
         addCustomFields();
         setFieldsValuesFromConfig(puzzleConfig);
-
         addStartButton();
 
         setSpacing(20);
@@ -65,9 +61,21 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         getChildren().addAll(pianoKeyboardBox, rootNoteBox, inputModeBox);
     }
 
+    protected PianoKeyboard buildPianoKeyboard(byte[] selectedKeys) {
+        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getWidth(), getHeight() / 4, selectedKeys);
+        pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
+        return pianoKeyboard;
+    }
+
+    protected static VBox buildPianoKeyboardBox(PianoKeyboard pianoKeyboard) {
+        var notesLabel = new Label("notes");
+        var pianoKeyboardBox = new VBox(notesLabel, pianoKeyboard);
+        pianoKeyboardBox.setAlignment(Pos.CENTER);
+        return pianoKeyboardBox;
+    }
+
     protected final void setFieldsValuesFromConfig(PerfectPitchConfig<?> puzzleConfig) {
         setInputMode(puzzleConfig.inputMode);
-        setNotes(puzzleConfig.normalizedNotesForPuzzle);
         if (puzzleConfig.inputMode == PerfectPitchInputMode.KEYBOARD_AS_PIANO) {
             setRootNote(puzzleConfig.normalizedRootNote);
         }
@@ -83,10 +91,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
                 break;
             }
         }
-    }
-
-    protected void setNotes(byte[] normalizedNotes) {
-        // TODO
     }
 
     protected void setRootNote(Byte normalizedRootNote) {

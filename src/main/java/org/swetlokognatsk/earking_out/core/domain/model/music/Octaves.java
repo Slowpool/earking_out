@@ -13,5 +13,4 @@ public enum Octaves {
     FIFTH,
     SIXTH,
     SEVENTH,
-    EIGHTH,
 }
