@@ -89,19 +89,21 @@ public class PianoKeyboard extends Region {
         return dichotomizedPianoKeys;
     }
 
-    private void addPianoKeys() {
-        getChildren().addAll(whitePianoKeys);
-        getChildren().addAll(blackPianoKeys);
-    }
-
-    public ObservableSet<Byte> initSelectedKeys(byte[] keyNumbers) {
+    protected ObservableSet<Byte> initSelectedKeys(byte[] keyNumbers) {
         var boxedKeyNumbers = ArrayUtils.toObject(keyNumbers);
         var set = new HashSet<Byte>(Arrays.asList(boxedKeyNumbers));
         var observableSet = FXCollections.observableSet(set);
         for (var pianoKey : allPianoKeys) {
             boolean shouldBeSelected = ArrayUtils.contains(keyNumbers, pianoKey.keyNumber);
-            pianoKey.toggleSelection(shouldBeSelected);
+            if (shouldBeSelected) {
+                pianoKey.toggleSelection(shouldBeSelected);
+            }
         }
         return observableSet;
+    }
+
+    private void addPianoKeys() {
+        getChildren().addAll(whitePianoKeys);
+        getChildren().addAll(blackPianoKeys);
     }
 }

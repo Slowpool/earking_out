@@ -19,9 +19,9 @@ import javafx.scene.layout.VBox;
 // TODO generalize into abstract class
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
     protected final PianoKeyboard pianoKeyboard;
-
     protected final VBox pianoKeyboardBox;
     protected final VBox rootNoteBox;
+
     protected final ToggleGroup inputModeToggleGroup;
     protected final VBox inputModeBox;
 
@@ -51,6 +51,19 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         setAlignment(Pos.CENTER);
     }
 
+    protected PianoKeyboard buildPianoKeyboard(byte[] selectedKeys) {
+        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getWidth(), getHeight() / 4, selectedKeys);
+        pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
+        return pianoKeyboard;
+    }
+
+    protected static VBox buildPianoKeyboardBox(PianoKeyboard pianoKeyboard) {
+        var notesLabel = new Label("notes");
+        var pianoKeyboardBox = new VBox(notesLabel, pianoKeyboard);
+        pianoKeyboardBox.setAlignment(Pos.CENTER);
+        return pianoKeyboardBox;
+    }
+
     protected RadioButton[] buildInputModeRadioButtons(ToggleGroup inputModeToggleGroup, PerfectPitchInputMode selectedInputMode) {
         var inputModeRadioButtons = RadioButtonHelper.makeList(PerfectPitchInputMode.class, inputModeToggleGroup, selectedInputMode, this::handleRadioButtonSelected);
         inputModeToggleGroup.selectedToggleProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.INPUT_MODE_PROP));
@@ -71,19 +84,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected void addCustomFields() {
         getChildren().addAll(pianoKeyboardBox, rootNoteBox, inputModeBox);
-    }
-
-    protected PianoKeyboard buildPianoKeyboard(byte[] selectedKeys) {
-        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getWidth(), getHeight() / 4, selectedKeys);
-        pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
-        return pianoKeyboard;
-    }
-
-    protected static VBox buildPianoKeyboardBox(PianoKeyboard pianoKeyboard) {
-        var notesLabel = new Label("notes");
-        var pianoKeyboardBox = new VBox(notesLabel, pianoKeyboard);
-        pianoKeyboardBox.setAlignment(Pos.CENTER);
-        return pianoKeyboardBox;
     }
 
     protected final void setFieldsValuesFromConfig(PerfectPitchConfig<?> puzzleConfig) {
@@ -109,13 +109,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         // TODO
     }
 
-    protected void chagneInputMode() {
-        // TODO
-        var selectedInputMode = (RadioButton) inputModeToggleGroup.getSelectedToggle();
-        var id = selectedInputMode.getId();
-        var inputMode = PerfectPitchInputMode.valueOf(id);
-    }
-
     protected void handleRadioButtonSelected(ActionEvent e) {
         var selectedRadioButton = (RadioButton) inputModeToggleGroup.getSelectedToggle();
         var selectedRadioButtonId = selectedRadioButton.getId();
@@ -136,7 +129,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             yield primitiveArray;
         }
         case PerfectPitchConfig.INPUT_MODE_PROP -> {
-            var radioButton = (RadioButton)newValue;
+            var radioButton = (RadioButton) newValue;
             var enumValue = radioButton.getId();
             var enumElement = PerfectPitchInputMode.valueOf(enumValue);
             yield enumElement;
