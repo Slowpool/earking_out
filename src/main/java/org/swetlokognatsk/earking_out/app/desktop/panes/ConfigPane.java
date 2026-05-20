@@ -27,7 +27,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
 
     protected abstract void setFieldsValuesFromConfig(PC puzzleConfig);
 
-    protected abstract String castCustomConfigPropertyNewValue(String configProperty, Object newValue);
+    protected abstract Object castCustomConfigPropertyNewValue(String configProperty, Object newValue);
 
     {
         var numberOfPuzzlesLabel = new Label("number of puzzles");
@@ -68,11 +68,12 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
         };
     }
 
-    private String castConfigPropertyNewValue(String configProperty, Object newValue) {
+    private Object castConfigPropertyNewValue(String configProperty, Object newValue) {
+        // casts like (String) are just for explicity, actually they aren't necessary
         return switch (configProperty) {
         // TODO what's the difference between `(String)obj` and `String.valueOf(obj)`?
         case PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP -> (String) newValue;
-        case PuzzleConfig.STATS_RECORDING_PROP -> String.valueOf(newValue);
+        case PuzzleConfig.STATS_RECORDING_PROP -> (boolean) newValue;
         default -> castCustomConfigPropertyNewValue(configProperty, newValue);
         };
     }

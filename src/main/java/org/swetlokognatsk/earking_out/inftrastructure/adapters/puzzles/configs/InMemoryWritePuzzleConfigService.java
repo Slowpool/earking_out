@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 
@@ -10,6 +11,7 @@ public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigServic
 
     /**
      * Always accepts `newValue` as `String` because it'll be stored serialized;
+     * 
      * @param exercise
      * @param configProperty
      * @param newValue
@@ -19,11 +21,15 @@ public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigServic
         switch (configProperty) {
         case PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP:
             // TODO casting Object to String and then String to Integer is a little awkward, but probably that's how the cookies crumbles
-            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(Integer.valueOf(newValue), oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, oldConfig.inputMode);
+            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig((int) newValue, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, oldConfig.inputMode);
             break;
         case PuzzleConfig.STATS_RECORDING_PROP:
-            var newStatsRecording = Boolean.valueOf(newValue);
+            var newStatsRecording = (boolean) newValue;
             InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, newStatsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, oldConfig.inputMode);
+            break;
+        case PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP:
+            var newNormalizedNotes = (byte[]) newValue;
+            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, newNormalizedNotes, oldConfig.normalizedRootNote, oldConfig.inputMode);
             break;
         default:
             break;

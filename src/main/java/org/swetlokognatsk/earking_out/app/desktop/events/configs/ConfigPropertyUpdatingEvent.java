@@ -10,9 +10,9 @@ public class ConfigPropertyUpdatingEvent extends Event {
 
     public final Exercise exercise;
     public final String configProperty;
-    public final String newValue;
+    public final Object newValue;
 
-    public ConfigPropertyUpdatingEvent(final EventType<?> eventType, Exercise exercise, String configProperty, String newValue) {
+    public ConfigPropertyUpdatingEvent(final EventType<?> eventType, Exercise exercise, String configProperty, Object newValue) {
         super(eventType);
 
         this.exercise = exercise;

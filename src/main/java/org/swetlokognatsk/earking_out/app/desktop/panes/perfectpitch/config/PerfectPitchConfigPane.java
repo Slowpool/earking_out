@@ -1,15 +1,14 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboardMode;
-import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.pianokeyboard.SelectedNotesUpdatedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
+import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -111,9 +110,15 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         }
     }
 
-    protected String castCustomConfigPropertyNewValue(String configProperty, Object newValue) {
+    protected Object castCustomConfigPropertyNewValue(String configProperty, Object newValue) {
         return switch (configProperty) {
-        case PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP -> "";
+        // TODO why (Integer) or (Byte) is fine whereas (SetProperty<Byte>) gives unchecked cast warning?
+        case PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP -> {
+            var set = (ObservableSet<Byte>) newValue;
+            var objArray = set.toArray(new Byte[0]);
+            var primitiveArray = ArrayUtils.toPrimitive(objArray);
+            yield primitiveArray;
+        }
         default -> throw new IllegalArgumentException();
         };
     }

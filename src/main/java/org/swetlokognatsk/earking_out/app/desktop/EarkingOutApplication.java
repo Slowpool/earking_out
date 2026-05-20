@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
 import java.util.UUID;
-
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
@@ -115,12 +114,12 @@ public final class EarkingOutApplication extends Application {
         var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
         var puzzleConfig = (AudioPerfectPitchConfig) puzzleConfigService.fetch(exercise);
         var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig, WIDTH, HEIGHT);
-        perfectPitchConfigPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::openPuzzlePane);
+        perfectPitchConfigPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
         perfectPitchConfigPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
         return perfectPitchConfigPane;
     }
 
-    private void openPuzzlePane(ExerciseStartedEvent<?> e) {
+    private void tryOpenPuzzlePane(ExerciseStartedEvent<?> e) {
         var readPuzzleConfigService = DI.get(ReadPuzzleConfigService.class);
         var puzzleConfig = readPuzzleConfigService.fetch(e.exercise);
 

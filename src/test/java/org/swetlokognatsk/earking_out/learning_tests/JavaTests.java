@@ -274,6 +274,20 @@ public class JavaTests {
 
         assertEquals(lol, result);
     }
+
+    @Test
+    public void stringTest1() {
+        String string1 = "bazinga";
+
+        var castedString1 = string1.toString();
+        assertEquals(string1, castedString1);
+
+        var castedString2 = (String) string1;
+        assertEquals(string1, castedString2);
+
+        var castedString3 = String.valueOf(string1);
+        assertEquals(string1, castedString3);
+    }
 }
 
 class Parent {
