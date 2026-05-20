@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental
  * and Db1 actually have the same key number (and sound accordingly) and it's
  * 5th, so both of their normalized values must be "5"
  */
-public interface INoteNormalizer {
+public interface NoteNormalizer {
     /**
      * Skipping A0, A#0, B0, so that `C1.normalize() == 4`. Why? These three notes
      * aren't used in app by two reasons: 1. To simplify the logic, cause i doubt

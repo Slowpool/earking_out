@@ -3,24 +3,24 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPit
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.IFiniteHintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.IHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.FiniteHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 
-public abstract class HintFinderByType implements IHintFinder {
-    final IFiniteHintFinder visualHintFinder = resolveVisualHintFinder();
-    final IFiniteHintFinder audioHintFinder = resolveAudioHintFinder();
+public abstract class HintFinderByType implements HintFinder {
+    final FiniteHintFinder visualHintFinder = resolveVisualHintFinder();
+    final FiniteHintFinder audioHintFinder = resolveAudioHintFinder();
 
-    private IFiniteHintFinder resolveVisualHintFinder() {
+    private FiniteHintFinder resolveVisualHintFinder() {
         return DI.get(getVisualHintFinderClass());
     }
 
-    protected abstract Class<? extends IFiniteHintFinder> getVisualHintFinderClass();
+    protected abstract Class<? extends FiniteHintFinder> getVisualHintFinderClass();
 
-    private IFiniteHintFinder resolveAudioHintFinder() {
+    private FiniteHintFinder resolveAudioHintFinder() {
         return DI.get(getAudioHintFinderClass());
     }
 
-    protected abstract Class<? extends IFiniteHintFinder> getAudioHintFinderClass();
+    protected abstract Class<? extends FiniteHintFinder> getAudioHintFinderClass();
 
     public Hint find(Puzzle<?, ?, ?> puzzle) {
         return switch (puzzle.exercise.type) {

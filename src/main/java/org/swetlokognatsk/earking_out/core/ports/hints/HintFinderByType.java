@@ -1,5 +1,5 @@
 package org.swetlokognatsk.earking_out.core.ports.hints;
 
-public interface IHintFinderByType {
+public interface HintFinderByType {
 
 }

@@ -5,9 +5,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
-import org.swetlokognatsk.earking_out.core.ports.music.INoteNormalizer;
+import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
-public class NoteNormalizer implements INoteNormalizer {
+public class NoteNormalizerImpl implements NoteNormalizer {
 
     public byte normalize(NoteWithAccidental noteWithAccidental) {
         byte value = SHIFT;
@@ -46,7 +46,7 @@ public class NoteNormalizer implements INoteNormalizer {
 
     private static byte getOctavesShift(Octaves octave) {
         int octaveNumber = getOctaveNumber(octave);
-        return (byte) ((octaveNumber - 1) * Invariants.OCTAVE_SIZE);
+        return (byte) ((octaveNumber - 1) * Invariants.KEYS_IN_OCTAVE);
     }
 
     // TODO encapsulate it into Octaves somehow?

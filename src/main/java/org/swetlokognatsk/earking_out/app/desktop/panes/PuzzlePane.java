@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseFinishedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
@@ -14,7 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class PuzzlePane<PC extends PuzzleConfig<? extends Exercise>> extends BorderPane {
+public abstract class PuzzlePane<PC extends PuzzleConfig<?>> extends BorderPane {
     // TODO why it's so awkward? do i use it in a wrong way?
     public static final EventType<ExerciseFinishedEvent> EXERCISE_FINISHED = new EventType<ExerciseFinishedEvent>("EXERCISE_FINISHED");
 

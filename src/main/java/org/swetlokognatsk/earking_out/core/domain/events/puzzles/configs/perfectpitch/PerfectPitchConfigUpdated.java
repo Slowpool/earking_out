@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs.perfec
 import java.time.LocalDateTime;
 
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs.PuzzleConfigUpdated;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 
 abstract class PerfectPitchConfigUpdated<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends PuzzleConfigUpdated<E, PC> {

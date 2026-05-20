@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch;
+package org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;

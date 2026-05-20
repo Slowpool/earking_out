@@ -3,9 +3,9 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPit
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
-import org.swetlokognatsk.earking_out.core.ports.hints.IFiniteHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.FiniteHintFinder;
 
-public class FakeVisualPerfectPitchHints implements IFiniteHintFinder {
+public class FakeVisualPerfectPitchHints implements FiniteHintFinder {
     public static final String EXERCISE = "perfect_pitch";
     public static final String TYPE = "visual";
 

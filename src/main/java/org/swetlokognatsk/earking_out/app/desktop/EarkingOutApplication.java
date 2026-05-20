@@ -1,12 +1,12 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
 import java.util.UUID;
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseFinishedEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedOverEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.SessionStatsPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config.AudioPerfectPitchConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.VisualPerfectPitchPane;
@@ -14,13 +14,14 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.Perfe
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.typed.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -33,7 +34,8 @@ import javafx.stage.Stage;
 
 public final class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
-    private static final int WIDTH = 1500;
+    // TODO make minimalWidth property to be equal to maximum screen width
+    private static final int WIDTH = 1920;
     private static final int HEIGHT = 700;
 
     private BorderPane contentPane;
@@ -100,29 +102,45 @@ public final class EarkingOutApplication extends Application {
         showConfigPane(new AudioPerfectPitchExercise());
     }
 
-    private void showConfigPane(Exercise exercise) {
+    private <E extends Exercise> void showConfigPane(E exercise) {
         var configPane = buildConfigPane(exercise);
         show(configPane);
     }
 
     // TODO redo via some ActionEvent parameter, this method must be factory
-    private ConfigPane<?> buildConfigPane(Exercise exercise) {
-        // TODO take config from storage
-        var puzzleConfig = new AudioPerfectPitchConfig(9);
-        var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig);
-        perfectPitchConfigPane.addEventHandler(ConfigPane.EXERCISE_STARTED, this::openPuzzlePane);
+    // TODO use this signature
+    // private <E extends Exercise, PC extends PuzzleConfig<E>> ConfigPane<E, PC> buildConfigPane(E exercise) {
+    private <E extends Exercise, PC extends PuzzleConfig<E>> ConfigPane<AudioPerfectPitchExercise, AudioPerfectPitchConfig> buildConfigPane(E exercise) {
+        var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
+        var puzzleConfig = (AudioPerfectPitchConfig) puzzleConfigService.fetch(exercise);
+        var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig, WIDTH, HEIGHT);
+        perfectPitchConfigPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
+        perfectPitchConfigPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
         return perfectPitchConfigPane;
     }
 
-    private void openPuzzlePane(ExerciseStartedEvent<?> e) {
-        session = startSession((AudioPerfectPitchConfig) e.puzzleConfig);
+    private void tryOpenPuzzlePane(ExerciseStartedEvent<?> e) {
+        var readPuzzleConfigService = DI.get(ReadPuzzleConfigService.class);
+        var puzzleConfig = readPuzzleConfigService.fetch(e.exercise);
 
-        showPuzzlePane(session);
+        if (puzzleConfig.isValid()) {
+            // TODO generalize
+            session = startSession((AudioPerfectPitchConfig) puzzleConfig);
+            showPuzzlePane(session);
+        } else {
+            // TODO message
+            // DialogPane.
+        }
     }
 
     private void showPuzzlePane(Session<?> session) {
         var puzzlePane = buildPuzzlePane(session);
         show(puzzlePane);
+    }
+
+    private void updateConfigProperty(ConfigPropertyUpdatingEvent e) {
+        var writePuzzleConfigService = DI.get(WritePuzzleConfigService.class);
+        writePuzzleConfigService.updateProperty(e.exercise, e.configProperty, e.newValue);
     }
 
     private void openConfigPaneOver(ExerciseStartedOverEvent<?> e) {
@@ -136,9 +154,8 @@ public final class EarkingOutApplication extends Application {
         return new Session<AudioPerfectPitchConfig>(UUID.randomUUID(), puzzleConfig, new SessionStats(5, puzzleConfig.targetNumberOfPuzzles));
     }
 
-    // TODO generics seems to be redundant here, this is just factory-like steering method
     // TODO maybe just passing only config/exercise?
-    private Pane buildPuzzlePane(Session<? extends PuzzleConfig<? extends Exercise>> session) {
+    private Pane buildPuzzlePane(Session<?> session) {
         var exercise = session.puzzleConfig().exercise;
         var puzzlePane = switch (exercise.type) {
         case VISUAL -> switch (exercise.name) {
@@ -181,7 +198,7 @@ public final class EarkingOutApplication extends Application {
     private Pane buildSessionStatsPane() {
         // TODO factory method? this warning bothers a lot
         var sessionStatsPane = new PerfectPitchStatsPane(session);
-        sessionStatsPane.addEventHandler(SessionStatsPane.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
+        sessionStatsPane.addEventHandler(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
         return sessionStatsPane;
     }
 

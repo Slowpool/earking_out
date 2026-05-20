@@ -8,8 +8,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.IHintFinder;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.IPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 
 public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig<E>, H extends Hint> {
     public final Solution solution;
@@ -17,7 +17,7 @@ public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig<E>, H e
     public final PC config;
     public final H hint;
 
-    public Puzzle(E exercise, PC config, IPuzzleGenerator puzzleGenerator) {
+    public Puzzle(E exercise, PC config, PuzzleGenerator puzzleGenerator) {
         Objects.requireNonNull(exercise, "Exercise cannot be null");
         Objects.requireNonNull(puzzleGenerator, "PuzzleGenerator cannot be null");
         this.exercise = exercise;
@@ -28,7 +28,7 @@ public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig<E>, H e
     }
 
     private Hint findHint() {
-        var hintFinder = DI.get(IHintFinder.class);
+        var hintFinder = DI.get(HintFinder.class);
         return hintFinder.find(this);
     }
 

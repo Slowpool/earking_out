@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.exercises;
 
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.typed.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfect_pitch.typed.VisualPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.VisualPerfectPitchExercise;
 
 public final class ExercisesFactory {
     public static Exercise create(ExerciseNames name, ExerciseTypes exerciseType) {

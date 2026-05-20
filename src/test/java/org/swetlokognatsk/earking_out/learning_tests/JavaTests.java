@@ -251,4 +251,70 @@ public class JavaTests {
     private <T extends MyGeneric<?>> T gettingTheValue4(T someClass) {
         return someClass;
     }
+
+    @Test
+    public void polymorphismTest1() {
+        Child child = new Child();
+        assertEquals("child", child.foo(child));
+        assertEquals("parent", child.parentFooViaSuper(child));
+        assertEquals("parent", child.parentFooViaCast(child));
+    }
+
+    @Test
+    public void toStringTest1() {
+        assertEquals(String.valueOf(true), "true");
+    }
+
+    @Test
+    public void invalidationListenerTest1() {
+        var lol = "bazingalol";
+        var result = Child.doSomething((firstArg, secondArg) -> {
+            return firstArg + secondArg;
+        });
+
+        assertEquals(lol, result);
+    }
+
+    @Test
+    public void stringTest1() {
+        String string1 = "bazinga";
+
+        var castedString1 = string1.toString();
+        assertEquals(string1, castedString1);
+
+        var castedString2 = (String) string1;
+        assertEquals(string1, castedString2);
+
+        var castedString3 = String.valueOf(string1);
+        assertEquals(string1, castedString3);
+    }
+}
+
+class Parent {
+    public String foo(Parent parent) {
+        return "parent";
+    }
+}
+
+class Child extends Parent {
+    public String foo(Child child) {
+        return "child";
+    }
+
+    public String parentFooViaSuper(Child child) {
+        return super.foo(child);
+    }
+
+    public String parentFooViaCast(Child child) {
+        return ((Parent) this).foo(child);
+    }
+
+    public static String doSomething(CustomInvalidationListener listener) {
+        return listener.something("bazinga", "lol");
+    }
+}
+
+@FunctionalInterface
+interface CustomInvalidationListener {
+    public String something(String firstArg, String secondArg);
 }

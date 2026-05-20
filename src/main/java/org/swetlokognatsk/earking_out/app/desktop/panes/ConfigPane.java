@@ -1,11 +1,12 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.EarkingOutApplication;
-import org.swetlokognatsk.earking_out.app.desktop.events.ExerciseStartedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -14,46 +15,85 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public abstract class ConfigPane<PC extends PuzzleConfig<? extends Exercise>> extends VBox {
-    // TODO where it should be?
-    public static final EventType<ExerciseStartedEvent> EXERCISE_STARTED = new EventType<ExerciseStartedEvent>("EXERCISE_STARTED");
+public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>> extends VBox {
+    protected final E exercise;
 
-    protected final PC puzzleConfig;
-
-    protected final HBox numberOfPuzzles;
+    protected final HBox numberOfPuzzlesBox;
     protected final TextField numberOfPuzzlesField;
-    protected final CheckBox statisticsRecording;
+    protected final CheckBox statisticsRecordingField;
     protected final Button start;
 
-    protected abstract PC mapToDomainConfig();
+    protected abstract void addCustomFields();
 
-    protected abstract void addCustomSettings();
+    protected abstract void setFieldsValuesFromConfig(PC puzzleConfig);
+
+    protected abstract Object castCustomConfigPropertyNewValue(String configProperty, Object newValue);
 
     {
         var numberOfPuzzlesLabel = new Label("number of puzzles");
-        var numberOfPuzzlesTextField = new TextField();
-        numberOfPuzzlesField = numberOfPuzzlesTextField;
-        numberOfPuzzles = new HBox(numberOfPuzzlesLabel, numberOfPuzzlesTextField);
-        numberOfPuzzles.setAlignment(Pos.CENTER);
-        numberOfPuzzles.setSpacing(EarkingOutApplication.LABEL_FIELD_SPACING);
+        numberOfPuzzlesField = new TextField();
+        var numberOfPuzzlesProperty = numberOfPuzzlesField.textProperty();
+        numberOfPuzzlesProperty.addListener((prop, oldValue, newValue) -> {
+            var containsOnlyDigits = newValue.matches("\\d*");
+            if (!containsOnlyDigits) {
+                numberOfPuzzlesField.setText(oldValue);
+            }
+        });
+        numberOfPuzzlesProperty.addListener(createConfigPropertyUpadtingEvent(PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP));
+        numberOfPuzzlesBox = new HBox(numberOfPuzzlesLabel, numberOfPuzzlesField);
+        numberOfPuzzlesBox.setAlignment(Pos.CENTER);
+        numberOfPuzzlesBox.setSpacing(EarkingOutApplication.LABEL_FIELD_SPACING);
 
-        statisticsRecording = new CheckBox("statistics recording");
-        statisticsRecording.setSelected(true);
+        statisticsRecordingField = new CheckBox("statistics recording");
+        statisticsRecordingField.setSelected(true);
+        statisticsRecordingField.selectedProperty().addListener(createConfigPropertyUpadtingEvent(PuzzleConfig.STATS_RECORDING_PROP));
 
         start = new Button("start");
         start.setOnAction(this::fireExerciseStartedEvent);
     }
 
-    public ConfigPane(final PC puzzleConfig) {
-        // TODO what's the difference between calling super() and not doing so here?
-        super();
-        this.puzzleConfig = puzzleConfig;
+    public ConfigPane(final PC puzzleConfig, double width, double height) {
+        this.exercise = puzzleConfig.exercise;
+        setWidth(width);
+        setHeight(height);
 
-        addCommonComponents();
+        addCommonFields(puzzleConfig);
     }
 
-    private void addCommonComponents() {
-        getChildren().addAll(numberOfPuzzles, statisticsRecording);
+    protected ChangeListener<Object> createConfigPropertyUpadtingEvent(String configProperty) {
+        return (prop, oldValue, newValue) -> {
+            var castedNewValue = castConfigPropertyNewValue(configProperty, newValue);
+            var configPropertyUpdatingEvent = new ConfigPropertyUpdatingEvent(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, exercise, configProperty, castedNewValue);
+            fireEvent(configPropertyUpdatingEvent);
+        };
+    }
+
+    private Object castConfigPropertyNewValue(String configProperty, Object newValue) {
+        // here the casts are just for the sake of explicitness, actually they aren't necessary
+        return switch (configProperty) {
+        // TODO what's the difference between `(String)obj` and `String.valueOf(obj)`?
+        case PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP -> {
+            int intNewValue;
+            try {
+                intNewValue = Integer.valueOf((String) newValue);
+            } catch (NumberFormatException e) {
+                intNewValue = 0;
+            }
+            yield intNewValue;
+        }
+        case PuzzleConfig.STATS_RECORDING_PROP -> (boolean) newValue;
+        default -> castCustomConfigPropertyNewValue(configProperty, newValue);
+        };
+    }
+
+    private void addCommonFields(PC puzzleConfig) {
+        setCommonFieldsValuesFromConfig(puzzleConfig);
+        getChildren().addAll(numberOfPuzzlesBox, statisticsRecordingField);
+    }
+
+    private void setCommonFieldsValuesFromConfig(PC puzzleConfig) {
+        numberOfPuzzlesField.setText("" + puzzleConfig.targetNumberOfPuzzles);
+        statisticsRecordingField.setSelected(puzzleConfig.statsRecording);
     }
 
     protected void addStartButton() {
@@ -63,10 +103,8 @@ public abstract class ConfigPane<PC extends PuzzleConfig<? extends Exercise>> ex
     private void fireExerciseStartedEvent(ActionEvent e) {
         // TODO should it be here or after fireEvent()? how it works at all, i mean events flow - like middleware in both directions?
         e.consume();
-        // TODO validate
-        var puzzleConfig = mapToDomainConfig();
-        var exerciseStartedEvent = new ExerciseStartedEvent(EXERCISE_STARTED, puzzleConfig);
+
+        var exerciseStartedEvent = new ExerciseStartedEvent<>(ExerciseStartedEvent.EXERCISE_STARTED, exercise);
         fireEvent(exerciseStartedEvent);
     }
-
 }
