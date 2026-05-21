@@ -9,4 +9,8 @@ public class VisualPerfectPitchExercise extends PerfectPitchExercise {
         super(ExerciseTypes.VISUAL);
 
     }
+
+    public String tType() {
+        return "visual";
+    }
 }

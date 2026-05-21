@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
 import java.util.UUID;
+
+import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
@@ -43,7 +45,7 @@ public final class EarkingOutApplication extends Application {
     private AppState state;
     private Session<?> session;
 
-    private Menu perfectPitch;
+    private ExercisesMenu exercisesMenu;
 
     public void start(Stage primaryStage) throws Exception {
         state = AppState.HOME;
@@ -55,42 +57,18 @@ public final class EarkingOutApplication extends Application {
 
     private Scene buildScene() {
         contentPane = new BorderPane();
-        buildMenu();
+        exercisesMenu = buildMenu();
         var scene = new Scene(contentPane, WIDTH, HEIGHT);
         return scene;
     }
 
-    private void buildMenu() {
-        // TODO refactor it via a new MenuBuilder class p.s. or create ExercisesMenu?
-        var exercises = new Menu("exercises");
-        var exercisesItems = exercises.getItems();
+    private ExercisesMenu buildMenu() {
+        var exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
 
-        perfectPitch = new Menu("perfect pitch");
-        var perfectPitchItems = perfectPitch.getItems();
-        // TODO make menu item mapping to specific configPane class
-        perfectPitch.setOnAction(this::openConfigPane);
-
-        var audioPerfectPitch = new MenuItem("audio");
-        perfectPitchItems.add(audioPerfectPitch);
-
-        var visualPerfectPitch = new MenuItem("visual");
-        perfectPitchItems.add(visualPerfectPitch);
-
-        exercisesItems.add(perfectPitch);
-
-        var melodicIntervals = new Menu("melodic intervals");
-        var melodicIntervalsItems = melodicIntervals.getItems();
-
-        var audioMelodicIntervals = new MenuItem("audio");
-        melodicIntervalsItems.add(audioMelodicIntervals);
-
-        var visualMelodicIntervals = new MenuItem("visual");
-        melodicIntervalsItems.add(visualMelodicIntervals);
-
-        exercisesItems.add(melodicIntervals);
-
-        var menu = new MenuBar(exercises);
+        var menu = new MenuBar(exercisesMenu);
         contentPane.setTop(menu);
+
+        return exercisesMenu;
     }
 
     private void show(Pane pane) {
@@ -98,8 +76,8 @@ public final class EarkingOutApplication extends Application {
     }
 
     private void openConfigPane(ActionEvent e) {
-        // TODO take exercise from e
-        showConfigPane(new AudioPerfectPitchExercise());
+        var menuItem = (MenuItem)e.getTarget();
+        showConfigPane((Exercise)menuItem.getUserData());
     }
 
     private <E extends Exercise> void showConfigPane(E exercise) {
@@ -145,7 +123,7 @@ public final class EarkingOutApplication extends Application {
 
     private void openConfigPaneOver(ExerciseStartedOverEvent<?> e) {
         // TODO click menu item depending on e
-        perfectPitch.fire();
+        exercisesMenu.fireExercise(e.puzzleConfig.exercise);
     }
 
     // TODO replace with service call

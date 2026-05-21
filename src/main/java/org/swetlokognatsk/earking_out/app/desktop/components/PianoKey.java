@@ -12,7 +12,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
 public final class PianoKey extends Button {
-    // TODO WHAT are insets and corner radii
     protected static final Background selectedWhiteBackground = new Background(new BackgroundFill(Color.rgb(0x00, 0xB4, 0xD8), CornerRadii.EMPTY, Insets.EMPTY));
     protected static final Background selectedBlackBackground = new Background(new BackgroundFill(Color.rgb(0x00, 0x14, 0xA9), CornerRadii.EMPTY, Insets.EMPTY));
     protected static final Background notSelectedWhiteBackground = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
@@ -31,7 +30,7 @@ public final class PianoKey extends Button {
     }
 
     public PianoKey(final byte keyNumber, final boolean isWhite) {
-        // TODO for debug
+        // TODO for debugf
         // super("" + keyNumber);
 
         this.keyNumber = keyNumber;

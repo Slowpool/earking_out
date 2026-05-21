@@ -11,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -20,17 +21,19 @@ import javafx.scene.layout.VBox;
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
     protected final PianoKeyboard pianoKeyboard;
     protected final VBox pianoKeyboardBox;
+
+    protected final PianoKeyboard rootNotePicker;
     protected final VBox rootNoteBox;
 
     protected final ToggleGroup inputModeToggleGroup;
     protected final VBox inputModeBox;
 
-    {
-        var rootNoteLabel = new Label("root note");
-        var oneKeyChoicePiano = new Label("notes are here, but only one key can be chosen");
-        rootNoteBox = new VBox(rootNoteLabel, oneKeyChoicePiano);
-        rootNoteBox.setAlignment(Pos.CENTER);
-        rootNoteBox.setVisible(false);
+    protected double getPianoKeyboardHeight() {
+        return getHeight() / 4;
+    }
+
+    protected double getPianoKeyboardWidth() {
+        return getWidth();
     }
 
     public PerfectPitchConfigPane(final PC puzzleConfig, double width, double height) {
@@ -38,6 +41,9 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
         pianoKeyboard = buildPianoKeyboard(puzzleConfig.normalizedNotesForPuzzle);
         pianoKeyboardBox = buildPianoKeyboardBox(pianoKeyboard);
+
+        rootNotePicker = buildRootNotePicker(puzzleConfig.normalizedRootNote);
+        rootNoteBox = buildRootNotePickerBox(rootNotePicker, puzzleConfig.inputMode);
 
         inputModeToggleGroup = new ToggleGroup();
         var inputModeRadioButtons = buildInputModeRadioButtons(inputModeToggleGroup, puzzleConfig.inputMode);
@@ -52,7 +58,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
     }
 
     protected PianoKeyboard buildPianoKeyboard(byte[] selectedKeys) {
-        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getWidth(), getHeight() / 4, selectedKeys);
+        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
         pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
         return pianoKeyboard;
     }
@@ -62,6 +68,23 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         var pianoKeyboardBox = new VBox(notesLabel, pianoKeyboard);
         pianoKeyboardBox.setAlignment(Pos.CENTER);
         return pianoKeyboardBox;
+    }
+
+    protected PianoKeyboard buildRootNotePicker(Byte selectedRootNote) {
+        var wrappedSelectedRootNote = selectedRootNote == null ? new byte[0] : new byte[] { selectedRootNote };
+        var rootNotePicker = new PianoKeyboard(PianoKeyboardMode.ONE_KEY_SELECT, getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
+        return rootNotePicker;
+    }
+
+    protected static VBox buildRootNotePickerBox(PianoKeyboard rootNotePicker, PerfectPitchInputMode inputMode) {
+        var rootNoteLabel = new Label("root note picking");
+
+        var rootNoteBox = new VBox(rootNoteLabel, rootNotePicker);
+        rootNoteBox.setAlignment(Pos.CENTER);
+        var shouldDisplay = inputMode == PerfectPitchInputMode.KEYBOARD_AS_PIANO;
+        rootNoteBox.setVisible(shouldDisplay);
+
+        return rootNoteBox;
     }
 
     protected RadioButton[] buildInputModeRadioButtons(ToggleGroup inputModeToggleGroup, PerfectPitchInputMode selectedInputMode) {
