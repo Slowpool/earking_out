@@ -20,17 +20,19 @@ import javafx.scene.layout.VBox;
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
     protected final PianoKeyboard pianoKeyboard;
     protected final VBox pianoKeyboardBox;
+
+    protected final PianoKeyboard rootNotePicker;
     protected final VBox rootNoteBox;
 
     protected final ToggleGroup inputModeToggleGroup;
     protected final VBox inputModeBox;
 
-    {
-        var rootNoteLabel = new Label("root note");
-        var oneKeyChoicePiano = new Label("notes are here, but only one key can be chosen");
-        rootNoteBox = new VBox(rootNoteLabel, oneKeyChoicePiano);
-        rootNoteBox.setAlignment(Pos.CENTER);
-        rootNoteBox.setVisible(false);
+    protected double getPianoKeyboardHeight() {
+        return getHeight() / 4;
+    }
+
+    protected double getPianoKeyboardWidth() {
+        return getWidth();
     }
 
     public PerfectPitchConfigPane(final PC puzzleConfig, double width, double height) {
@@ -38,6 +40,9 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
         pianoKeyboard = buildPianoKeyboard(puzzleConfig.normalizedNotesForPuzzle);
         pianoKeyboardBox = buildPianoKeyboardBox(pianoKeyboard);
+
+        rootNotePicker = buildRootNotePicker(puzzleConfig.normalizedRootNote);
+        rootNoteBox = buildRootNotePickerBox(rootNotePicker, puzzleConfig.inputMode);
 
         inputModeToggleGroup = new ToggleGroup();
         var inputModeRadioButtons = buildInputModeRadioButtons(inputModeToggleGroup, puzzleConfig.inputMode);
@@ -52,7 +57,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
     }
 
     protected PianoKeyboard buildPianoKeyboard(byte[] selectedKeys) {
-        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getWidth(), getHeight() / 4, selectedKeys);
+        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
         pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
         return pianoKeyboard;
     }
@@ -62,6 +67,24 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         var pianoKeyboardBox = new VBox(notesLabel, pianoKeyboard);
         pianoKeyboardBox.setAlignment(Pos.CENTER);
         return pianoKeyboardBox;
+    }
+
+    protected PianoKeyboard buildRootNotePicker(Byte selectedRootNote) {
+        var wrappedSelectedRootNote = selectedRootNote == null ? new byte[0] : new byte[] { selectedRootNote };
+        var rootNotePicker = new PianoKeyboard(PianoKeyboardMode.ONE_KEY_SELECT, getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
+        rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
+        return rootNotePicker;
+    }
+
+    protected static VBox buildRootNotePickerBox(PianoKeyboard rootNotePicker, PerfectPitchInputMode inputMode) {
+        var rootNoteLabel = new Label("root note picking");
+
+        var rootNoteBox = new VBox(rootNoteLabel, rootNotePicker);
+        rootNoteBox.setAlignment(Pos.CENTER);
+        var shouldDisplay = inputMode == PerfectPitchInputMode.KEYBOARD_AS_PIANO;
+        rootNoteBox.setVisible(shouldDisplay);
+
+        return rootNoteBox;
     }
 
     protected RadioButton[] buildInputModeRadioButtons(ToggleGroup inputModeToggleGroup, PerfectPitchInputMode selectedInputMode) {
@@ -134,7 +157,18 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             var enumElement = PerfectPitchInputMode.valueOf(enumValue);
             yield enumElement;
         }
-        default -> throw new IllegalArgumentException();
+        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE -> {
+            var set = (ObservableSet<Byte>) newValue;
+            var numberOfSelectedKeys = set.size();
+            // TODO DRY violation, copy-pasted from PianoKeyboard
+            if (numberOfSelectedKeys == 0) {
+                yield null;
+            } else if (numberOfSelectedKeys > 1) {
+                throw new RuntimeException("several keys were selected, although only one key was supposed to be selected");
+            }
+            yield set.iterator().next();
+        }
+        default -> throw new IllegalArgumentException("custom property cast is not defined");
         };
     }
 

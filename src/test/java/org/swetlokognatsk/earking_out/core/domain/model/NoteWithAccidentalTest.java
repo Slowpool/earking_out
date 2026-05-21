@@ -78,7 +78,7 @@ public class NoteWithAccidentalTest {
 
     @Test
     public void humanReadableNormalizingTest2() {
-        var octave = Octaves.EIGHTH;
+        var octave = Octaves.SEVENTH;
 
         var CSharp = new NoteWithAccidental(NoteNames.C, Accidentals.SHARP, octave);
         var normalizedCSharp = CSharp.normalize();

@@ -10,4 +10,8 @@ public abstract class PerfectPitchExercise extends Exercise {
         super(ExerciseNames.PERFECT_PITCH, type);
 
     }
+
+    public String tName() {
+        return "perfect pitch";
+    }
 }

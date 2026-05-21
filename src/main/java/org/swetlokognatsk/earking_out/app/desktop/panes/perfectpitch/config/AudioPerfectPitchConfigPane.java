@@ -14,17 +14,4 @@ public class AudioPerfectPitchConfigPane extends PerfectPitchConfigPane<AudioPer
     protected void setFieldsValuesFromConfig(AudioPerfectPitchConfig puzzleConfig) {
         super.setFieldsValuesFromConfig((PerfectPitchConfig<AudioPerfectPitchExercise>) puzzleConfig);
     }
-
-    // TODO it's not needed anymore, but remained for backward mapping (from pane to config store)
-    // protected AudioPerfectPitchConfig mapToDomainConfig() {
-    //     //     // TODO ParsingException?
-    //     //     var targetNumberOfPuzzles = Integer.valueOf(numberOfPuzzlesField.getText());
-    //     //     var statsRecording = statisticsRecordingField.isSelected();
-    //     //     var notes = new NoteWithAccidental[] {};
-    //     //     var inputMode = 
-
-    //     //     var config = new AudioPerfectPitchConfig(targetNumberOfPuzzles, statsRecording, notes, null, inputMode);
-    //     // return config;
-    //     return null;
-    // }
 }

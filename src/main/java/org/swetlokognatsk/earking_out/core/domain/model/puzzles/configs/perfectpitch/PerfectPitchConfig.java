@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 
 public abstract class PerfectPitchConfig<E extends PerfectPitchExercise> extends PuzzleConfig<E> {
     public static final String NORMALIZED_NOTES_FOR_PUZZLE_PROP = "normalizedNotesForPuzzle";
+    public static final String NORMALIZED_ROOT_NOTE = "normalizedRootNote";
     public static final String INPUT_MODE_PROP = "inputMode";
 
     public final byte[] normalizedNotesForPuzzle;

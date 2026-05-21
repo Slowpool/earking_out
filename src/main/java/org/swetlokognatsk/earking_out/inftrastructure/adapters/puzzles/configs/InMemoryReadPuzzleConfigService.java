@@ -14,7 +14,7 @@ public class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigService 
 
     static {
         var notes = new byte[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST).normalize() };
-        puzzleConfig = new AudioPerfectPitchConfig(100, false, notes, null, PerfectPitchInputMode.NOTES_AS_CHARACTERS);
+        puzzleConfig = new AudioPerfectPitchConfig(100, false, notes, Byte.valueOf((byte)25), PerfectPitchInputMode.NOTES_AS_CHARACTERS);
     }
 
     public <E extends Exercise> PuzzleConfig<E> fetch(E exercise) {
