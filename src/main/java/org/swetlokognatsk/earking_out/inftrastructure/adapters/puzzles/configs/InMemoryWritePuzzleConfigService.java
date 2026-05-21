@@ -32,12 +32,16 @@ public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigServic
             var newNormalizedNotes = (byte[]) newValue;
             InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, newNormalizedNotes, oldConfig.normalizedRootNote, oldConfig.inputMode);
             break;
+        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE:
+            var newNormalizedRootNote = (Byte)newValue;
+            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, newNormalizedRootNote, oldConfig.inputMode);
+            break;
         case PerfectPitchConfig.INPUT_MODE_PROP:
             var newInputMode = (PerfectPitchInputMode)newValue;
             InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, newInputMode);
             break;
         default:
-            break;
+            throw new RuntimeException("property saving is not defined");
         }
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.builders.PianoKeysBuilder;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
@@ -58,7 +59,7 @@ public class PianoKeyboard extends Region {
         for (Byte i = 0; pianoKeysBuilder.hasNext(); i++) {
             pianoKey = pianoKeysBuilder.next();
             addEventHandlers(pianoKey);
-            allPianoKeys.put(i, pianoKey);
+            allPianoKeys.put(pianoKey.keyNumber, pianoKey);
         }
         return allPianoKeys;
     }
@@ -73,6 +74,9 @@ public class PianoKeyboard extends Region {
             toggleSelection(pianoKey);
         };
         case ONE_KEY_SELECT -> e -> {
+            if (pianoKey.isSelected()) {
+                return;
+            }
             tryUnselectPreviouslySelectedKey();
             toggleSelection(pianoKey);
         };
@@ -94,16 +98,22 @@ public class PianoKeyboard extends Region {
      * This method supopse that only one key was selected.
      */
     protected void tryUnselectPreviouslySelectedKey() {
-        if (selectedKeys.getValue().size() > 1) {
+        int numberOfSelectedKeys = selectedKeys.getValue().size();
+
+        // nothing is selected, normal case
+        if (numberOfSelectedKeys == 0) {
+            return;
+        } else if (numberOfSelectedKeys > 1) {
             // TODO how 'bout other exceptions
             throw new RuntimeException("several keys were selected, although only one key was supposed to  be selected");
         }
-        PianoKey selectedPianoKey;
-        for (var selectedPianoKeyNumber : selectedKeys.getValue()) {
-            selectedPianoKey = allPianoKeys.get(selectedPianoKeyNumber);
-            selectedKeys.remove(selectedPianoKeyNumber);
-            selectedPianoKey.toggleSelection();
-        }
+        var selectedKeysIterator = selectedKeys.getValue().iterator();
+        var selectedPianoKeyNumber = selectedKeysIterator.next();
+
+        var oldSelectedPianoKey = allPianoKeys.get(selectedPianoKeyNumber);
+        selectedKeys.remove(selectedPianoKeyNumber);
+
+        oldSelectedPianoKey.toggleSelection();
     }
 
     private static PianoKey[][] dichotomize(HashMap<Byte, PianoKey> pianoKeys) {

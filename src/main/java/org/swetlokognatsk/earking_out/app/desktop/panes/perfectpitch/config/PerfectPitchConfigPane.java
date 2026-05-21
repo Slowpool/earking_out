@@ -11,7 +11,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -73,6 +72,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
     protected PianoKeyboard buildRootNotePicker(Byte selectedRootNote) {
         var wrappedSelectedRootNote = selectedRootNote == null ? new byte[0] : new byte[] { selectedRootNote };
         var rootNotePicker = new PianoKeyboard(PianoKeyboardMode.ONE_KEY_SELECT, getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
+        rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
         return rootNotePicker;
     }
 
@@ -157,7 +157,18 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             var enumElement = PerfectPitchInputMode.valueOf(enumValue);
             yield enumElement;
         }
-        default -> throw new IllegalArgumentException();
+        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE -> {
+            var set = (ObservableSet<Byte>) newValue;
+            var numberOfSelectedKeys = set.size();
+            // TODO DRY violation, copy-pasted from PianoKeyboard
+            if (numberOfSelectedKeys == 0) {
+                yield null;
+            } else if (numberOfSelectedKeys > 1) {
+                throw new RuntimeException("several keys were selected, although only one key was supposed to be selected");
+            }
+            yield set.iterator().next();
+        }
+        default -> throw new IllegalArgumentException("custom property cast is not defined");
         };
     }
 
