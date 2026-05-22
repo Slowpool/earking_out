@@ -7,8 +7,8 @@ import javafx.scene.layout.VBox;
 
 public class VisualPerfectPitchPane extends PerfectPitchPane<VisualPerfectPitchConfig> {
 
-    public VisualPerfectPitchPane(Session<VisualPerfectPitchConfig> session) {
-        super(session);
+    public VisualPerfectPitchPane(Session<VisualPerfectPitchConfig> session, double width, double height) {
+        super(session, width, height);
 
     }
 

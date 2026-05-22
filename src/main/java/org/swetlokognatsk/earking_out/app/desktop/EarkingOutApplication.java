@@ -10,7 +10,6 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
-import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.PerfectPitchStatsPane;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
@@ -35,6 +34,7 @@ public final class EarkingOutApplication extends Application {
     private static final int WIDTH = 1920;
     private static final int HEIGHT = 700;
 
+    // TODO make them final
     private BorderPane contentPane;
     private ExercisesMenu exercisesMenu;
 
@@ -130,7 +130,7 @@ public final class EarkingOutApplication extends Application {
     }
 
     private Pane buildPuzzlePane(Session<?> session) {
-        var puzzlePane = PuzzlePanesFactory.create(session);
+        var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT); 
 
         puzzlePane.addEventHandler(PuzzlePane.EXERCISE_FINISHED, this::openExerciseFinish);
 

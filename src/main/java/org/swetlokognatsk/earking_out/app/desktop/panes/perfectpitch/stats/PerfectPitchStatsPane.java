@@ -9,7 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public class PerfectPitchStatsPane<PC extends PerfectPitchConfig<? extends PerfectPitchExercise>> extends SessionStatsPane<PC> {
+// no further inheritance because stats are the same for both visual and audio exercise types
+public final class PerfectPitchStatsPane<PC extends PerfectPitchConfig<? extends PerfectPitchExercise>> extends SessionStatsPane<PC> {
 
     public PerfectPitchStatsPane(Session<PC> session) {
         super(session);
