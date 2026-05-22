@@ -10,7 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 
 public class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigService {
-    public static AudioPerfectPitchConfig puzzleConfig;
+    static AudioPerfectPitchConfig puzzleConfig;
 
     static {
         var notes = new byte[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST).normalize() };

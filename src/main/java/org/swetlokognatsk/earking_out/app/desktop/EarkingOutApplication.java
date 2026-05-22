@@ -9,14 +9,12 @@ import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStart
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPaneFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config.AudioPerfectPitchConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.VisualPerfectPitchPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.PerfectPitchStatsPane;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
@@ -24,10 +22,11 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
+import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
@@ -40,15 +39,12 @@ public final class EarkingOutApplication extends Application {
     private static final int WIDTH = 1920;
     private static final int HEIGHT = 700;
 
-    private BorderPane contentPane;
-
-    private AppState state;
     private Session<?> session;
 
+    private BorderPane contentPane;
     private ExercisesMenu exercisesMenu;
 
     public void start(Stage primaryStage) throws Exception {
-        state = AppState.HOME;
         var scene = buildScene();
 
         configurePrimaryStage(primaryStage, scene);
@@ -57,18 +53,16 @@ public final class EarkingOutApplication extends Application {
 
     private Scene buildScene() {
         contentPane = new BorderPane();
-        exercisesMenu = buildMenu();
+        buildAndDisplayMenu();
         var scene = new Scene(contentPane, WIDTH, HEIGHT);
         return scene;
     }
 
-    private ExercisesMenu buildMenu() {
-        var exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
+    private void buildAndDisplayMenu() {
+        exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
 
         var menu = new MenuBar(exercisesMenu);
         contentPane.setTop(menu);
-
-        return exercisesMenu;
     }
 
     private void show(Pane pane) {
@@ -100,17 +94,26 @@ public final class EarkingOutApplication extends Application {
         var puzzleConfig = readPuzzleConfigService.fetch(e.exercise);
 
         if (puzzleConfig.isValid()) {
-            // TODO generalize
-            session = startSession((AudioPerfectPitchConfig) puzzleConfig);
-            showPuzzlePane(session);
+            session = startSession(puzzleConfig);
+            showPuzzlePane();
         } else {
             // TODO message
             // DialogPane.
         }
     }
 
-    private void showPuzzlePane(Session<?> session) {
-        var puzzlePane = buildPuzzlePane(session);
+    private static <PC extends PuzzleConfig<?>> Session<PC> startSession(PC puzzleConfig) {
+        var writeSessionService = DI.get(WriteSessionService.class);
+        writeSessionService.createSession(puzzleConfig);
+
+        var readSessionService = DI.get(ReadSessionService.class);
+        var session = (Session<PC>) readSessionService.getCurrentSession();
+
+        return session;
+    }
+
+    private void showPuzzlePane() {
+        var puzzlePane = buildPuzzlePane();
         show(puzzlePane);
     }
 
@@ -120,18 +123,11 @@ public final class EarkingOutApplication extends Application {
     }
 
     private void openConfigPaneOver(ExerciseStartedOverEvent<?> e) {
-        // TODO click menu item depending on e
         exercisesMenu.fireExercise(e.puzzleConfig.exercise);
     }
 
-    // TODO replace with service call
-    // private <E extends Exercise, PC extends PuzzleConfig<E>> Session<E, PC> startSession(PC puzzleConfig) {
-    private Session<AudioPerfectPitchConfig> startSession(AudioPerfectPitchConfig puzzleConfig) {
-        return new Session<AudioPerfectPitchConfig>(UUID.randomUUID(), puzzleConfig, new SessionStats(5, puzzleConfig.targetNumberOfPuzzles));
-    }
-
     // TODO maybe just passing only config/exercise?
-    private Pane buildPuzzlePane(Session<?> session) {
+    private Pane buildPuzzlePane() {
         var exercise = session.puzzleConfig().exercise;
         var puzzlePane = switch (exercise.type) {
         case VISUAL -> switch (exercise.name) {
