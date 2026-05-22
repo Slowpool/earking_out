@@ -17,7 +17,7 @@ public class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigService 
         puzzleConfig = new AudioPerfectPitchConfig(100, false, notes, Byte.valueOf((byte)25), PerfectPitchInputMode.NOTES_AS_CHARACTERS);
     }
 
-    public <E extends Exercise> PuzzleConfig<E> fetch(E exercise) {
-        return (PuzzleConfig<E>) puzzleConfig;
+    public <E extends Exercise, PC extends PuzzleConfig<E>> PC fetch(E exercise) {
+        return (PC)puzzleConfig;
     }
 }

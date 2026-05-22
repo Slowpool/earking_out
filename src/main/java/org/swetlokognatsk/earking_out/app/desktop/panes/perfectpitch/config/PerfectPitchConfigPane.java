@@ -171,11 +171,4 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         default -> throw new IllegalArgumentException("custom property cast is not defined");
         };
     }
-
-    // protected void fireSelectedNotesUpdated(SelectedNotesUpdatedEvent e) {
-
-    //     var configPropertyUpdatedEvent = new ConfigPropertyUpdatingEvent(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, exercise, PerfectPitchConfig.NOTES_FOR_PUZZLE_PROP, );
-    //     fireEvent(configPropertyUpdatedEvent);
-    // }
-
 }

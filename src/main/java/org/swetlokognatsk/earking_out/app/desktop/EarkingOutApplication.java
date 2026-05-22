@@ -1,13 +1,13 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
 import java.util.UUID;
-
 import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
+import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPaneFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config.AudioPerfectPitchConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
@@ -76,8 +76,8 @@ public final class EarkingOutApplication extends Application {
     }
 
     private void openConfigPane(ActionEvent e) {
-        var menuItem = (MenuItem)e.getTarget();
-        showConfigPane((Exercise)menuItem.getUserData());
+        var menuItem = (MenuItem) e.getTarget();
+        showConfigPane((Exercise) menuItem.getUserData());
     }
 
     private <E extends Exercise> void showConfigPane(E exercise) {
@@ -85,16 +85,14 @@ public final class EarkingOutApplication extends Application {
         show(configPane);
     }
 
-    // TODO redo via some ActionEvent parameter, this method must be factory
-    // TODO use this signature
-    // private <E extends Exercise, PC extends PuzzleConfig<E>> ConfigPane<E, PC> buildConfigPane(E exercise) {
-    private <E extends Exercise, PC extends PuzzleConfig<E>> ConfigPane<AudioPerfectPitchExercise, AudioPerfectPitchConfig> buildConfigPane(E exercise) {
+    private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfig<E>>> CP buildConfigPane(E exercise) {
         var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
-        var puzzleConfig = (AudioPerfectPitchConfig) puzzleConfigService.fetch(exercise);
-        var perfectPitchConfigPane = new AudioPerfectPitchConfigPane(puzzleConfig, WIDTH, HEIGHT);
-        perfectPitchConfigPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
-        perfectPitchConfigPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
-        return perfectPitchConfigPane;
+        var puzzleConfig = puzzleConfigService.fetch(exercise);
+
+        var configPane = ConfigPaneFactory.create(puzzleConfig, WIDTH, HEIGHT);
+        configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
+        configPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
+        return (CP) configPane;
     }
 
     private void tryOpenPuzzlePane(ExerciseStartedEvent<?> e) {

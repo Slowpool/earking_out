@@ -288,6 +288,15 @@ public class JavaTests {
         var castedString3 = String.valueOf(string1);
         assertEquals(string1, castedString3);
     }
+
+    @Test
+    public void genericTest2() {
+
+    }
+
+    private <P extends Parent> P getGenericObj() {
+        return (P)new Child();
+    }
 }
 
 class Parent {
