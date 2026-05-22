@@ -168,7 +168,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             }
             yield set.iterator().next();
         }
-        default -> throw new IllegalArgumentException("custom property cast is not defined");
+        default -> throw new IllegalArgumentException("unknown custom property: " + configProperty);
         };
     }
 }

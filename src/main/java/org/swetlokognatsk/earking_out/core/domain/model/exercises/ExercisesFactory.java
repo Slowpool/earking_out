@@ -4,14 +4,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.t
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.VisualPerfectPitchExercise;
 
 public final class ExercisesFactory {
-    public static Exercise create(ExerciseNames name, ExerciseTypes exerciseType) {
-        return switch (name)
-        {
-            case PERFECT_PITCH -> switch (exerciseType) {
-                case VISUAL -> new VisualPerfectPitchExercise();
-                case AUDIO -> new AudioPerfectPitchExercise();
-            };
-            default -> throw new RuntimeException("unknown exercise");
+    public static Exercise create(ExerciseNames name, ExerciseTypes type) {
+        return switch (name) {
+        case PERFECT_PITCH -> switch (type) {
+        case VISUAL -> new VisualPerfectPitchExercise();
+        case AUDIO -> new AudioPerfectPitchExercise();
+        default -> throw new RuntimeException("unknown exercise type: " + type);
+        };
+        default -> throw new RuntimeException("unknown exercise: " + name);
         };
     }
 }

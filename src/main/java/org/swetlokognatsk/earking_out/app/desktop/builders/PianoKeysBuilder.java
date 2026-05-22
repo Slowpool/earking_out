@@ -126,7 +126,7 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
             currentBlackX += whiteKeyWidth * 2;
             break;
         default:
-            throw new RuntimeException("calling nextBlackX for not black key");
+            throw new RuntimeException("calling nextBlackX for not black key: " + getCurrentKeyNumberInOctave());
         }
         return x;
     }

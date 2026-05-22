@@ -297,6 +297,14 @@ public class JavaTests {
     private <P extends Parent> P getGenericObj() {
         return (P)new Child();
     }
+
+    @Test
+    public void enumToStringTest1() {
+        var castedValue = Days.MONDAY.toString();
+        var interpolatedValue = "" + Days.MONDAY;
+        assertEquals("MONDAY", castedValue);
+        assertEquals("MONDAY", interpolatedValue);
+    }
 }
 
 class Parent {
@@ -326,4 +334,14 @@ class Child extends Parent {
 @FunctionalInterface
 interface CustomInvalidationListener {
     public String something(String firstArg, String secondArg);
+}
+
+enum Days {
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY 
 }

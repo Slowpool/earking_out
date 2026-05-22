@@ -41,7 +41,7 @@ public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigServic
             InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, newInputMode);
             break;
         default:
-            throw new RuntimeException("property saving is not defined");
+            throw new RuntimeException("unknown property to save: " + configProperty);
         }
     }
 }

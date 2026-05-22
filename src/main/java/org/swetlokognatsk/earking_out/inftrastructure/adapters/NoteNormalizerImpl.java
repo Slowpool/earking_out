@@ -59,7 +59,7 @@ public class NoteNormalizerImpl implements NoteNormalizer {
         case FIFTH -> 5;
         case SIXTH -> 6;
         case SEVENTH -> 7;
-        default -> throw new RuntimeException("unknown octave");
+        default -> throw new RuntimeException("unknown octave: " + octave);
         };
     }
 }

@@ -16,7 +16,7 @@ public class HintFinderByExercise implements HintFinder {
     private HintFinder findSpecificHintFinder(Puzzle<?, ?, ?> puzzle) {
         var specificHintFinder = switch (puzzle) {
         case PerfectPitchPuzzle perfectPitchPuzzle -> IPerfectPitchHintFinder.class;
-        default -> throw new RuntimeException("unknown puzzle on looking for specificHintFinder");
+        default -> throw new RuntimeException("unknown puzzle on looking for specificHintFinder: " + puzzle.getClass().getName());
         };
         return DI.get(specificHintFinder);
     }

@@ -6,17 +6,15 @@ import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinis
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPaneFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.VisualPerfectPitchPane;
+import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
+import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
+import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.PerfectPitchStatsPane;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
@@ -40,6 +38,10 @@ public final class EarkingOutApplication extends Application {
     private BorderPane contentPane;
     private ExercisesMenu exercisesMenu;
 
+    public static void main(String[] args) {
+        launch();
+    }
+
     public void start(Stage primaryStage) throws Exception {
         var scene = buildScene();
 
@@ -61,6 +63,11 @@ public final class EarkingOutApplication extends Application {
         contentPane.setTop(menu);
     }
 
+    private void configurePrimaryStage(Stage primaryStage, Scene scene) {
+        primaryStage.setScene(scene);
+        primaryStage.setTitle(Invariants.APP_NAME);
+    }
+
     private void show(Pane pane) {
         contentPane.setCenter(pane);
     }
@@ -79,7 +86,7 @@ public final class EarkingOutApplication extends Application {
         var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
         var puzzleConfig = puzzleConfigService.fetch(exercise);
 
-        var configPane = ConfigPaneFactory.create(puzzleConfig, WIDTH, HEIGHT);
+        var configPane = ConfigPanesFactory.create(puzzleConfig, WIDTH, HEIGHT);
         configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
         configPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
         return (CP) configPane;
@@ -123,22 +130,7 @@ public final class EarkingOutApplication extends Application {
     }
 
     private Pane buildPuzzlePane(Session<?> session) {
-        var exercise = session.puzzleConfig().exercise;
-        var puzzlePane = switch (exercise.type) {
-        case VISUAL -> switch (exercise.name) {
-        // TODO what to do with warning
-        case PERFECT_PITCH -> new VisualPerfectPitchPane((Session<VisualPerfectPitchConfig>) session);
-        case MELODIC_INTERVALS -> null;
-        case HARMONIC_INTERVALS -> null;
-        case KEYS -> null;
-        };
-        case AUDIO -> switch (exercise.name) {
-        case PERFECT_PITCH -> new AudioPerfectPitchPane((Session<AudioPerfectPitchConfig>) session);
-        case MELODIC_INTERVALS -> null;
-        case HARMONIC_INTERVALS -> null;
-        case KEYS -> null;
-        };
-        };
+        var puzzlePane = PuzzlePanesFactory.create(session);
 
         puzzlePane.addEventHandler(PuzzlePane.EXERCISE_FINISHED, this::openExerciseFinish);
 
@@ -146,7 +138,6 @@ public final class EarkingOutApplication extends Application {
     }
 
     private void openExerciseFinish(ExerciseFinishedEvent e) {
-        // TODO don't pass session, replace with something narrowed (e.g. only exercise or stats)
         showExerciseFinishPane(e.session);
         closeSession(e.session);
     }
@@ -161,20 +152,9 @@ public final class EarkingOutApplication extends Application {
         session = null;
     }
 
-    // TODO extract into special class
     private Pane buildSessionStatsPane(Session<?> session) {
-        // TODO factory method? this warning bothers a lot
-        var sessionStatsPane = new PerfectPitchStatsPane(session);
+        var sessionStatsPane = StatsPanesFactory.create(session);
         sessionStatsPane.addEventHandler(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
         return sessionStatsPane;
-    }
-
-    private void configurePrimaryStage(Stage primaryStage, Scene scene) {
-        primaryStage.setScene(scene);
-        primaryStage.setTitle(Invariants.APP_NAME);
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }
