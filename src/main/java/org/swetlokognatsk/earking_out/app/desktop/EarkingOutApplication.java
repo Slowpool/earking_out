@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
-import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
@@ -13,7 +12,6 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.Audi
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.VisualPerfectPitchPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.PerfectPitchStatsPane;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
-import org.swetlokognatsk.earking_out.core.domain.model.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
@@ -38,8 +36,6 @@ public final class EarkingOutApplication extends Application {
     // TODO make minimalWidth property to be equal to maximum screen width
     private static final int WIDTH = 1920;
     private static final int HEIGHT = 700;
-
-    private Session<?> session;
 
     private BorderPane contentPane;
     private ExercisesMenu exercisesMenu;
@@ -94,8 +90,8 @@ public final class EarkingOutApplication extends Application {
         var puzzleConfig = readPuzzleConfigService.fetch(e.exercise);
 
         if (puzzleConfig.isValid()) {
-            session = startSession(puzzleConfig);
-            showPuzzlePane();
+            var session = startSession(puzzleConfig);
+            showPuzzlePane(session);
         } else {
             // TODO message
             // DialogPane.
@@ -112,8 +108,8 @@ public final class EarkingOutApplication extends Application {
         return session;
     }
 
-    private void showPuzzlePane() {
-        var puzzlePane = buildPuzzlePane();
+    private void showPuzzlePane(Session<?> session) {
+        var puzzlePane = buildPuzzlePane(session);
         show(puzzlePane);
     }
 
@@ -126,8 +122,7 @@ public final class EarkingOutApplication extends Application {
         exercisesMenu.fireExercise(e.puzzleConfig.exercise);
     }
 
-    // TODO maybe just passing only config/exercise?
-    private Pane buildPuzzlePane() {
+    private Pane buildPuzzlePane(Session<?> session) {
         var exercise = session.puzzleConfig().exercise;
         var puzzlePane = switch (exercise.type) {
         case VISUAL -> switch (exercise.name) {
@@ -153,21 +148,21 @@ public final class EarkingOutApplication extends Application {
     private void openExerciseFinish(ExerciseFinishedEvent e) {
         // TODO don't pass session, replace with something narrowed (e.g. only exercise or stats)
         showExerciseFinishPane(e.session);
-        closeSession();
+        closeSession(e.session);
     }
 
     private void showExerciseFinishPane(Session<?> session) {
-        var sessionStatsPane = buildSessionStatsPane();
+        var sessionStatsPane = buildSessionStatsPane(session);
         show(sessionStatsPane);
     }
 
-    private void closeSession() {
+    private void closeSession(Session<?> session) {
         // TODO delegate to service
         session = null;
     }
 
     // TODO extract into special class
-    private Pane buildSessionStatsPane() {
+    private Pane buildSessionStatsPane(Session<?> session) {
         // TODO factory method? this warning bothers a lot
         var sessionStatsPane = new PerfectPitchStatsPane(session);
         sessionStatsPane.addEventHandler(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
