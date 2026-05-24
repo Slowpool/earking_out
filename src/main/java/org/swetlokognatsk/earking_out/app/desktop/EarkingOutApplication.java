@@ -129,7 +129,7 @@ public final class EarkingOutApplication extends Application {
         exercisesMenu.fireExercise(e.puzzleConfig.exercise);
     }
 
-    private Pane buildPuzzlePane(Session<?> session) {
+    private Pane buildPuzzlePane(Session<? extends PuzzleConfig<?>> session) {
         var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT); 
 
         puzzlePane.addEventHandler(PuzzlePane.EXERCISE_FINISHED, this::openExerciseFinish);

@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.generators.PuzzleGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
@@ -17,16 +18,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>, H extends Hint, P extends Puzzle<E, PC, H>/* , PG extends PuzzleGenerator */> extends BorderPane {
+public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>, H extends Hint, PG extends PuzzleGenerator, P extends Puzzle<E, PC, H, PG>> extends BorderPane {
     // TODO why it's so awkward? do i use it in a wrong way?
     public static final EventType<ExerciseFinishedEvent> EXERCISE_FINISHED = new EventType<ExerciseFinishedEvent>("EXERCISE_FINISHED");
 
     protected final Session<PC> session;
     protected final PC puzzleConfig;
-    // TODO do we need it?
-    // protected PG puzzleGenerator;
+    protected final PG puzzleGenerator;
     protected P puzzle;
 
+    // TODO misleading naming (PuzzlePane has puzzlePane of Pane type)
     protected final Pane puzzlePane;
     protected final ProgressBar puzzlesProgressBar;
     protected final Button finishButton;
@@ -39,6 +40,7 @@ public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>,
 
         this.session = session;
         this.puzzleConfig = session.puzzleConfig();
+        this.puzzleGenerator = PuzzleGeneratorsFactory.create(puzzleConfig);
 
         var puzzleProgressLabel = new Label(interpolatePuzzleProgress(0, puzzleConfig.targetNumberOfPuzzles));
         puzzlesProgressBar = new ProgressBar(0.0);

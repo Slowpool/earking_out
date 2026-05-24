@@ -4,7 +4,6 @@ import java.util.Iterator;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
-import javafx.geometry.Point2D;
 
 // TODO should it be final?
 public class PianoKeysBuilder implements Iterator<PianoKey> {
@@ -59,13 +58,9 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
         return (byte) (currentKeyIndex + firstNoteNumber);
     }
 
-    private byte getShiftedKeyNumber() {
-        return (byte) (getCurrentKeyNumber() - NoteNormalizer.SHIFT);
-    }
-
     private byte getCurrentKeyNumberInOctave() {
         // - 1 and + 1 is math trick to get 12 when getShiftedKeyNumber() == 12
-        return (byte) ((getShiftedKeyNumber() - 1) % Invariants.KEYS_IN_OCTAVE + 1);
+        return (byte) ((currentKeyIndex - 1) % Invariants.KEYS_IN_OCTAVE + 1);
     }
 
     public boolean hasNext() {
@@ -76,7 +71,6 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
         var pianoKey = new PianoKey(getCurrentKeyNumber(), isWhite());
         calculatePosition(pianoKey);
         calculateDimensions(pianoKey);
-        // TODO event handler
 
         currentKeyIndex++;
 

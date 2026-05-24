@@ -6,8 +6,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.P
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.PerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.generators.perfectpitch.PerfectPitchPuzzleGenerator;
 
-public abstract class PerfectPitchPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>, H extends Hint, P extends PerfectPitchPuzzle<E, PC, H>> extends PuzzlePane<E, PC, H, P> {
+public abstract class PerfectPitchPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>, H extends Hint, PG extends PerfectPitchPuzzleGenerator<PC>, P extends PerfectPitchPuzzle<E, PC, H, PG>> extends PuzzlePane<E, PC, H, PG, P> {
 
     public PerfectPitchPane(Session<PC> config, double width, double height) {
         super(config, width, height);
