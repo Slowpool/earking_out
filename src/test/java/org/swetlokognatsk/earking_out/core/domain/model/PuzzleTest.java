@@ -1,28 +1,35 @@
 package org.swetlokognatsk.earking_out.core.domain.model;
 
 import static org.junit.Assert.*;
-
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.generators.PuzzleGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.FakePuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 
 public class PuzzleTest {
-    public static Puzzle<?, ?, ?> createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType, String fakeSolution) {
+    public static Puzzle<?, ?, ?, ?> createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType, String fakeSolution) {
         FakePuzzleGenerator.fakeSolution = fakeSolution;
         return createPuzzle(exerciseName, exerciseType);
     }
 
-    public static Puzzle<?, ?, ?> createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType) {
+    public static Puzzle<?, ?, ?, ?> createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType) {
         var exercise = ExercisesFactory.create(exerciseName, exerciseType);
         assertNotNull(exercise);
-        return PuzzlesFactory.create(exercise, null);
+
+        var configReadService = DI.get(ReadPuzzleConfigService.class);
+        var puzzleConfig = configReadService.fetch(exercise);
+
+        var puzzleGenerator = DI.get(FakePuzzleGenerator.class);
+        return PuzzlesFactory.create(exercise, puzzleConfig, puzzleGenerator);
     }
 
     @Test
@@ -50,7 +57,9 @@ public class PuzzleTest {
     // TODO is it normal to test X and then write the test Y which also does X?
     @Test
     /**
-     * Well, actually the only thing this test does is checking that Puzzle() constructor successfully assigned the object variable `IHintFinder` as a dependency
+     * Well, actually the only thing this test does is checking that Puzzle()
+     * constructor successfully assigned the object variable `IHintFinder` as a
+     * dependency
      */
     public void hintCorrespondsToSolution() {
         var fakeSolution = "4";

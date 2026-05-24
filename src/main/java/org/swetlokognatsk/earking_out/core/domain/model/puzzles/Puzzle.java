@@ -29,7 +29,7 @@ public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig<E>, H e
 
     private H findHint() {
         var hintFinder = DI.get(HintFinder.class);
-        return hintFinder.find(this);
+        return (H)hintFinder.find(this);
     }
 
     public boolean guess(Guess guess) {

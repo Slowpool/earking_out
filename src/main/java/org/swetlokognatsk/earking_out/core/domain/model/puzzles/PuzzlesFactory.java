@@ -15,6 +15,7 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 // TODO exterminate this casting mess
 public final class PuzzlesFactory {
     public static <E extends Exercise, PC extends PuzzleConfig<E>, PG extends PuzzleGenerator, P extends Puzzle<E, PC, ?, PG>> P create(E exercise, PC puzzleConfig, PG puzzleGenerator) {
+        TODO make VisualPerfectPitchPuzzleGenerator to be interface and add fake version of it to di. do it with all of the puzzle generators (visual perfect pitch and audio perfect pitch yet)
         var puzzle = switch (exercise.name) {
         case PERFECT_PITCH -> switch (exercise.type) {
         case VISUAL -> new VisualPerfectPitchPuzzle((VisualPerfectPitchExercise) exercise, (VisualPerfectPitchConfig) puzzleConfig, (VisualPerfectPitchPuzzleGenerator) puzzleGenerator);
