@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
 import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizerImpl;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.HintFinderByExercise;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.HintFinderDelegatorByExercise;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakePerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
@@ -33,7 +33,7 @@ final public class DI {
         } else if (className == PuzzleGenerator.class.getName()) {
             return (T) new FakePuzzleGenerator();
         } else if (className == HintFinder.class.getName()) {
-            return (T) new HintFinderByExercise();
+            return (T) new HintFinderDelegatorByExercise();
         } else if (className == PerfectPitchHintFinder.class.getName()) {
             return (T) new FakePerfectPitchHintFinder();
         } else if (className == FakeVisualPerfectPitchHints.class.getName()) {

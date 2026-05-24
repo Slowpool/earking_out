@@ -3,15 +3,18 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPit
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.PerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.ports.hints.FiniteHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.PerfectPitchHintFinder;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.HintFinderMediatorByType;
 
-public abstract class FakePerfectPitchHintFinder<H extends Hint, P extends PerfectPitchPuzzle<?, ?, H, ?>> extends HintFinderByType implements PerfectPitchHintFinder<H, P> {
-    protected Class<? extends FiniteHintFinder> getVisualHintFinderClass() {
-        return FakeVisualPerfectPitchHints.class;
+// TODO refactoring so that different Hint types could be used for visual and audio types
+public abstract class FakePerfectPitchHintFinder<P extends PerfectPitchPuzzle<?, ?, UsualHint, ?>> extends HintFinderMediatorByType<UsualHint, P> implements PerfectPitchHintFinder<UsualHint, P> {
+    protected Class<FiniteHintFinder<UsualHint>> getVisualHintFinderClass() {
+        return (Class<FiniteHintFinder<UsualHint>>)FakeVisualPerfectPitchHints.class;
     }
 
-    protected Class<? extends FiniteHintFinder> getAudioHintFinderClass() {
+    protected Class<FiniteHintFinder<UsualHint>> getAudioHintFinderClass() {
         return FakeAudioPerfectPitchHints.class;
     }
 }
