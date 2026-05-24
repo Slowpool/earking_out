@@ -3,19 +3,28 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IPerfectPitchHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.PerfectPitchHintFinder;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.PerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.VisualPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 
-public class HintFinderByExercise implements HintFinder {
-    public Hint find(Puzzle<?, ?, ?> puzzle) {
-        var specificHintFinder = findSpecificHintFinder(puzzle);
+// TODO does this pattern have common name?
+/**
+ * Under the hood it's a mediator - all it does is delegating the finding to
+ * specific finder
+ */
+public class HintFinderByExercise<H extends Hint, P extends Puzzle<?, ?, H, ?>> implements HintFinder<H, P> {
+
+    public H find(P puzzle) {
+        var specificHintFinder = createSpecificHintFinder(puzzle);
         return specificHintFinder.find(puzzle);
     }
 
-    private HintFinder findSpecificHintFinder(Puzzle<?, ?, ?> puzzle) {
+    private HintFinder<H, P> createSpecificHintFinder(P puzzle) {
         var specificHintFinder = switch (puzzle) {
-        case PerfectPitchPuzzle perfectPitchPuzzle -> IPerfectPitchHintFinder.class;
+        case AudioPerfectPitchPuzzle x -> AudioPerfectPitchHintFinder.class;
+        case VisualPerfectPitchPuzzle x -> VisualPerfectPitchHintFinder.class;
         default -> throw new RuntimeException("unknown puzzle on looking for specificHintFinder: " + puzzle.getClass().getName());
         };
         return DI.get(specificHintFinder);

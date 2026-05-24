@@ -6,14 +6,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.PuzzleTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IPerfectPitchHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.PerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 
 public class PerfectPitchHintFinderTest {
     @Test
     public void exerciseTypeIsCorrect() {
-        var hintFinder = DI.get(IPerfectPitchHintFinder.class);
+        var hintFinder = DI.get(PerfectPitchHintFinder.class);
 
         String fakeSolution;
         for (var exerciseType : ExerciseTypes.values()) {
@@ -30,7 +30,7 @@ public class PerfectPitchHintFinderTest {
 
     @Test
     public void exerciseSolutionIsCorrect() {
-        var hintFinder = DI.get(IPerfectPitchHintFinder.class);
+        var hintFinder = DI.get(PerfectPitchHintFinder.class);
 
         String fakeSolution;
         String expectedSubstring;

@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.ports;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.IPerfectPitchHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.PerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionSe
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizerImpl;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.HintFinderByExercise;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.PerfectPitchHintFinder;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakePerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.FakePuzzleGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryReadPuzzleConfigService;
@@ -34,8 +34,8 @@ final public class DI {
             return (T) new FakePuzzleGenerator();
         } else if (className == HintFinder.class.getName()) {
             return (T) new HintFinderByExercise();
-        } else if (className == IPerfectPitchHintFinder.class.getName()) {
-            return (T) new PerfectPitchHintFinder();
+        } else if (className == PerfectPitchHintFinder.class.getName()) {
+            return (T) new FakePerfectPitchHintFinder();
         } else if (className == FakeVisualPerfectPitchHints.class.getName()) {
             return (T) new FakeVisualPerfectPitchHints();
         } else if (className == FakeAudioPerfectPitchHints.class.getName()) {
