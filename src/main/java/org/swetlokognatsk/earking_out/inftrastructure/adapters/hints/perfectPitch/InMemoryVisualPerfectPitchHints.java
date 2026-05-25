@@ -1,15 +1,19 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
 
-public class FakeVisualPerfectPitchHints implements VisualPerfectPitchHints {
-    public static final String EXERCISE = "perfect_pitch";
-    public static final String TYPE = "visual";
+// TODO
+public class InMemoryVisualPerfectPitchHints implements VisualPerfectPitchHints {
+    protected Map<String, UsualHint> hints = new HashMap<>();
+
+    public InMemoryVisualPerfectPitchHints() {
+    }
 
     public UsualHint find(Solution solution) {
-        var hint = EXERCISE + " " + TYPE + " hint for #" + solution.value;
-        return new UsualHint(hint);
+        return hints.get(solution.value);
     }
 }

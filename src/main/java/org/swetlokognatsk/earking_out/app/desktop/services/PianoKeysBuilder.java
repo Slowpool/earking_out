@@ -1,9 +1,11 @@
-package org.swetlokognatsk.earking_out.app.desktop.builders;
+package org.swetlokognatsk.earking_out.app.desktop.services;
 
+import java.io.File;
 import java.util.Iterator;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
+
+import javafx.scene.media.AudioClip;
 
 // TODO should it be final?
 public class PianoKeysBuilder implements Iterator<PianoKey> {
@@ -19,7 +21,7 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
 
     protected byte currentKeyIndex = 0;
     protected double currentWhiteX = 0;
-    protected double currentBlackX;
+    protected double currentBlackX = initBlackX();
 
     public PianoKeysBuilder(double keyboardWidth, double keyboardHeight) {
         this.keyboardWidth = keyboardWidth;
@@ -30,8 +32,6 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
 
         blackKeyWidth = calculateBlackKeyWidth();
         blackKeyHeight = calculateBlackKeyHeight();
-
-        currentBlackX = initBlackX();
     }
 
     private double calculateWhiteKeyWidth() {
@@ -67,7 +67,20 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
     }
 
     public PianoKey next() {
-        var pianoKey = new PianoKey(getCurrentKeyNumber(), isWhite());
+        // TODO var hint = hintFinder.find() or kinda, then pass it to audioClip of SoundPlayer, then use it in play and stop. create special class that implements SoundPlayer instead of using anonymous type.
+        
+        var pianoKey = new PianoKey(getCurrentKeyNumber(), isWhite(), new SoundPlayer() {
+            private AudioClip audioClip = new AudioClip();
+
+            
+            public void play() {
+                
+            }
+
+            public void stop() {
+
+            }
+        });
         calculatePosition(pianoKey);
         calculateDimensions(pianoKey);
 

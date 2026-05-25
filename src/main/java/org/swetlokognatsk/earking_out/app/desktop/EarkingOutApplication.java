@@ -39,6 +39,8 @@ public final class EarkingOutApplication extends Application {
     private ExercisesMenu exercisesMenu;
 
     public static void main(String[] args) {
+        // TODO wash away this hack after setting up the spring boot
+        DI.env = DI.PROD_ENV;
         launch();
     }
 

@@ -21,4 +21,8 @@ public class VisualPerfectPitchPane extends PerfectPitchPane<VisualPerfectPitchE
         return new VBox();
     }
 
+    // TODO
+    protected void demonstrateHint() {
+        throw new RuntimeException("demonstrating the hint");
+    }
 }

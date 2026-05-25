@@ -3,11 +3,10 @@ package org.swetlokognatsk.earking_out.app.desktop.components;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
-import org.swetlokognatsk.earking_out.app.desktop.builders.PianoKeysBuilder;
+import org.swetlokognatsk.earking_out.app.desktop.services.PianoKeysBuilder;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
@@ -23,7 +22,7 @@ public class PianoKeyboard extends Region {
 
     public final PianoKeyboardMode mode;
     // TODO is it possible to use either only all keys or only white/black?
-    protected final HashMap<Byte, PianoKey> allPianoKeys;
+    protected final Map<Byte, PianoKey> allPianoKeys;
     protected final PianoKey[] whitePianoKeys;
     protected final PianoKey[] blackPianoKeys;
 
@@ -50,7 +49,7 @@ public class PianoKeyboard extends Region {
         addPianoKeys();
     }
 
-    private HashMap<Byte, PianoKey> buildPianoKeys() {
+    private Map<Byte, PianoKey> buildPianoKeys() {
         var allPianoKeys = new HashMap<Byte, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
 
         var pianoKeysBuilder = new PianoKeysBuilder(getWidth(), getHeight());
@@ -65,19 +64,56 @@ public class PianoKeyboard extends Region {
     }
 
     private void addEventHandlers(PianoKey pianoKey) {
-        pianoKey.setOnMousePressed(createMousePressedHandler(pianoKey));
+        var pressedHandler = createMousePressedHandler(pianoKey);
+        if (pressedHandler != null) {
+            pianoKey.setOnMousePressed(pressedHandler);
+        }
+        var releasedHandler = createMouseReleasedHandler(pianoKey);
+        if (releasedHandler != null) {
+            pianoKey.setOnMouseReleased(releasedHandler);
+        }
     }
 
     protected EventHandler<? super MouseEvent> createMousePressedHandler(PianoKey pianoKey) {
         return switch (mode) {
         case SEVERAL_KEYS_SELECT -> e -> {
-            toggleSelection(pianoKey);
+            selectOneOfSeveralKeys(pianoKey);
         };
         case ONE_KEY_SELECT -> e -> {
-            if (pianoKey.isSelected()) {
-                return;
-            }
-            tryUnselectPreviouslySelectedKey();
+            selectOneKey(pianoKey);
+        };
+        case ONE_KEY_TOUCH -> e -> {
+            touchOneKey(pianoKey);
+        };
+        default -> null;
+        };
+    }
+
+    protected void selectOneOfSeveralKeys(PianoKey pianoKey) {
+        pianoKey.playSound();
+
+        toggleSelection(pianoKey);
+    }
+
+    protected void selectOneKey(PianoKey pianoKey) {
+        pianoKey.playSound();
+
+        if (pianoKey.isSelected()) {
+            return;
+        }
+        tryUnselectPreviouslySelectedKey();
+        toggleSelection(pianoKey);
+    }
+
+    protected void touchOneKey(PianoKey pianoKey) {
+        pianoKey.playSound();
+
+        toggleSelection(pianoKey);
+    }
+
+    protected EventHandler<? super MouseEvent> createMouseReleasedHandler(PianoKey pianoKey) {
+        return switch (mode) {
+        case ONE_KEY_TOUCH -> e -> {
             toggleSelection(pianoKey);
         };
         default -> null;
@@ -116,7 +152,7 @@ public class PianoKeyboard extends Region {
         oldSelectedPianoKey.toggleSelection();
     }
 
-    private static PianoKey[][] dichotomize(HashMap<Byte, PianoKey> pianoKeys) {
+    private static PianoKey[][] dichotomize(Map<Byte, PianoKey> pianoKeys) {
         // TODO dirty, dirty code, refactoring
         var dichotomizedPianoKeys = new PianoKey[2][];
         dichotomizedPianoKeys[WHITE_KEYS] = new PianoKey[Invariants.WHITE_PIANO_KEYS_NUMBER];

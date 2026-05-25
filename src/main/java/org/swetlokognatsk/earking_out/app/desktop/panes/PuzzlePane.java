@@ -5,6 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators.PuzzleGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
@@ -33,6 +34,8 @@ public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>,
     protected final Button finishButton;
 
     protected abstract Pane buildPuzzlePane();
+
+    protected abstract void demonstrateHint();
 
     public PuzzlePane(final Session<PC> session, double width, double height) {
         setWidth(width);
@@ -67,4 +70,14 @@ public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>,
         var exerciseFinishedEvent = new ExerciseFinishedEvent(EXERCISE_FINISHED, session);
         fireEvent(exerciseFinishedEvent);
     }
+
+    protected void nextPuzzle() {
+        createNextPuzzle();
+        demonstrateHint();
+    }
+
+    protected void createNextPuzzle() {
+        puzzle = PuzzlesFactory.create(puzzleConfig, puzzleGenerator);
+    }
+
 }

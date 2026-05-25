@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.components;
 
+import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayer;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
@@ -19,6 +20,7 @@ public final class PianoKey extends Button {
 
     public final byte keyNumber;
     private final boolean isWhite;
+    private final SoundPlayer soundPlayer;
     private boolean isSelected;
 
     public boolean isSelected() {
@@ -29,12 +31,13 @@ public final class PianoKey extends Button {
         isSelected = value;
     }
 
-    public PianoKey(final byte keyNumber, final boolean isWhite) {
+    public PianoKey(final byte keyNumber, final boolean isWhite, final SoundPlayer soundPlayer) {
         // TODO for debugf
         // super("" + keyNumber);
 
         this.keyNumber = keyNumber;
         this.isWhite = isWhite;
+        this.soundPlayer = soundPlayer;
 
         var background = isWhite() ? notSelectedWhiteBackground : notSelectedBlackBackground;
         setBackground(background);
@@ -71,5 +74,13 @@ public final class PianoKey extends Button {
             }
         }
         setBackground(background);
+    }
+
+    public void playSound() {
+        soundPlayer.play();
+    }
+
+    public void stopSound() {
+        soundPlayer.stop();
     }
 }

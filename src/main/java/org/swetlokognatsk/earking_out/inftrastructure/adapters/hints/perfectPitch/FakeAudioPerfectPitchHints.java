@@ -2,11 +2,10 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPit
 
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
-import org.swetlokognatsk.earking_out.core.ports.hints.FiniteHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
 
-// TODO package name - singular or plural?
 // TODO move to tests project somehow. upd: that's DI issue, fix after setting up DI, setup Fake classes on tests setup stage
-public class FakeAudioPerfectPitchHints implements FiniteHintFinder<UsualHint> {
+public class FakeAudioPerfectPitchHints implements AudioPerfectPitchHints {
     public static final String EXERCISE = "perfect_pitch";
     public static final String TYPE = "audio";
 
