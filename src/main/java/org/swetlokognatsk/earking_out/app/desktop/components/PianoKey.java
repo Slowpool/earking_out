@@ -31,6 +31,7 @@ public final class PianoKey extends Button {
         isSelected = value;
     }
 
+    // TODO SoundPlayer is port, but current class is already in app layer, so where the SoundPlayer and its implementation should be?
     public PianoKey(final byte keyNumber, final boolean isWhite, final SoundPlayer soundPlayer) {
         // TODO for debugf
         // super("" + keyNumber);

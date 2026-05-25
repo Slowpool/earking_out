@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
+import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.PianoKeysBuilder;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.ports.DI;
+
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
@@ -52,7 +55,8 @@ public class PianoKeyboard extends Region {
     private Map<Byte, PianoKey> buildPianoKeys() {
         var allPianoKeys = new HashMap<Byte, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
 
-        var pianoKeysBuilder = new PianoKeysBuilder(getWidth(), getHeight());
+        
+        var pianoKeysBuilder = createPianoKeysBuilder();
 
         PianoKey pianoKey;
         for (Byte i = 0; pianoKeysBuilder.hasNext(); i++) {
@@ -63,7 +67,14 @@ public class PianoKeyboard extends Region {
         return allPianoKeys;
     }
 
-    private void addEventHandlers(PianoKey pianoKey) {
+    private PianoKeysBuilder createPianoKeysBuilder() {
+        var keySoundsService = DI.get(KeySoundsService.class);
+        var keySounds = keySoundsService.getMap();
+        var pianoKeysBuilder = new PianoKeysBuilder(getWidth(), getHeight(), keySounds);
+        return pianoKeysBuilder;
+    }
+
+    private void addEventHandlers(final PianoKey pianoKey) {
         var pressedHandler = createMousePressedHandler(pianoKey);
         if (pressedHandler != null) {
             pianoKey.setOnMousePressed(pressedHandler);

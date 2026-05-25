@@ -7,6 +7,10 @@ public sealed class Guess permits Solution {
         this.value = guess;
     }
 
+    public int hashCode() {
+        return value.hashCode();
+    }
+    
     public boolean equals(Object obj) {
         boolean result;
         if (obj instanceof Solution) {

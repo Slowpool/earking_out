@@ -1,7 +1,9 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
-import org.swetlokognatsk.earking_out.app.desktop.services.AudioclipHintPlayer;
+import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsFromHintsService;
+import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
+import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
@@ -62,7 +64,10 @@ final public class DI {
             return (T) (env == TEST_ENV ? new FakeAudioPerfectPitchPuzzleGenerator() : new RandomAudioPerfectPitchPuzzleGenerator((AudioPerfectPitchConfig)args[0]));
 
         } else if (className == AudioHintPlayer.class.getName()) {
-            return (T) new AudioclipHintPlayer();
+            return (T) new AudioClipHintPlayer();
+        
+        } else if (className == KeySoundsService.class.getName()) {
+            return (T) new KeySoundsFromHintsService();
 
         } else {
             return null;

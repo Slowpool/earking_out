@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 
 import javafx.scene.media.AudioClip;
 
-public class AudioclipHintPlayer implements AudioHintPlayer<UsualHint> {
+public class AudioClipHintPlayer implements AudioHintPlayer<UsualHint> {
     // TODO cache
     protected AudioClip audioClip;
     

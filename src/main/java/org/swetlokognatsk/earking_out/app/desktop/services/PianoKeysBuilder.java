@@ -2,16 +2,17 @@ package org.swetlokognatsk.earking_out.app.desktop.services;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-
-import javafx.scene.media.AudioClip;
 
 // TODO should it be final?
 public class PianoKeysBuilder implements Iterator<PianoKey> {
     protected final byte firstNoteNumber = Invariants.FIRST_NOTE_NUMBER;
     protected final double keyboardWidth;
     protected final double keyboardHeight;
+
+    protected final Map<Byte, String> keySounds;
 
     protected final double whiteKeyWidth;
     protected final double whiteKeyHeight;
@@ -21,17 +22,21 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
 
     protected byte currentKeyIndex = 0;
     protected double currentWhiteX = 0;
-    protected double currentBlackX = initBlackX();
+    protected double currentBlackX;
 
-    public PianoKeysBuilder(double keyboardWidth, double keyboardHeight) {
+    public PianoKeysBuilder(double keyboardWidth, double keyboardHeight, Map<Byte, String> keySounds) {
         this.keyboardWidth = keyboardWidth;
         this.keyboardHeight = keyboardHeight;
+        this.keySounds = keySounds;
 
         whiteKeyWidth = calculateWhiteKeyWidth();
         whiteKeyHeight = calculateWhiteKeyHeight();
 
         blackKeyWidth = calculateBlackKeyWidth();
         blackKeyHeight = calculateBlackKeyHeight();
+
+        // it must be here, not in `protected double currentBlackX = ...` line due to the order of other properties assigning
+        currentBlackX = initBlackX();
     }
 
     private double calculateWhiteKeyWidth() {
@@ -68,19 +73,11 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
 
     public PianoKey next() {
         // TODO var hint = hintFinder.find() or kinda, then pass it to audioClip of SoundPlayer, then use it in play and stop. create special class that implements SoundPlayer instead of using anonymous type.
-        
-        var pianoKey = new PianoKey(getCurrentKeyNumber(), isWhite(), new SoundPlayer() {
-            private AudioClip audioClip = new AudioClip();
 
-            
-            public void play() {
-                
-            }
-
-            public void stop() {
-
-            }
-        });
+        var sound = keySounds.get(getCurrentKeyNumber());
+        var soundFile = new File(sound);
+        var fileSoundPlayer = new FileSoundPlayer(soundFile);
+        var pianoKey = new PianoKey(getCurrentKeyNumber(), isWhite(), fileSoundPlayer);
         calculatePosition(pianoKey);
         calculateDimensions(pianoKey);
 

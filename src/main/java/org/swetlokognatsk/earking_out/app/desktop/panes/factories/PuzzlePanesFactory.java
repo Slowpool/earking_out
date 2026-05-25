@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.factories;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.VisualPerfectPitchPane;
-import org.swetlokognatsk.earking_out.app.desktop.services.AudioclipHintPlayer;
+import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
@@ -24,7 +24,7 @@ public final class PuzzlePanesFactory {
         }
         case AUDIO -> {
             var castedSession = (Session<AudioPerfectPitchConfig>) session;
-            var pane = new AudioPerfectPitchPane(castedSession, width, height, new AudioclipHintPlayer());
+            var pane = new AudioPerfectPitchPane(castedSession, width, height, new AudioClipHintPlayer());
             var castedPane = (PuzzlePane<?, PC, ?, ?, ?>) pane;
             yield castedPane;
         }
