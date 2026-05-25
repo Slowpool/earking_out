@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.ports.hints.FiniteHintFinder;
 
 // TODO package name - singular or plural?
 // TODO move to tests project somehow. upd: that's DI issue, fix after setting up DI, setup Fake classes on tests setup stage
-public class FakeAudioPerfectPitchHints implements FiniteHintFinder {
+public class FakeAudioPerfectPitchHints implements FiniteHintFinder<UsualHint> {
     public static final String EXERCISE = "perfect_pitch";
     public static final String TYPE = "audio";
 

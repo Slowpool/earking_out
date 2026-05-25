@@ -168,14 +168,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             }
             yield set.iterator().next();
         }
-        default -> throw new IllegalArgumentException("custom property cast is not defined");
+        default -> throw new IllegalArgumentException("unknown custom property: " + configProperty);
         };
     }
-
-    // protected void fireSelectedNotesUpdated(SelectedNotesUpdatedEvent e) {
-
-    //     var configPropertyUpdatedEvent = new ConfigPropertyUpdatingEvent(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, exercise, PerfectPitchConfig.NOTES_FOR_PUZZLE_PROP, );
-    //     fireEvent(configPropertyUpdatedEvent);
-    // }
-
 }

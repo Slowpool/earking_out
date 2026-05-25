@@ -1,24 +1,28 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.PerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.AudioPerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.VisualPerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchPuzzleGenerator;
 
-// TODO all factories need refactoring
+// TODO exterminate this casting mess
 public final class PuzzlesFactory {
-    public static <E extends Exercise, PC extends PuzzleConfig<E>> Puzzle<E, PC, ?> create(E exercise, PC puzzleConfig) {
-        Puzzle<E, PC, ?> puzzle;
-        if (exercise.name == ExerciseNames.PERFECT_PITCH) {
-            var puzzleGenerator = DI.get(PuzzleGenerator.class);
-            puzzle = new PerfectPitchPuzzle<>(exercise, puzzleConfig, puzzleGenerator);
-        }
-        else {
-            throw new RuntimeException("unknown exercise");
-        }
-        return puzzle;
-        
+    public static <E extends Exercise, PC extends PuzzleConfig<E>, PG extends PuzzleGenerator, P extends Puzzle<E, PC, ?, PG>> P create(E exercise, PC puzzleConfig, PG puzzleGenerator) {
+        var puzzle = switch (exercise.name) {
+        case PERFECT_PITCH -> switch (exercise.type) {
+        case VISUAL -> new VisualPerfectPitchPuzzle((VisualPerfectPitchExercise) exercise, (VisualPerfectPitchConfig) puzzleConfig, (VisualPerfectPitchPuzzleGenerator) puzzleGenerator);
+        case AUDIO -> new AudioPerfectPitchPuzzle((AudioPerfectPitchExercise) exercise, (AudioPerfectPitchConfig) puzzleConfig, (AudioPerfectPitchPuzzleGenerator) puzzleGenerator);
+        default -> throw new RuntimeException("unknown exercise type for puzzle: " + exercise.type);
+        };
+        default -> throw new RuntimeException("unknown exercise for puzzle: " + exercise.name);
+        };
+        return (P) puzzle;
     }
 }

@@ -105,7 +105,7 @@ public class PianoKeyboard extends Region {
             return;
         } else if (numberOfSelectedKeys > 1) {
             // TODO how 'bout other exceptions
-            throw new RuntimeException("several keys were selected, although only one key was supposed to  be selected");
+            throw new RuntimeException("several keys were selected, although only one key was supposed to be selected");
         }
         var selectedKeysIterator = selectedKeys.getValue().iterator();
         var selectedPianoKeyNumber = selectedKeysIterator.next();

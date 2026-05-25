@@ -7,6 +7,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 import org.junit.*;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
 
 public class JavaTests {
     @Test
@@ -288,6 +291,30 @@ public class JavaTests {
         var castedString3 = String.valueOf(string1);
         assertEquals(string1, castedString3);
     }
+
+    @Test
+    public void genericTest2() {
+
+    }
+
+    private <P extends Parent> P getGenericObj() {
+        return (P)new Child();
+    }
+
+    @Test
+    public void enumToStringTest1() {
+        var castedValue = Days.MONDAY.toString();
+        var interpolatedValue = "" + Days.MONDAY;
+        assertEquals("MONDAY", castedValue);
+        assertEquals("MONDAY", interpolatedValue);
+    }
+
+    @Test
+    public void staticVariableInheritanceTest1() {
+        var fakeSolution = "bazinga";
+        FakeAudioPerfectPitchPuzzleGenerator.fakeSolution = fakeSolution;
+        assertEquals(fakeSolution, FakeVisualPerfectPitchPuzzleGenerator.fakeSolution);
+    }
 }
 
 class Parent {
@@ -317,4 +344,14 @@ class Child extends Parent {
 @FunctionalInterface
 interface CustomInvalidationListener {
     public String something(String firstArg, String secondArg);
+}
+
+enum Days {
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY 
 }

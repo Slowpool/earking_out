@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
+// TODO it must be somewhere else cuz it's a core business logic, not technology-dependend service
 public class NoteNormalizerImpl implements NoteNormalizer {
 
     public byte normalize(NoteWithAccidental noteWithAccidental) {
@@ -59,7 +60,7 @@ public class NoteNormalizerImpl implements NoteNormalizer {
         case FIFTH -> 5;
         case SIXTH -> 6;
         case SEVENTH -> 7;
-        default -> throw new RuntimeException("unknown octave");
+        default -> throw new RuntimeException("unknown octave: " + octave);
         };
     }
 }
