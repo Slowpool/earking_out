@@ -7,6 +7,6 @@ module org.swetlokognatsk {
 
     exports org.swetlokognatsk.earking_out;
     // TODO remove in prod
-    // exports org.swetlokognatsk.test;
+    exports org.swetlokognatsk.test;
     exports org.swetlokognatsk.earking_out.app.desktop;
 }

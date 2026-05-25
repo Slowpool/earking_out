@@ -4,9 +4,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.P
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.generators.perfectpitch.PerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.PerfectPitchPuzzleGenerator;
 
-public class PerfectPitchPuzzle<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>, H extends Hint, PG extends PerfectPitchPuzzleGenerator<PC>> extends Puzzle<E, PC, H, PG> {
+public abstract class PerfectPitchPuzzle<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>, H extends Hint, PG extends PerfectPitchPuzzleGenerator<PC>> extends Puzzle<E, PC, H, PG> {
 
     public PerfectPitchPuzzle(E exercise, PC config, PG puzzleGenerator) {
         super(exercise, config, puzzleGenerator);

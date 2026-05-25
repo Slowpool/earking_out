@@ -5,7 +5,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.p
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.generators.perfectpitch.VisualPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchPuzzleGenerator;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 

@@ -5,15 +5,16 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.PuzzleTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
+import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.PerfectPitchHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 
 public class PerfectPitchHintFinderTest {
     @Test
     public void exerciseTypeIsCorrect() {
-        var hintFinder = DI.get(PerfectPitchHintFinder.class);
+        var hintFinder = DI.get(HintFinder.class);
 
         String fakeSolution;
         for (var exerciseType : ExerciseTypes.values()) {
@@ -30,18 +31,18 @@ public class PerfectPitchHintFinderTest {
 
     @Test
     public void exerciseSolutionIsCorrect() {
-        var hintFinder = DI.get(PerfectPitchHintFinder.class);
+        var hintFinder = DI.get(HintFinder.class);
 
         String fakeSolution;
         String expectedSubstring;
-        for (Integer i = 4; i < 90; i++) {
+        for (byte i = Invariants.FIRST_NOTE_NUMBER; i < 90; i++) {
             for (var exerciseType : ExerciseTypes.values()) {
-                expectedSubstring = i.toString();
+                expectedSubstring = String.valueOf(i);
+                fakeSolution = String.valueOf(i);
                 // TODO is it a good idea to depent on other test suites' static methods?
-                fakeSolution = i.toString();
                 var puzzle = PuzzleTest.createPuzzle(ExerciseNames.PERFECT_PITCH, exerciseType, fakeSolution);
                 var hint = hintFinder.find(puzzle).getValue();
-                assertTrue(hint.contains(expectedSubstring));
+                assertTrue(hint.endsWith(expectedSubstring));
             }
         }
     }

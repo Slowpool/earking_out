@@ -59,8 +59,7 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
     }
 
     private byte getCurrentKeyNumberInOctave() {
-        // - 1 and + 1 is math trick to get 12 when getShiftedKeyNumber() == 12
-        return (byte) ((currentKeyIndex - 1) % Invariants.KEYS_IN_OCTAVE + 1);
+        return (byte) (currentKeyIndex % Invariants.KEYS_IN_OCTAVE + 1);
     }
 
     public boolean hasNext() {

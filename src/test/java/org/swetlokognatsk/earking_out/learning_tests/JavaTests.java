@@ -7,6 +7,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 import org.junit.*;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
 
 public class JavaTests {
     @Test
@@ -304,6 +307,13 @@ public class JavaTests {
         var interpolatedValue = "" + Days.MONDAY;
         assertEquals("MONDAY", castedValue);
         assertEquals("MONDAY", interpolatedValue);
+    }
+
+    @Test
+    public void staticVariableInheritanceTest1() {
+        var fakeSolution = "bazinga";
+        FakeAudioPerfectPitchPuzzleGenerator.fakeSolution = fakeSolution;
+        assertEquals(fakeSolution, FakeVisualPerfectPitchPuzzleGenerator.fakeSolution);
     }
 }
 

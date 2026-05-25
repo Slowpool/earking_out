@@ -18,30 +18,42 @@ public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigServic
      * @param newValue
      */
     public void updateProperty(Exercise exercise, String configProperty, Object newValue) {
-        var oldConfig = InMemoryReadPuzzleConfigService.puzzleConfig;
-        switch (configProperty) {
-        case PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP:
-            // TODO casting Object to String and then String to Integer is a little awkward, but probably that's how the cookies crumbles
-            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig((int) newValue, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, oldConfig.inputMode);
-            break;
-        case PuzzleConfig.STATS_RECORDING_PROP:
-            var newStatsRecording = (boolean) newValue;
-            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, newStatsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, oldConfig.inputMode);
-            break;
-        case PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP:
-            var newNormalizedNotes = (byte[]) newValue;
-            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, newNormalizedNotes, oldConfig.normalizedRootNote, oldConfig.inputMode);
-            break;
-        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE:
-            var newNormalizedRootNote = (Byte)newValue;
-            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, newNormalizedRootNote, oldConfig.inputMode);
-            break;
-        case PerfectPitchConfig.INPUT_MODE_PROP:
-            var newInputMode = (PerfectPitchInputMode)newValue;
-            InMemoryReadPuzzleConfigService.puzzleConfig = new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, newInputMode);
+        switch (exercise.name) {
+        case PERFECT_PITCH:
+            switch (exercise.type) {
+            case AUDIO:
+                updateAudioPerfectPitchProperty(exercise, configProperty, newValue);
+                break;
+            default:
+                throw new RuntimeException("yet not implemented exercise type");
+            }
             break;
         default:
-            throw new RuntimeException("unknown property to save: " + configProperty);
+            throw new RuntimeException("yet not implemented exercise name");
         }
+    }
+
+    private void updateAudioPerfectPitchProperty(Exercise exercise, String configProperty, Object newValue) {
+        var oldConfig = InMemoryReadPuzzleConfigService.appc;
+        InMemoryReadPuzzleConfigService.appc = switch (configProperty) {
+        case PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP -> new AudioPerfectPitchConfig((int) newValue, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, oldConfig.inputMode);
+        case PuzzleConfig.STATS_RECORDING_PROP -> {
+            var newStatsRecording = (boolean) newValue;
+            yield new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, newStatsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, oldConfig.inputMode);
+        }
+        case PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP -> {
+            var newNormalizedNotes = (byte[]) newValue;
+            yield new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, newNormalizedNotes, oldConfig.normalizedRootNote, oldConfig.inputMode);
+        }
+        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE -> {
+            var newNormalizedRootNote = (Byte) newValue;
+            yield new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, newNormalizedRootNote, oldConfig.inputMode);
+        }
+        case PerfectPitchConfig.INPUT_MODE_PROP -> {
+            var newInputMode = (PerfectPitchInputMode) newValue;
+            yield new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, oldConfig.normalizedRootNote, newInputMode);
+        }
+        default -> throw new RuntimeException("unknown property to save: " + configProperty);
+        };
     }
 }

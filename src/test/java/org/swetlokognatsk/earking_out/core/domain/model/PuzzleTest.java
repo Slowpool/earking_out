@@ -2,34 +2,49 @@ package org.swetlokognatsk.earking_out.core.domain.model;
 
 import static org.junit.Assert.*;
 import org.junit.*;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.generators.PuzzleGeneratorsFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators.PuzzleGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.FakePuzzleGenerator;
-import org.swetlokognatsk.earking_out.core.domain.model.Guess;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.FakePuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
 
 public class PuzzleTest {
-    public static Puzzle<?, ?, ?, ?> createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType, String fakeSolution) {
+    public static <P extends Puzzle<?, ?, ?, ?>> P createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType, String fakeSolution) {
         FakePuzzleGenerator.fakeSolution = fakeSolution;
         return createPuzzle(exerciseName, exerciseType);
     }
 
-    public static Puzzle<?, ?, ?, ?> createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType) {
+    public static <P extends  Puzzle<?, ?, ?, ?>> P createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType) {
         var exercise = ExercisesFactory.create(exerciseName, exerciseType);
         assertNotNull(exercise);
 
         var configReadService = DI.get(ReadPuzzleConfigService.class);
         var puzzleConfig = configReadService.fetch(exercise);
 
-        var puzzleGenerator = DI.get(FakePuzzleGenerator.class);
-        return PuzzlesFactory.create(exercise, puzzleConfig, puzzleGenerator);
+        var puzzleGenerator = getFakePuzzleGenerator(exercise);
+        return (P)PuzzlesFactory.create(exercise, puzzleConfig, puzzleGenerator);
+    }
+
+    private static <PG extends PuzzleGenerator> PG getFakePuzzleGenerator(Exercise exercise) {
+        var puzzleGenerator = switch (exercise.name) {
+            case PERFECT_PITCH -> switch (exercise.type) {
+                case VISUAL -> new FakeVisualPerfectPitchPuzzleGenerator();
+                case AUDIO -> new FakeAudioPerfectPitchPuzzleGenerator();
+                default -> throw new RuntimeException("unknown exercise");
+            };
+            default -> throw new RuntimeException("unknown exercise");
+        };
+        return (PG)puzzleGenerator;
     }
 
     @Test

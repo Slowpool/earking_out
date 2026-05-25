@@ -6,9 +6,6 @@ import org.swetlokognatsk.earking_out.core.ports.hints.FiniteHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.PerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 
 // TODO does this pattern have common name?
