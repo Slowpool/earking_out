@@ -16,6 +16,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 public class HintFinderDelegator<H extends Hint, P extends Puzzle<?, ?, H, ?>> implements HintFinder<H, P> {
 
     public H find(P puzzle) {
+        // TODO cache only the last hintFinder in memory
         var specificHintFinder = createSpecificHintFinder(puzzle);
         return specificHintFinder.find(puzzle.solution);
     }

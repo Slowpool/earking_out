@@ -32,7 +32,7 @@ public class PuzzleTest {
         var puzzleConfig = configReadService.fetch(exercise);
 
         var puzzleGenerator = getFakePuzzleGenerator(exercise);
-        return (P)PuzzlesFactory.create(exercise, puzzleConfig, puzzleGenerator);
+        return (P)PuzzlesFactory.create(puzzleConfig, puzzleGenerator);
     }
 
     private static <PG extends PuzzleGenerator> PG getFakePuzzleGenerator(Exercise exercise) {

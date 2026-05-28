@@ -1,6 +1,7 @@
 module org.swetlokognatsk {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
     requires org.apache.commons.lang3;
 
     opens org.swetlokognatsk.earking_out to javafx.fxml;
