@@ -24,21 +24,6 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
     protected double currentWhiteX = 0;
     protected double currentBlackX;
 
-    public PianoKeysBuilder(double keyboardWidth, double keyboardHeight, Map<Byte, String> keySounds) {
-        this.keyboardWidth = keyboardWidth;
-        this.keyboardHeight = keyboardHeight;
-        this.keySounds = keySounds;
-
-        whiteKeyWidth = calculateWhiteKeyWidth();
-        whiteKeyHeight = calculateWhiteKeyHeight();
-
-        blackKeyWidth = calculateBlackKeyWidth();
-        blackKeyHeight = calculateBlackKeyHeight();
-
-        // it must be here, not in `protected double currentBlackX = ...` line due to the order of other properties assigning
-        currentBlackX = initBlackX();
-    }
-
     private double calculateWhiteKeyWidth() {
         return keyboardWidth / Invariants.WHITE_PIANO_KEYS_NUMBER;
     }
@@ -67,17 +52,31 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
         return (byte) (currentKeyIndex % Invariants.KEYS_IN_OCTAVE + 1);
     }
 
+    public PianoKeysBuilder(double keyboardWidth, double keyboardHeight, Map<Byte, String> keySounds) {
+        this.keyboardWidth = keyboardWidth;
+        this.keyboardHeight = keyboardHeight;
+        this.keySounds = keySounds;
+
+        whiteKeyWidth = calculateWhiteKeyWidth();
+        whiteKeyHeight = calculateWhiteKeyHeight();
+
+        blackKeyWidth = calculateBlackKeyWidth();
+        blackKeyHeight = calculateBlackKeyHeight();
+
+        // it must be here, not in `protected double currentBlackX = ...` line due to the order of other properties assigning
+        currentBlackX = initBlackX();
+    }
+
     public boolean hasNext() {
         return currentKeyIndex < Invariants.PIANO_KEYS_NUMBER;
     }
 
     public PianoKey next() {
-        // TODO var hint = hintFinder.find() or kinda, then pass it to audioClip of SoundPlayer, then use it in play and stop. create special class that implements SoundPlayer instead of using anonymous type.
-
         var sound = keySounds.get(getCurrentKeyNumber());
         var soundFile = new File(sound);
         var fileSoundPlayer = new FileSoundPlayer(soundFile);
         var pianoKey = new PianoKey(getCurrentKeyNumber(), isWhite(), fileSoundPlayer);
+
         calculatePosition(pianoKey);
         calculateDimensions(pianoKey);
 
@@ -88,7 +87,6 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
 
     private void calculatePosition(PianoKey pianoKey) {
         var x = calculateX();
-        // TODO why Translate?
         pianoKey.setTranslateX(x);
     }
 

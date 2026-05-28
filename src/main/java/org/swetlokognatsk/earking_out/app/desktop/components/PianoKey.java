@@ -32,6 +32,7 @@ public final class PianoKey extends Button {
     }
 
     // TODO SoundPlayer is port, but current class is already in app layer, so where the SoundPlayer and its implementation should be?
+    // TODO what is hexagon in hexagonal architecture?
     public PianoKey(final byte keyNumber, final boolean isWhite, final SoundPlayer soundPlayer) {
         // TODO for debugf
         // super("" + keyNumber);
@@ -78,7 +79,7 @@ public final class PianoKey extends Button {
     }
 
     public void playSound() {
-        soundPlayer.play();
+        soundPlayer.stopAndPlay();
     }
 
     public void stopSound() {

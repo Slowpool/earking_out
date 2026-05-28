@@ -35,6 +35,8 @@ public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>,
 
     protected abstract Pane buildPuzzlePane();
 
+    protected abstract void demonstrateNewHint();
+
     protected abstract void demonstrateHint();
 
     public PuzzlePane(final Session<PC> session, double width, double height) {
@@ -73,7 +75,7 @@ public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>,
 
     protected void nextPuzzle() {
         createNextPuzzle();
-        demonstrateHint();
+        demonstrateNewHint();
     }
 
     protected void createNextPuzzle() {

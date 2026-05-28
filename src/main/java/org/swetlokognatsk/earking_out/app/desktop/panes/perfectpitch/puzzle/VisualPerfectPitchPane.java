@@ -22,6 +22,11 @@ public class VisualPerfectPitchPane extends PerfectPitchPane<VisualPerfectPitchE
     }
 
     // TODO
+    protected void demonstrateNewHint() {
+        throw new RuntimeException("demonstrating the hint");
+    }
+
+    // TODO
     protected void demonstrateHint() {
         throw new RuntimeException("demonstrating the hint");
     }

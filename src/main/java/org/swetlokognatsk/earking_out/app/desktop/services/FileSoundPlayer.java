@@ -20,6 +20,11 @@ public class FileSoundPlayer implements SoundPlayer {
         audioClip.play();
     }
 
+    public void stopAndPlay() {
+        stop();
+        play();
+    }
+
     public void stop() {
         audioClip.stop();
     }

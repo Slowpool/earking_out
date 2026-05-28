@@ -1,8 +1,12 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Stream;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators.ConfigBasedPuzzleGenerator;
@@ -20,8 +24,12 @@ public abstract class RandomPerfectPitchPuzzleGenerator<PC extends PerfectPitchC
     }
 
     protected Solution[] buildPossibleSolutions() {
-        var possibleSolutions = Stream.of(puzzleConfig.normalizedNotesForPuzzle).map(possibleNote -> new Solution(String.valueOf(possibleNote))).toArray();
-        return (Solution[]) possibleSolutions;
+        // TODO weweeeel., sosuch a cumbresome
+        Byte[] ByteNotes = ArrayUtils.toObject(puzzleConfig.normalizedNotesForPuzzle);
+        Stream<Byte> stream = Arrays.stream(ByteNotes);
+        Stream<Solution> map = stream.map(possibleNote -> new Solution(String.valueOf(possibleNote)));
+        Solution[] possibleSolutions = map.toArray(Solution[]::new);
+        return possibleSolutions;
     }
 
     public Solution generateSolution() {
