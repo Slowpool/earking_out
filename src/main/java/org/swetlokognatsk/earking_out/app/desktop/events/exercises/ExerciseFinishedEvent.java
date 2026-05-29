@@ -4,7 +4,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.Session;
 
 import javafx.event.*;
 
-// TODO generic?
 public class ExerciseFinishedEvent extends Event {
     public final Session<?> session;
 

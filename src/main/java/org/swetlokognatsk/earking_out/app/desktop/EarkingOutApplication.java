@@ -88,18 +88,22 @@ public final class EarkingOutApplication extends Application {
 
     private void openConfigPane(ActionEvent e) {
         var menuItem = (MenuItem) e.getTarget();
-        // TODO it's awkward cuz why to use generic here at all?
-        showConfigPane((Exercise) menuItem.getUserData());
+        Exercise exercise = (Exercise) menuItem.getUserData();
+        showConfigPane(exercise);
     }
 
-    private <E extends Exercise> void showConfigPane(E exercise) {
-        var configPane = buildConfigPane(exercise);
+    private void showConfigPane(Exercise exercise) {
+        var configPane = buildConfigPane(exercise.getClass(), exercise);
         showAsContent(configPane);
     }
 
-    private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfig<E>>> CP buildConfigPane(E exercise) {
+    private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfig<E>>> CP buildConfigPane(Class<E> exerciseClass, Exercise exercise) {
+        if (!exerciseClass.equals(exercise.getClass())) {
+            throw new IllegalArgumentException("exercise class does not correspond to exerciseClass");
+        }
+
         var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
-        var puzzleConfig = puzzleConfigService.fetch(exercise);
+        var puzzleConfig = puzzleConfigService.fetch(exerciseClass, exercise);
 
         var configPane = ConfigPanesFactory.create(puzzleConfig, WIDTH, HEIGHT);
         configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
@@ -109,7 +113,8 @@ public final class EarkingOutApplication extends Application {
 
     private void tryOpenPuzzlePane(ExerciseStartedEvent<?> e) {
         var readPuzzleConfigService = DI.get(ReadPuzzleConfigService.class);
-        var puzzleConfig = readPuzzleConfigService.fetch(e.exercise);
+        var exercise = e.exercise;
+        var puzzleConfig = readPuzzleConfigService.fetch(exercise.getClass(), exercise);
 
         if (puzzleConfig.isValid()) {
             var session = startSession(puzzleConfig);
@@ -154,6 +159,7 @@ public final class EarkingOutApplication extends Application {
 
     private void openExerciseFinish(ExerciseFinishedEvent e) {
         showExerciseFinishPane(e.session);
+        // TODO actually exerciseFinishingService.finish(e.session) should be here
         closeSession(e.session);
     }
 

@@ -7,7 +7,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 import org.junit.*;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.VisualPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
 
@@ -293,12 +299,37 @@ public class JavaTests {
     }
 
     @Test
-    public void genericTest2() {
+    public void genericMethodWithGenericReturnType1() {
+        var varObj = getGenericObj();
+        Object objObj = getGenericObj();
+        Parent parentObj = getGenericObj();
+        Child childObj = getGenericObj();
 
+        assertEquals(varObj.getClass().getName(), Child.class.getName());
+        assertEquals(objObj.getClass().getName(), Child.class.getName());
+        assertEquals(parentObj.getClass().getName(), Child.class.getName());
+        assertEquals(childObj.getClass().getName(), Child.class.getName());
+    }
+
+    @Test
+    public void genericMethodWithGenericReturnType2() {
+        var varObj = getNotGenericObj();
+        Object objObj = getNotGenericObj();
+        Parent parentObj = getNotGenericObj();
+        Child childObj = (Child) getNotGenericObj();
+
+        assertEquals(varObj.getClass().getName(), Child.class.getName());
+        assertEquals(objObj.getClass().getName(), Child.class.getName());
+        assertEquals(parentObj.getClass().getName(), Child.class.getName());
+        assertEquals(childObj.getClass().getName(), Child.class.getName());
     }
 
     private <P extends Parent> P getGenericObj() {
-        return (P)new Child();
+        return (P) new Child();
+    }
+
+    private Parent getNotGenericObj() {
+        return new Child();
     }
 
     @Test
@@ -314,6 +345,23 @@ public class JavaTests {
         var fakeSolution = "bazinga";
         FakeAudioPerfectPitchPuzzleGenerator.fakeSolution = fakeSolution;
         assertEquals(fakeSolution, FakeVisualPerfectPitchPuzzleGenerator.fakeSolution);
+    }
+
+    @Test
+    public void genericTest3() {
+        var service = new InMemoryReadPuzzleConfigService();
+
+        Exercise audioPerfectPitchExercise = new AudioPerfectPitchExercise();
+        AudioPerfectPitchConfig audioConfig = (AudioPerfectPitchConfig) service.fetch(audioPerfectPitchExercise.getClass(), audioPerfectPitchExercise);
+
+        Exercise visualPerfectPitchExercise = new VisualPerfectPitchExercise();
+        VisualPerfectPitchConfig visualConfig = (VisualPerfectPitchConfig) service.fetch(visualPerfectPitchExercise.getClass(), visualPerfectPitchExercise);
+
+        try {
+            service.fetch(audioPerfectPitchExercise.getClass(), visualPerfectPitchExercise);
+            fail();
+        } catch (IllegalArgumentException e) {
+        }
     }
 }
 
@@ -347,11 +395,5 @@ interface CustomInvalidationListener {
 }
 
 enum Days {
-    SUNDAY,
-    MONDAY,
-    TUESDAY,
-    WEDNESDAY,
-    THURSDAY,
-    FRIDAY,
-    SATURDAY 
+    SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY
 }

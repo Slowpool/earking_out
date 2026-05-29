@@ -8,8 +8,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators.PuzzleGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
@@ -29,7 +27,7 @@ public class PuzzleTest {
         assertNotNull(exercise);
 
         var configReadService = DI.get(ReadPuzzleConfigService.class);
-        var puzzleConfig = configReadService.fetch(exercise);
+        var puzzleConfig = configReadService.fetch(exercise.getClass(), exercise);
 
         var puzzleGenerator = getFakePuzzleGenerator(exercise);
         return (P)PuzzlesFactory.create(puzzleConfig, puzzleGenerator);

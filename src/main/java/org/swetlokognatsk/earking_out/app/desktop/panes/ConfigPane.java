@@ -116,7 +116,6 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     }
 
     private void fireExerciseStartedEvent(ActionEvent e) {
-        // TODO should it be here or after fireEvent()? how it works at all, i mean events flow - like middleware in both directions?
         e.consume();
 
         var exerciseStartedEvent = new ExerciseStartedEvent<>(ExerciseStartedEvent.EXERCISE_STARTED, exercise);

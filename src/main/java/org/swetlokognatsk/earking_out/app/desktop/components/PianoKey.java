@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
+// TODO HEXAGONAL ARCHITECTURE VIOLATION DETECTED. there's core business logic inside PianoKey, PianoKeyboard, (probably some other classes) and it should be extracted into core.
 public final class PianoKey extends Button {
     protected static final Background selectedWhiteBackground = new Background(new BackgroundFill(Color.rgb(0x00, 0xB4, 0xD8), CornerRadii.EMPTY, Insets.EMPTY));
     protected static final Background selectedBlackBackground = new Background(new BackgroundFill(Color.rgb(0x00, 0x14, 0xA9), CornerRadii.EMPTY, Insets.EMPTY));
@@ -31,12 +32,8 @@ public final class PianoKey extends Button {
         isSelected = value;
     }
 
-    // TODO SoundPlayer is port, but current class is already in app layer, so where the SoundPlayer and its implementation should be?
-    // TODO what is hexagon in hexagonal architecture?
+    // TODO SoundPlayer is port, but current class is already in app layer, so where the SoundPlayer and its implementation should be? p.s.: @see PianoKey
     public PianoKey(final byte keyNumber, final boolean isWhite, final SoundPlayer soundPlayer) {
-        // TODO for debugf
-        // super("" + keyNumber);
-
         this.keyNumber = keyNumber;
         this.isWhite = isWhite;
         this.soundPlayer = soundPlayer;

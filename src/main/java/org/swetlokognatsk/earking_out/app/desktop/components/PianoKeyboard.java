@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.PianoKeysBuilder;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
@@ -19,14 +19,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 
 public class PianoKeyboard extends Region {
-    private static final int WHITE_KEYS = 0;
-    private static final int BLACK_KEYS = 1;
 
     public final PianoKeyboardMode mode;
-    // TODO is it possible to use either only all keys or only white/black?
     protected final Map<Byte, PianoKey> allPianoKeys;
-    protected final PianoKey[] whitePianoKeys;
-    protected final PianoKey[] blackPianoKeys;
 
     // TODO what's the difference between observable and property?
     protected final SetProperty<Byte> selectedKeys;
@@ -41,9 +36,6 @@ public class PianoKeyboard extends Region {
         setWidth(width);
 
         allPianoKeys = buildPianoKeys();
-        var dichotomizedPianoKeys = dichotomize(allPianoKeys);
-        whitePianoKeys = dichotomizedPianoKeys[WHITE_KEYS];
-        blackPianoKeys = dichotomizedPianoKeys[BLACK_KEYS];
 
         var selectedKeys = initSelectedKeys(selectedKeyNumbers);
         this.selectedKeys = new SimpleSetProperty<>(selectedKeys);
@@ -54,7 +46,6 @@ public class PianoKeyboard extends Region {
     private Map<Byte, PianoKey> buildPianoKeys() {
         var allPianoKeys = new HashMap<Byte, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
 
-        
         var pianoKeysBuilder = createPianoKeysBuilder();
 
         PianoKey pianoKey;
@@ -150,8 +141,7 @@ public class PianoKeyboard extends Region {
         if (numberOfSelectedKeys == 0) {
             return;
         } else if (numberOfSelectedKeys > 1) {
-            // TODO how 'bout other exceptions
-            throw new RuntimeException("several keys were selected, although only one key was supposed to be selected");
+            throw new IllegalStateException("several keys were selected, although only one key was supposed to be selected");
         }
         var selectedKeysIterator = selectedKeys.getValue().iterator();
         var selectedPianoKeyNumber = selectedKeysIterator.next();
@@ -160,24 +150,6 @@ public class PianoKeyboard extends Region {
         selectedKeys.remove(selectedPianoKeyNumber);
 
         oldSelectedPianoKey.toggleSelection();
-    }
-
-    private static PianoKey[][] dichotomize(Map<Byte, PianoKey> pianoKeys) {
-        // TODO dirty, dirty code, refactoring
-        var dichotomizedPianoKeys = new PianoKey[2][];
-        dichotomizedPianoKeys[WHITE_KEYS] = new PianoKey[Invariants.WHITE_PIANO_KEYS_NUMBER];
-        dichotomizedPianoKeys[BLACK_KEYS] = new PianoKey[Invariants.BLACK_PIANO_KEYS_NUMBER];
-
-        int pianoKeyColor;
-        int i;
-        byte whiteI = 0;
-        byte blackI = 0;
-        for (var pianoKey : pianoKeys.values()) {
-            pianoKeyColor = pianoKey.isWhite() ? WHITE_KEYS : BLACK_KEYS;
-            i = pianoKey.isWhite() ? whiteI++ : blackI++;
-            dichotomizedPianoKeys[pianoKeyColor][i] = pianoKey;
-        }
-        return dichotomizedPianoKeys;
     }
 
     protected ObservableSet<Byte> initSelectedKeys(byte[] keyNumbers) {
@@ -202,21 +174,25 @@ public class PianoKeyboard extends Region {
 
     protected void validateKeyNumbersToSelect(byte[] keyNumbers) {
         if (!modeAllowsSelecting() && ArrayUtils.isNotEmpty(keyNumbers)) {
-            // TODO maybe some other exceptions exist for that?
-            throw new IllegalArgumentException("PianoKeyboard keys cannot be selected in this mode");
+            throw new IllegalStateException("PianoKeyboard keys cannot be selected in this mode");
         }
         if (mode == PianoKeyboardMode.ONE_KEY_SELECT && keyNumbers.length > 1) {
-            throw new IllegalArgumentException("this mode does not allow selecting more than 1 key");
+            throw new IllegalStateException("this mode does not allow selecting more than 1 key");
         }
     }
 
     private boolean modeAllowsSelecting() {
-        // TODO add any other?
         return !ArrayUtils.contains(new PianoKeyboardMode[] { PianoKeyboardMode.ONE_KEY_TOUCH }, mode);
     }
 
     private void addPianoKeys() {
-        getChildren().addAll(whitePianoKeys);
-        getChildren().addAll(blackPianoKeys);
+        var dichotomizedPianoKeys = PianoKeysHelper.dichotomize(allPianoKeys);
+        var whitePianoKeys = dichotomizedPianoKeys[PianoKeysHelper.WHITE_KEYS];
+        var blackPianoKeys = dichotomizedPianoKeys[PianoKeysHelper.BLACK_KEYS];
+
+        // the presentation intricacies of javafx require white keys to be added first in order to display black keys in front of (above) the white keys. probably more reasonable way exists, but that's frontender's bread
+        var children = getChildren();
+        children.addAll(whitePianoKeys);
+        children.addAll(blackPianoKeys);
     }
 }

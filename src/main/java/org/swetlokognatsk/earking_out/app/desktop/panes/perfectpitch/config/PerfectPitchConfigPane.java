@@ -164,7 +164,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             if (numberOfSelectedKeys == 0) {
                 yield null;
             } else if (numberOfSelectedKeys > 1) {
-                throw new RuntimeException("several keys were selected, although only one key was supposed to be selected");
+                throw new IllegalStateException("several keys were selected, although only one key was supposed to be selected");
             }
             yield set.iterator().next();
         }
