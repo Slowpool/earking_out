@@ -1,11 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators;
 
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchPuzzleGenerator;
 
 // TODO does it make sense to add private constructor to each factory?
 public final class PuzzleGeneratorsFactory {

@@ -18,7 +18,6 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 
-// TODO add border to white keys, now they are kinda invisible
 public class PianoKeyboard extends Region {
     private static final int WHITE_KEYS = 0;
     private static final int BLACK_KEYS = 1;

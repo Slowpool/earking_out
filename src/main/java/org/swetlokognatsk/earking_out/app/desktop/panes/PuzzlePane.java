@@ -28,7 +28,6 @@ public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>,
     protected final PG puzzleGenerator;
     protected P puzzle;
 
-    // TODO misleading naming (PuzzlePane has puzzlePane of Pane type)
     protected final Pane puzzlePane;
     protected final ProgressBar puzzlesProgressBar;
     protected final Button finishButton;

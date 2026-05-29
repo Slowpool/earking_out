@@ -26,9 +26,9 @@ public class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigService 
             case PERFECT_PITCH -> switch(exercise.type) {
                 case VISUAL -> vppc;
                 case AUDIO -> appc;
-                default -> throw new RuntimeException();
-            };
-            default -> throw new RuntimeException();
+                default -> throw new RuntimeException("unknown exercise type on config fetching: " + exercise.type);
+        };
+        default -> throw new RuntimeException("unknown exercise on config fetching: " + exercise.name);
         };
         return (PC)puzzleConfig;
     }

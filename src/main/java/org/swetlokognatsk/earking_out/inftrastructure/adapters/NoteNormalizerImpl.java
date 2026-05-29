@@ -29,6 +29,7 @@ public class NoteNormalizerImpl implements NoteNormalizer {
         case NATURAL -> 0;
         case null -> 0;
         case FLAT -> -1;
+        default -> throw new IllegalArgumentException("unkown accidental: " + accidental);
         };
     }
 
@@ -42,6 +43,7 @@ public class NoteNormalizerImpl implements NoteNormalizer {
         case G -> 8;
         case A -> 10;
         case B -> 12;
+        default -> throw new IllegalArgumentException("unkown note: " + noteName);
         };
     }
 
@@ -60,7 +62,7 @@ public class NoteNormalizerImpl implements NoteNormalizer {
         case FIFTH -> 5;
         case SIXTH -> 6;
         case SEVENTH -> 7;
-        default -> throw new RuntimeException("unknown octave: " + octave);
+        default -> throw new IllegalArgumentException("unknown octave: " + octave);
         };
     }
 }

@@ -28,8 +28,9 @@ public final class PuzzlePanesFactory {
             var castedPane = (PuzzlePane<?, PC, ?, ?, ?>) pane;
             yield castedPane;
         }
+        default -> throw new RuntimeException("unkown exercise type: " + exercise.type);
         };
-        default -> throw new RuntimeException("unkown exercise for puzzle pane" + exercise.name + " " + exercise.type);
+        default -> throw new RuntimeException("unkown exercise for puzzle pane: " + exercise.name);
         };
 
         return puzzlePane;

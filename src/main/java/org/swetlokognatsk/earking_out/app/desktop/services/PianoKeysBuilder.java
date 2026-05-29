@@ -107,7 +107,7 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
         return switch (getCurrentKeyNumberInOctave()) {
         case 1, 3, 5, 6, 8, 10, 12 -> true;
         case 2, 4, 7, 9, 11 -> false;
-        default -> throw new RuntimeException("wrong math for isWhite(): " + getCurrentKeyNumberInOctave());
+        default -> throw new ArithmeticException("wrong keyNumber in octave for isWhite(): " + getCurrentKeyNumberInOctave());
         };
     }
 
@@ -127,7 +127,7 @@ public class PianoKeysBuilder implements Iterator<PianoKey> {
             currentBlackX += whiteKeyWidth * 2;
             break;
         default:
-            throw new RuntimeException("calling nextBlackX for not black key: " + getCurrentKeyNumberInOctave());
+            throw new IllegalStateException("calling nextBlackX for not black key: " + getCurrentKeyNumberInOctave());
         }
         return x;
     }

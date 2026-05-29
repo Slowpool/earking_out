@@ -25,11 +25,11 @@ public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigServic
                 updateAudioPerfectPitchProperty(exercise, configProperty, newValue);
                 break;
             default:
-                throw new RuntimeException("yet not implemented exercise type");
+                throw new RuntimeException("unknown exercise type on config property updating: " + exercise.type);
             }
             break;
         default:
-            throw new RuntimeException("yet not implemented exercise name");
+            throw new RuntimeException("unknown exercise on config property updating: " + exercise.name);
         }
     }
 

@@ -88,7 +88,6 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     private Object castConfigPropertyNewValue(String configProperty, Object newValue) {
         // here the casts are just for the sake of explicitness, actually they aren't necessary
         return switch (configProperty) {
-        // TODO what's the difference between `(String)obj` and `String.valueOf(obj)`?
         case PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP -> {
             int intNewValue;
             try {
