@@ -190,7 +190,7 @@ public class PianoKeyboard extends Region {
         var whitePianoKeys = dichotomizedPianoKeys[PianoKeysHelper.WHITE_KEYS];
         var blackPianoKeys = dichotomizedPianoKeys[PianoKeysHelper.BLACK_KEYS];
 
-        // the presentation intricacies of javafx require white keys to be added first in order to display black keys in front of (above) the white keys. probably more reasonable way exists, but that's frontender's bread
+        // the intricacies of javafx view require white keys to be added first in order to display black keys in front of (above) the white keys. probably more reasonable way exists, but that's frontender's bread
         var children = getChildren();
         children.addAll(whitePianoKeys);
         children.addAll(blackPianoKeys);

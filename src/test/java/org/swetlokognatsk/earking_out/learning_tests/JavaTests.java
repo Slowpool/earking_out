@@ -17,6 +17,8 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.I
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
 
+import javafx.scene.control.MenuItem;
+
 public class JavaTests {
     @Test
     public void genericTest1() {
@@ -396,4 +398,13 @@ interface CustomInvalidationListener {
 
 enum Days {
     SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY
+}
+
+interface Feedable {
+    default void doSomething() {
+        var b = 3;
+    }
+}
+
+class Mouse implements Feedable {
 }
