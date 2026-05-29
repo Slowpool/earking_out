@@ -17,6 +17,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.I
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
 
+import javafx.collections.ObservableSet;
 import javafx.scene.control.MenuItem;
 
 public class JavaTests {
@@ -364,6 +365,14 @@ public class JavaTests {
             fail();
         } catch (IllegalArgumentException e) {
         }
+    }
+
+    @Test
+    public void weirdoCast() {
+        Object object = new Object();
+        var byteObject = (Byte)object;
+        var mouseObject = (Mouse)object;
+        var observableList = (ObservableSet<Byte>) object;
     }
 }
 
