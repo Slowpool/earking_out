@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 public class NoteNormalizerImpl implements NoteNormalizer {
 
     public byte normalize(NoteWithAccidental noteWithAccidental) {
-        byte value = SHIFT;
+        byte value = Invariants.SHIFT;
         value += getOctavesShift(noteWithAccidental.octave());
         value += normalizeInOctave(noteWithAccidental);
         return value;
@@ -29,6 +29,7 @@ public class NoteNormalizerImpl implements NoteNormalizer {
         case NATURAL -> 0;
         case null -> 0;
         case FLAT -> -1;
+        default -> throw new IllegalArgumentException("unkown accidental: " + accidental);
         };
     }
 
@@ -42,6 +43,7 @@ public class NoteNormalizerImpl implements NoteNormalizer {
         case G -> 8;
         case A -> 10;
         case B -> 12;
+        default -> throw new IllegalArgumentException("unkown note: " + noteName);
         };
     }
 
@@ -60,7 +62,7 @@ public class NoteNormalizerImpl implements NoteNormalizer {
         case FIFTH -> 5;
         case SIXTH -> 6;
         case SEVENTH -> 7;
-        default -> throw new RuntimeException("unknown octave: " + octave);
+        default -> throw new IllegalArgumentException("unknown octave: " + octave);
         };
     }
 }

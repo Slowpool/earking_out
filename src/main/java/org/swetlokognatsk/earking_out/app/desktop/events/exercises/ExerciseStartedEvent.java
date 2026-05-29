@@ -10,6 +10,7 @@ public class ExerciseStartedEvent<E extends Exercise> extends Event {
 
     public ExerciseStartedEvent(final EventType<?> eventType, final E exercise) {
         super(eventType);
+
         this.exercise = exercise;
     }
 }

@@ -8,9 +8,7 @@ public class AudioClipHintPlayer implements AudioHintPlayer<UsualHint> {
     protected AudioClip audioClip;
 
     public void prepareHint(UsualHint hint) {
-        // TODO restore in prod
-        // audioClip = new AudioClip("file://" + hint.getValue());
-        audioClip = new AudioClip("file:///key4.wav");
+        audioClip = new AudioClip("file://" + hint.getValue());
     }
 
     public void play() {

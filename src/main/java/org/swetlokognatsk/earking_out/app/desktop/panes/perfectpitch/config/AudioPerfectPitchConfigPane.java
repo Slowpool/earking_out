@@ -10,8 +10,4 @@ public class AudioPerfectPitchConfigPane extends PerfectPitchConfigPane<AudioPer
         super(puzzleConfig, width, height);
 
     }
-
-    protected void setFieldsValuesFromConfig(AudioPerfectPitchConfig puzzleConfig) {
-        super.setFieldsValuesFromConfig((PerfectPitchConfig<AudioPerfectPitchExercise>) puzzleConfig);
-    }
 }

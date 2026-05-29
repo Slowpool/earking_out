@@ -49,7 +49,6 @@ public abstract class SessionStatsPane<PC extends PuzzleConfig<?>> extends Borde
     }
 
     private void fireExerciseStartOverEvent(ActionEvent e) {
-        // TODO correct?
         e.consume();
 
         var config = session.puzzleConfig();

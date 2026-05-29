@@ -16,7 +16,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 
-// TODO generalize into abstract class
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
     protected final PianoKeyboard pianoKeyboard;
     protected final VBox pianoKeyboardBox;
@@ -49,7 +48,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         inputModeBox = buildInputModeBox(inputModeRadioButtons);
 
         addCustomFields();
-        setFieldsValuesFromConfig(puzzleConfig);
         addStartButton();
 
         setSpacing(20);
@@ -109,29 +107,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         getChildren().addAll(pianoKeyboardBox, rootNoteBox, inputModeBox);
     }
 
-    protected final void setFieldsValuesFromConfig(PerfectPitchConfig<?> puzzleConfig) {
-        setInputMode(puzzleConfig.inputMode);
-        if (puzzleConfig.inputMode == PerfectPitchInputMode.KEYBOARD_AS_PIANO) {
-            setRootNote(puzzleConfig.normalizedRootNote);
-        }
-    }
-
-    protected void setInputMode(PerfectPitchInputMode inputMode) {
-        var radioButtons = inputModeToggleGroup.getToggles();
-        RadioButton radioButton;
-        for (var toggle : radioButtons) {
-            radioButton = (RadioButton) toggle;
-            if (radioButton.getId() == inputMode.name()) {
-                inputModeToggleGroup.selectToggle(toggle);
-                break;
-            }
-        }
-    }
-
-    protected void setRootNote(Byte normalizedRootNote) {
-        // TODO
-    }
-
     protected void handleRadioButtonSelected(ActionEvent e) {
         var selectedRadioButton = (RadioButton) inputModeToggleGroup.getSelectedToggle();
         var selectedRadioButtonId = selectedRadioButton.getId();
@@ -164,7 +139,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             if (numberOfSelectedKeys == 0) {
                 yield null;
             } else if (numberOfSelectedKeys > 1) {
-                throw new RuntimeException("several keys were selected, although only one key was supposed to be selected");
+                throw new IllegalStateException("several keys were selected, although only one key was supposed to be selected");
             }
             yield set.iterator().next();
         }

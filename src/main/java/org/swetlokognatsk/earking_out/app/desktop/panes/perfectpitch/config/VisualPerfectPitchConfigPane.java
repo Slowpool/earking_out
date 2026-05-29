@@ -10,16 +10,4 @@ public class VisualPerfectPitchConfigPane extends PerfectPitchConfigPane<VisualP
         super(puzzleConfig, width, height);
 
     }
-
-    protected void setFieldsValuesFromConfig(VisualPerfectPitchConfig puzzleConfig) {
-        super.setFieldsValuesFromConfig((PerfectPitchConfig<VisualPerfectPitchExercise>) puzzleConfig);
-    }
-
-    // TODO it's not needed anymore, but remained for backward mapping (from form to)
-    // protected VisualPerfectPitchConfig mapToDomainConfig() {
-    //     // TODO ParsingException?
-    //     var targetNumberOfPuzzles = Integer.valueOf(numberOfPuzzlesField.getText());
-
-    //     return new VisualPerfectPitchConfig(targetNumberOfPuzzles, true, null, null, PerfectPitchInputMode.KEYBOARD_AS_PIANO);
-    // }
 }

@@ -1,6 +1,9 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch;
 
 import static org.junit.Assert.*;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
@@ -19,7 +22,10 @@ public class RandomPerfectPitchPuzzleGeneratorTest {
         var generator = new RandomPerfectPitchPuzzleGenerator<AudioPerfectPitchConfig>(puzzleConfig) {
         };
 
-        var possibleSolutions = Stream.of(notes).map(noteNumber -> new Solution(String.valueOf(noteNumber))).toArray();
+        Byte[] ByteNotes = ArrayUtils.toObject(notes);
+        Stream<Byte> stream = Arrays.stream(ByteNotes);
+        var map = stream.map((Byte noteNumber) -> new Solution(String.valueOf(noteNumber)));
+        Solution[] possibleSolutions = map.toArray(Solution[]::new);
         Solution generatedSolution;
         for (int i = 0; i < ITERATIONS_NUMBER; i++) {
             generatedSolution = generator.generateSolution();

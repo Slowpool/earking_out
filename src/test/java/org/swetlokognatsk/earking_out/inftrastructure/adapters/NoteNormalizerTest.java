@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.NoteWithAccidentalTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
+import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
@@ -37,7 +38,7 @@ public class NoteNormalizerTest {
             var normalizedValue = noteNormalizer.normalizeInOctave(notesWithAccidental[i]);
             // normalizedValues are defined for FIRST octave, whereas this test checks for octave-scoped value
             expected = normalizedValues[i];
-            expected -= NoteNormalizer.SHIFT;
+            expected -= Invariants.SHIFT;
             assertEquals(expected, normalizedValue);
         }
     }

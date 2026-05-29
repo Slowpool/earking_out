@@ -25,7 +25,6 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     protected final Button start;
 
     protected abstract void addCustomFields();
-    protected abstract void setFieldsValuesFromConfig(PC puzzleConfig);
     protected abstract Object castCustomConfigPropertyNewValue(String configProperty, Object newValue);
 
     {
@@ -88,7 +87,6 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     private Object castConfigPropertyNewValue(String configProperty, Object newValue) {
         // here the casts are just for the sake of explicitness, actually they aren't necessary
         return switch (configProperty) {
-        // TODO what's the difference between `(String)obj` and `String.valueOf(obj)`?
         case PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP -> {
             int intNewValue;
             try {
@@ -104,12 +102,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     }
 
     private void addCommonFields(PC puzzleConfig) {
-        setCommonFieldsValuesFromConfig(puzzleConfig);
         getChildren().addAll(numberOfPuzzlesBox, statisticsRecordingField);
-    }
-
-    // TODO it's being set in constructor, do we need it?
-    private void setCommonFieldsValuesFromConfig(PC puzzleConfig) {
     }
 
     protected void addStartButton() {
@@ -117,7 +110,6 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     }
 
     private void fireExerciseStartedEvent(ActionEvent e) {
-        // TODO should it be here or after fireEvent()? how it works at all, i mean events flow - like middleware in both directions?
         e.consume();
 
         var exerciseStartedEvent = new ExerciseStartedEvent<>(ExerciseStartedEvent.EXERCISE_STARTED, exercise);

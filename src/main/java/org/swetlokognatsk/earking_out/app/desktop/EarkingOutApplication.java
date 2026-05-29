@@ -6,7 +6,6 @@ import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinis
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
@@ -30,13 +29,13 @@ import javafx.stage.Stage;
 
 public final class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
-    // TODO make minimalWidth property to be equal to maximum screen width
+
     private static final int WIDTH = 1920;
     private static final int HEIGHT = 700;
 
-    // TODO make them final
-    private BorderPane contentPane;
-    private ExercisesMenu exercisesMenu;
+    private final BorderPane contentPane;
+    private final ExercisesMenu exercisesMenu;
+    private final Scene mainScene;
 
     public static void main(String[] args) {
         // TODO wash away this hack after setting up the spring boot
@@ -44,49 +43,66 @@ public final class EarkingOutApplication extends Application {
         launch();
     }
 
-    public void start(Stage primaryStage) throws Exception {
-        var scene = buildScene();
+    public EarkingOutApplication() {
+        contentPane = buildContentPane();
+        exercisesMenu = buildExercisesMenu();
+        buildAndDisplayMenu();
+        mainScene = buildMainScene();
 
-        configurePrimaryStage(primaryStage, scene);
-        primaryStage.show();
     }
 
-    private Scene buildScene() {
-        contentPane = new BorderPane();
-        buildAndDisplayMenu();
-        var scene = new Scene(contentPane, WIDTH, HEIGHT);
-        return scene;
+    private BorderPane buildContentPane() {
+        var contentPane = new BorderPane();
+        return contentPane;
+    }
+
+    protected ExercisesMenu buildExercisesMenu() {
+        var exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
+        return exercisesMenu;
     }
 
     private void buildAndDisplayMenu() {
-        exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
-
         var menu = new MenuBar(exercisesMenu);
         contentPane.setTop(menu);
     }
 
-    private void configurePrimaryStage(Stage primaryStage, Scene scene) {
-        primaryStage.setScene(scene);
+    private Scene buildMainScene() {
+        var scene = new Scene(contentPane, WIDTH, HEIGHT);
+        return scene;
+    }
+
+    public void start(Stage primaryStage) throws Exception {
+        configurePrimaryStage(primaryStage);
+        primaryStage.show();
+    }
+
+    private void configurePrimaryStage(Stage primaryStage) {
+        primaryStage.setScene(mainScene);
         primaryStage.setTitle(Invariants.APP_NAME);
     }
 
-    private void show(Pane pane) {
+    private void showAsContent(Pane pane) {
         contentPane.setCenter(pane);
     }
 
     private void openConfigPane(ActionEvent e) {
         var menuItem = (MenuItem) e.getTarget();
-        showConfigPane((Exercise) menuItem.getUserData());
+        Exercise exercise = (Exercise) menuItem.getUserData();
+        showConfigPane(exercise);
     }
 
-    private <E extends Exercise> void showConfigPane(E exercise) {
-        var configPane = buildConfigPane(exercise);
-        show(configPane);
+    private void showConfigPane(Exercise exercise) {
+        var configPane = buildConfigPane(exercise.getClass(), exercise);
+        showAsContent(configPane);
     }
 
-    private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfig<E>>> CP buildConfigPane(E exercise) {
+    private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfig<E>>> CP buildConfigPane(Class<E> exerciseClass, Exercise exercise) {
+        if (!exerciseClass.equals(exercise.getClass())) {
+            throw new IllegalArgumentException("exercise class does not correspond to exerciseClass");
+        }
+
         var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
-        var puzzleConfig = puzzleConfigService.fetch(exercise);
+        var puzzleConfig = puzzleConfigService.fetch(exerciseClass, exercise);
 
         var configPane = ConfigPanesFactory.create(puzzleConfig, WIDTH, HEIGHT);
         configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
@@ -96,7 +112,8 @@ public final class EarkingOutApplication extends Application {
 
     private void tryOpenPuzzlePane(ExerciseStartedEvent<?> e) {
         var readPuzzleConfigService = DI.get(ReadPuzzleConfigService.class);
-        var puzzleConfig = readPuzzleConfigService.fetch(e.exercise);
+        var exercise = e.exercise;
+        var puzzleConfig = readPuzzleConfigService.fetch(exercise.getClass(), exercise);
 
         if (puzzleConfig.isValid()) {
             var session = startSession(puzzleConfig);
@@ -119,7 +136,7 @@ public final class EarkingOutApplication extends Application {
 
     private void showPuzzlePane(Session<?> session) {
         var puzzlePane = buildPuzzlePane(session);
-        show(puzzlePane);
+        showAsContent(puzzlePane);
     }
 
     private void updateConfigProperty(ConfigPropertyUpdatingEvent e) {
@@ -132,21 +149,22 @@ public final class EarkingOutApplication extends Application {
     }
 
     private Pane buildPuzzlePane(Session<? extends PuzzleConfig<?>> session) {
-        var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT); 
+        var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT);
 
-        puzzlePane.addEventHandler(PuzzlePane.EXERCISE_FINISHED, this::openExerciseFinish);
+        puzzlePane.addEventHandler(ExerciseFinishedEvent.EXERCISE_FINISHED, this::openExerciseFinish);
 
         return puzzlePane;
     }
 
     private void openExerciseFinish(ExerciseFinishedEvent e) {
         showExerciseFinishPane(e.session);
+        // TODO actually exerciseFinishingService.finish(e.session) should be here
         closeSession(e.session);
     }
 
     private void showExerciseFinishPane(Session<?> session) {
         var sessionStatsPane = buildSessionStatsPane(session);
-        show(sessionStatsPane);
+        showAsContent(sessionStatsPane);
     }
 
     private void closeSession(Session<?> session) {

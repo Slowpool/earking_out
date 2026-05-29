@@ -15,7 +15,7 @@ public sealed class Guess permits Solution {
         boolean result;
         if (obj instanceof Solution) {
             var solution = (Solution)obj;
-            result = value == solution.value;
+            result = value.equals(solution.value);
         }
         else {
             result = super.equals(obj);

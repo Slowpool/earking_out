@@ -9,9 +9,9 @@ public final class ExercisesFactory {
         case PERFECT_PITCH -> switch (type) {
         case VISUAL -> new VisualPerfectPitchExercise();
         case AUDIO -> new AudioPerfectPitchExercise();
-        default -> throw new RuntimeException("unknown exercise type: " + type);
+        default -> throw new IllegalArgumentException("unknown exercise type: " + type);
         };
-        default -> throw new RuntimeException("unknown exercise: " + name);
+        default -> throw new IllegalArgumentException("unknown exercise: " + name);
         };
     }
 }

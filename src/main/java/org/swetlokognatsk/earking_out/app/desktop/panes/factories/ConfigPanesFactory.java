@@ -15,6 +15,7 @@ public final class ConfigPanesFactory {
         case PERFECT_PITCH -> switch (exercise.type) {
         case VISUAL -> (CP) new VisualPerfectPitchConfigPane((VisualPerfectPitchConfig) puzzleConfig, width, height);
         case AUDIO -> (CP) new AudioPerfectPitchConfigPane((AudioPerfectPitchConfig) puzzleConfig, width, height);
+        default -> throw new RuntimeException("unknown exercise type: " + exercise.type);
         };
         // case MELODIC_INTERVALS -> switch (exercise.type) {
         //     case VISUAL -> new VisualPerfectPitchConfigPane(puzzleConfig, width, height);

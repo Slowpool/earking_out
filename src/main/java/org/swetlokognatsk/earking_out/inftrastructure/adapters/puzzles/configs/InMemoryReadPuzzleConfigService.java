@@ -21,15 +21,20 @@ public class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigService 
         vppc = new VisualPerfectPitchConfig(0, false, new byte[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO);
     }
 
-    public <E extends Exercise, PC extends PuzzleConfig<E>> PC fetch(E exercise) {
+    public <E extends Exercise, PC extends PuzzleConfig<E>> PC fetch(Class<E> exerciseClass, Exercise exercise) {
+        if (!exerciseClass.equals(exercise.getClass())) {
+            throw new IllegalArgumentException("exercise class does not correspond to exerciseClass");
+        }
+
         var puzzleConfig = switch (exercise.name) {
-            case PERFECT_PITCH -> switch(exercise.type) {
-                case VISUAL -> vppc;
-                case AUDIO -> appc;
-                default -> throw new RuntimeException();
-            };
-            default -> throw new RuntimeException();
+        case PERFECT_PITCH -> switch (exercise.type) {
+        case VISUAL -> vppc;
+        case AUDIO -> appc;
+        default -> throw new RuntimeException("unknown exercise type on config fetching: " + exercise.type);
         };
-        return (PC)puzzleConfig;
+        default -> throw new RuntimeException("unknown exercise on config fetching: " + exercise.name);
+        };
+
+        return (PC) puzzleConfig;
     }
 }

@@ -40,33 +40,33 @@ final public class DI {
     public static <T> T get(Class<T> someClass, Object... args) {
         var className = someClass.getName();
         // case IPuzzleGenerator.class.getName() -> new TestPuzzleGenerator();
-        if (className == NoteNormalizer.class.getName()) {
+        if (className.equals(NoteNormalizer.class.getName())) {
             return (T) new NoteNormalizerImpl();
 
-        } else if (className == HintFinder.class.getName()) {
+        } else if (className.equals(HintFinder.class.getName())) {
             return (T) new HintFinderDelegator();
-        } else if (className == VisualPerfectPitchHints.class.getName()) {
-            return (T) (env == TEST_ENV ? new FakeVisualPerfectPitchHints() : new InMemoryVisualPerfectPitchHints());
+        } else if (className.equals(VisualPerfectPitchHints.class.getName())) {
+            return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchHints() : new InMemoryVisualPerfectPitchHints());
         } else if (className == AudioPerfectPitchHints.class.getName()) {
-            return (T) (env == TEST_ENV ? new FakeAudioPerfectPitchHints() : new InMemoryAudioPerfectPitchHints());
+            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchHints() : new InMemoryAudioPerfectPitchHints());
 
-        } else if (className == ReadPuzzleConfigService.class.getName()) {
+        } else if (className.equals(ReadPuzzleConfigService.class.getName())) {
             return (T) new InMemoryReadPuzzleConfigService();
-        } else if (className == WritePuzzleConfigService.class.getName()) {
+        } else if (className.equals(WritePuzzleConfigService.class.getName())) {
             return (T) new InMemoryWritePuzzleConfigService();
 
-        } else if (className == WriteSessionService.class.getName()) {
+        } else if (className.equals(WriteSessionService.class.getName())) {
             return (T) new InMemoryWriteSessionService();
-        } else if (className == ReadSessionService.class.getName()) {
+        } else if (className.equals(ReadSessionService.class.getName())) {
             return (T) new InMemoryReadSessionService();
 
-        } else if (className == AudioPerfectPitchPuzzleGenerator.class.getName()) {
-            return (T) (env == TEST_ENV ? new FakeAudioPerfectPitchPuzzleGenerator() : new RandomAudioPerfectPitchPuzzleGenerator((AudioPerfectPitchConfig)args[0]));
+        } else if (className.equals(AudioPerfectPitchPuzzleGenerator.class.getName())) {
+            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchPuzzleGenerator() : new RandomAudioPerfectPitchPuzzleGenerator((AudioPerfectPitchConfig)args[0]));
 
-        } else if (className == AudioHintPlayer.class.getName()) {
+        } else if (className.equals(AudioHintPlayer.class.getName())) {
             return (T) new AudioClipHintPlayer();
         
-        } else if (className == KeySoundsService.class.getName()) {
+        } else if (className.equals(KeySoundsService.class.getName())) {
             return (T) new KeySoundsFromHintsService();
 
         } else {

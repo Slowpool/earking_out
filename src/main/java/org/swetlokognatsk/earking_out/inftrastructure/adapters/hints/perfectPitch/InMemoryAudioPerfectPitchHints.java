@@ -17,7 +17,8 @@ public class InMemoryAudioPerfectPitchHints implements AudioPerfectPitchHints {
         UsualHint hint;
         for (Byte keyNumber = Invariants.FIRST_NOTE_NUMBER; keyNumber < Invariants.PIANO_KEYS_NUMBER + Invariants.FIRST_NOTE_NUMBER; keyNumber++) {
             key = String.valueOf(keyNumber);
-            filePath = String.format("/key%s.wav", key);
+            // TODO path should be taken from config?
+            filePath = String.format("/piano_keys/key%s.wav", key);
             hint = new UsualHint(filePath);
             hints.put(key, hint);
         }
