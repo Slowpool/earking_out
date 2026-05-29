@@ -30,13 +30,13 @@ import javafx.stage.Stage;
 
 public final class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
-    // TODO make minimalWidth property to be equal to maximum screen width
+
     private static final int WIDTH = 1920;
     private static final int HEIGHT = 700;
 
-    // TODO make them final
-    private BorderPane contentPane;
-    private ExercisesMenu exercisesMenu;
+    private final BorderPane contentPane;
+    private final ExercisesMenu exercisesMenu;
+    private final Scene mainScene;
 
     public static void main(String[] args) {
         // TODO wash away this hack after setting up the spring boot
@@ -44,44 +44,57 @@ public final class EarkingOutApplication extends Application {
         launch();
     }
 
-    public void start(Stage primaryStage) throws Exception {
-        var scene = buildScene();
+    public EarkingOutApplication() {
+        contentPane = buildContentPane();
+        exercisesMenu = buildExercisesMenu();
+        buildAndDisplayMenu();
+        mainScene = buildMainScene();
 
-        configurePrimaryStage(primaryStage, scene);
-        primaryStage.show();
     }
 
-    private Scene buildScene() {
-        contentPane = new BorderPane();
-        buildAndDisplayMenu();
-        var scene = new Scene(contentPane, WIDTH, HEIGHT);
-        return scene;
+    private BorderPane buildContentPane() {
+        var contentPane = new BorderPane();
+        return contentPane;
+    }
+
+    protected ExercisesMenu buildExercisesMenu() {
+        var exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
+        return exercisesMenu;
     }
 
     private void buildAndDisplayMenu() {
-        exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
-
         var menu = new MenuBar(exercisesMenu);
         contentPane.setTop(menu);
     }
 
-    private void configurePrimaryStage(Stage primaryStage, Scene scene) {
-        primaryStage.setScene(scene);
+    private Scene buildMainScene() {
+        var scene = new Scene(contentPane, WIDTH, HEIGHT);
+        return scene;
+    }
+
+    public void start(Stage primaryStage) throws Exception {
+        configurePrimaryStage(primaryStage);
+        primaryStage.show();
+    }
+
+    private void configurePrimaryStage(Stage primaryStage) {
+        primaryStage.setScene(mainScene);
         primaryStage.setTitle(Invariants.APP_NAME);
     }
 
-    private void show(Pane pane) {
+    private void showAsContent(Pane pane) {
         contentPane.setCenter(pane);
     }
 
     private void openConfigPane(ActionEvent e) {
         var menuItem = (MenuItem) e.getTarget();
+        // TODO it's awkward cuz why to use generic here at all?
         showConfigPane((Exercise) menuItem.getUserData());
     }
 
     private <E extends Exercise> void showConfigPane(E exercise) {
         var configPane = buildConfigPane(exercise);
-        show(configPane);
+        showAsContent(configPane);
     }
 
     private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfig<E>>> CP buildConfigPane(E exercise) {
@@ -119,7 +132,7 @@ public final class EarkingOutApplication extends Application {
 
     private void showPuzzlePane(Session<?> session) {
         var puzzlePane = buildPuzzlePane(session);
-        show(puzzlePane);
+        showAsContent(puzzlePane);
     }
 
     private void updateConfigProperty(ConfigPropertyUpdatingEvent e) {
@@ -132,7 +145,7 @@ public final class EarkingOutApplication extends Application {
     }
 
     private Pane buildPuzzlePane(Session<? extends PuzzleConfig<?>> session) {
-        var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT); 
+        var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT);
 
         puzzlePane.addEventHandler(PuzzlePane.EXERCISE_FINISHED, this::openExerciseFinish);
 
@@ -146,7 +159,7 @@ public final class EarkingOutApplication extends Application {
 
     private void showExerciseFinishPane(Session<?> session) {
         var sessionStatsPane = buildSessionStatsPane(session);
-        show(sessionStatsPane);
+        showAsContent(sessionStatsPane);
     }
 
     private void closeSession(Session<?> session) {
