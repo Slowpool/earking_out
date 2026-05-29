@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 public class NoteNormalizerImpl implements NoteNormalizer {
 
     public byte normalize(NoteWithAccidental noteWithAccidental) {
-        byte value = SHIFT;
+        byte value = Invariants.SHIFT;
         value += getOctavesShift(noteWithAccidental.octave());
         value += normalizeInOctave(noteWithAccidental);
         return value;

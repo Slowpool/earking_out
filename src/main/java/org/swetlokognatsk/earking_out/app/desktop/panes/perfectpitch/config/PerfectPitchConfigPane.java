@@ -121,7 +121,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         RadioButton radioButton;
         for (var toggle : radioButtons) {
             radioButton = (RadioButton) toggle;
-            if (radioButton.getId() == inputMode.name()) {
+            if (radioButton.getId().equals(inputMode.name())) {
                 inputModeToggleGroup.selectToggle(toggle);
                 break;
             }

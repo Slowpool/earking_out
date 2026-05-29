@@ -7,6 +7,14 @@ public final class Invariants {
     }
 
     /**
+     * Skipping A0, A#0, B0 notes, so that `C1.normalize() == 4`. Why not 1? These three notes
+     * aren't used in app by three reasons: 1. To simplify the logic 2. I doubt
+     * anybody gonna use them 3. To keep key numbers names as-is in domain.
+     * @see https://en.wikipedia.org/wiki/Piano_key_frequencies ctrl+f `Piano key number`
+     */
+    public static final byte SHIFT = 3;
+    public static final byte FIRST_NOTE_NUMBER = 1 + SHIFT;
+    /**
      * 12 semitones
      */
     public static final int KEYS_IN_OCTAVE = 12;
@@ -32,8 +40,6 @@ public final class Invariants {
     private static final double WHITE_KEY_LENGTH = 15;
     private static final double BLACK_KEY_LENGTH = 9;
     public static final double BLACK_KEY_LENGTH_RELATIVELY_TO_WHITE_KEY_LENGTH = BLACK_KEY_LENGTH / WHITE_KEY_LENGTH;
-
-    public static final byte FIRST_NOTE_NUMBER = 1 + NoteNormalizer.SHIFT;
 
     // TODO actually it's not invariant, then where to store it?
     public static final String APP_NAME = "Earking out";
