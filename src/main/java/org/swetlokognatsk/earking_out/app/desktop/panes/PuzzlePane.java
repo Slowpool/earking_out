@@ -10,7 +10,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators.PuzzleGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,9 +19,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>, H extends Hint, PG extends PuzzleGenerator, P extends Puzzle<E, PC, H, PG>> extends BorderPane {
-    // TODO why it's so awkward? do i use it in a wrong way?
-    public static final EventType<ExerciseFinishedEvent> EXERCISE_FINISHED = new EventType<ExerciseFinishedEvent>("EXERCISE_FINISHED");
-
     protected final Session<PC> session;
     protected final PC puzzleConfig;
     protected final PG puzzleGenerator;
@@ -68,7 +64,7 @@ public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>,
     }
 
     protected void finishExercise(ActionEvent e) {
-        var exerciseFinishedEvent = new ExerciseFinishedEvent(EXERCISE_FINISHED, session);
+        var exerciseFinishedEvent = new ExerciseFinishedEvent(ExerciseFinishedEvent.EXERCISE_FINISHED, session);
         fireEvent(exerciseFinishedEvent);
     }
 

@@ -6,7 +6,6 @@ import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinis
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
@@ -152,7 +151,7 @@ public final class EarkingOutApplication extends Application {
     private Pane buildPuzzlePane(Session<? extends PuzzleConfig<?>> session) {
         var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT);
 
-        puzzlePane.addEventHandler(PuzzlePane.EXERCISE_FINISHED, this::openExerciseFinish);
+        puzzlePane.addEventHandler(ExerciseFinishedEvent.EXERCISE_FINISHED, this::openExerciseFinish);
 
         return puzzlePane;
     }

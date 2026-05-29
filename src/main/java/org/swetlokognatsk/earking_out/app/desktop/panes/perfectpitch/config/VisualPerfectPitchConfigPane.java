@@ -10,8 +10,4 @@ public class VisualPerfectPitchConfigPane extends PerfectPitchConfigPane<VisualP
         super(puzzleConfig, width, height);
 
     }
-
-    protected void setFieldsValuesFromConfig(VisualPerfectPitchConfig puzzleConfig) {
-        super.setFieldsValuesFromConfig((PerfectPitchConfig<VisualPerfectPitchExercise>) puzzleConfig);
-    }
 }

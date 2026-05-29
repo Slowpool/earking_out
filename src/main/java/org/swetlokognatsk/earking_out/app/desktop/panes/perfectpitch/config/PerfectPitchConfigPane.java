@@ -16,7 +16,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 
-// TODO generalize into abstract class
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
     protected final PianoKeyboard pianoKeyboard;
     protected final VBox pianoKeyboardBox;
@@ -49,7 +48,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         inputModeBox = buildInputModeBox(inputModeRadioButtons);
 
         addCustomFields();
-        setFieldsValuesFromConfig(puzzleConfig);
         addStartButton();
 
         setSpacing(20);
@@ -107,29 +105,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected void addCustomFields() {
         getChildren().addAll(pianoKeyboardBox, rootNoteBox, inputModeBox);
-    }
-
-    protected final void setFieldsValuesFromConfig(PerfectPitchConfig<?> puzzleConfig) {
-        setInputMode(puzzleConfig.inputMode);
-        if (puzzleConfig.inputMode == PerfectPitchInputMode.KEYBOARD_AS_PIANO) {
-            setRootNote(puzzleConfig.normalizedRootNote);
-        }
-    }
-
-    protected void setInputMode(PerfectPitchInputMode inputMode) {
-        var radioButtons = inputModeToggleGroup.getToggles();
-        RadioButton radioButton;
-        for (var toggle : radioButtons) {
-            radioButton = (RadioButton) toggle;
-            if (radioButton.getId().equals(inputMode.name())) {
-                inputModeToggleGroup.selectToggle(toggle);
-                break;
-            }
-        }
-    }
-
-    protected void setRootNote(Byte normalizedRootNote) {
-        // TODO
     }
 
     protected void handleRadioButtonSelected(ActionEvent e) {
