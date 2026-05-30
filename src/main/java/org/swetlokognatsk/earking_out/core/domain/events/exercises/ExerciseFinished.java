@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 /**
  * @param aborted - whether user stopped the exercise session before solving all of the puzzles
  */
-public class ExerciseFinished<E extends Exercise, PC extends PuzzleConfig<E>> extends ExerciseStateChanged<E, PC> {
+public final class ExerciseFinished<E extends Exercise, PC extends PuzzleConfig<E>> extends ExerciseStateChanged<E, PC> {
     public final boolean aborted;
 
     public ExerciseFinished(final LocalDateTime timestamp, final UUID sessionId, final boolean aborted) {

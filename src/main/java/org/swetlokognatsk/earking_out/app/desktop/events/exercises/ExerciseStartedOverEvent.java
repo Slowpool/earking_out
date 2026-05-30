@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import javafx.event.Event;
 import javafx.event.EventType;
 
-public class ExerciseStartedOverEvent<PC extends PuzzleConfig<?>> extends Event {
+public final class ExerciseStartedOverEvent<PC extends PuzzleConfig<?>> extends Event {
     // TODO how 'bout inheritance from EXERCISE_STARTED?
     public static EventType<ExerciseStartedOverEvent<?>> EXERCISE_STARTED_OVER = new EventType<>("EXERCISE_STARTED_OVER");
 

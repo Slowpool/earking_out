@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.hints;
 
-public class UsualHint extends Hint {
+public final class UsualHint extends Hint {
     final String hint;
 
     public UsualHint(String hint) {

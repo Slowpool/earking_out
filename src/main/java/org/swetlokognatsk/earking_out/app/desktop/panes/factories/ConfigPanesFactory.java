@@ -9,6 +9,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
 
 public final class ConfigPanesFactory {
+
+    private ConfigPanesFactory() {
+    }
+
     public static <E extends Exercise, PC extends PuzzleConfig<E>, CP extends ConfigPane<E, PC>> CP create(final PC puzzleConfig, final double width, final double height) {
         var exercise = puzzleConfig.exercise;
         return switch (exercise.name) {

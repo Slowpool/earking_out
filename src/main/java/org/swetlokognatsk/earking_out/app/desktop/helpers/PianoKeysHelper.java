@@ -2,12 +2,16 @@ package org.swetlokognatsk.earking_out.app.desktop.helpers;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.function.Consumer;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 
-public class PianoKeysHelper {
+public final class PianoKeysHelper {
     public static final int WHITE_KEYS = 0;
     public static final int BLACK_KEYS = 1;
+
+    private PianoKeysHelper() {
+    }
 
     /**
      * Divides `pianoKeys` into white ones and black ones
@@ -27,5 +31,11 @@ public class PianoKeysHelper {
         var dichotomizedKeys = new PianoKey[][] { whiteKeys.toArray(PianoKey[]::new), blackKeys.toArray(PianoKey[]::new) };
 
         return dichotomizedKeys;
+    }
+
+    public static void forEachKey(Consumer<Byte> action) {
+        for (Byte keyNumber = Invariants.FIRST_NOTE_NUMBER; keyNumber < Invariants.PIANO_KEYS_NUMBER + Invariants.FIRST_NOTE_NUMBER; keyNumber++) {
+            action.accept(keyNumber);
+        }
     }
 }

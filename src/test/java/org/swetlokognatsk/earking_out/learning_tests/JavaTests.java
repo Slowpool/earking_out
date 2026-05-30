@@ -1,24 +1,18 @@
 package org.swetlokognatsk.earking_out.learning_tests;
 
 import static org.junit.Assert.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
-
 import javafx.collections.ObservableSet;
-import javafx.scene.control.MenuItem;
+import scala.Int;
 
 public class JavaTests {
     @Test
@@ -370,10 +364,63 @@ public class JavaTests {
     @Test
     public void weirdoCast() {
         Object object = new Object();
-        var byteObject = (Byte)object;
-        var mouseObject = (Mouse)object;
-        var observableList = (ObservableSet<Byte>) object;
+        try {
+            var byteObject = (Byte) object;
+            fail();
+        } catch (ClassCastException e) {
+        }
+        try {
+            var mouseObject = (Mouse) object;
+            fail();
+        } catch (ClassCastException e) {
+        }
+        try {
+            var observableList = (ObservableSet<Byte>) object;
+            fail();
+        } catch (ClassCastException e) {
+        }
     }
+
+    @Test
+    public void weirdoCast2() {
+        var book = new Book<String>();
+        book.cover = "bazinga";
+
+        Object objBook = book;
+        Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
+        try {
+            var x = bookWithByteCover.cover;
+            fail();
+        } catch (ClassCastException e) {
+        }
+    }
+
+    @Test
+    public void uncheckedCastCatching() {
+        var book = new Book<String>();
+        book.cover = "bazinga";
+
+        Object objBook = book;
+        try {
+            Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
+        }
+        catch (ClassCastException e) {
+
+        }
+    }
+
+    @Test
+    public void theMostWildThingIVeSeenTest() {
+        
+    }
+
+    // protected static int test = 5;
+    // public static final byte source = (byte)((byte)84 / test);
+    // public static final byte dervied = (byte) (source / 1);
+    // public static final byte result = dervied * 1;
+
+    static final int first = 126;
+    static final byte second = first + 1;
 }
 
 class Parent {
@@ -416,4 +463,24 @@ interface Feedable {
 }
 
 class Mouse implements Feedable {
+}
+
+class Book<Cover> {
+    public Cover cover;
+}
+
+abstract class Person {
+    public abstract void doSomething();
+}
+
+interface Doinger {
+    default void doSomething() {
+    }
+}
+
+class John extends Person implements Doinger {
+    // you'll get fired by compiler if this method is absent (yes, from your job)
+    public void doSomething() {
+
+    }
 }

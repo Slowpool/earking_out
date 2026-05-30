@@ -11,7 +11,6 @@ import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
 import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
@@ -29,7 +28,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryWriteSessionService;
 
 // TODO for now this class was made strictly in test purposes, to postpone DI in java
-final public class DI {
+public final class DI {
     public static String TEST_ENV = "test_env";
     public static String PROD_ENV = "prod_env";
     public static String env = "test_env";
@@ -39,7 +38,6 @@ final public class DI {
 
     public static <T> T get(Class<T> someClass, Object... args) {
         var className = someClass.getName();
-        // case IPuzzleGenerator.class.getName() -> new TestPuzzleGenerator();
         if (className.equals(NoteNormalizer.class.getName())) {
             return (T) new NoteNormalizerImpl();
 
@@ -61,11 +59,11 @@ final public class DI {
             return (T) new InMemoryReadSessionService();
 
         } else if (className.equals(AudioPerfectPitchPuzzleGenerator.class.getName())) {
-            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchPuzzleGenerator() : new RandomAudioPerfectPitchPuzzleGenerator((AudioPerfectPitchConfig)args[0]));
+            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchPuzzleGenerator() : new RandomAudioPerfectPitchPuzzleGenerator((AudioPerfectPitchConfig) args[0]));
 
         } else if (className.equals(AudioHintPlayer.class.getName())) {
             return (T) new AudioClipHintPlayer();
-        
+
         } else if (className.equals(KeySoundsService.class.getName())) {
             return (T) new KeySoundsFromHintsService();
 

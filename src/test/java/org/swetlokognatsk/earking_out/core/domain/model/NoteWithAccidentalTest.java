@@ -39,7 +39,7 @@ public class NoteWithAccidentalTest {
         octaveShifts = new byte[] { 0, 12 };
     }
 
-    // TODO checks normalizing for first and second octave. i feel mathematically that's sufficient (induction), but proofs are welcomed
+    // TODO normalizing works via math formulae, so it is enough to check only first and second octave. upd: actually it depends on implementation, whereas tests should not know how it works under the hood.
     @Test
     public void normalizingFirstAndSecondOctave() {
         for (int octave = 0; octave < octaves.length; octave++) {

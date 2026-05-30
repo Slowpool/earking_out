@@ -18,7 +18,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 
-public class PianoKeyboard extends Region {
+public final class PianoKeyboard extends Region {
 
     public final PianoKeyboardMode mode;
     protected final Map<Byte, PianoKey> allPianoKeys;

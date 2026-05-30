@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.t
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 
-public class VisualPerfectPitchConfig extends PerfectPitchConfig<VisualPerfectPitchExercise> {
+public final class VisualPerfectPitchConfig extends PerfectPitchConfig<VisualPerfectPitchExercise> {
 
     public VisualPerfectPitchConfig(final int targetNumberOfPuzzles, final boolean statsRecording, final byte[] normalizedNotesForPuzzle, final Byte normalizedRootNote, final PerfectPitchInputMode inputMode) {
         super(targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode);

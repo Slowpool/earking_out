@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import javafx.event.Event;
 import javafx.event.EventType;
 
-public class ConfigPropertyUpdatingEvent extends Event {
+public final class ConfigPropertyUpdatingEvent extends Event {
     public static final EventType<ConfigPropertyUpdatingEvent> CONFIG_PROPERTY_UPDATING = new EventType<ConfigPropertyUpdatingEvent>("CONFIG_PROPERTY_UPDATING");
 
     public final Exercise exercise;

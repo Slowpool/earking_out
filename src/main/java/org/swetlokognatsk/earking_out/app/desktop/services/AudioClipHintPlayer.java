@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.app.desktop.services;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import javafx.scene.media.AudioClip;
 
-public class AudioClipHintPlayer implements AudioHintPlayer<UsualHint> {
+public final class AudioClipHintPlayer implements AudioHintPlayer<UsualHint> {
     // TODO cache
     protected AudioClip audioClip;
 
@@ -26,10 +26,9 @@ public class AudioClipHintPlayer implements AudioHintPlayer<UsualHint> {
         }
     }
 
-    public void stop() {
+    public void stop() throws IllegalStateException {
         if (audioClipIsNull()) {
-            // TODO how 'bout picking another exception?
-            throw new RuntimeException();
+            throw new IllegalStateException("sound is not defined");
         }
         audioClip.stop();
     }

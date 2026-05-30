@@ -1,26 +1,21 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch;
 
 import static org.junit.Assert.*;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.function.IntFunction;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 
-public class RandomPerfectPitchPuzzleGeneratorTest {
+public class RandomAudioPerfectPitchPuzzleGeneratorTest {
     protected static int ITERATIONS_NUMBER = 100;
 
     @Test
     public void generateSolutionTest() {
         var notes = new byte[] { 4, 5 };
         var puzzleConfig = new AudioPerfectPitchConfig(0, false, notes, null, null);
-        // TODO why it cannot be cast?
-        var generator = new RandomPerfectPitchPuzzleGenerator<AudioPerfectPitchConfig>(puzzleConfig) {
-        };
+        var generator = new RandomAudioPerfectPitchPuzzleGenerator(puzzleConfig);
 
         Byte[] ByteNotes = ArrayUtils.toObject(notes);
         Stream<Byte> stream = Arrays.stream(ByteNotes);

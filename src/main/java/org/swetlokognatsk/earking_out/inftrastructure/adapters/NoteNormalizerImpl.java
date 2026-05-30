@@ -2,13 +2,12 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters;
 
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
 // TODO it must be somewhere else cuz it's a core business logic, not technology-dependend service
-public class NoteNormalizerImpl implements NoteNormalizer {
+public final class NoteNormalizerImpl implements NoteNormalizer {
 
     public byte normalize(NoteWithAccidental noteWithAccidental) {
         byte value = Invariants.SHIFT;
@@ -18,51 +17,13 @@ public class NoteNormalizerImpl implements NoteNormalizer {
     }
 
     public byte normalizeInOctave(NoteWithAccidental noteWithAccidental) {
-        byte octaveScopedNoteValue = normalizeNoteName(noteWithAccidental.noteName());
-        byte accidentalShift = getAccidentalShift(noteWithAccidental.accidental());
+        byte octaveScopedNoteValue = noteWithAccidental.noteName().keyNumber;
+        byte accidentalShift = Accidentals.getShift(noteWithAccidental.accidental());
         return (byte) (octaveScopedNoteValue + accidentalShift);
     }
 
-    public static byte getAccidentalShift(Accidentals accidental) {
-        return switch (accidental) {
-        case SHARP -> 1;
-        case NATURAL -> 0;
-        case null -> 0;
-        case FLAT -> -1;
-        default -> throw new IllegalArgumentException("unkown accidental: " + accidental);
-        };
-    }
-
-    // TODO does better way exist?
-    private static byte normalizeNoteName(NoteNames noteName) {
-        return switch (noteName) {
-        case C -> 1;
-        case D -> 3;
-        case E -> 5;
-        case F -> 6;
-        case G -> 8;
-        case A -> 10;
-        case B -> 12;
-        default -> throw new IllegalArgumentException("unkown note: " + noteName);
-        };
-    }
-
     private static byte getOctavesShift(Octaves octave) {
-        int octaveNumber = getOctaveNumber(octave);
+        int octaveNumber = octave.number;
         return (byte) ((octaveNumber - 1) * Invariants.KEYS_IN_OCTAVE);
-    }
-
-    // TODO encapsulate it into Octaves somehow?
-    private static int getOctaveNumber(Octaves octave) {
-        return switch (octave) {
-        case FIRST -> 1;
-        case SECOND -> 2;
-        case THIRD -> 3;
-        case FOURTH -> 4;
-        case FIFTH -> 5;
-        case SIXTH -> 6;
-        case SEVENTH -> 7;
-        default -> throw new IllegalArgumentException("unknown octave: " + octave);
-        };
     }
 }

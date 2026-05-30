@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 
-public class ExerciseStarted<E extends Exercise, PC extends PuzzleConfig<E>> extends ExerciseStateChanged<E, PC> {
+public final class ExerciseStarted<E extends Exercise, PC extends PuzzleConfig<E>> extends ExerciseStateChanged<E, PC> {
     public final E exercise;
     public final PC puzzleConfig;
 

@@ -8,21 +8,20 @@ import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfect
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 
-// TODO does this pattern have common name?
 /**
  * Under the hood it's a mediator - all it does is delegating the finding to
  * specific finder.
  */
-public class HintFinderDelegator<H extends Hint, P extends Puzzle<?, ?, H, ?>> implements HintFinder<H, P> {
+public final class HintFinderDelegator implements HintFinder {
 
-    public H find(P puzzle) {
+    public <H extends Hint, P extends Puzzle<?, ?, H, ?>> H find(P puzzle) {
         // TODO cache only the last hintFinder in memory
         var specificHintFinder = createSpecificHintFinder(puzzle);
         return specificHintFinder.find(puzzle.solution);
     }
 
-    private FiniteHintFinder<H> createSpecificHintFinder(P puzzle) {
-        var exercise = puzzle.exercise;
+    private <H extends Hint, P extends Puzzle<?, ?, H, ?>> FiniteHintFinder<H> createSpecificHintFinder(P puzzle) {
+        var exercise = puzzle.config.exercise;
         var specificHintFinder = switch (exercise.name) {
         case PERFECT_PITCH -> switch (exercise.type) {
         case AUDIO -> AudioPerfectPitchHints.class;

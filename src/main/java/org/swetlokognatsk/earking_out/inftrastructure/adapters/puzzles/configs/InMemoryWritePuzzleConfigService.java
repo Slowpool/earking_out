@@ -7,8 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 
-// TODO should such an implementations, that are utilized only in test purposes, be covered with tests? having it written it sounds like not, but i thought yes before.
-public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigService {
+public final class InMemoryWritePuzzleConfigService implements WritePuzzleConfigService {
 
     /**
      * Always accepts `newValue` as `String` because it'll be stored serialized;
@@ -25,11 +24,11 @@ public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigServic
                 updateAudioPerfectPitchProperty(exercise, configProperty, newValue);
                 break;
             default:
-                throw new RuntimeException("unknown exercise type on config property updating: " + exercise.type);
+                throw new IllegalArgumentException("unknown exercise type on config property updating: " + exercise.type);
             }
             break;
         default:
-            throw new RuntimeException("unknown exercise on config property updating: " + exercise.name);
+            throw new IllegalArgumentException("unknown exercise on config property updating: " + exercise.name);
         }
     }
 
