@@ -21,11 +21,8 @@ public abstract class RandomPerfectPitchPuzzleGenerator<PC extends PerfectPitchC
     }
 
     protected Solution[] buildPossibleSolutions() {
-        // TODO weweeeel., sosuch a cumbresome
         Byte[] ByteNotes = ArrayUtils.toObject(puzzleConfig.normalizedNotesForPuzzle);
-        Stream<Byte> stream = Arrays.stream(ByteNotes);
-        Stream<Solution> map = stream.map(possibleNote -> new Solution(String.valueOf(possibleNote)));
-        Solution[] possibleSolutions = map.toArray(Solution[]::new);
+        Solution[] possibleSolutions = Arrays.stream(ByteNotes).map(possibleNote -> new Solution(String.valueOf(possibleNote))).toArray(Solution[]::new);
         return possibleSolutions;
     }
 
