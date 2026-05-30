@@ -3,13 +3,15 @@ package org.swetlokognatsk.earking_out.app.desktop.helpers;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Consumer;
-
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 
 public final class PianoKeysHelper {
     public static final int WHITE_KEYS = 0;
     public static final int BLACK_KEYS = 1;
+
+    private PianoKeysHelper() {
+    }
 
     /**
      * Divides `pianoKeys` into white ones and black ones

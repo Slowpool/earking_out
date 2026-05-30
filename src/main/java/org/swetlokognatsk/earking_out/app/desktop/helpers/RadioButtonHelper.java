@@ -6,6 +6,10 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 
 public final class RadioButtonHelper {
+
+    private RadioButtonHelper() {
+    }
+
     public static <E extends Enum<?>> RadioButton[] makeList(final Class<E> enumClass, final ToggleGroup toggleGroup, E selectedValue, final EventHandler<ActionEvent> handler) {
         final var enumElements = enumClass.getEnumConstants();
         final var radioButtons = new RadioButton[enumElements.length];
