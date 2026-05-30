@@ -11,7 +11,6 @@ import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
 import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
@@ -39,7 +38,6 @@ public final class DI {
 
     public static <T> T get(Class<T> someClass, Object... args) {
         var className = someClass.getName();
-        // case IPuzzleGenerator.class.getName() -> new TestPuzzleGenerator();
         if (className.equals(NoteNormalizer.class.getName())) {
             return (T) new NoteNormalizerImpl();
 
@@ -61,11 +59,11 @@ public final class DI {
             return (T) new InMemoryReadSessionService();
 
         } else if (className.equals(AudioPerfectPitchPuzzleGenerator.class.getName())) {
-            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchPuzzleGenerator() : new RandomAudioPerfectPitchPuzzleGenerator((AudioPerfectPitchConfig)args[0]));
+            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchPuzzleGenerator() : new RandomAudioPerfectPitchPuzzleGenerator((AudioPerfectPitchConfig) args[0]));
 
         } else if (className.equals(AudioHintPlayer.class.getName())) {
             return (T) new AudioClipHintPlayer();
-        
+
         } else if (className.equals(KeySoundsService.class.getName())) {
             return (T) new KeySoundsFromHintsService();
 

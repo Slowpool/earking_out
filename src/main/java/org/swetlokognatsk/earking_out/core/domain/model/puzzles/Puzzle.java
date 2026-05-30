@@ -23,13 +23,13 @@ public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig<E>, H e
         this.exercise = exercise;
         this.config = config;
         this.solution = puzzleGenerator.generateSolution();
-        // TODO it should be guaranted by underlying IHintFinder.find(this), then supress warning
         this.hint = findHint();
     }
 
     private H findHint() {
         var hintFinder = DI.get(HintFinder.class);
-        return (H)hintFinder.find(this);
+        H hint = hintFinder.find(this);
+        return hint;
     }
 
     public boolean guess(Guess guess) {
