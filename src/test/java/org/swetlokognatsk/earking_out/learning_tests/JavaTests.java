@@ -16,7 +16,6 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitc
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
-
 import javafx.collections.ObservableSet;
 import javafx.scene.control.MenuItem;
 
@@ -370,9 +369,50 @@ public class JavaTests {
     @Test
     public void weirdoCast() {
         Object object = new Object();
-        var byteObject = (Byte)object;
-        var mouseObject = (Mouse)object;
-        var observableList = (ObservableSet<Byte>) object;
+        try {
+            var byteObject = (Byte) object;
+            fail();
+        } catch (ClassCastException e) {
+        }
+        try {
+            var mouseObject = (Mouse) object;
+            fail();
+        } catch (ClassCastException e) {
+        }
+        try {
+            var observableList = (ObservableSet<Byte>) object;
+            fail();
+        } catch (ClassCastException e) {
+        }
+    }
+
+    @Test
+    public void weirdoCast2() {
+        var book = new Book<String>();
+        book.cover = "bazinga";
+
+        Object objBook = book;
+        Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
+        try {
+            var x = bookWithByteCover.cover;
+            fail();
+        } catch (ClassCastException e) {
+        }
+        var x = bookWithByteCover.cover;
+    }
+
+    @Test
+    public void uncheckedCastCatching() {
+        var book = new Book<String>();
+        book.cover = "bazinga";
+
+        Object objBook = book;
+        try {
+            Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
+        }
+        catch (ClassCastException e) {
+            
+        }
     }
 }
 
@@ -416,4 +456,8 @@ interface Feedable {
 }
 
 class Mouse implements Feedable {
+}
+
+class Book<Cover> {
+    public Cover cover;
 }
