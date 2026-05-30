@@ -8,8 +8,8 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 
 public abstract class PerfectPitchPuzzle<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>, H extends Hint, PG extends PerfectPitchPuzzleGenerator<PC>> extends Puzzle<E, PC, H, PG> {
 
-    public PerfectPitchPuzzle(E exercise, PC config, PG puzzleGenerator) {
-        super(exercise, config, puzzleGenerator);
+    public PerfectPitchPuzzle(PC config, PG puzzleGenerator) {
+        super(config, puzzleGenerator);
 
     }
 }

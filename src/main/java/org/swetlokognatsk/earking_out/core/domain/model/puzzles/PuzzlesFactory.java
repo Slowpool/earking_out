@@ -12,14 +12,13 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchPuzzleGenerator;
 
-// TODO exterminate this casting mess
 public final class PuzzlesFactory {
     public static <E extends Exercise, PC extends PuzzleConfig<E>, PG extends PuzzleGenerator, P extends Puzzle<E, PC, ?, PG>> P create(PC puzzleConfig, PG puzzleGenerator) {
         var exercise = puzzleConfig.exercise;
         var puzzle = switch (exercise.name) {
         case PERFECT_PITCH -> switch (exercise.type) {
-        case VISUAL -> new VisualPerfectPitchPuzzle((VisualPerfectPitchExercise) exercise, (VisualPerfectPitchConfig) puzzleConfig, (VisualPerfectPitchPuzzleGenerator) puzzleGenerator);
-        case AUDIO -> new AudioPerfectPitchPuzzle((AudioPerfectPitchExercise) exercise, (AudioPerfectPitchConfig) puzzleConfig, (AudioPerfectPitchPuzzleGenerator) puzzleGenerator);
+        case VISUAL -> new VisualPerfectPitchPuzzle((VisualPerfectPitchConfig) puzzleConfig, (VisualPerfectPitchPuzzleGenerator) puzzleGenerator);
+        case AUDIO -> new AudioPerfectPitchPuzzle((AudioPerfectPitchConfig) puzzleConfig, (AudioPerfectPitchPuzzleGenerator) puzzleGenerator);
         default -> throw new RuntimeException("unknown exercise type for puzzle: " + exercise.type);
         };
         default -> throw new RuntimeException("unknown exercise for puzzle: " + exercise.name);

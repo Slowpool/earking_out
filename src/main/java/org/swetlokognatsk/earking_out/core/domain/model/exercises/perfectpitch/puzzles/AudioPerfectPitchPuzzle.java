@@ -7,8 +7,8 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 
 public final class AudioPerfectPitchPuzzle extends PerfectPitchPuzzle<AudioPerfectPitchExercise, AudioPerfectPitchConfig, UsualHint, AudioPerfectPitchPuzzleGenerator> {
 
-    public AudioPerfectPitchPuzzle(AudioPerfectPitchExercise exercise, AudioPerfectPitchConfig config, AudioPerfectPitchPuzzleGenerator puzzleGenerator) {
-        super(exercise, config, puzzleGenerator);
+    public AudioPerfectPitchPuzzle(AudioPerfectPitchConfig config, AudioPerfectPitchPuzzleGenerator puzzleGenerator) {
+        super(config, puzzleGenerator);
 
     }
 

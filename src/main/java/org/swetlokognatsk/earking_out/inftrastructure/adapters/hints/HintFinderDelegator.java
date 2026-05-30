@@ -21,7 +21,7 @@ public final class HintFinderDelegator implements HintFinder {
     }
 
     private <H extends Hint, P extends Puzzle<?, ?, H, ?>> FiniteHintFinder<H> createSpecificHintFinder(P puzzle) {
-        var exercise = puzzle.exercise;
+        var exercise = puzzle.config.exercise;
         var specificHintFinder = switch (exercise.name) {
         case PERFECT_PITCH -> switch (exercise.type) {
         case AUDIO -> AudioPerfectPitchHints.class;

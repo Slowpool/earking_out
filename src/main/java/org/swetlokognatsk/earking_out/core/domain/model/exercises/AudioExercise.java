@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.exercises;
 
-public interface AudioExercise {
-    public default String tType() {
+public final class AudioExercise {
+    public static String tType() {
         return "audio";
     }
 }
