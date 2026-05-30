@@ -2,7 +2,6 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generato
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
