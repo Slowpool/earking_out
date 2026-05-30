@@ -1,16 +1,16 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music;
 
-import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
-
 public final class Invariants {
     private Invariants() {
     }
 
     /**
-     * Skipping A0, A#0, B0 notes, so that `C1.normalize() == 4`. Why not 1? These three notes
-     * aren't used in app by three reasons: 1. To simplify the logic 2. I doubt
-     * anybody gonna use them 3. To keep key numbers names as-is in domain.
-     * @see https://en.wikipedia.org/wiki/Piano_key_frequencies ctrl+f `Piano key number`
+     * Skipping A0, A#0, B0 notes, so that `C1.normalize() == 4`. Why not 1? These
+     * three notes aren't used in app by three reasons: 1. To simplify the logic 2.
+     * I doubt anybody gonna use them 3. To keep key numbers names as-is in domain
+     * 
+     * @see https://en.wikipedia.org/wiki/Piano_key_frequencies ctrl+f `Piano key
+     *      number`
      */
     public static final byte SHIFT = 3;
     public static final byte FIRST_NOTE_NUMBER = 1 + SHIFT;

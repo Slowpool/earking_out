@@ -35,10 +35,9 @@ public class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExe
 
     public AudioPerfectPitchPane(final Session<AudioPerfectPitchConfig> session, final double width, final double height, final AudioHintPlayer<UsualHint> audioHintPlayer) {
         super(session, width, height);
-        this.audioHintPlayer = audioHintPlayer;
 
-        // TODO it's awkward, but dunno how to do it in different way
-        this.pianoKeyboardForGuessing = (PianoKeyboard) puzzlePane.getChildren().get(1);
+        this.audioHintPlayer = audioHintPlayer;
+        pianoKeyboardForGuessing = (PianoKeyboard) puzzlePane.getChildren().get(1);
 
         nextPuzzle();
     }

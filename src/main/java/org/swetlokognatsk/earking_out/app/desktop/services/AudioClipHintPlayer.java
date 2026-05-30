@@ -26,10 +26,9 @@ public class AudioClipHintPlayer implements AudioHintPlayer<UsualHint> {
         }
     }
 
-    public void stop() {
+    public void stop() throws IllegalStateException {
         if (audioClipIsNull()) {
-            // TODO how 'bout picking another exception?
-            throw new RuntimeException();
+            throw new IllegalStateException("sound is not defined");
         }
         audioClip.stop();
     }

@@ -8,10 +8,7 @@ public class FileSoundPlayer implements SoundPlayer {
 
     public FileSoundPlayer(File file) {
         if (!file.exists()) {
-            // TODO uncomment in prod
-            // TODO maybe another exception?
-            // throw new IllegalArgumentException("FileSoundPlayer requires existing file");
-            return;
+            throw new RuntimeException("File does not exist: " + file.getAbsolutePath());
         }
         audioClip = new AudioClip("file://" + file.getAbsolutePath());
     }

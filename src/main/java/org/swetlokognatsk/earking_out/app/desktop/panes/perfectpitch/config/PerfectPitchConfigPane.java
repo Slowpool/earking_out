@@ -119,7 +119,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected Object castCustomConfigPropertyNewValue(String configProperty, Object newValue) {
         return switch (configProperty) {
-        // TODO why (Integer) or (Byte) is fine whereas (SetProperty<Byte>) gives unchecked cast warning?
         case PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP -> {
             var set = (ObservableSet<Byte>) newValue;
             var objArray = set.toArray(new Byte[0]);

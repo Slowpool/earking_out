@@ -398,7 +398,6 @@ public class JavaTests {
             fail();
         } catch (ClassCastException e) {
         }
-        var x = bookWithByteCover.cover;
     }
 
     @Test
@@ -411,7 +410,7 @@ public class JavaTests {
             Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
         }
         catch (ClassCastException e) {
-            
+
         }
     }
 }
