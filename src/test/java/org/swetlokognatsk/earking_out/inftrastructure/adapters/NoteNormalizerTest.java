@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters;
 
 import static org.junit.Assert.*;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.NoteWithAccidentalTest;
@@ -46,19 +45,19 @@ public class NoteNormalizerTest {
     // TODO implementation tests further. isn't it awkward?
     @Test
     public void gettingAccidentalShiftSharp() {
-        var accidentalShift = NoteNormalizerImpl.getAccidentalShift(Accidentals.SHARP);
+        var accidentalShift = Accidentals.getShift(Accidentals.SHARP);
         assertEquals(1, accidentalShift);
     }
 
     @Test
     public void gettingAccidentalShiftNatural() {
-        var accidentalShift = NoteNormalizerImpl.getAccidentalShift(Accidentals.NATURAL);
+        var accidentalShift = Accidentals.getShift(Accidentals.NATURAL);
         assertEquals(0, accidentalShift);
     }
 
     @Test
     public void gettingAccidentalShiftFlat() {
-        var accidentalShift = NoteNormalizerImpl.getAccidentalShift(Accidentals.FLAT);
+        var accidentalShift = Accidentals.getShift(Accidentals.FLAT);
         assertEquals(-1, accidentalShift);
     }
 }
