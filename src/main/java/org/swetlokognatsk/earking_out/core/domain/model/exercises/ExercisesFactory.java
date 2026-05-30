@@ -4,6 +4,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.t
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.VisualPerfectPitchExercise;
 
 public final class ExercisesFactory {
+
+    private ExercisesFactory() {
+    }
+
     public static Exercise create(ExerciseNames name, ExerciseTypes type) {
         return switch (name) {
         case PERFECT_PITCH -> switch (type) {

@@ -10,6 +10,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
 
 public final class PuzzlePanesFactory {
+
+    private PuzzlePanesFactory() {
+    }
+
     public static <PC extends PuzzleConfig<?>> PuzzlePane<?, PC, ?, ?, ?> create(Session<PC> session, double width, double height) {
         var exercise = session.puzzleConfig().exercise;
 

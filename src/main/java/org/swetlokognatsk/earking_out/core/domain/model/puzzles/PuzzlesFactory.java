@@ -13,6 +13,10 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchPuzzleGenerator;
 
 public final class PuzzlesFactory {
+
+    private PuzzlesFactory() {
+    }
+
     public static <E extends Exercise, PC extends PuzzleConfig<E>, PG extends PuzzleGenerator, P extends Puzzle<E, PC, ?, PG>> P create(PC puzzleConfig, PG puzzleGenerator) {
         var exercise = puzzleConfig.exercise;
         var puzzle = switch (exercise.name) {
