@@ -6,10 +6,9 @@ import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
 
-public class InMemoryAudioPerfectPitchHints implements AudioPerfectPitchHints {
+public final class InMemoryAudioPerfectPitchHints implements AudioPerfectPitchHints {
     protected Map<String, UsualHint> hints = new HashMap<>();
 
     // TODO Java resources - i think it solves the problem of direct access to file system

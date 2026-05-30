@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
 
 // TODO
-public class InMemoryVisualPerfectPitchHints implements VisualPerfectPitchHints {
+public final class InMemoryVisualPerfectPitchHints implements VisualPerfectPitchHints {
     protected Map<String, UsualHint> hints = new HashMap<>();
 
     public InMemoryVisualPerfectPitchHints() {

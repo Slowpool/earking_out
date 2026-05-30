@@ -10,7 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 
-public class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigService {
+public final class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigService {
     // TODO use Map<Exercise, PuzzleConfig>
     static AudioPerfectPitchConfig appc;
     static VisualPerfectPitchConfig vppc;

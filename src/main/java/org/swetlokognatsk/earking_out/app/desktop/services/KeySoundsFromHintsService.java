@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
 
-public class KeySoundsFromHintsService implements KeySoundsService {
+public final class KeySoundsFromHintsService implements KeySoundsService {
     public Map<Byte, String> getMap() {
         var map = new HashMap<Byte, String>();
         var audioHints = DI.get(AudioPerfectPitchHints.class);

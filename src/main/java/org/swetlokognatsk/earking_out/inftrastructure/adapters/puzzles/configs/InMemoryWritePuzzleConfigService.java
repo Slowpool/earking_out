@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 
 // TODO should such an implementations, that are utilized only in test purposes, be covered with tests? having it written it sounds like not, but i thought yes before.
-public class InMemoryWritePuzzleConfigService implements WritePuzzleConfigService {
+public final class InMemoryWritePuzzleConfigService implements WritePuzzleConfigService {
 
     /**
      * Always accepts `newValue` as `String` because it'll be stored serialized;

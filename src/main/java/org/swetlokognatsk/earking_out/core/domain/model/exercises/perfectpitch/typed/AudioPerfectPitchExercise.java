@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 
 // TODO default interface method does not work like php traits???
-public class AudioPerfectPitchExercise extends PerfectPitchExercise {
+public final class AudioPerfectPitchExercise extends PerfectPitchExercise {
 
     public AudioPerfectPitchExercise() {
         super(ExerciseTypes.AUDIO);

@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 
-public class UserTriedToGuessPuzzle extends DomainEvent {
+public final class UserTriedToGuessPuzzle extends DomainEvent {
     public final UUID sessionId;
     public final Guess guess;
     public final Solution solution;

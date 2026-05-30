@@ -6,8 +6,7 @@ import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 
-// TODO should it be final?
-public class PianoKeysBuilder implements Iterator<PianoKey> {
+public final class PianoKeysBuilder implements Iterator<PianoKey> {
     protected final byte firstNoteNumber = Invariants.FIRST_NOTE_NUMBER;
     protected final double keyboardWidth;
     protected final double keyboardHeight;

@@ -13,7 +13,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
  * Under the hood it's a mediator - all it does is delegating the finding to
  * specific finder.
  */
-public class HintFinderDelegator<H extends Hint, P extends Puzzle<?, ?, H, ?>> implements HintFinder<H, P> {
+public final class HintFinderDelegator<H extends Hint, P extends Puzzle<?, ?, H, ?>> implements HintFinder<H, P> {
 
     public H find(P puzzle) {
         // TODO cache only the last hintFinder in memory

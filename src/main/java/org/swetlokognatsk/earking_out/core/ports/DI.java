@@ -29,7 +29,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryWriteSessionService;
 
 // TODO for now this class was made strictly in test purposes, to postpone DI in java
-final public class DI {
+public final class DI {
     public static String TEST_ENV = "test_env";
     public static String PROD_ENV = "prod_env";
     public static String env = "test_env";

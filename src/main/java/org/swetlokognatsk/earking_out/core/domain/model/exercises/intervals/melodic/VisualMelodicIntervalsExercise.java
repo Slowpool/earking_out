@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 
-public class VisualMelodicIntervalsExercise extends Exercise {
+public final class VisualMelodicIntervalsExercise extends Exercise {
 
     public VisualMelodicIntervalsExercise() {
         super(ExerciseNames.MELODIC_INTERVALS, ExerciseTypes.VISUAL);
