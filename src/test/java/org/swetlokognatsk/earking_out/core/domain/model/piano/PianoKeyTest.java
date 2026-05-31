@@ -7,34 +7,15 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
-import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorServiceImpl;
-import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyMode;
 
-public class PianoKeyTest {
+public final class PianoKeyTest {
     protected static byte ANY_PIANO_KEY_NUMBER = 4;
-
-    protected static PianoKey createPianoKey(final byte keyNumber, final PianoKeyMode mode) {
-        var keyColorService = new PianoKeyColorServiceImpl();
-        var soundPlayerLatch = new SoundPlayerService() {
-            public void play() {
-            }
-
-            public void stopAndPlay() {
-            }
-
-            public void stop() {
-            }
-        };
-        var pianoKey = new PianoKey(keyNumber, mode, keyColorService, soundPlayerLatch);
-        return pianoKey;
-    }
 
     @Test
     public void pianoKeyColorTest() {
         PianoKeysHelper.forEachKey((Byte keyNumber) -> {
-            var pianoKey = createPianoKey((byte) keyNumber, PianoKeyMode.TOUCH);
+            var pianoKey = PianoKeysFactory.create((byte) keyNumber, PianoKeyMode.TOUCH);
             var expectedColor = getExpectedPianoKeyColor(keyNumber);
             assertEquals(expectedColor, pianoKey.color);
         });
@@ -66,7 +47,7 @@ public class PianoKeyTest {
 
     @Test
     public void pressPianoKeyInTouchMode() {
-        var pianoKey = createPianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
+        var pianoKey = PianoKeysFactory.create(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
 
         pianoKey.press();
         assertTrue(pianoKey.getIsSelected());
@@ -77,7 +58,7 @@ public class PianoKeyTest {
 
     @Test
     public void releasePianoKeyInTouchMode() {
-        var pianoKey = createPianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
+        var pianoKey = PianoKeysFactory.create(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
 
         try {
             pianoKey.release();
@@ -89,7 +70,7 @@ public class PianoKeyTest {
 
     @Test
     public void pressTwicePianoKeyInTouchMode() {
-        var pianoKey = createPianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
+        var pianoKey = PianoKeysFactory.create(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
 
         pianoKey.press();
         try {

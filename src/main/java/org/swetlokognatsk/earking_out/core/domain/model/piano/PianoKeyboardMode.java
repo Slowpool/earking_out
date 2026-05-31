@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.app.desktop.components;
+package org.swetlokognatsk.earking_out.core.domain.model.piano;
 
 public enum PianoKeyboardMode {
     ONE_KEY_TOUCH, // when you press the key, it is highlighted during the key holding. then, after releasing the key, highlighting disappears

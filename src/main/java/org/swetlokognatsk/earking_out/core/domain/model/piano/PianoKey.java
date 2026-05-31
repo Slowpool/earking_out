@@ -2,7 +2,6 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano;
 
 import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorService;
-import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyMode;
 
 public class PianoKey {
     public final byte keyNumber;
