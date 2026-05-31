@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.app.desktop.services;
 import java.io.File;
 import javafx.scene.media.AudioClip;
 
-public final class FileSoundPlayer implements SoundPlayer {
+public final class FileSoundPlayer implements SoundPlayerService {
     protected AudioClip audioClip;
 
     public FileSoundPlayer(File file) {
