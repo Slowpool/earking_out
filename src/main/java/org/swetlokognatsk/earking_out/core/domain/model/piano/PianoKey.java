@@ -18,21 +18,43 @@ public class PianoKey {
         isSelected = value;
     }
 
-    public PianoKey(final byte keyNumber, final PianoKeyMode mode, final PianoKeyColorService colorService, final SoundPlayerService soundPlayer) {
+    public PianoKey(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final SoundPlayerService soundPlayer) {
         this.keyNumber = keyNumber;
         this.mode = mode;
         this.color = colorService.getColor(keyNumber);
         this.soundPlayer = soundPlayer;
 
+        setIsSelected(isSelected);
     }
 
     public void press() {
-        if (getIsSelected()) {
-            throw new IllegalStateException("piano key is already pressed");
-        }
+        validatePressing();
 
         this.setIsSelected(true);
         this.playSound();
+    }
+
+    protected void validatePressing() {
+        switch (mode) {
+        case TOUCH:
+            validatePressingInTouchMode();
+            break;
+        case SELECT:
+            validatePressingInSelectMode();
+            break;
+        default:
+            throw new RuntimeException("unkown piano key mode");
+        }
+    }
+
+    protected void validatePressingInTouchMode() {
+        if (getIsSelected()) {
+            throw new IllegalStateException("this key is already pressed");
+        }
+    }
+
+    protected void validatePressingInSelectMode() {
+        
     }
 
     public void release() {

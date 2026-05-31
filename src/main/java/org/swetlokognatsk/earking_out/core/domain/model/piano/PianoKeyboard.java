@@ -20,6 +20,7 @@ public class PianoKeyboard {
     public final PianoKeyboardMode mode;
     protected final Map<Byte, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
+    protected PianoKey pressedKey;
 
     public byte[] getSelectedKeyNumbers() {
         var ByteSelectedKeys = this.selectedKeys.stream().map(pianoKey -> (byte) pianoKey.keyNumber).toArray(Byte[]::new);
@@ -30,7 +31,19 @@ public class PianoKeyboard {
     protected PianoKey getPianoKey(byte keyNumber) {
         var ByteKeyNumber = Byte.valueOf(keyNumber);
         var pianoKey = pianoKeys.get(ByteKeyNumber);
+
+        if (pianoKey == null) {
+            throw new IllegalArgumentException("there is no such a piano key: " + keyNumber);
+        }
         return pianoKey;
+    }
+
+    final protected boolean isSelectMode() {
+        return mode.isSelectMode();
+    }
+
+    final protected boolean isTouchMode() {
+        return mode.isTouchMode();
     }
 
     public PianoKeyboard(final PianoKeyboardMode mode) {
@@ -46,20 +59,48 @@ public class PianoKeyboard {
     }
 
     private Map<Byte, PianoKey> buildPianoKeys(final byte[] selectedKeyNumbers) {
-        // TODO
-        final var pianoKeys = new HashMap<Byte, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
+        validateKeyNumbersToSelect(selectedKeyNumbers);
 
-        PianoKeyMode pianoKeyMode = switch (this.mode) {
-        case ONE_KEY_TOUCH -> PianoKeyMode.TOUCH;
-        case ONE_KEY_TOUCH -> PianoKeyMode.SELECT;
-        default -> throw new IllegalArgumentException("unknown pianoKeyboard mode");
-        };
+        final var pianoKeys = new HashMap<Byte, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
+        final PianoKeyMode pianoKeyMode = getPianoKeyMode();
 
         PianoKeysHelper.forEachKey((Byte keyNumber) -> {
-            var pianoKey = PianoKeysFactory.create(keyNumber, pianoKeyMode);
+            final boolean isSelected = ArrayUtils.contains(selectedKeyNumbers, (byte) keyNumber);
+
+            final var pianoKey = PianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected);
             pianoKeys.put(keyNumber, pianoKey);
+
+            tryAddAsSelected(pianoKey);
         });
         return pianoKeys;
+    }
+
+    protected void validateKeyNumbersToSelect(byte[] keyNumbers) {
+        if (!isSelectMode() && ArrayUtils.isNotEmpty(keyNumbers)) {
+            throw new IllegalArgumentException("PianoKeyboard keys cannot be selected in this mode");
+        }
+        if (mode == PianoKeyboardMode.ONE_KEY_SELECT && keyNumbers.length > 1) {
+            throw new IllegalArgumentException("this mode does not allow selecting more than 1 key");
+        }
+    }
+
+    protected PianoKeyMode getPianoKeyMode() {
+        PianoKeyMode pianoKeyMode;
+        if (isSelectMode()) {
+            pianoKeyMode = PianoKeyMode.SELECT;
+        } else if (isTouchMode()) {
+            pianoKeyMode = PianoKeyMode.TOUCH;
+        } else {
+            throw new RuntimeException("unknown pianoKeyboard mode");
+        }
+
+        return pianoKeyMode;
+    }
+
+    protected void tryAddAsSelected(final PianoKey pianoKey) {
+        if (pianoKey.getIsSelected()) {
+            selectedKeys.add(pianoKey);
+        }
     }
 
     // // TODO yet dunno how to use it
@@ -79,59 +120,26 @@ public class PianoKeyboard {
     //     toggleSelection(pianoKey);
     // }
 
-    /**
-     * This method supposes that only one key was selected.
-     */
-    protected void tryUnselectPreviouslySelectedKey() {
-        int numberOfSelectedKeys = selectedKeys.getValue().size();
+    // /**
+    //  * This method supposes that only one key was selected.
+    //  */
+    // protected void tryUnselectPreviouslySelectedKey() {
+    //     int numberOfSelectedKeys = selectedKeys.getValue().size();
 
-        // nothing is selected, normal case
-        if (numberOfSelectedKeys == 0) {
-            return;
-        } else if (numberOfSelectedKeys > 1) {
-            throw new IllegalStateException("several keys were selected, although only one key was supposed to be selected");
-        }
-        var selectedKeysIterator = selectedKeys.getValue().iterator();
-        var selectedPianoKeyNumber = selectedKeysIterator.next();
+    //     // nothing is selected, normal case
+    //     if (numberOfSelectedKeys == 0) {
+    //         return;
+    //     } else if (numberOfSelectedKeys > 1) {
+    //         throw new IllegalStateException("several keys were selected, although only one key was supposed to be selected");
+    //     }
+    //     var selectedKeysIterator = selectedKeys.getValue().iterator();
+    //     var selectedPianoKeyNumber = selectedKeysIterator.next();
 
-        var oldSelectedPianoKey = pianoKeys.get(selectedPianoKeyNumber);
-        selectedKeys.remove(selectedPianoKeyNumber);
+    //     var oldSelectedPianoKey = pianoKeys.get(selectedPianoKeyNumber);
+    //     selectedKeys.remove(selectedPianoKeyNumber);
 
-        oldSelectedPianoKey.toggleSelection();
-    }
-
-    protected ObservableSet<Byte> initSelectedKeys(byte[] keyNumbers) {
-        validateKeyNumbersToSelect(keyNumbers);
-
-        var boxedKeyNumbers = ArrayUtils.toObject(keyNumbers);
-        var set = new HashSet<Byte>(Arrays.asList(boxedKeyNumbers));
-        var observableSet = FXCollections.observableSet(set);
-
-        boolean shouldBeSelected;
-        for (var pianoKey : pianoKeys.values()) {
-            shouldBeSelected = ArrayUtils.contains(keyNumbers, pianoKey.keyNumber);
-            if (shouldBeSelected) {
-                pianoKey.toggleSelection(shouldBeSelected);
-                if (mode == PianoKeyboardMode.ONE_KEY_SELECT) {
-                    break;
-                }
-            }
-        }
-        return observableSet;
-    }
-
-    protected void validateKeyNumbersToSelect(byte[] keyNumbers) {
-        if (!modeAllowsSelecting() && ArrayUtils.isNotEmpty(keyNumbers)) {
-            throw new IllegalStateException("PianoKeyboard keys cannot be selected in this mode");
-        }
-        if (mode == PianoKeyboardMode.ONE_KEY_SELECT && keyNumbers.length > 1) {
-            throw new IllegalStateException("this mode does not allow selecting more than 1 key");
-        }
-    }
-
-    private boolean modeAllowsSelecting() {
-        return !ArrayUtils.contains(new PianoKeyboardMode[] { PianoKeyboardMode.ONE_KEY_TOUCH }, mode);
-    }
+    //     oldSelectedPianoKey.toggleSelection();
+    // }
 
     public void touchKey(byte keyNumber) {
         pressKey(keyNumber);
@@ -139,11 +147,40 @@ public class PianoKeyboard {
     }
 
     public void pressKey(byte keyNumber) {
+        validatePianoKeyToPress(keyNumber);
+
         var pianoKey = getPianoKey(keyNumber);
         pianoKey.press();
+        selectedKeys.add(pianoKey);
+        pressedKey = pianoKey;
+    }
+
+    protected void validatePianoKeyToPress(byte keyNumber) {
+        if (pressedKey != null) {
+            throw new IllegalStateException("another key is already pressed");
+        }
+
+        try {
+            getPianoKey(keyNumber);
+        } catch (IllegalArgumentException e) {
+            throw new IndexOutOfBoundsException("there is no such a piano key");
+        }
     }
 
     public void releaseKey() {
-        
+        validatePianoKeyToRelease();
+
+        pressedKey.release();
+        if (isTouchMode()) {
+            selectedKeys.remove(pressedKey);
+        }
+
+        pressedKey = null;
+    }
+
+    protected void validatePianoKeyToRelease() {
+        if (pressedKey == null) {
+            throw new IllegalStateException("there is no pressed key on piano keyboard");
+        }
     }
 }

@@ -70,7 +70,7 @@ public final class PianoKeyboardOneKeySelectTest {
             try {
                 pianoKeyboard.touchKey(nonExistingPianoKey);
                 fail();
-            } catch (IllegalArgumentException e) {
+            } catch (IndexOutOfBoundsException e) {
             }
         }
     }

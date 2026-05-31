@@ -10,7 +10,7 @@ public final class PianoKeysFactory {
     private PianoKeysFactory() {
     }
 
-    public static PianoKey create(byte keyNumber, PianoKeyMode mode) {
+    public static PianoKey create(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected) {
         var keyColorService = DI.get(PianoKeyColorService.class);
         // TODO use hints? this logic is already implemented somewhere
         var soundPlayerLatch = new SoundPlayerService() {
@@ -23,7 +23,7 @@ public final class PianoKeysFactory {
             public void stop() {
             }
         };
-        var pianoKey = new PianoKey(keyNumber, mode, keyColorService, soundPlayerLatch);
+        var pianoKey = new PianoKey(keyNumber, mode, isSelected, keyColorService, soundPlayerLatch);
         return pianoKey;
     }
 
