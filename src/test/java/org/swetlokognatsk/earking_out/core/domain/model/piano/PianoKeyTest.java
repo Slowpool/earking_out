@@ -9,11 +9,10 @@ import org.junit.Test;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorServiceImpl;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyMode;
 
-public final class PianoKeyTest {
+public class PianoKeyTest {
     protected static byte ANY_PIANO_KEY_NUMBER = 4;
 
     protected static PianoKey createPianoKey(final byte keyNumber, final PianoKeyMode mode) {
@@ -28,7 +27,8 @@ public final class PianoKeyTest {
             public void stop() {
             }
         };
-        var pianoKey = new PianoKey((byte) keyNumber, mode, keyColorService, soundPlayerLatch);
+        var pianoKey = new PianoKey(keyNumber, mode, keyColorService, soundPlayerLatch);
+        return pianoKey;
     }
 
     @Test
