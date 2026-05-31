@@ -66,5 +66,35 @@ public final class PianoKeyboard extends Region {
         default -> null;
         };
     }
+
+    private void addPianoKeys() {
+        var dichotomizedPianoKeys = PianoKeysHelper.dichotomize(pianoKeys);
+        var whitePianoKeys = dichotomizedPianoKeys[PianoKeysHelper.WHITE_KEYS];
+        var blackPianoKeys = dichotomizedPianoKeys[PianoKeysHelper.BLACK_KEYS];
+
+        // the intricacies of javafx view require white keys to be added first in order to display black keys in front of (above) the white keys. probably more reasonable way exists, but that's frontender's bread
+        var children = getChildren();
+        children.addAll(whitePianoKeys);
+        children.addAll(blackPianoKeys);
+    }
+
+    protected EventHandler<? super MouseEvent> createMouseReleasedHandler(PianoKey pianoKey) {
+        return switch (mode) {
+        case ONE_KEY_TOUCH -> e -> {
+            toggleSelection(pianoKey);
+        };
+        default -> null;
+        };
+    }
+
+    protected void toggleSelection(PianoKey pianoKey) {
+        pianoKey.toggleSelection();
+
+        if (pianoKey.isSelected()) {
+            selectedKeys.add(pianoKey.keyNumber);
+        } else {
+            selectedKeys.remove(pianoKey.keyNumber);
+        }
+    }
     
 }

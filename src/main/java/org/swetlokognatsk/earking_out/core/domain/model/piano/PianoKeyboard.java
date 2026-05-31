@@ -21,9 +21,16 @@ public class PianoKeyboard {
     protected final Map<Byte, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
 
-    public Byte[] getSelectedKeyNumbers() {
-        // TODO map
-        return new Byte[0];
+    public byte[] getSelectedKeyNumbers() {
+        var ByteSelectedKeys = this.selectedKeys.stream().map(pianoKey -> (byte) pianoKey.keyNumber).toArray(Byte[]::new);
+        var byteSelectedKeys = ArrayUtils.toPrimitive(ByteSelectedKeys);
+        return byteSelectedKeys;
+    }
+
+    protected PianoKey getPianoKey(byte keyNumber) {
+        var ByteKeyNumber = Byte.valueOf(keyNumber);
+        var pianoKey = pianoKeys.get(ByteKeyNumber);
+        return pianoKey;
     }
 
     public PianoKeyboard(final PianoKeyboardMode mode) {
@@ -36,17 +43,16 @@ public class PianoKeyboard {
         pianoKeys = buildPianoKeys(selectedKeyNumbers);
         // TODO i decided to move this init logic to buildPianoKeys
         // var selectedKeys = initSelectedKeys(selectedKeyNumbers);
-
-        addPianoKeys();
     }
 
     private Map<Byte, PianoKey> buildPianoKeys(final byte[] selectedKeyNumbers) {
+        // TODO
         final var pianoKeys = new HashMap<Byte, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
 
         PianoKeyMode pianoKeyMode = switch (this.mode) {
         case ONE_KEY_TOUCH -> PianoKeyMode.TOUCH;
         case ONE_KEY_TOUCH -> PianoKeyMode.SELECT;
-        default -> throw new IllegalArgument("unknown pianoKeyboard mode");
+        default -> throw new IllegalArgumentException("unknown pianoKeyboard mode");
         };
 
         PianoKeysHelper.forEachKey((Byte keyNumber) -> {
@@ -56,49 +62,25 @@ public class PianoKeyboard {
         return pianoKeys;
     }
 
-    protected void selectOneOfSeveralKeys(PianoKey pianoKey) {
-        pianoKey.playSound();
+    // // TODO yet dunno how to use it
+    // protected void selectOneOfSeveralKeys(PianoKey pianoKey) {
+    //     pianoKey.playSound();
 
-        toggleSelection(pianoKey);
-    }
+    //     toggleSelection(pianoKey);
+    // }
 
-    protected void selectOneKey(PianoKey pianoKey) {
-        pianoKey.playSound();
+    // protected void selectOneKey(PianoKey pianoKey) {
+    //     pianoKey.playSound();
 
-        if (pianoKey.isSelected()) {
-            return;
-        }
-        tryUnselectPreviouslySelectedKey();
-        toggleSelection(pianoKey);
-    }
-
-    protected void touchOneKey(PianoKey pianoKey) {
-        pianoKey.playSound();
-
-        toggleSelection(pianoKey);
-    }
-
-    protected EventHandler<? super MouseEvent> createMouseReleasedHandler(PianoKey pianoKey) {
-        return switch (mode) {
-        case ONE_KEY_TOUCH -> e -> {
-            toggleSelection(pianoKey);
-        };
-        default -> null;
-        };
-    }
-
-    protected void toggleSelection(PianoKey pianoKey) {
-        pianoKey.toggleSelection();
-
-        if (pianoKey.isSelected()) {
-            selectedKeys.add(pianoKey.keyNumber);
-        } else {
-            selectedKeys.remove(pianoKey.keyNumber);
-        }
-    }
+    //     if (pianoKey.isSelected()) {
+    //         return;
+    //     }
+    //     tryUnselectPreviouslySelectedKey();
+    //     toggleSelection(pianoKey);
+    // }
 
     /**
-     * This method supopse that only one key was selected.
+     * This method supposes that only one key was selected.
      */
     protected void tryUnselectPreviouslySelectedKey() {
         int numberOfSelectedKeys = selectedKeys.getValue().size();
@@ -151,14 +133,17 @@ public class PianoKeyboard {
         return !ArrayUtils.contains(new PianoKeyboardMode[] { PianoKeyboardMode.ONE_KEY_TOUCH }, mode);
     }
 
-    private void addPianoKeys() {
-        var dichotomizedPianoKeys = PianoKeysHelper.dichotomize(pianoKeys);
-        var whitePianoKeys = dichotomizedPianoKeys[PianoKeysHelper.WHITE_KEYS];
-        var blackPianoKeys = dichotomizedPianoKeys[PianoKeysHelper.BLACK_KEYS];
+    public void touchKey(byte keyNumber) {
+        pressKey(keyNumber);
+        releaseKey();
+    }
 
-        // the intricacies of javafx view require white keys to be added first in order to display black keys in front of (above) the white keys. probably more reasonable way exists, but that's frontender's bread
-        var children = getChildren();
-        children.addAll(whitePianoKeys);
-        children.addAll(blackPianoKeys);
+    public void pressKey(byte keyNumber) {
+        var pianoKey = getPianoKey(keyNumber);
+        pianoKey.press();
+    }
+
+    public void releaseKey() {
+        
     }
 }
