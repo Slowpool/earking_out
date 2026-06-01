@@ -2,7 +2,6 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano;
 
 import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorService;
-import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorServiceImpl;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 
 public final class PianoKeysFactory {
@@ -25,6 +24,10 @@ public final class PianoKeysFactory {
         };
         var pianoKey = new PianoKey(keyNumber, mode, isSelected, keyColorService, soundPlayerLatch);
         return pianoKey;
+    }
+
+    public static PianoKey create(final byte keyNumber, final PianoKeyMode mode) {
+        return create(keyNumber, mode, false);
     }
 
 }

@@ -1,20 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
-import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
-import org.swetlokognatsk.earking_out.app.desktop.services.PianoKeysBuilder;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.ports.DI;
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
 
 public class PianoKeyboard {
     public final PianoKeyboardMode mode;
@@ -54,8 +46,6 @@ public class PianoKeyboard {
         this.mode = mode;
 
         pianoKeys = buildPianoKeys(selectedKeyNumbers);
-        // TODO i decided to move this init logic to buildPianoKeys
-        // var selectedKeys = initSelectedKeys(selectedKeyNumbers);
     }
 
     private Map<Byte, PianoKey> buildPianoKeys(final byte[] selectedKeyNumbers) {
@@ -103,44 +93,6 @@ public class PianoKeyboard {
         }
     }
 
-    // // TODO yet dunno how to use it
-    // protected void selectOneOfSeveralKeys(PianoKey pianoKey) {
-    //     pianoKey.playSound();
-
-    //     toggleSelection(pianoKey);
-    // }
-
-    // protected void selectOneKey(PianoKey pianoKey) {
-    //     pianoKey.playSound();
-
-    //     if (pianoKey.isSelected()) {
-    //         return;
-    //     }
-    //     tryUnselectPreviouslySelectedKey();
-    //     toggleSelection(pianoKey);
-    // }
-
-    // /**
-    //  * This method supposes that only one key was selected.
-    //  */
-    // protected void tryUnselectPreviouslySelectedKey() {
-    //     int numberOfSelectedKeys = selectedKeys.getValue().size();
-
-    //     // nothing is selected, normal case
-    //     if (numberOfSelectedKeys == 0) {
-    //         return;
-    //     } else if (numberOfSelectedKeys > 1) {
-    //         throw new IllegalStateException("several keys were selected, although only one key was supposed to be selected");
-    //     }
-    //     var selectedKeysIterator = selectedKeys.getValue().iterator();
-    //     var selectedPianoKeyNumber = selectedKeysIterator.next();
-
-    //     var oldSelectedPianoKey = pianoKeys.get(selectedPianoKeyNumber);
-    //     selectedKeys.remove(selectedPianoKeyNumber);
-
-    //     oldSelectedPianoKey.toggleSelection();
-    // }
-
     public void touchKey(byte keyNumber) {
         pressKey(keyNumber);
         releaseKey();
@@ -149,10 +101,29 @@ public class PianoKeyboard {
     public void pressKey(byte keyNumber) {
         validatePianoKeyToPress(keyNumber);
 
+        // TODO refactoring (otherwise current method will become cluttered in the end)
+        if (mode == PianoKeyboardMode.ONE_KEY_SELECT) {
+            if (moreThanOnePianoKeyIsSelected()) {
+                throw new IllegalStateException("several keys were selected in one key select mode");
+            } else if (onePianoKeyIsSelected()) {
+                var selectedPianoKey = selectedKeys.iterator().next();
+                selectedPianoKey.setIsSelected(false);
+                selectedKeys.remove(selectedPianoKey);
+            }
+        }
+
         var pianoKey = getPianoKey(keyNumber);
         pianoKey.press();
         selectedKeys.add(pianoKey);
         pressedKey = pianoKey;
+    }
+
+    protected boolean moreThanOnePianoKeyIsSelected() {
+        return selectedKeys.size() > 1;
+    }
+
+    protected boolean onePianoKeyIsSelected() {
+        return selectedKeys.size() == 1;
     }
 
     protected void validatePianoKeyToPress(byte keyNumber) {
