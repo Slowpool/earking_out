@@ -5,6 +5,8 @@ import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsFromHintsSer
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorServiceImpl;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
@@ -66,6 +68,9 @@ public final class DI {
 
         } else if (className.equals(KeySoundsService.class.getName())) {
             return (T) new KeySoundsFromHintsService();
+
+        } else if (className.equals(PianoKeyColorService.class.getName())) {
+            return (T) new PianoKeyColorServiceImpl();
 
         } else {
             return null;

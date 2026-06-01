@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.services;
 
-public interface SoundPlayer {
+public interface SoundPlayerService {
     void play();
     void stopAndPlay();
     void stop();

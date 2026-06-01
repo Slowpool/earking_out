@@ -1,12 +1,12 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
-import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboardMode;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboardMode;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
 import javafx.geometry.Pos;

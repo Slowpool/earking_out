@@ -2,10 +2,10 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
-import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboardMode;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboardMode;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import javafx.collections.ObservableSet;

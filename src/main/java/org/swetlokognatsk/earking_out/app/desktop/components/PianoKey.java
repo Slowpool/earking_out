@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.components;
 
-import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayer;
+import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
@@ -19,42 +19,11 @@ public final class PianoKey extends Button {
     protected static final Background notSelectedWhiteBackground = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
     protected static final Background notSelectedBlackBackground = new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));
 
-    public final byte keyNumber;
-    private final boolean isWhite;
-    private final SoundPlayer soundPlayer;
-    private boolean isSelected;
-
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    protected void setSelected(boolean value) {
-        isSelected = value;
-    }
-
-    // TODO SoundPlayer is port, but current class is already in app layer, so where the SoundPlayer and its implementation should be? p.s.: @see PianoKey
-    public PianoKey(final byte keyNumber, final boolean isWhite, final SoundPlayer soundPlayer) {
-        this.keyNumber = keyNumber;
-        this.isWhite = isWhite;
-        this.soundPlayer = soundPlayer;
-
+    public PianoKey() {
         var background = isWhite() ? notSelectedWhiteBackground : notSelectedBlackBackground;
         setBackground(background);
 
         setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
-    }
-
-    public boolean isWhite() {
-        return isWhite;
-    }
-
-    public void toggleSelection() {
-        toggleSelection(!isSelected());
-    }
-
-    public void toggleSelection(boolean value) {
-        setSelected(value);
-        toggleColor(value);
     }
 
     protected void toggleColor(boolean newIsSelected) {
@@ -73,13 +42,5 @@ public final class PianoKey extends Button {
             }
         }
         setBackground(background);
-    }
-
-    public void playSound() {
-        soundPlayer.stopAndPlay();
-    }
-
-    public void stopSound() {
-        soundPlayer.stop();
     }
 }
