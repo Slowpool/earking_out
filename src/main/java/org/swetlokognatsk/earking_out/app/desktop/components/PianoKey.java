@@ -12,35 +12,26 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
-// TODO HEXAGONAL ARCHITECTURE VIOLATION DETECTED. there's core business logic inside PianoKey, PianoKeyboard, (probably some other classes) and it should be extracted into core.
-public final class PianoKey extends Button {
-    protected static final Background selectedWhiteBackground = new Background(new BackgroundFill(Color.rgb(0x00, 0xB4, 0xD8), CornerRadii.EMPTY, Insets.EMPTY));
-    protected static final Background selectedBlackBackground = new Background(new BackgroundFill(Color.rgb(0x00, 0x14, 0xA9), CornerRadii.EMPTY, Insets.EMPTY));
-    protected static final Background notSelectedWhiteBackground = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
-    protected static final Background notSelectedBlackBackground = new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));
+public sealed abstract class PianoKey extends Button permits WhitePianoKey, BlackPianoKey {
+    protected static final Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1)));
 
-    public PianoKey() {
-        var background = isWhite() ? notSelectedWhiteBackground : notSelectedBlackBackground;
+    public PianoKey(final boolean isSelected) {
+        var background = workOutBackground(isSelected);
         setBackground(background);
 
-        setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
+        setBorder(border);
     }
 
+    protected Background workOutBackground(final boolean isSelected) {
+        return isSelected ? getSelectedBackground() : getNotSelectedBackground();
+    }
+
+    protected abstract Background getSelectedBackground();
+
+    protected abstract Background getNotSelectedBackground();
+
     protected void toggleColor(boolean newIsSelected) {
-        Background background;
-        if (newIsSelected) {
-            if (isWhite()) {
-                background = selectedWhiteBackground;
-            } else {
-                background = selectedBlackBackground;
-            }
-        } else {
-            if (isWhite()) {
-                background = notSelectedWhiteBackground;
-            } else {
-                background = notSelectedBlackBackground;
-            }
-        }
+        Background background = newIsSelected ? getSelectedBackground() : getNotSelectedBackground();
         setBackground(background);
     }
 }

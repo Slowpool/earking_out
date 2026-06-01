@@ -19,7 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 
 public final class PianoKeyboard extends Region {
-    // TODO sort everything out after refactoring
+
     public PianoKeyboard(final double width, final double height) {
         setHeight(height);
         setWidth(width);
@@ -96,5 +96,5 @@ public final class PianoKeyboard extends Region {
             selectedKeys.remove(pianoKey.keyNumber);
         }
     }
-    
+
 }
