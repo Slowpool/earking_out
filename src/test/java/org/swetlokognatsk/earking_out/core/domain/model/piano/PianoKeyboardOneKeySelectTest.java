@@ -9,7 +9,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboa
 
 public final class PianoKeyboardOneKeySelectTest {
 
-    private PianoKeyboard pianoKeyboard;
+    private PianoKeyboardAggregate pianoKeyboard;
 
     @Before
     public void before() {

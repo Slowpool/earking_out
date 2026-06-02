@@ -8,17 +8,17 @@ public final class PianoKeyboardTestHelper {
     private PianoKeyboardTestHelper() {
     }
 
-    public static PianoKeyboard createPianoKeyboard(PianoKeyboardMode mode) {
-        var pianoKeyboard = new PianoKeyboard(mode);
+    public static PianoKeyboardAggregate createPianoKeyboard(PianoKeyboardMode mode) {
+        var pianoKeyboard = new PianoKeyboardAggregate(mode);
         return pianoKeyboard;
     }
 
-    public static PianoKeyboard createPianoKeyboard(PianoKeyboardMode mode, byte[] selectedKeys) {
-        var pianoKeyboard = new PianoKeyboard(mode, selectedKeys);
+    public static PianoKeyboardAggregate createPianoKeyboard(PianoKeyboardMode mode, byte[] selectedKeys) {
+        var pianoKeyboard = new PianoKeyboardAggregate(mode, selectedKeys);
         return pianoKeyboard;
     }
 
-    public static void assertOnlyTheseKeysAreSelected(byte[] pianoKeys, PianoKeyboard pianoKeyboard) {
+    public static void assertOnlyTheseKeysAreSelected(byte[] pianoKeys, PianoKeyboardAggregate pianoKeyboard) {
         var selectedPianoKeys = pianoKeyboard.getSelectedKeyNumbers();
 
         assertEquals(pianoKeys.length, selectedPianoKeys.length);
@@ -27,11 +27,11 @@ public final class PianoKeyboardTestHelper {
         }
     }
 
-    public static void assertOnlyTheseKeysAreSelected(byte key, PianoKeyboard pianoKeyboard) {
+    public static void assertOnlyTheseKeysAreSelected(byte key, PianoKeyboardAggregate pianoKeyboard) {
         assertOnlyTheseKeysAreSelected(new byte[] { key }, pianoKeyboard);
     }
 
-    public static void assertNoSelectedKeys(PianoKeyboard pianoKeyboard) {
+    public static void assertNoSelectedKeys(PianoKeyboardAggregate pianoKeyboard) {
         assertOnlyTheseKeysAreSelected(new byte[0], pianoKeyboard);
     }
 }

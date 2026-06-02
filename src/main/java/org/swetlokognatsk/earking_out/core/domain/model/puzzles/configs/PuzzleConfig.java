@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs;
 
-import org.swetlokognatsk.earking_out.core.domain.model.Model;
+import org.swetlokognatsk.earking_out.core.domain.model.base.Model;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
@@ -14,6 +14,10 @@ public abstract class PuzzleConfig<E extends Exercise> extends Model {
     public final E exercise = getExercise();
     public final int targetNumberOfPuzzles;
     public final boolean statsRecording;
+
+    public final String getId() {
+        return exercise.toString();
+    }
 
     public PuzzleConfig(final int targetNumberOfPuzzles, final boolean statsRecording) {
         this.targetNumberOfPuzzles = targetNumberOfPuzzles;

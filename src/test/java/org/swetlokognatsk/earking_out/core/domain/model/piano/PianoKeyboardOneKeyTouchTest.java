@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public final class PianoKeyboardOneKeyTouchTest {
 
-    private PianoKeyboard pianoKeyboard;
+    private PianoKeyboardAggregate pianoKeyboard;
 
     @Before
     public void before() {

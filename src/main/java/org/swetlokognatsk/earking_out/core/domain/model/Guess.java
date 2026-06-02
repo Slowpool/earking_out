@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model;
 
-public sealed class Guess permits Solution {
+import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
+
+public sealed class Guess extends ValueObject permits Solution {
     public final String value;
 
     public Guess(String guess) {

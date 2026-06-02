@@ -1,14 +1,19 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano;
 
 import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
+import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
 import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorService;
 
-public class PianoKey {
+public final class PianoKey extends Entity {
     public final byte keyNumber;
     public final PianoKeyColor color;
     private final SoundPlayerService soundPlayer;
     private final PianoKeyMode mode;
     private boolean isSelected;
+
+    public String getId() {
+        return String.valueOf(keyNumber);
+    }
 
     public boolean getIsSelected() {
         return isSelected;
@@ -54,7 +59,7 @@ public class PianoKey {
     }
 
     protected void validatePressingInSelectMode() {
-        
+
     }
 
     public void release() {

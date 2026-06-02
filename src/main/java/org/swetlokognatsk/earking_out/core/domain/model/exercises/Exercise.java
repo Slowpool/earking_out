@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.exercises;
 
-public abstract class Exercise {
+import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
+
+public abstract class Exercise extends ValueObject {
     public ExerciseNames name;
     public ExerciseTypes type;
 

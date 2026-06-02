@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.piano;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyColor;
 
+// btw interface is redundant here cuz i can't imagine different implementation
 public class PianoKeyColorServiceImpl implements PianoKeyColorService {
     public PianoKeyColor getColor(byte keyNumber) {
         var octaveScopedKeyNumber = (byte) ((keyNumber - Invariants.SHIFT - 1) % Invariants.KEYS_IN_OCTAVE + 1);

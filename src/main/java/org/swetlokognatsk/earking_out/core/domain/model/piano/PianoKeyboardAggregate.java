@@ -6,13 +6,20 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
+import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 
-public class PianoKeyboard {
-    public final PianoKeyboardMode mode;
+public final class PianoKeyboardAggregate extends Aggregate {
+    // TODO make all variables immutable for public read-only aggregate state
+    protected final PianoKeyboardId id;
+    protected final PianoKeyboardMode mode;
     protected final Map<Byte, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
     protected PianoKey pressedKey;
+
+    public PianoKeyboardMode getMode() {
+        return mode;
+    }
 
     public byte[] getSelectedKeyNumbers() {
         var ByteSelectedKeys = this.selectedKeys.stream().map(pianoKey -> (byte) pianoKey.keyNumber).toArray(Byte[]::new);
@@ -38,11 +45,16 @@ public class PianoKeyboard {
         return mode.isTouchMode();
     }
 
-    public PianoKeyboard(final PianoKeyboardMode mode) {
-        this(mode, new byte[0]);
+    public String getId() {
+        return id.toString();
     }
 
-    public PianoKeyboard(final PianoKeyboardMode mode, final byte[] selectedKeyNumbers) {
+    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyboardMode mode) {
+        this(id, mode, new byte[0]);
+    }
+
+    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyboardMode mode, final byte[] selectedKeyNumbers) {
+        this.id = id;
         this.mode = mode;
 
         pianoKeys = buildPianoKeys(selectedKeyNumbers);
