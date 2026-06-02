@@ -8,6 +8,7 @@ public final class PianoKeyboardTestHelper {
     private PianoKeyboardTestHelper() {
     }
 
+    // TODO pass PianoKeyboardId, not mode
     public static PianoKeyboardAggregate createPianoKeyboard(PianoKeyboardMode mode) {
         var pianoKeyboard = new PianoKeyboardAggregate(mode);
         return pianoKeyboard;
