@@ -1,16 +1,23 @@
 package org.swetlokognatsk.earking_out.app.desktop.services;
 
-import java.io.File;
+// import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
+import org.apache.commons.lang3.ArrayUtils;
+import org.swetlokognatsk.earking_out.app.desktop.components.BlackPianoKey;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
+import org.swetlokognatsk.earking_out.app.desktop.components.WhitePianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyColor;
+import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorService;
 
 public final class PianoKeysBuilder implements Iterator<PianoKey> {
     protected final byte firstNoteNumber = Invariants.FIRST_NOTE_NUMBER;
     protected final double keyboardWidth;
     protected final double keyboardHeight;
 
+    protected final byte[] selectedKeys;
+    protected final PianoKeyColorService colorService;
     protected final Map<Byte, String> keySounds;
 
     protected final double whiteKeyWidth;
@@ -19,7 +26,7 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
     protected final double blackKeyWidth;
     protected final double blackKeyHeight;
 
-    protected byte currentKeyIndex = 0;
+    protected byte currentKeyIndex = -1;
     protected double currentWhiteX = 0;
     protected double currentBlackX;
 
@@ -43,7 +50,7 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
         return whiteKeyWidth - (blackKeyWidth / 2);
     }
 
-    private byte getCurrentKeyNumber() {
+    public byte getCurrentKeyNumber() {
         return (byte) (currentKeyIndex + firstNoteNumber);
     }
 
@@ -51,10 +58,12 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
         return (byte) (currentKeyIndex % Invariants.KEYS_IN_OCTAVE + 1);
     }
 
-    public PianoKeysBuilder(double keyboardWidth, double keyboardHeight, Map<Byte, String> keySounds) {
+    public PianoKeysBuilder(final double keyboardWidth, final double keyboardHeight, final byte[] selectedKeys, final Map<Byte, String> keySounds, final PianoKeyColorService colorService) {
         this.keyboardWidth = keyboardWidth;
         this.keyboardHeight = keyboardHeight;
+        this.selectedKeys = selectedKeys;
         this.keySounds = keySounds;
+        this.colorService = colorService;
 
         whiteKeyWidth = calculateWhiteKeyWidth();
         whiteKeyHeight = calculateWhiteKeyHeight();
@@ -71,20 +80,21 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
     }
 
     public PianoKey next() {
-        var sound = keySounds.get(getCurrentKeyNumber());
-        var soundFile = new File(sound);
-        var fileSoundPlayer = new FileSoundPlayer(soundFile);
-        var pianoKey = new PianoKey(getCurrentKeyNumber(), isWhite(), fileSoundPlayer);
+        currentKeyIndex++;
+
+        // var sound = keySounds.get(getCurrentKeyNumber());
+        // var soundFile = new File(sound);
+        // var fileSoundPlayer = new FileSoundPlayer(soundFile);
+        var isSelected = ArrayUtils.contains(selectedKeys, getCurrentKeyNumber());
+        var pianoKey = isWhite() ? new WhitePianoKey(isSelected) : new BlackPianoKey(isSelected);
 
         calculatePosition(pianoKey);
         calculateDimensions(pianoKey);
 
-        currentKeyIndex++;
-
         return pianoKey;
     }
 
-    private void calculatePosition(PianoKey pianoKey) {
+    private void calculatePosition(final PianoKey pianoKey) {
         var x = calculateX();
         pianoKey.setTranslateX(x);
     }
@@ -98,16 +108,11 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
     }
 
     private double calculateX() {
-        double x = isWhite() ? nextWhiteX() : nextBlackX();
-        return x;
+        return isWhite() ? nextWhiteX() : nextBlackX();
     }
 
     private boolean isWhite() {
-        return switch (getCurrentKeyNumberInOctave()) {
-        case 1, 3, 5, 6, 8, 10, 12 -> true;
-        case 2, 4, 7, 9, 11 -> false;
-        default -> throw new ArithmeticException("wrong keyNumber in octave for isWhite(): " + getCurrentKeyNumberInOctave());
-        };
+        return colorService.getColor(getCurrentKeyNumber()) == PianoKeyColor.WHITE;
     }
 
     private double nextWhiteX() {

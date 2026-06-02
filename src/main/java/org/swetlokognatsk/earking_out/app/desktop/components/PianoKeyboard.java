@@ -1,70 +1,49 @@
 package org.swetlokognatsk.earking_out.app.desktop.components;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import org.apache.commons.lang3.ArrayUtils;
+import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
-import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
-import org.swetlokognatsk.earking_out.app.desktop.services.PianoKeysBuilder;
+import org.swetlokognatsk.earking_out.app.desktop.services.PianoKeysBuildersFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.ports.DI;
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 
 public final class PianoKeyboard extends Region {
+    protected final Map<Byte, PianoKey> pianoKeys = new HashMap<>(Invariants.PIANO_KEYS_NUMBER);
 
-    public PianoKeyboard(final double width, final double height) {
+    public PianoKeyboard(final double width, final double height, final byte[] selectedKeys) {
         setHeight(height);
         setWidth(width);
 
-        var pianoKeysBuilder = createPianoKeysBuilder();
+        var pianoKeysBuilder = PianoKeysBuildersFactory.create(getWidth(), getHeight(), selectedKeys);
 
         PianoKey pianoKey;
+        Byte pianoKeyNumber;
         for (Byte i = 0; pianoKeysBuilder.hasNext(); i++) {
             pianoKey = pianoKeysBuilder.next();
-            addEventHandlers(pianoKey);
-            pianoKeys.put(pianoKey.keyNumber, pianoKey);
+            pianoKeyNumber = pianoKeysBuilder.getCurrentKeyNumber();
+            addEventHandlers(pianoKey, pianoKeyNumber);
+            pianoKeys.put(pianoKeyNumber, pianoKey);
         }
+
+        addPianoKeys();
     }
 
-    private PianoKeysBuilder createPianoKeysBuilder() {
-        var keySoundsService = DI.get(KeySoundsService.class);
-        var keySounds = keySoundsService.getMap();
-        var pianoKeysBuilder = new PianoKeysBuilder(getWidth(), getHeight(), keySounds);
-        return pianoKeysBuilder;
+    public PianoKeyboard(final double width, final double height) {
+        this(width, height, new byte[0]);
     }
 
-    private void addEventHandlers(final PianoKey pianoKey) {
-        var pressedHandler = createMousePressedHandler(pianoKey);
-        if (pressedHandler != null) {
-            pianoKey.setOnMousePressed(pressedHandler);
-        }
-        var releasedHandler = createMouseReleasedHandler(pianoKey);
-        if (releasedHandler != null) {
-            pianoKey.setOnMouseReleased(releasedHandler);
-        }
-    }
+    private void addEventHandlers(final PianoKey pianoKey, final Byte keyNumber) {
+        pianoKey.setOnMousePressed(e -> {
+            var event = new PianoKeyPressedEvent(PianoKeyPressedEvent.PIANO_KEY_PRESSED, keyNumber);
+            fireEvent(event);
+        });
 
-    protected EventHandler<? super MouseEvent> createMousePressedHandler(PianoKey pianoKey) {
-        return switch (mode) {
-        case SEVERAL_KEYS_SELECT -> e -> {
-            selectOneOfSeveralKeys(pianoKey);
-        };
-        case ONE_KEY_SELECT -> e -> {
-            selectOneKey(pianoKey);
-        };
-        case ONE_KEY_TOUCH -> e -> {
-            touchOneKey(pianoKey);
-        };
-        default -> null;
-        };
+        pianoKey.setOnMouseReleased(e -> {
+            var event = new PianoKeyReleasedEvent(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, keyNumber);
+            fireEvent(event);
+        });
     }
 
     private void addPianoKeys() {
@@ -78,23 +57,14 @@ public final class PianoKeyboard extends Region {
         children.addAll(blackPianoKeys);
     }
 
-    protected EventHandler<? super MouseEvent> createMouseReleasedHandler(PianoKey pianoKey) {
-        return switch (mode) {
-        case ONE_KEY_TOUCH -> e -> {
-            toggleSelection(pianoKey);
-        };
-        default -> null;
-        };
-    }
+    // protected void toggleSelection(PianoKey pianoKey) {
+    //     pianoKey.toggleSelection();
 
-    protected void toggleSelection(PianoKey pianoKey) {
-        pianoKey.toggleSelection();
-
-        if (pianoKey.isSelected()) {
-            selectedKeys.add(pianoKey.keyNumber);
-        } else {
-            selectedKeys.remove(pianoKey.keyNumber);
-        }
-    }
+    //     if (pianoKey.isSelected()) {
+    //         selectedKeys.add(pianoKey.keyNumber);
+    //     } else {
+    //         selectedKeys.remove(pianoKey.keyNumber);
+    //     }
+    // }
 
 }

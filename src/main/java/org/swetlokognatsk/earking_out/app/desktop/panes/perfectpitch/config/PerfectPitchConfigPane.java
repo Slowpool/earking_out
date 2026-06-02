@@ -54,9 +54,10 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         setAlignment(Pos.CENTER);
     }
 
-    protected PianoKeyboard buildPianoKeyboard(byte[] selectedKeys) {
-        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
-        pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
+    protected PianoKeyboard buildPianoKeyboard(final byte[] selectedKeys) {
+        var pianoKeyboard = new PianoKeyboard(getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
+        // TODO this listener should be added to domain model???
+        // pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
         return pianoKeyboard;
     }
 
@@ -69,8 +70,9 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected PianoKeyboard buildRootNotePicker(Byte selectedRootNote) {
         var wrappedSelectedRootNote = selectedRootNote == null ? new byte[0] : new byte[] { selectedRootNote };
-        var rootNotePicker = new PianoKeyboard(PianoKeyboardMode.ONE_KEY_SELECT, getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
-        rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
+        var rootNotePicker = new PianoKeyboard(getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
+        // TODO this listener should be added to domain model???
+        // rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
         return rootNotePicker;
     }
 
@@ -132,6 +134,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             yield enumElement;
         }
         case PerfectPitchConfig.NORMALIZED_ROOT_NOTE -> {
+            // TODO remaking
             var set = (ObservableSet<Byte>) newValue;
             var numberOfSelectedKeys = set.size();
             // TODO DRY violation, copy-pasted from PianoKeyboard

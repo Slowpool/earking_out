@@ -1,10 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.components;
 
-import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;

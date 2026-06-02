@@ -52,7 +52,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     protected PianoKeyboard buildPianoKeyboardForGuessing() {
         var pianoKeyboardWidth = getWidth();
         var pianoKeyboardHeight = getHeight() / 4;
-        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.ONE_KEY_TOUCH, pianoKeyboardWidth, pianoKeyboardHeight, new byte[0]);
+        var pianoKeyboard = new PianoKeyboard(pianoKeyboardWidth, pianoKeyboardHeight);
         return pianoKeyboard;
     }
 
