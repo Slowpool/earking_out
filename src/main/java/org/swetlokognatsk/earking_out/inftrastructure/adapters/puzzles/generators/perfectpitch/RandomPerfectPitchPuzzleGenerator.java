@@ -25,6 +25,7 @@ public abstract class RandomPerfectPitchPuzzleGenerator<PC extends PerfectPitchC
         return possibleSolutions;
     }
 
+    // TODO actually all logic in current class (except this method) is core logic, whereas this method should be implemented via infrastructure service
     public Solution generateSolution() {
         var solutionValue = random.nextInt(0, possibleSolutions.length);
         var solution = possibleSolutions[solutionValue];

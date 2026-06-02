@@ -1,7 +1,6 @@
-package org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed;
+package org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 
 public final class VisualPerfectPitchExercise extends PerfectPitchExercise {
 

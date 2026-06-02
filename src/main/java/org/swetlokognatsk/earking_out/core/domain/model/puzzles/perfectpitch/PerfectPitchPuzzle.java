@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.puzzles;
+package org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;

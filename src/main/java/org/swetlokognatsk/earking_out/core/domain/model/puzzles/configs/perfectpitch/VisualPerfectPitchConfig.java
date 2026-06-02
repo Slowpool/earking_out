@@ -1,9 +1,7 @@
-package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed;
+package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.VisualPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 
 public final class VisualPerfectPitchConfig extends PerfectPitchConfig<VisualPerfectPitchExercise> {
 

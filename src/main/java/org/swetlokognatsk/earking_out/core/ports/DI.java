@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsFromHintsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorServiceImpl;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;

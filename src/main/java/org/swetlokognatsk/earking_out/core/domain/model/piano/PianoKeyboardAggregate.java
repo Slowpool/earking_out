@@ -37,11 +37,11 @@ public final class PianoKeyboardAggregate extends Aggregate {
         return pianoKey;
     }
 
-    final protected boolean isSelectMode() {
+    protected boolean isSelectMode() {
         return mode.isSelectMode();
     }
 
-    final protected boolean isTouchMode() {
+    protected boolean isTouchMode() {
         return mode.isTouchMode();
     }
 
