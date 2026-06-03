@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboardTestHelper.*;
 import org.junit.Test;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 
 public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 

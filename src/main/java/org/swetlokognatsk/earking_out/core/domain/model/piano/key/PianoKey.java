@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.piano;
+package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
@@ -19,7 +19,7 @@ public final class PianoKey extends Entity {
         return isSelected;
     }
 
-    protected void setIsSelected(boolean value) {
+    public void setIsSelected(boolean value) {
         isSelected = value;
     }
 

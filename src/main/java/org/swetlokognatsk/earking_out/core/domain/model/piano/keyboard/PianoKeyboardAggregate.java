@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.piano;
+package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +8,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 
 public final class PianoKeyboardAggregate extends Aggregate {
     // TODO make all variables immutable for public read-only aggregate state

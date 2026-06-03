@@ -8,6 +8,9 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 
 public final class PianoKeyTest {
     protected static byte ANY_PIANO_KEY_NUMBER = 4;

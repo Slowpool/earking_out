@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano;
 
 import static org.junit.Assert.*;
 import org.apache.commons.lang3.ArrayUtils;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 
 public final class PianoKeyboardTestHelper {
 

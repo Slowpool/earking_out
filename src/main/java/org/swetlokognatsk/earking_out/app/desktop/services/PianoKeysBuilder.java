@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.app.desktop.components.BlackPianoKey;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.app.desktop.components.WhitePianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyColor;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
 import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorService;
 
 public final class PianoKeysBuilder implements Iterator<PianoKey> {

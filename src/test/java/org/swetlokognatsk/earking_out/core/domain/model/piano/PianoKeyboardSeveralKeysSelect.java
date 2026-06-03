@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano;
 
 import org.junit.Test;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboardTestHelper.*;
 
 public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {

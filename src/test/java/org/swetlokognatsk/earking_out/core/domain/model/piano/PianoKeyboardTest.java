@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano;
 
 import org.junit.Before;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 
 abstract class PianoKeyboardTest {
     private PianoKeyboardId pianoKeyboardIdWithTestedMode = getSomeSuitablePianoKeyboardId();

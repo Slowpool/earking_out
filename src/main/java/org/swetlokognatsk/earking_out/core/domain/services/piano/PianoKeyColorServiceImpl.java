@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.piano;
 
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyColor;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
 
 // btw interface is redundant here cuz i can't imagine different implementation
 public class PianoKeyColorServiceImpl implements PianoKeyColorService {
