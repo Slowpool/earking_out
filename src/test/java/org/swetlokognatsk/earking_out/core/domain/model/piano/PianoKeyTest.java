@@ -53,10 +53,10 @@ public final class PianoKeyTest {
         var pianoKey = PianoKeysFactory.create(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
 
         pianoKey.press();
-        assertTrue(pianoKey.getIsSelected());
+        assertTrue(pianoKey.getIsPressed());
 
         pianoKey.release();
-        assertFalse(pianoKey.getIsSelected());
+        assertFalse(pianoKey.getIsPressed());
     }
 
     @Test

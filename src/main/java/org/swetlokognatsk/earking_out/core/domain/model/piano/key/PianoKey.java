@@ -10,6 +10,7 @@ public final class PianoKey extends Entity {
     private final SoundPlayerService soundPlayer;
     private final PianoKeyMode mode;
     private boolean isSelected;
+    private boolean isPressed;
 
     public String getId() {
         return String.valueOf(keyNumber);
@@ -21,6 +22,14 @@ public final class PianoKey extends Entity {
 
     public void setIsSelected(boolean value) {
         isSelected = value;
+    }
+
+    protected void setIsPressed(final boolean value) {
+        isPressed = value;
+    }
+
+    public boolean getIsPressed() {
+        return isPressed;
     }
 
     public PianoKey(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final SoundPlayerService soundPlayer) {
@@ -35,8 +44,8 @@ public final class PianoKey extends Entity {
     public void press() {
         validatePressing();
 
-        this.setIsSelected(true);
-        this.playSound();
+        setIsPressed(true);
+        playSound();
     }
 
     protected void validatePressing() {
@@ -53,7 +62,7 @@ public final class PianoKey extends Entity {
     }
 
     protected void validatePressingInTouchMode() {
-        if (getIsSelected()) {
+        if (getIsPressed()) {
             throw new IllegalStateException("this key is already pressed");
         }
     }
@@ -63,13 +72,13 @@ public final class PianoKey extends Entity {
     }
 
     public void release() {
-        if (!getIsSelected()) {
+        if (!getIsPressed()) {
             throw new IllegalStateException("piano key is already released");
         }
 
         switch (mode) {
         case TOUCH:
-            this.setIsSelected(false);
+            this.setIsPressed(false);
             break;
         case SELECT:
             break;
@@ -77,15 +86,6 @@ public final class PianoKey extends Entity {
             throw new RuntimeException("unkown PianoKeyMode");
         }
     }
-
-    // public void toggleSelection() {
-    //     toggleSelection(!isSelected());
-    // }
-
-    // public void toggleSelection(boolean value) {
-    //     setSelected(value);
-    //     toggleColor(value);
-    // }
 
     protected void playSound() {
         soundPlayer.stopAndPlay();

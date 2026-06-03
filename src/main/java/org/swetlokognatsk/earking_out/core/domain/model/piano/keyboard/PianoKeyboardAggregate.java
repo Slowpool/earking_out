@@ -125,29 +125,12 @@ public final class PianoKeyboardAggregate extends Aggregate {
     public void pressKey(byte keyNumber) {
         validatePianoKeyToPress(keyNumber);
 
-        // TODO refactoring (otherwise current method will become cluttered in the end)
-        if (mode == PianoKeyboardMode.ONE_KEY_SELECT) {
-            if (moreThanOnePianoKeyIsSelected()) {
-                throw new IllegalStateException("several keys were selected in one key select mode");
-            } else if (onePianoKeyIsSelected()) {
-                var selectedPianoKey = selectedKeys.iterator().next();
-                selectedPianoKey.setIsSelected(false);
-                selectedKeys.remove(selectedPianoKey);
-            }
-        }
-
+        updateOtherKeysState();
         var pianoKey = getPianoKey(keyNumber);
         pianoKey.press();
-        selectedKeys.add(pianoKey);
+        applySelectingLogic(pianoKey);
+
         pressedKey = pianoKey;
-    }
-
-    protected boolean moreThanOnePianoKeyIsSelected() {
-        return selectedKeys.size() > 1;
-    }
-
-    protected boolean onePianoKeyIsSelected() {
-        return selectedKeys.size() == 1;
     }
 
     protected void validatePianoKeyToPress(byte keyNumber) {
@@ -160,6 +143,60 @@ public final class PianoKeyboardAggregate extends Aggregate {
         } catch (IllegalArgumentException e) {
             throw new IndexOutOfBoundsException("there is no such a piano key");
         }
+    }
+
+    /**
+     * e.g. if it's ONE_KEY_SELECT mode, the previously selected key will be
+     * unselected.
+     */
+    protected void updateOtherKeysState() {
+        if (mode == PianoKeyboardMode.ONE_KEY_SELECT) {
+            if (moreThanOnePianoKeyIsSelected()) {
+                throw new IllegalStateException("several keys were selected in one key select mode");
+                // TODO what if the same key is pressed?
+            } else if (onePianoKeyIsSelected()) {
+                unselectPressedKey();
+            }
+        }
+    }
+
+    protected boolean moreThanOnePianoKeyIsSelected() {
+        return selectedKeys.size() > 1;
+    }
+
+    protected boolean onePianoKeyIsSelected() {
+        return selectedKeys.size() == 1;
+    }
+
+    protected void applySelectingLogic(PianoKey pianoKey) {
+        if (pianoKey.getIsSelected()) {
+            switch (mode) {
+            case ONE_KEY_SELECT:
+                throw new RuntimeException("this key was supposed to already be unselected in `updateOtherKeysState` method");
+            case ONE_KEY_TOUCH:
+                throw new IllegalStateException("pressed key cannot be already touched in one key touch mode");
+            case SEVERAL_KEYS_SELECT:
+                unselectKey(pianoKey);
+                break;
+            default:
+                throw new RuntimeException("unknown mode: " + mode);
+            }
+        } else {
+            switch (mode) {
+            case ONE_KEY_SELECT:
+            case ONE_KEY_TOUCH:
+            case SEVERAL_KEYS_SELECT:
+                selectKey(pianoKey);
+                break;
+            default:
+                throw new RuntimeException("unknown mode: " + mode);
+            }
+        }
+    }
+
+    protected void unselectPressedKey() {
+        var selectedPianoKey = selectedKeys.iterator().next();
+        unselectKey(selectedPianoKey);
     }
 
     public void releaseKey() {
@@ -177,5 +214,15 @@ public final class PianoKeyboardAggregate extends Aggregate {
         if (pressedKey == null) {
             throw new IllegalStateException("there is no pressed key on piano keyboard");
         }
+    }
+
+    protected void selectKey(PianoKey pianoKey) {
+        selectedKeys.add(pianoKey);
+        pianoKey.setIsSelected(true);
+    }
+
+    protected void unselectKey(PianoKey pianoKey) {
+        selectedKeys.remove(pianoKey);
+        pianoKey.setIsSelected(false);
     }
 }
