@@ -49,15 +49,24 @@ public final class PianoKeyboardAggregate extends Aggregate {
         return id.toString();
     }
 
-    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyboardMode mode) {
-        this(id, mode, new byte[0]);
+    public PianoKeyboardAggregate(final PianoKeyboardId id) {
+        this(id, new byte[0]);
     }
 
-    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyboardMode mode, final byte[] selectedKeyNumbers) {
+    public PianoKeyboardAggregate(final PianoKeyboardId id, final byte[] selectedKeyNumbers) {
         this.id = id;
-        this.mode = mode;
+        this.mode = getModeById(id);
 
         pianoKeys = buildPianoKeys(selectedKeyNumbers);
+    }
+
+    protected static PianoKeyboardMode getModeById(final PianoKeyboardId id) {
+        return switch (id) {
+        case ROOT_NOTE_PICKER -> PianoKeyboardMode.ONE_KEY_SELECT;
+        case PERFECT_PITCH_NOTES_PICKER -> PianoKeyboardMode.SEVERAL_KEYS_SELECT;
+        case PERFECT_PITCH_NOTES_GUESSING -> PianoKeyboardMode.ONE_KEY_TOUCH;
+        default -> throw new RuntimeException("unknown piano keyboard id: " + id);
+        };
     }
 
     private Map<Byte, PianoKey> buildPianoKeys(final byte[] selectedKeyNumbers) {

@@ -3,29 +3,23 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboardTestHelper.*;
-import org.junit.Before;
 import org.junit.Test;
 
-public final class PianoKeyboardOneKeyTouchTest {
+public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
-    private PianoKeyboardAggregate pianoKeyboard;
-
-    @Before
-    public void before() {
-        pianoKeyboard = createPianoKeyboard(PianoKeyboardMode.ONE_KEY_TOUCH);
-
+    protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
+        return PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING;
     }
 
     @Test
     public void initWithoutSelectedKeys() {
-
         assertNoSelectedKeys(pianoKeyboard);
     }
 
     @Test
     public void initWithSelectedKey() {
         try {
-            createPianoKeyboard(PianoKeyboardMode.ONE_KEY_TOUCH, new byte[] { FIRST_NOTE_NUMBER });
+            createPianoKeyboard(new byte[] { FIRST_NOTE_NUMBER });
             fail();
         } catch (IllegalArgumentException e) {
         }
@@ -34,7 +28,7 @@ public final class PianoKeyboardOneKeyTouchTest {
     @Test
     public void initWithSelectedKeys() {
         try {
-            createPianoKeyboard(PianoKeyboardMode.ONE_KEY_TOUCH, new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER + 1 });
+            createPianoKeyboard(new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER + 1 });
             fail();
         } catch (IllegalArgumentException e) {
         }
@@ -54,7 +48,7 @@ public final class PianoKeyboardOneKeyTouchTest {
         byte pianoKey = FIRST_NOTE_NUMBER;
 
         pianoKeyboard.pressKey(pianoKey);
-        assertOnlyTheseKeysAreSelected(pianoKey, pianoKeyboard);
+        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
 
         pianoKeyboard.releaseKey();
         assertNoSelectedKeys(pianoKeyboard);

@@ -8,14 +8,13 @@ public final class PianoKeyboardTestHelper {
     private PianoKeyboardTestHelper() {
     }
 
-    // TODO pass PianoKeyboardId, not mode
-    public static PianoKeyboardAggregate createPianoKeyboard(PianoKeyboardMode mode) {
-        var pianoKeyboard = new PianoKeyboardAggregate(mode);
+    public static PianoKeyboardAggregate createPianoKeyboard(PianoKeyboardId id) {
+        var pianoKeyboard = new PianoKeyboardAggregate(id);
         return pianoKeyboard;
     }
 
-    public static PianoKeyboardAggregate createPianoKeyboard(PianoKeyboardMode mode, byte[] selectedKeys) {
-        var pianoKeyboard = new PianoKeyboardAggregate(mode, selectedKeys);
+    public static PianoKeyboardAggregate createPianoKeyboard(PianoKeyboardId id, byte[] selectedKeys) {
+        var pianoKeyboard = new PianoKeyboardAggregate(id, selectedKeys);
         return pianoKeyboard;
     }
 
@@ -28,7 +27,7 @@ public final class PianoKeyboardTestHelper {
         }
     }
 
-    public static void assertOnlyTheseKeysAreSelected(byte key, PianoKeyboardAggregate pianoKeyboard) {
+    public static void assertOnlyThisKeyIsSelected(byte key, PianoKeyboardAggregate pianoKeyboard) {
         assertOnlyTheseKeysAreSelected(new byte[] { key }, pianoKeyboard);
     }
 

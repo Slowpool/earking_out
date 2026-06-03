@@ -1,20 +1,14 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano;
 
 import static org.junit.Assert.*;
-import org.apache.commons.lang3.ArrayUtils;
-import org.junit.Before;
 import org.junit.Test;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboardTestHelper.*;
 
-public final class PianoKeyboardOneKeySelectTest {
+public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
-    private PianoKeyboardAggregate pianoKeyboard;
-
-    @Before
-    public void before() {
-        pianoKeyboard = createPianoKeyboard(PianoKeyboardMode.ONE_KEY_SELECT);
-
+    protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
+        return PianoKeyboardId.ROOT_NOTE_PICKER;
     }
 
     @Test
@@ -26,7 +20,7 @@ public final class PianoKeyboardOneKeySelectTest {
     // TODO use https://github.com/piotr-yuxuan/custom-ignore-annotation/
     public void initKeyboardWithKey() {
         var presetKeys = new byte[] { FIRST_NOTE_NUMBER };
-        var pianoKeyboard = createPianoKeyboard(PianoKeyboardMode.ONE_KEY_SELECT, presetKeys);
+        var pianoKeyboard = createPianoKeyboard(presetKeys);
 
         assertOnlyTheseKeysAreSelected(presetKeys, pianoKeyboard);
     }
@@ -35,7 +29,7 @@ public final class PianoKeyboardOneKeySelectTest {
     public void initKeyboardWithKeys() {
         var presetKeys = new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER + 1 };
         try {
-            createPianoKeyboard(PianoKeyboardMode.ONE_KEY_SELECT, presetKeys);
+            createPianoKeyboard(presetKeys);
             fail();
         } catch (IllegalArgumentException e) {
         }
@@ -47,7 +41,7 @@ public final class PianoKeyboardOneKeySelectTest {
 
         pianoKeyboard.touchKey(pianoKey);
 
-        assertOnlyTheseKeysAreSelected(pianoKey, pianoKeyboard);
+        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
     }
 
     @Test
@@ -59,7 +53,7 @@ public final class PianoKeyboardOneKeySelectTest {
             pianoKeyboard.touchKey(pianoKey);
         }
 
-        assertOnlyTheseKeysAreSelected(pianoKey, pianoKeyboard);
+        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
     }
 
     @Test
@@ -83,14 +77,14 @@ public final class PianoKeyboardOneKeySelectTest {
             pianoKeyboard.touchKey(pianoKey);
         }
 
-        assertOnlyTheseKeysAreSelected(pianoKeys[pianoKeys.length - 1], pianoKeyboard);
+        assertOnlyThisKeyIsSelected(pianoKeys[pianoKeys.length - 1], pianoKeyboard);
     }
 
     @Test
     public void initWithDuplicateKeys() {
         var presetKeys = new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER };
         try {
-            createPianoKeyboard(PianoKeyboardMode.ONE_KEY_SELECT, presetKeys);
+            createPianoKeyboard(presetKeys);
             fail();
         } catch (IllegalArgumentException e) {
         }

@@ -27,26 +27,26 @@ public class Tests {
 
     @Test
     public void test() {
-        var mongoClient = getMongoClient();
-        var eventStoreConfig = new EventStoreConfig(TimeRepresentation.RFC_3339_STRING);
-        var eventStore = new MongoEventStore(mongoClient, "earking_out", "perfect_pitch", eventStoreConfig);
-        // GenericApplicationService service = new GenericApplicationService<>(eventStore, null);
+        // var mongoClient = getMongoClient();
+        // var eventStoreConfig = new EventStoreConfig(TimeRepresentation.RFC_3339_STRING);
+        // var eventStore = new MongoEventStore(mongoClient, "earking_out", "perfect_pitch", eventStoreConfig);
+        // // GenericApplicationService service = new GenericApplicationService<>(eventStore, null);
 
-        CloudEvent event = CloudEventBuilder.v1()
-            .withId("1937")
-            .withSource(URI.create("someSource"))
-            .withType("someType")
-            .withTime(LocalDateTime.now().atOffset(ZoneOffset.UTC))
-            .withSubject("someSubject")
-            .withDataContentType("application/json")
-            .withData("{\"messsage\": \"hello\"}".getBytes(StandardCharsets.UTF_8))
-            .build() ;
+        // CloudEvent event = CloudEventBuilder.v1()
+        //     .withId("1937")
+        //     .withSource(URI.create("someSource"))
+        //     .withType("someType")
+        //     .withTime(LocalDateTime.now().atOffset(ZoneOffset.UTC))
+        //     .withSubject("someSubject")
+        //     .withDataContentType("application/json")
+        //     .withData("{\"messsage\": \"hello\"}".getBytes(StandardCharsets.UTF_8))
+        //     .build() ;
         
-        var streamId = "streamId";
-        eventStore.write(streamId, Stream.of(event));
+        // var streamId = "streamId";
+        // eventStore.write(streamId, Stream.of(event));
 
-        // var eventStream = eventStore.read(streamId);
-        // eventStream.
+        // // var eventStream = eventStore.read(streamId);
+        // // eventStream.
     }
 
     MongoClient getMongoClient() {
