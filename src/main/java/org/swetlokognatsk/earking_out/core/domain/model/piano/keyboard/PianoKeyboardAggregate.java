@@ -16,7 +16,7 @@ public final class PianoKeyboardAggregate extends Aggregate {
     // TODO make all variables immutable for public read-only aggregate state
     protected final PianoKeyboardId id;
     protected final PianoKeyboardMode mode;
-    protected final Map<Byte, PianoKey> pianoKeys;
+    public final Map<Byte, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
     protected PianoKey pressedKey;
 
