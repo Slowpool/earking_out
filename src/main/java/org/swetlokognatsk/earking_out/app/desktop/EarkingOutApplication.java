@@ -139,6 +139,7 @@ public final class EarkingOutApplication extends Application {
         showAsContent(puzzlePane);
     }
 
+    // TODO should it be encapsulated inside configPage?
     private void updateConfigProperty(ConfigPropertyUpdatingEvent e) {
         var writePuzzleConfigService = DI.get(WritePuzzleConfigService.class);
         writePuzzleConfigService.updateProperty(e.exercise, e.configProperty, e.newValue);
