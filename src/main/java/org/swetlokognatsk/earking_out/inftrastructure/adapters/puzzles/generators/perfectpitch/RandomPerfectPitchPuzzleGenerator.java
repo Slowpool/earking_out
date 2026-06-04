@@ -5,7 +5,7 @@ import java.util.Random;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators.ConfigBasedPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.ConfigBasedPuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.PerfectPitchPuzzleGenerator;
 
 public abstract class RandomPerfectPitchPuzzleGenerator<PC extends PerfectPitchConfig<?>> extends ConfigBasedPuzzleGenerator<PC> implements PerfectPitchPuzzleGenerator<PC> {

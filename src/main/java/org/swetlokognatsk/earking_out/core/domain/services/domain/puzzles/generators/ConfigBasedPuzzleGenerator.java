@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators;
+package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators;
 
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;

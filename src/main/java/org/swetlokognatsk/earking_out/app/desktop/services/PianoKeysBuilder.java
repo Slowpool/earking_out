@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.app.desktop.components.WhitePianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
-import org.swetlokognatsk.earking_out.core.domain.services.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 
 public final class PianoKeysBuilder implements Iterator<PianoKey> {
     protected final byte firstNoteNumber = Invariants.FIRST_NOTE_NUMBER;

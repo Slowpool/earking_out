@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators.PuzzleGeneratorsFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.PuzzleGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;

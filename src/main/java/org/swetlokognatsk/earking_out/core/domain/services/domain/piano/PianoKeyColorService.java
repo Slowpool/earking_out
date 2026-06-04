@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.services.piano;
+package org.swetlokognatsk.earking_out.core.domain.services.domain.piano;
 
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
 
