@@ -7,12 +7,16 @@ import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedE
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.app.desktop.services.PianoKeysBuildersFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import javafx.scene.layout.Region;
 
 public final class PianoKeyboard extends Region {
+    public final PianoKeyboardId id;
     protected final Map<Byte, PianoKey> pianoKeys = new HashMap<>(Invariants.PIANO_KEYS_NUMBER);
 
-    public PianoKeyboard(final double width, final double height, final byte[] selectedKeys) {
+    public PianoKeyboard(final PianoKeyboardId id, final double width, final double height, final byte[] selectedKeys) {
+        this.id = id;
+
         setHeight(height);
         setWidth(width);
 
@@ -30,18 +34,19 @@ public final class PianoKeyboard extends Region {
         addPianoKeys();
     }
 
-    public PianoKeyboard(final double width, final double height) {
-        this(width, height, new byte[0]);
+    public PianoKeyboard(final PianoKeyboardId id, final double width, final double height) {
+        this(id, width, height, new byte[0]);
     }
 
     private void addEventHandlers(final PianoKey pianoKey, final Byte keyNumber) {
+        // TODO how 'bout pressing keys via key arrows and space/enter/w?
         pianoKey.setOnMousePressed(e -> {
-            var event = new PianoKeyPressedEvent(PianoKeyPressedEvent.PIANO_KEY_PRESSED, keyNumber);
+            var event = new PianoKeyPressedEvent(PianoKeyPressedEvent.PIANO_KEY_PRESSED, id, keyNumber);
             fireEvent(event);
         });
 
         pianoKey.setOnMouseReleased(e -> {
-            var event = new PianoKeyReleasedEvent(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, keyNumber);
+            var event = new PianoKeyReleasedEvent(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, id, keyNumber);
             fireEvent(event);
         });
     }

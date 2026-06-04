@@ -13,9 +13,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
 import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
 import javafx.application.Application;
@@ -139,10 +139,12 @@ public final class EarkingOutApplication extends Application {
         showAsContent(puzzlePane);
     }
 
-    // TODO should it be encapsulated inside configPage?
+    // TODO it definitely must be somewhere else, not here. though, it mustn't be encapsulated inside configPage.
+    // app-level delivering mechanism
     private void updateConfigProperty(ConfigPropertyUpdatingEvent e) {
-        var writePuzzleConfigService = DI.get(WritePuzzleConfigService.class);
-        writePuzzleConfigService.updateProperty(e.exercise, e.configProperty, e.newValue);
+        // TODO can app service be skipped here so that the infrastructure service is used here instead?
+        var puzzleConfigService = DI.get(PuzzleConfigService.class);
+        puzzleConfigService.updateProperty(e.exercise, e.configProperty, e.newValue);
     }
 
     private void openConfigPaneOver(ExerciseStartedOverEvent<?> e) {
