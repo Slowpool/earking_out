@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
+import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -51,7 +52,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     protected PianoKeyboard buildPianoKeyboardForGuessing() {
         var pianoKeyboardWidth = getWidth();
         var pianoKeyboardHeight = getHeight() / 4;
-        var pianoKeyboard = new PianoKeyboard(pianoKeyboardWidth, pianoKeyboardHeight);
+        var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesGuessing(pianoKeyboardWidth, pianoKeyboardHeight);
         return pianoKeyboard;
     }
 

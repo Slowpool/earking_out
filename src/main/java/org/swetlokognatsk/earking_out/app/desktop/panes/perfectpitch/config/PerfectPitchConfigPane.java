@@ -2,17 +2,13 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
-import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHelper;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardMode;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
-import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
-import org.swetlokognatsk.earking_out.core.ports.DI;
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -61,7 +57,9 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected PianoKeyboard buildPianoKeyboard(final byte[] selectedKeys) {
         var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesPicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
-        pianoKeyboard.
+
+        PianoKeyboardHelper.addPianoKeyEventsHandlers(pianoKeyboard);
+
         // TODO this listener should be added to domain model???
         // pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
         return pianoKeyboard;
@@ -78,15 +76,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         var wrappedSelectedRootNote = selectedRootNote == null ? new byte[0] : new byte[] { selectedRootNote };
         var rootNotePicker = PianoKeyboardsFactory.createRootNotePicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
 
-        // TODO pianoKeyboardService shouldn't be here
-        final var pianoKeyboardService = DI.get(PianoKeyboardService.class);
-        // TODO eventHandler should be static somewhere to comply with DRY
-        rootNotePicker.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, e -> {
-            pianoKeyboardService.pressKey(e.pianoKeyboardId, e.keyNumber);
-        });
-        rootNotePicker.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, e -> {
-            pianoKeyboardService.releaseKey(e.pianoKeyboardId, e.keyNumber);
-        });
+        PianoKeyboardHelper.addPianoKeyEventsHandlers(rootNotePicker);
 
         // TODO this listener should be added to domain model???
         // rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
