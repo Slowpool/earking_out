@@ -3,7 +3,10 @@ package org.swetlokognatsk.earking_out.app.desktop.helpers;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleGuessingService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import javafx.event.EventHandler;
 
@@ -13,25 +16,42 @@ public final class PianoKeyboardHelper {
     }
 
     public static void addPianoKeyEventsHandlers(PianoKeyboard pianoKeyboard) {
-        pianoKeyboard.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, createPressKeyHandler());
+        pianoKeyboard.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, createPressKeyHandler(pianoKeyboard.id));
         pianoKeyboard.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, createReleaseKeyHandler());
     }
 
-    public static EventHandler<PianoKeyPressedEvent> createReleaseKeyHandler() {
+    public static EventHandler<PianoKeyReleasedEvent> createReleaseKeyHandler() {
         final var pianoKeyboardService = getPianoKeyboardService();
         return e -> {
             pianoKeyboardService.releaseKey(e.pianoKeyboardId, e.keyNumber);
         };
     }
 
-    public static EventHandler<PianoKeyPressedEvent> createPressKeyHandler() {
-        final var pianoKeyboardService = getPianoKeyboardService();
-        return e -> {
-            pianoKeyboardService.pressKey(e.pianoKeyboardId, e.keyNumber);
+    public static EventHandler<PianoKeyPressedEvent> createPressKeyHandler(final PianoKeyboardId pianoKeyboardId) {
+        EventHandler<PianoKeyPressedEvent> handler = switch (pianoKeyboardId) {
+        case ROOT_NOTE_PICKER -> e -> {
+            getConfigService().updatePropertyViaPianoKeyPressing(e.pianoKeyboardId, e.keyNumber);
         };
+        case PERFECT_PITCH_NOTES_PICKER -> e -> {
+            getConfigService().updatePropertyViaPianoKeyPressing(e.pianoKeyboardId, e.keyNumber);
+        };
+        case PERFECT_PITCH_NOTES_GUESSING -> e -> {
+            getPuzzleGuessingService().guessViaPianoKeyPressing(e.pianoKeyboardId, e.keyNumber);
+        };
+        default -> throw new RuntimeException("unknown piano keyboard id: " + pianoKeyboardId);
+        };
+        return handler;
     }
 
     protected static PianoKeyboardService getPianoKeyboardService() {
         return DI.get(PianoKeyboardService.class);
+    }
+
+    protected static PuzzleConfigService getConfigService() {
+        return DI.get(PuzzleConfigService.class);
+    }
+
+    protected static PuzzleGuessingService getPuzzleGuessingService() {
+        return DI.get(PuzzleGuessingService.class);
     }
 }
