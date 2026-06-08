@@ -140,7 +140,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
             var enumElement = PerfectPitchInputMode.valueOf(enumValue);
             yield enumElement;
         }
-        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE -> {
+        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE_PROP -> {
             // TODO remaking
             var set = (ObservableSet<Byte>) newValue;
             var numberOfSelectedKeys = set.size();

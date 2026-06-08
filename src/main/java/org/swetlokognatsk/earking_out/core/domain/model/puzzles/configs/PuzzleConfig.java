@@ -12,8 +12,8 @@ public abstract class PuzzleConfig<E extends Exercise> extends Model {
     public static final String STATS_RECORDING_PROP = "statsRecording";
 
     public final E exercise = getExercise();
-    public final int targetNumberOfPuzzles;
-    public final boolean statsRecording;
+    public int targetNumberOfPuzzles;
+    public boolean statsRecording;
 
     public final String getId() {
         return exercise.toString();

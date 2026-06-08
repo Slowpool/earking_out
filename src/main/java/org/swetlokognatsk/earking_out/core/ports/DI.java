@@ -9,6 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardServ
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorServiceImpl;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigAggregateRepository;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
@@ -79,6 +80,10 @@ public final class DI {
 
         } else if (className.equals(PianoKeyboardService.class.getName())) {
             return (T) new PianoKeyboardService();
+
+        } else if (className.equals(PuzzleConfigAggregateRepository.class.getName())) {
+            // TODO yet unclear
+            return (T) new InMemoryPuzzleConfigAggregateRepository();
 
         
         } else {

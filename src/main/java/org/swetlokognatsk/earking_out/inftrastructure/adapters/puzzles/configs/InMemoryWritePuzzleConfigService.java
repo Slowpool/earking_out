@@ -44,7 +44,7 @@ public final class InMemoryWritePuzzleConfigService implements WritePuzzleConfig
             var newNormalizedNotes = (byte[]) newValue;
             yield new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, newNormalizedNotes, oldConfig.normalizedRootNote, oldConfig.inputMode);
         }
-        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE -> {
+        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE_PROP -> {
             var newNormalizedRootNote = (Byte) newValue;
             yield new AudioPerfectPitchConfig(oldConfig.targetNumberOfPuzzles, oldConfig.statsRecording, oldConfig.normalizedNotesForPuzzle, newNormalizedRootNote, oldConfig.inputMode);
         }
