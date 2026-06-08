@@ -14,9 +14,13 @@ public class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends Aggregate
     protected PC puzzleConfig;
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates;
 
-    public PuzzleConfigAggregate(final PC puzzleConfig, final Exercise exercise) {
+    public PC getPuzzleConfig() {
+        return puzzleConfig;
+    }
+
+    public PuzzleConfigAggregate(final PC puzzleConfig) {
         this.puzzleConfig = puzzleConfig;
-        this.pianoKeyboardAggregates = findPianoKeyboardAggregates(exercise);
+        this.pianoKeyboardAggregates = findPianoKeyboardAggregates(puzzleConfig.exercise);
     }
 
     protected static Map<PianoKeyboardId, PianoKeyboardAggregate> findPianoKeyboardAggregates(final Exercise exercise) {
@@ -29,8 +33,7 @@ public class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends Aggregate
     }
 
     public String getId() {
-        // TODO what id?
-        return "";
+        return puzzleConfig.getId();
     }
 
     public void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
@@ -49,6 +52,7 @@ public class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends Aggregate
         };
     }
 
+    // TODO it should be delegated to polymorphic descendants
     public void updateProperty(final String propertyName, final Object propertyValue) {
         switch (propertyName) {
         // TODO how 'bout reflection?

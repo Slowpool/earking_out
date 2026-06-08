@@ -25,6 +25,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitc
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.InMemoryAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.InMemoryVisualPerfectPitchHints;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigAggregateRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryWritePuzzleConfigService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
@@ -74,18 +75,24 @@ public final class DI {
 
         } else if (className.equals(PianoKeyColorService.class.getName())) {
             return (T) new PianoKeyColorServiceImpl();
-            
+
         } else if (className.equals(PuzzleConfigService.class.getName())) {
             return (T) new PuzzleConfigService(get(WritePuzzleConfigService.class), get(ReadPuzzleConfigService.class));
 
         } else if (className.equals(PianoKeyboardService.class.getName())) {
             return (T) new PianoKeyboardService();
 
-        } else if (className.equals(PuzzleConfigAggregateRepository.class.getName())) {
-            // TODO yet unclear
-            return (T) new InMemoryPuzzleConfigAggregateRepository();
+        } else if (className.equals(InMemoryWritePuzzleConfigService.class.getName())) {
+            return (T) new InMemoryWritePuzzleConfigService();
 
-        
+        } else if (className.equals(InMemoryReadPuzzleConfigService.class.getName())) {
+            return (T) new InMemoryReadPuzzleConfigService();
+
+        } else if (className.equals(PuzzleConfigAggregateRepository.class.getName())) {
+            var writeService = get(InMemoryWritePuzzleConfigService.class);
+            var readService = get(InMemoryReadPuzzleConfigService.class);
+            return (T) new InMemoryPuzzleConfigAggregateRepository(writeService, readService);
+
         } else {
             return null;
         }

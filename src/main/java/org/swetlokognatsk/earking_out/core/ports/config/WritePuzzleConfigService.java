@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports.config;
 
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 
 public interface WritePuzzleConfigService {
-    void updateProperty(Exercise e, String configProperty, Object newValue);
+    void save(final PuzzleConfig<?> puzzleConfig);
 }
