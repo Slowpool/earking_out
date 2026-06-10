@@ -9,23 +9,26 @@ import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService
 
 public final class PuzzleConfigService {
 
-    protected final WritePuzzleConfigService writeService;
-    protected final ReadPuzzleConfigService readService;
+    protected final PuzzleConfigAggregateRepository repository;
 
-    public PuzzleConfigService(final WritePuzzleConfigService writeService, final ReadPuzzleConfigService readService) {
-        this.writeService = writeService;
-        this.readService = readService;
+    public PuzzleConfigService(final PuzzleConfigAggregateRepository repository) {
+        this.repository = repository;
     }
 
     public void updateProperty(final Exercise exercise, final String property, final Object value) {
-        // TODO is it fine to do so directly instead of getting aggregates via repositories and then save changes via save()?
-        writeService.updateProperty(exercise, property, value);
+        var puzzleConfigAggregate = repository.get(exercise);
+        try {
+            puzzleConfigAggregate.updateProperty(property, value);
+            repository.save(puzzleConfigAggregate);
+        }
+        // TODO just Exception?
+        catch (Exception e) {
+        }
     }
 
     // TODO should it be here or in separated PerfectPitchConfigService?
     public void updatePropertyViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
         var exercise = pianoKeyboardId.exercise;
-        var repository = DI.get(PuzzleConfigAggregateRepository.class);
         var puzzleConfigAggregate = repository.get(exercise);
         try {
             puzzleConfigAggregate.updateViaPianoKeyPressing(pianoKeyboardId, keyNumber);
