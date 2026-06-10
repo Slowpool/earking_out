@@ -18,6 +18,7 @@ public final class PuzzleConfigService {
     }
 
     public void updateProperty(final Exercise exercise, final String property, final Object value) {
+        // TODO is it fine to do so directly instead of getting aggregates via repositories and then save changes via save()?
         writeService.updateProperty(exercise, property, value);
     }
 
