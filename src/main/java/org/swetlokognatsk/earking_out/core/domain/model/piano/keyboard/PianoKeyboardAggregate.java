@@ -52,6 +52,10 @@ public final class PianoKeyboardAggregate extends Aggregate {
         return id.toString();
     }
 
+    public PianoKeyboardId getPianoKeyboardId() {
+        return id;
+    }
+
     public PianoKeyboardAggregate(final PianoKeyboardId id) {
         this(id, new byte[0]);
     }

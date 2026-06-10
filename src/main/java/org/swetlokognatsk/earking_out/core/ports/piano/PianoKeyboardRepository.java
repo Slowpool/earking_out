@@ -5,6 +5,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 
 // TODO use generics for repositories
 public interface PianoKeyboardRepository {
-    public PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId);
-    public void save(final PianoKeyboardAggregate pianoKeyboardAggregate);
+    PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId);
+    void save(final PianoKeyboardAggregate pianoKeyboardAggregate);
 }
