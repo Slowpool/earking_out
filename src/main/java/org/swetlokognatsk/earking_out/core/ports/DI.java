@@ -5,11 +5,10 @@ import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsFromHintsSer
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorServiceImpl;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigAggregateRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
@@ -25,7 +24,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitc
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.InMemoryAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.InMemoryVisualPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigAggregateRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryWritePuzzleConfigService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
@@ -77,10 +76,7 @@ public final class DI {
             return (T) new PianoKeyColorServiceImpl();
 
         } else if (className.equals(PuzzleConfigService.class.getName())) {
-            return (T) new PuzzleConfigService(get(WritePuzzleConfigService.class), get(ReadPuzzleConfigService.class));
-
-        } else if (className.equals(PianoKeyboardService.class.getName())) {
-            return (T) new PianoKeyboardService();
+            return (T) new PuzzleConfigService(get(PuzzleConfigRepository.class));
 
         } else if (className.equals(InMemoryWritePuzzleConfigService.class.getName())) {
             return (T) new InMemoryWritePuzzleConfigService();
@@ -88,10 +84,10 @@ public final class DI {
         } else if (className.equals(InMemoryReadPuzzleConfigService.class.getName())) {
             return (T) new InMemoryReadPuzzleConfigService();
 
-        } else if (className.equals(PuzzleConfigAggregateRepository.class.getName())) {
+        } else if (className.equals(PuzzleConfigRepository.class.getName())) {
             var writeService = get(InMemoryWritePuzzleConfigService.class);
             var readService = get(InMemoryReadPuzzleConfigService.class);
-            return (T) new InMemoryPuzzleConfigAggregateRepository(writeService, readService);
+            return (T) new InMemoryPuzzleConfigRepository(writeService, readService);
 
         } else {
             return null;

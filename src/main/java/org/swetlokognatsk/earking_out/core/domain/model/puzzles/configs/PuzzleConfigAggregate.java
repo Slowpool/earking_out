@@ -3,33 +3,25 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs;
 import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig.*;
 
 public class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends Aggregate {
 
     protected PC puzzleConfig;
-    protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates;
+    protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
+    protected final PianoKeyboardRepository pianoKeyboardRepository;
 
     public PC getPuzzleConfig() {
         return puzzleConfig;
     }
 
-    public PuzzleConfigAggregate(final PC puzzleConfig) {
+    public PuzzleConfigAggregate(final PC puzzleConfig, final PianoKeyboardRepository pianoKeyboardRepository) {
         this.puzzleConfig = puzzleConfig;
-        this.pianoKeyboardAggregates = findPianoKeyboardAggregates(puzzleConfig.exercise);
-    }
-
-    protected static Map<PianoKeyboardId, PianoKeyboardAggregate> findPianoKeyboardAggregates(final Exercise exercise) {
-        // TODO it should be in helper class i think. switch(exercise) should be here
-        var map = new HashMap<PianoKeyboardId, PianoKeyboardAggregate>();
-        map.put(PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING, new PianoKeyboardAggregate(PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING));
-        map.put(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, new PianoKeyboardAggregate(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER));
-        map.put(PianoKeyboardId.ROOT_NOTE_PICKER, new PianoKeyboardAggregate(PianoKeyboardId.ROOT_NOTE_PICKER));
-        return map;
+        this.pianoKeyboardRepository = pianoKeyboardRepository;
     }
 
     public String getId() {
@@ -37,11 +29,20 @@ public class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends Aggregate
     }
 
     public void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
-        var pianoKeyboard = pianoKeyboardAggregates.get(pianoKeyboardId);
+        var pianoKeyboard = getPianoKeyboard(pianoKeyboardId);
         pianoKeyboard.pressKey(keyNumber);
 
         var propertyName = getPropertyName(pianoKeyboardId);
         updateProperty(propertyName, pianoKeyboard.getSelectedKeyNumbers());
+    }
+
+    // minor optimization. using create-if-not-exists strategy to avoid redundant writes of unchanged pianoKeyboards on `repository.save(this)`
+    protected PianoKeyboardAggregate getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
+        if (!pianoKeyboardAggregates.containsKey(pianoKeyboardId)) {
+            var pianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
+            pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
+        }
+        return pianoKeyboardAggregates.get(pianoKeyboardId);
     }
 
     protected String getPropertyName(final PianoKeyboardId pianoKeyboardId) {
@@ -59,13 +60,11 @@ public class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends Aggregate
         case NORMALIZED_ROOT_NOTE_PROP: {
             var puzzleConfig = (AudioPerfectPitchConfig) this.puzzleConfig;
             puzzleConfig.normalizedNotesForPuzzle = (byte[]) propertyValue;
-            this.puzzleConfig = (PC) puzzleConfig;
             break;
         }
         case NORMALIZED_NOTES_FOR_PUZZLE_PROP: {
             var puzzleConfig = (AudioPerfectPitchConfig) this.puzzleConfig;
             puzzleConfig.normalizedRootNote = ((byte[]) propertyValue)[0];
-            this.puzzleConfig = (PC) puzzleConfig;
             // TODO is there any difference between `break; }` and `} break;` here?
             break;
         }

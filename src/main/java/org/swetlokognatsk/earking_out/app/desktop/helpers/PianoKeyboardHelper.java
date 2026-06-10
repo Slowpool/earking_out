@@ -10,6 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleGuessingSer
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import javafx.event.EventHandler;
 
+// TODO Helper or Utility?
 public final class PianoKeyboardHelper {
 
     private PianoKeyboardHelper() {
@@ -17,13 +18,13 @@ public final class PianoKeyboardHelper {
 
     public static void addPianoKeyEventsHandlers(PianoKeyboard pianoKeyboard) {
         pianoKeyboard.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, createPressKeyHandler(pianoKeyboard.id));
-        pianoKeyboard.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, createReleaseKeyHandler());
+        pianoKeyboard.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, createReleaseKeyHandler(pianoKeyboard.id));
     }
 
-    public static EventHandler<PianoKeyReleasedEvent> createReleaseKeyHandler() {
+    public static EventHandler<PianoKeyReleasedEvent> createReleaseKeyHandler(final PianoKeyboardId pianoKeyboardId) {
         final var pianoKeyboardService = getPianoKeyboardService();
         return e -> {
-            pianoKeyboardService.releaseKey(e.pianoKeyboardId, e.keyNumber);
+            pianoKeyboardService.releaseKey(e.pianoKeyboardId);
         };
     }
 

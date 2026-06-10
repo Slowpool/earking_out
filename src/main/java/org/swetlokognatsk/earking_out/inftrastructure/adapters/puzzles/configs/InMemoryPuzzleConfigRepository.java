@@ -3,13 +3,13 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigAggregateRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
-public class InMemoryPuzzleConfigAggregateRepository implements PuzzleConfigAggregateRepository {
+public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     protected final InMemoryWritePuzzleConfigService writeService;
     protected final InMemoryReadPuzzleConfigService readService;
 
-    public InMemoryPuzzleConfigAggregateRepository(final InMemoryWritePuzzleConfigService writeService, final InMemoryReadPuzzleConfigService readService) {
+    public InMemoryPuzzleConfigRepository(final InMemoryWritePuzzleConfigService writeService, final InMemoryReadPuzzleConfigService readService) {
         this.writeService = writeService;
         this.readService = readService;
     }
