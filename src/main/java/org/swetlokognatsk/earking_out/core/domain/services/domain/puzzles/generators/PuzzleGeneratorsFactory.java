@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators;
 
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
@@ -12,13 +13,10 @@ public final class PuzzleGeneratorsFactory {
 
     public static <PG extends PuzzleGenerator> PG create(PuzzleConfig<?> puzzleConfig) {
         var exercise = puzzleConfig.exercise;
-        var puzzleGenerator = switch (exercise.name) {
-        case PERFECT_PITCH -> switch (exercise.type) {
+        var puzzleGenerator = switch (exercise) {
         // case VISUAL -> 
-        case AUDIO -> DI.get(AudioPerfectPitchPuzzleGenerator.class, puzzleConfig);
-        default -> throw new RuntimeException("unknown exercise type for puzzle generator: " + exercise.type);
-        };
-        default -> throw new RuntimeException("unknown exercise for puzzle generator: " + exercise.name);
+        case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchPuzzleGenerator.class, puzzleConfig);
+        default -> throw new RuntimeException("unknown exercise for puzzle generator: " + exercise);
         };
         return (PG) puzzleGenerator;
     }

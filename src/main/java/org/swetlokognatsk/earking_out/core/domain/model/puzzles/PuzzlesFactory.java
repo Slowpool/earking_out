@@ -19,13 +19,10 @@ public final class PuzzlesFactory {
 
     public static <E extends Exercise, PC extends PuzzleConfig<E>, PG extends PuzzleGenerator, P extends Puzzle<E, PC, ?, PG>> P create(PC puzzleConfig, PG puzzleGenerator) {
         var exercise = puzzleConfig.exercise;
-        var puzzle = switch (exercise.name) {
-        case PERFECT_PITCH -> switch (exercise.type) {
-        case VISUAL -> new VisualPerfectPitchPuzzle((VisualPerfectPitchConfig) puzzleConfig, (VisualPerfectPitchPuzzleGenerator) puzzleGenerator);
-        case AUDIO -> new AudioPerfectPitchPuzzle((AudioPerfectPitchConfig) puzzleConfig, (AudioPerfectPitchPuzzleGenerator) puzzleGenerator);
-        default -> throw new RuntimeException("unknown exercise type for puzzle: " + exercise.type);
-        };
-        default -> throw new RuntimeException("unknown exercise for puzzle: " + exercise.name);
+        var puzzle = switch (exercise) {
+        case VisualPerfectPitchExercise e -> new VisualPerfectPitchPuzzle((VisualPerfectPitchConfig) puzzleConfig, (VisualPerfectPitchPuzzleGenerator) puzzleGenerator);
+        case AudioPerfectPitchExercise e -> new AudioPerfectPitchPuzzle((AudioPerfectPitchConfig) puzzleConfig, (AudioPerfectPitchPuzzleGenerator) puzzleGenerator);
+        default -> throw new RuntimeException("unknown exercise for puzzle: " + exercise);
         };
         return (P) puzzle;
     }

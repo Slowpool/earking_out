@@ -5,6 +5,8 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.Audi
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.VisualPerfectPitchPane;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfig;
@@ -16,25 +18,21 @@ public final class PuzzlePanesFactory {
 
     public static <PC extends PuzzleConfig<?>> PuzzlePane<?, PC, ?, ?, ?> create(Session<PC> session, double width, double height) {
         var exercise = session.puzzleConfig().exercise;
-
-        var puzzlePane = switch (exercise.name) {
-        case PERFECT_PITCH -> switch (exercise.type) {
+        var puzzlePane = switch (exercise) {
         // TODO it's too cumbersome, how 'bout other ways
-        case VISUAL -> {
+        case VisualPerfectPitchExercise e -> {
             var castedSession = (Session<VisualPerfectPitchConfig>) session;
             var pane = new VisualPerfectPitchPane(castedSession, width, height);
             var castedPane = (PuzzlePane<?, PC, ?, ?, ?>) pane;
             yield castedPane;
         }
-        case AUDIO -> {
+        case AudioPerfectPitchExercise e -> {
             var castedSession = (Session<AudioPerfectPitchConfig>) session;
             var pane = new AudioPerfectPitchPane(castedSession, width, height, new AudioClipHintPlayer());
             var castedPane = (PuzzlePane<?, PC, ?, ?, ?>) pane;
             yield castedPane;
         }
-        default -> throw new RuntimeException("unkown exercise type: " + exercise.type);
-        };
-        default -> throw new RuntimeException("unkown exercise for puzzle pane: " + exercise.name);
+        default -> throw new RuntimeException("unkown exercise: " + exercise);
         };
 
         return puzzlePane;
