@@ -28,9 +28,10 @@ public final class InMemoryReadPuzzleConfigService implements ReadPuzzleConfigSe
             throw new IllegalArgumentException("exercise class does not correspond to exerciseClass");
         }
 
+        // making the shallow copy
         var puzzleConfig = switch (exercise) {
-        case VisualPerfectPitchExercise e -> vppc;
-        case AudioPerfectPitchExercise e -> appc;
+        case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfig(vppc.targetNumberOfPuzzles, vppc.statsRecording, vppc.normalizedNotesForPuzzle, vppc.normalizedRootNote, vppc.inputMode);
+        case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfig(appc.targetNumberOfPuzzles, appc.statsRecording, appc.normalizedNotesForPuzzle, appc.normalizedRootNote, appc.inputMode);
         default -> throw new RuntimeException("unknown exercise on config fetching: " + exercise);
         };
 
