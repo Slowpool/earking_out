@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 
-public final class ExerciseStarted<E extends Exercise, PC extends PuzzleConfig<E>> extends ExerciseStateChanged<E, PC> {
+public final class ExerciseStarted<E extends Exercise, PC extends PuzzleConfigAggregate<E>> extends ExerciseStateChanged<E, PC> {
     public final E exercise;
     public final PC puzzleConfig;
 

@@ -1,32 +1,49 @@
-package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.aggregates;
+package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
-import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
 
-public abstract class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends Aggregate {
+// TODO store it in database as json
+// TODO it must extend Model
+public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregate {
+    public static final String TARGET_NUMBER_OF_PUZZLES_PROP = "targetNumberOfPuzzles";
+    public static final String STATS_RECORDING_PROP = "statsRecording";
 
-    protected PC puzzleConfig;
+    // TODO add setters/getters
+    public final E exercise = assembleExercise();
+    public int targetNumberOfPuzzles;
+    public boolean statsRecording;
+
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardRepository pianoKeyboardRepository;
 
-    public PC getPuzzleConfig() {
-        return puzzleConfig;
+    protected abstract ExerciseNames getExerciseName();
+
+    protected abstract ExerciseTypes getExerciseType();
+
+    public final String getId() {
+        return exercise.toString();
     }
 
-    public PuzzleConfigAggregate(final PC puzzleConfig, final PianoKeyboardRepository pianoKeyboardRepository) {
-        this.puzzleConfig = puzzleConfig;
+    private final E assembleExercise() {
+        return (E) ExercisesFactory.create(getExerciseName(), getExerciseType());
+    }
+
+    public PuzzleConfigAggregate(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyboardRepository pianoKeyboardRepository) {
+        this.targetNumberOfPuzzles = targetNumberOfPuzzles;
+        this.statsRecording = statsRecording;
         this.pianoKeyboardRepository = pianoKeyboardRepository;
-    }
-
-    public String getId() {
-        return puzzleConfig.getId();
     }
 
     public void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
@@ -59,12 +76,12 @@ public abstract class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends 
         switch (propertyName) {
         // TODO how 'bout reflection?
         case NORMALIZED_ROOT_NOTE_PROP: {
-            var puzzleConfig = (AudioPerfectPitchConfig) this.puzzleConfig;
+            var puzzleConfig = (AudioPerfectPitchConfigAggregate) this;
             puzzleConfig.normalizedNotesForPuzzle = (byte[]) propertyValue;
             break;
         }
         case NORMALIZED_NOTES_FOR_PUZZLE_PROP: {
-            var puzzleConfig = (AudioPerfectPitchConfig) this.puzzleConfig;
+            var puzzleConfig = (AudioPerfectPitchConfigAggregate) this;
             puzzleConfig.normalizedRootNote = ((byte[]) propertyValue)[0];
             // TODO is there any difference between `break; }` and `} break;` here?
             break;

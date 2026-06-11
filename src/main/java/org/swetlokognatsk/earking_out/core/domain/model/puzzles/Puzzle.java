@@ -6,12 +6,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 
-public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfig<E>, H extends Hint, PG extends PuzzleGenerator> extends ValueObject {
+public abstract class Puzzle<E extends Exercise, PC extends PuzzleConfigAggregate<E>, H extends Hint, PG extends PuzzleGenerator> extends ValueObject {
     public final Solution solution;
     public final PC config;
     public final H hint;

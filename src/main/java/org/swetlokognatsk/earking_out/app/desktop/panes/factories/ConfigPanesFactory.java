@@ -6,20 +6,20 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config.Visu
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
 
 public final class ConfigPanesFactory {
 
     private ConfigPanesFactory() {
     }
 
-    public static <E extends Exercise, PC extends PuzzleConfig<E>, CP extends ConfigPane<E, PC>> CP create(final PC puzzleConfig, final double width, final double height) {
+    public static <E extends Exercise, PC extends PuzzleConfigAggregate<E>, CP extends ConfigPane<E, PC>> CP create(final PC puzzleConfig, final double width, final double height) {
         var exercise = puzzleConfig.exercise;
         return switch (exercise) {
-            case VisualPerfectPitchExercise e -> (CP) new VisualPerfectPitchConfigPane((VisualPerfectPitchConfig) puzzleConfig, width, height);
-        case AudioPerfectPitchExercise e -> (CP) new AudioPerfectPitchConfigPane((AudioPerfectPitchConfig) puzzleConfig, width, height);
+            case VisualPerfectPitchExercise e -> (CP) new VisualPerfectPitchConfigPane((VisualPerfectPitchConfigAggregate) puzzleConfig, width, height);
+        case AudioPerfectPitchExercise e -> (CP) new AudioPerfectPitchConfigPane((AudioPerfectPitchConfigAggregate) puzzleConfig, width, height);
         default -> throw new RuntimeException("unknown exercise: " + exercise);
         };
         // case MELODIC_INTERVALS -> switch (exercise.type) {

@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.app.desktop.EarkingOutApplication;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>> extends VBox {
+public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfigAggregate<E>> extends VBox {
     protected final E exercise;
 
     protected final HBox numberOfPuzzlesBox;
@@ -50,7 +50,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
         var numberOfPuzzlesField = new TextField(String.valueOf(numberOfPuzzles));
         var numberOfPuzzlesProperty = numberOfPuzzlesField.textProperty();
         numberOfPuzzlesProperty.addListener(this::restrictInputToNumbers);
-        numberOfPuzzlesProperty.addListener(createConfigPropertyUpadtingEvent(PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP));
+        numberOfPuzzlesProperty.addListener(createConfigPropertyUpadtingEvent(PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP));
         return numberOfPuzzlesField;
     }
 
@@ -72,7 +72,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     private CheckBox initStatisticsRecordingField(boolean isSelected) {
         var statisticsRecordingField = new CheckBox("statistics recording");
         statisticsRecordingField.setSelected(isSelected);
-        statisticsRecordingField.selectedProperty().addListener(createConfigPropertyUpadtingEvent(PuzzleConfig.STATS_RECORDING_PROP));
+        statisticsRecordingField.selectedProperty().addListener(createConfigPropertyUpadtingEvent(PuzzleConfigAggregate.STATS_RECORDING_PROP));
         return statisticsRecordingField;
     }
 
@@ -87,7 +87,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
     private Object castConfigPropertyNewValue(String configProperty, Object newValue) {
         // here the casts are just for the sake of explicitness, actually they aren't necessary
         return switch (configProperty) {
-        case PuzzleConfig.TARGET_NUMBER_OF_PUZZLES_PROP -> {
+        case PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP -> {
             int intNewValue;
             try {
                 intNewValue = Integer.valueOf((String) newValue);
@@ -96,7 +96,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfig<E>>
             }
             yield intNewValue;
         }
-        case PuzzleConfig.STATS_RECORDING_PROP -> (boolean) newValue;
+        case PuzzleConfigAggregate.STATS_RECORDING_PROP -> (boolean) newValue;
         default -> castCustomConfigPropertyNewValue(configProperty, newValue);
         };
     }

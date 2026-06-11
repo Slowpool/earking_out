@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.PuzzleGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import javafx.event.ActionEvent;
@@ -18,7 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>, H extends Hint, PG extends PuzzleGenerator, P extends Puzzle<E, PC, H, PG>> extends BorderPane {
+public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfigAggregate<E>, H extends Hint, PG extends PuzzleGenerator, P extends Puzzle<E, PC, H, PG>> extends BorderPane {
     protected final Session<PC> session;
     protected final PC puzzleConfig;
     protected final PG puzzleGenerator;

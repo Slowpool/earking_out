@@ -6,8 +6,8 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryReadPuzzleConfigService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
@@ -349,10 +349,10 @@ public class JavaTests {
         var service = new InMemoryReadPuzzleConfigService();
 
         Exercise audioPerfectPitchExercise = new AudioPerfectPitchExercise();
-        AudioPerfectPitchConfig audioConfig = (AudioPerfectPitchConfig) service.fetch(audioPerfectPitchExercise.getClass(), audioPerfectPitchExercise);
+        AudioPerfectPitchConfigAggregate audioConfig = (AudioPerfectPitchConfigAggregate) service.fetch(audioPerfectPitchExercise.getClass(), audioPerfectPitchExercise);
 
         Exercise visualPerfectPitchExercise = new VisualPerfectPitchExercise();
-        VisualPerfectPitchConfig visualConfig = (VisualPerfectPitchConfig) service.fetch(visualPerfectPitchExercise.getClass(), visualPerfectPitchExercise);
+        VisualPerfectPitchConfigAggregate visualConfig = (VisualPerfectPitchConfigAggregate) service.fetch(visualPerfectPitchExercise.getClass(), visualPerfectPitchExercise);
 
         try {
             service.fetch(audioPerfectPitchExercise.getClass(), visualPerfectPitchExercise);

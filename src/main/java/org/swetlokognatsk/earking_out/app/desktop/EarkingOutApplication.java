@@ -12,7 +12,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFact
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
@@ -27,6 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+// TODO pianoKeyboard is not saved yet to repository, though it should be. in both `updateProperty()` and `updateViaPianoKeyboardPressing()`
 public final class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
@@ -96,7 +97,7 @@ public final class EarkingOutApplication extends Application {
         showAsContent(configPane);
     }
 
-    private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfig<E>>> CP buildConfigPane(Class<E> exerciseClass, Exercise exercise) {
+    private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfigAggregate<E>>> CP buildConfigPane(Class<E> exerciseClass, Exercise exercise) {
         if (!exerciseClass.equals(exercise.getClass())) {
             throw new IllegalArgumentException("exercise class does not correspond to exerciseClass");
         }
@@ -124,7 +125,7 @@ public final class EarkingOutApplication extends Application {
         }
     }
 
-    private static <PC extends PuzzleConfig<?>> Session<PC> startSession(PC puzzleConfig) {
+    private static <PC extends PuzzleConfigAggregate<?>> Session<PC> startSession(PC puzzleConfig) {
         var writeSessionService = DI.get(WriteSessionService.class);
         writeSessionService.createSession(puzzleConfig);
 
@@ -151,7 +152,7 @@ public final class EarkingOutApplication extends Application {
         exercisesMenu.fireExercise(e.puzzleConfig.exercise);
     }
 
-    private Pane buildPuzzlePane(Session<? extends PuzzleConfig<?>> session) {
+    private Pane buildPuzzlePane(Session<? extends PuzzleConfigAggregate<?>> session) {
         var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT);
 
         puzzlePane.addEventHandler(ExerciseFinishedEvent.EXERCISE_FINISHED, this::openExerciseFinish);

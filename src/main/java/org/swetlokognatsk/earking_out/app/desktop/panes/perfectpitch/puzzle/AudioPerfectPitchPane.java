@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
 import javafx.geometry.Pos;
@@ -14,7 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfig, UsualHint, AudioPerfectPitchPuzzleGenerator, AudioPerfectPitchPuzzle> {
+public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigAggregate, UsualHint, AudioPerfectPitchPuzzleGenerator, AudioPerfectPitchPuzzle> {
 
     protected final AudioHintPlayer<UsualHint> audioHintPlayer;
     protected final PianoKeyboard pianoKeyboardForGuessing;
@@ -32,7 +32,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         return pane;
     }
 
-    public AudioPerfectPitchPane(final Session<AudioPerfectPitchConfig> session, final double width, final double height, final AudioHintPlayer<UsualHint> audioHintPlayer) {
+    public AudioPerfectPitchPane(final Session<AudioPerfectPitchConfigAggregate> session, final double width, final double height, final AudioHintPlayer<UsualHint> audioHintPlayer) {
         super(session, width, height);
 
         this.audioHintPlayer = audioHintPlayer;

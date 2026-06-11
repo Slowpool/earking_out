@@ -1,5 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.model.base;
 
-public abstract class Aggregate extends Entity {
+import org.apache.commons.lang3.NotImplementedException;
 
+public abstract class Aggregate extends Entity implements Model {
+
+    public String[] getErrors() {
+        throw new NotImplementedException();
+    }
 }
