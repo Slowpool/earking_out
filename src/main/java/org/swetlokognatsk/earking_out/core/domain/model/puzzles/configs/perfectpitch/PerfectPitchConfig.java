@@ -10,6 +10,7 @@ public abstract class PerfectPitchConfig<E extends PerfectPitchExercise> extends
     public static final String NORMALIZED_ROOT_NOTE_PROP = "normalizedRootNote";
     public static final String INPUT_MODE_PROP = "inputMode";
 
+    // TODO replace `public` with getters/setters
     public byte[] normalizedNotesForPuzzle;
     public Byte normalizedRootNote;
     public PerfectPitchInputMode inputMode;

@@ -2,7 +2,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.aggregates.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
 public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
@@ -16,7 +16,7 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<? extends PuzzleConfig<E>>> PCA get(E exercise) {
         var puzzleConfig = readService.fetch(exercise.getClass(), exercise);
-        var puzzleConfigAggregate = new PuzzleConfigAggregate<>(puzzleConfig);
+        var puzzleConfigAggregate = PuzzleConfigAggregatesFactory.create(puzzleConfig);
         return (PCA) puzzleConfigAggregate;
     }
 

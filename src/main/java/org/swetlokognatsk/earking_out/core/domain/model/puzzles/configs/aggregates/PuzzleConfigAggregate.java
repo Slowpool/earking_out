@@ -1,15 +1,16 @@
-package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs;
+package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.aggregates;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig.*;
 
-public class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends Aggregate {
+public abstract class PuzzleConfigAggregate<PC extends PuzzleConfig<?>> extends Aggregate {
 
     protected PC puzzleConfig;
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
