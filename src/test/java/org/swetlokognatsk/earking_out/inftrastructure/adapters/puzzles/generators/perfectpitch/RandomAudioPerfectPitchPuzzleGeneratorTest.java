@@ -6,15 +6,19 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 
 public class RandomAudioPerfectPitchPuzzleGeneratorTest {
     protected static int ITERATIONS_NUMBER = 100;
 
+    protected static AudioPerfectPitchConfigAggregatesFactory factory = AbstractPuzzleConfigAggregatesFactory.createFactory(new AudioPerfectPitchExercise());
+
     @Test
     public void generateSolutionTest() {
         var notes = new byte[] { 4, 5 };
-        var puzzleConfig = new AudioPerfectPitchConfigAggregate(0, false, notes, null, null);
+        var puzzleConfig = factory.create(0, false, notes, null, null);
         var generator = new RandomAudioPerfectPitchPuzzleGenerator(puzzleConfig);
 
         Byte[] ByteNotes = ArrayUtils.toObject(notes);
