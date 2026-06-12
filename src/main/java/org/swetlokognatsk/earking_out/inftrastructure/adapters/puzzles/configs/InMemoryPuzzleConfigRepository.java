@@ -4,18 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.VisualPerfectPitchConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory.*;
 
@@ -51,10 +41,10 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         return (PCA) puzzleConfigAggregate;
     }
 
-    protected <E extends Exercise> PuzzleConfigAggregate<E> createShallowCopy(final PuzzleConfigAggregate<E> puzzleConfigAggregate) {
-        var puzzleConfigAggregateFactory = createFactory(puzzleConfigAggregate.exercise);
-        var puzzleConfigAggregateCopy = puzzleConfigAggregateFactory.createShallowCopy(puzzleConfigAggregate);
-        return (PuzzleConfigAggregate<E>) puzzleConfigAggregateCopy;
+    protected <PCA extends PuzzleConfigAggregate<?>> PCA createShallowCopy(final PCA puzzleConfigAggregate) {
+        var puzzleConfigAggregateFactory = (PuzzleConfigAggregatesFactory<PCA>) createFactory(puzzleConfigAggregate.exercise);
+        PCA puzzleConfigAggregateCopy = puzzleConfigAggregateFactory.createShallowCopy(puzzleConfigAggregate);
+        return (PCA) puzzleConfigAggregateCopy;
     }
 
     // TODO transaction stuff?

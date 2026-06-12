@@ -10,7 +10,7 @@ public final class InMemoryPuzzleConfigRepositoryTest {
     protected InMemoryPuzzleConfigRepository repository;
 
     @Before
-    public void before() {
+    public void setup() {
         repository = new InMemoryPuzzleConfigRepository();
     }
 
