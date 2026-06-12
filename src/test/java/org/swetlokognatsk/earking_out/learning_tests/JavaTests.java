@@ -421,6 +421,17 @@ public class JavaTests {
         };
         return (EF) factory;
     }
+
+    @Test
+    public void nullTest() {
+        Person person = new Person();
+        setPersonToNull(person);
+        assertNotEquals(null, person);
+    }
+
+    protected void setPersonToNull(Person person) {
+        person = null;
+    }
 }
 
 abstract class Id {
