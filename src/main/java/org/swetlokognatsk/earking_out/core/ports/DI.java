@@ -37,6 +37,9 @@ public final class DI {
     public static String PROD_ENV = "prod_env";
     public static String env = "test_env";
 
+    // singleton lifetime simulation
+    protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
+
     private DI() {
     }
 
@@ -73,7 +76,11 @@ public final class DI {
             return (T) new PuzzleConfigService(get(PuzzleConfigRepository.class));
 
         } else if (className.equals(PuzzleConfigRepository.class.getName())) {
-            return (T) new InMemoryPuzzleConfigRepository();
+            if (inMemoryPuzzleConfigRepository == null) {
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository();
+            }
+            
+            return (T) inMemoryPuzzleConfigRepository;
 
         } else if (className.equals(PianoKeyboardRepository.class.getName())) {
             return (T) new InMemoryPianoKeyboardRepository();
@@ -84,5 +91,10 @@ public final class DI {
         } else {
             return null;
         }
+    }
+
+    // TODO wanna believe there's such a feature in SpringBoot. it's required for pure junit tests, so that each starts in the same DI-container state
+    public void clear() {
+        inMemoryPuzzleConfigRepository = null;
     }
 }
