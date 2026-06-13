@@ -2,16 +2,24 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints;
 
 import static org.junit.Assert.*;
 import org.junit.*;
-import org.swetlokognatsk.earking_out.core.domain.model.PuzzleTest;
+import org.swetlokognatsk.earking_out.core.domain.model.PuzzleTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 
 public class PerfectPitchHintFinderTest {
+    protected PuzzleTestHelper puzzleHelper;
+
+    @Before
+    public void setup() {
+        puzzleHelper = new PuzzleTestHelper(DI.get(PuzzleConfigRepository.class));
+    }
+
     @Test
     public void exerciseTypeIsCorrect() {
         var hintFinder = DI.get(HintFinder.class);
@@ -22,7 +30,7 @@ public class PerfectPitchHintFinderTest {
             for (Integer i = 4; i < 90; i++) {
                 // TODO is it a good idea to depend on other test suites' static methods?
                 fakeSolution = i.toString();
-                var puzzle = PuzzleTest.createPuzzle(ExerciseNames.PERFECT_PITCH, exerciseType, fakeSolution);
+                var puzzle = puzzleHelper.createPuzzle(ExerciseNames.PERFECT_PITCH, exerciseType, fakeSolution);
                 var hint = hintFinder.find(puzzle).getValue();
                 assertTrue(hint.contains(expectedSubstring));
             }
@@ -39,9 +47,9 @@ public class PerfectPitchHintFinderTest {
             for (var exerciseType : ExerciseTypes.values()) {
                 expectedSubstring = String.valueOf(i);
                 fakeSolution = String.valueOf(i);
-                // TODO is it a good idea to depent on other test suites' static methods?
-                var puzzle = PuzzleTest.createPuzzle(ExerciseNames.PERFECT_PITCH, exerciseType, fakeSolution);
+                var puzzle = puzzleHelper.createPuzzle(ExerciseNames.PERFECT_PITCH, exerciseType, fakeSolution);
                 var hint = hintFinder.find(puzzle).getValue();
+                // TODO seems awkward
                 assertTrue(hint.endsWith(expectedSubstring));
             }
         }
