@@ -11,10 +11,22 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
     public static final String NORMALIZED_ROOT_NOTE_PROP = "normalizedRootNote";
     public static final String INPUT_MODE_PROP = "inputMode";
 
-    // TODO replace `public` with getters/setters
-    public byte[] normalizedNotesForPuzzle;
-    public Byte normalizedRootNote;
-    public PerfectPitchInputMode inputMode;
+    // TODO replace getters with read-only types
+    protected byte[] normalizedNotesForPuzzle;
+    protected Byte normalizedRootNote;
+    protected PerfectPitchInputMode inputMode;
+
+    public byte[] getNormalizedNotesForPuzzle() {
+        return normalizedNotesForPuzzle;
+    }
+
+    public Byte getNormalizedRootNote() {
+        return normalizedRootNote;
+    }
+
+    public PerfectPitchInputMode getInputMode() {
+        return inputMode;
+    }
 
     public PerfectPitchConfigAggregate(final int targetNumberOfPuzzles, final boolean statsRecording, final byte[] normalizedNotesForPuzzle, final Byte normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardRepository pianoKeyboardRepository) {
         super(targetNumberOfPuzzles, statsRecording, pianoKeyboardRepository);

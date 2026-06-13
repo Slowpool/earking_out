@@ -4,29 +4,37 @@ import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.EndDTOAssembler;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.EndPuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
 // TODO register this service as singleton in DI? or just use static methods with static fields?
 public final class PuzzleConfigDTOAssembler {
-    protected static final Map<Exercise, EndDTOAssembler<?, ?, ?>> dtoAssemblers = new HashMap<>();
+    protected static final Map<Exercise, EndPuzzleConfigDTOAssembler<?, ?, ?>> endDtoAssemblers = new HashMap<>();
 
     static {
-        EndDTOAssembler<?, ?, ?> dtoAssembler;
+        EndPuzzleConfigDTOAssembler<?, ?, ?> dtoAssembler;
         for (var exercise : ExercisesFactory.getAll()) {
             dtoAssembler = EndDTOAssemblersFactory.create(exercise);
-            dtoAssemblers.put(exercise, dtoAssembler);
+            endDtoAssemblers.put(exercise, dtoAssembler);
         }
     }
 
-    public static <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> void assemble(Class<E> exerciseClass, E exercise) {
+    private PuzzleConfigDTOAssembler() {
+    }
+
+    public static <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(Class<E> exerciseClass, E exercise) {
         var puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         var puzzleConfig = puzzleConfigRepository.get(exercise);
-
-        var endDtoAssembler = dtoAssemblers.get(exercise);
-        var dto = endDtoAssembler.assemble(puzzleConfig);
+        // TODO srp violation - this method must be just `assemble()`. getting config from repo is not responsibility of DTOAssembler. everything above this line in this method is violation, everything below is fine
+        var dto = assemble(puzzleConfig);
         return (PCDTO) dto;
+    }
 
+    protected static <E extends Exercise, PCA extends PuzzleConfigAggregate<E>, PCDTO extends PuzzleConfigDTO<E>> PCDTO assemble(final PCA aggregate) {
+        var endDtoAssembler = (EndPuzzleConfigDTOAssembler<E, PCA, PCDTO>) endDtoAssemblers.get(aggregate.exercise);
+        var dto = endDtoAssembler.assemble(aggregate);
+        return dto;
     }
 }

@@ -20,10 +20,18 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     public static final String TARGET_NUMBER_OF_PUZZLES_PROP = "targetNumberOfPuzzles";
     public static final String STATS_RECORDING_PROP = "statsRecording";
 
-    // TODO add setters/getters
     public final E exercise = assembleExercise();
-    public int targetNumberOfPuzzles;
-    public boolean statsRecording;
+    // TODO make getters read-only
+    protected int targetNumberOfPuzzles;
+    protected boolean statsRecording;
+
+    public int getTargetNumberOfPuzzles() {
+        return targetNumberOfPuzzles;
+    }
+
+    public boolean getStatsRecording() {
+        return statsRecording;
+    }
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardRepository pianoKeyboardRepository;
@@ -71,7 +79,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         };
     }
 
-    // TODO it should be delegated to polymorphic descendants
+    // TODO IT SHOULD BE DELEGATED TO POLYMORPHIC DESCENDANTS
     public void updateProperty(final String propertyName, final Object propertyValue) {
         switch (propertyName) {
         // TODO how 'bout reflection?

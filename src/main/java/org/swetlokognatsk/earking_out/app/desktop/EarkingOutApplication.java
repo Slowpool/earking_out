@@ -103,7 +103,7 @@ public final class EarkingOutApplication extends Application {
             throw new IllegalArgumentException("exercise class does not correspond to exerciseClass");
         }
 
-        var puzzleConfigDTO = PuzzleConfigDTOAssembler.getPuzzleConfig(exerciseClass, exercise);
+        var puzzleConfigDTO = PuzzleConfigDTOAssembler.getPuzzleConfigDTO(exerciseClass, exercise);
 
         var configPane = ConfigPanesFactory.create(puzzleConfigDTO, WIDTH, HEIGHT);
         configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
