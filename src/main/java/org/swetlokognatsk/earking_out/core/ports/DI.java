@@ -4,8 +4,8 @@ import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsFromHintsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorServiceImpl;
@@ -77,6 +77,9 @@ public final class DI {
 
         } else if (className.equals(PianoKeyboardRepository.class.getName())) {
             return (T) new InMemoryPianoKeyboardRepository();
+
+        } else if (className.equals(SessionService.class.getName())) {
+            return (T) new SessionService(DI.get(PuzzleConfigRepository.class));
 
         } else {
             return null;
