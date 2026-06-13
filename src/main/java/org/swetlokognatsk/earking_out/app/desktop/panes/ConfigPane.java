@@ -5,6 +5,8 @@ import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyU
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,7 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfigAggregate<E>> extends VBox {
+public abstract class ConfigPane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> extends VBox {
     protected final E exercise;
 
     protected final HBox numberOfPuzzlesBox;
@@ -32,7 +34,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfigAggr
         start.setOnAction(this::fireExerciseStartedEvent);
     }
 
-    public ConfigPane(final PC puzzleConfig, double width, double height) {
+    public ConfigPane(final PCDTO puzzleConfig, double width, double height) {
         exercise = puzzleConfig.exercise;
 
         numberOfPuzzlesField = buildNumberOfPuzzlesField(puzzleConfig.targetNumberOfPuzzles);
@@ -101,7 +103,7 @@ public abstract class ConfigPane<E extends Exercise, PC extends PuzzleConfigAggr
         };
     }
 
-    private void addCommonFields(PC puzzleConfig) {
+    private void addCommonFields(PCDTO puzzleConfig) {
         getChildren().addAll(numberOfPuzzlesBox, statisticsRecordingField);
     }
 

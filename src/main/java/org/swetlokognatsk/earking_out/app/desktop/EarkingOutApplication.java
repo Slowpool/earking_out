@@ -14,8 +14,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
 import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
 import javafx.application.Application;
@@ -102,10 +103,9 @@ public final class EarkingOutApplication extends Application {
             throw new IllegalArgumentException("exercise class does not correspond to exerciseClass");
         }
 
-        var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
-        var puzzleConfig = puzzleConfigService.fetch(exerciseClass, exercise);
+        var puzzleConfigDTO = PuzzleConfigDTOAssembler.getPuzzleConfig(exerciseClass, exercise);
 
-        var configPane = ConfigPanesFactory.create(puzzleConfig, WIDTH, HEIGHT);
+        var configPane = ConfigPanesFactory.create(puzzleConfigDTO, WIDTH, HEIGHT);
         configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
         configPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
         return (CP) configPane;

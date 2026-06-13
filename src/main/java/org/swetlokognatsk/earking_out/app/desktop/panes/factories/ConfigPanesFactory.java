@@ -9,17 +9,18 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.V
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 
 public final class ConfigPanesFactory {
 
     private ConfigPanesFactory() {
     }
 
-    public static <E extends Exercise, PC extends PuzzleConfigAggregate<E>, CP extends ConfigPane<E, PC>> CP create(final PC puzzleConfig, final double width, final double height) {
-        var exercise = puzzleConfig.exercise;
+    public static <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, CP extends ConfigPane<E, PCDTO>> CP create(final PCDTO puzzleConfigDTO, final double width, final double height) {
+        var exercise = puzzleConfigDTO.exercise;
         return switch (exercise) {
-            case VisualPerfectPitchExercise e -> (CP) new VisualPerfectPitchConfigPane((VisualPerfectPitchConfigAggregate) puzzleConfig, width, height);
-        case AudioPerfectPitchExercise e -> (CP) new AudioPerfectPitchConfigPane((AudioPerfectPitchConfigAggregate) puzzleConfig, width, height);
+            case VisualPerfectPitchExercise e -> (CP) new VisualPerfectPitchConfigPane((VisualPerfectPitchConfigAggregate) puzzleConfigDTO, width, height);
+        case AudioPerfectPitchExercise e -> (CP) new AudioPerfectPitchConfigPane((AudioPerfectPitchConfigAggregate) puzzleConfigDTO, width, height);
         default -> throw new RuntimeException("unknown exercise: " + exercise);
         };
         // case MELODIC_INTERVALS -> switch (exercise.type) {

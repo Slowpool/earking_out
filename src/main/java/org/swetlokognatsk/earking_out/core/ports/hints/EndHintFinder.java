@@ -4,8 +4,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 
 /**
- * It's called finite because that's the place where the finding logic itself happens, like skimming through files or accessing the in-memory HashMap.
+ * It's called end because that's the place where the finding logic itself happens, like skimming through files or accessing the in-memory HashMap.
  */
-public interface FiniteHintFinder<H extends Hint> {
+public interface EndHintFinder<H extends Hint> {
     H find(Solution solution);
 }
