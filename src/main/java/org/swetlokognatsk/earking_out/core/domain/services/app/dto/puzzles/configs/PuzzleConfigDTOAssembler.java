@@ -24,7 +24,7 @@ public final class PuzzleConfigDTOAssembler {
     private PuzzleConfigDTOAssembler() {
     }
 
-    public static <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(Class<E> exerciseClass, E exercise) {
+    public static <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
         var puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         var puzzleConfig = puzzleConfigRepository.get(exercise);
         // TODO srp violation - this method must be just `assemble()`. getting config from repo is not responsibility of DTOAssembler. everything above this line in this method is violation, everything below is fine

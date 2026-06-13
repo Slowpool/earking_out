@@ -3,6 +3,8 @@ package org.swetlokognatsk.earking_out.app.desktop.panes;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
 import javafx.geometry.Pos;
@@ -12,13 +14,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class SessionStatsPane<PC extends PuzzleConfigAggregate<?>> extends BorderPane {
-    protected final Session<PC> session;
+public abstract class SessionStatsPane<PCDTO extends PuzzleConfigDTO<?>> extends BorderPane {
+    protected final Session<PCDTO> session;
 
     protected abstract Pane buildStatsPane();
 
     // TODO passing Session domain model is a crime against good code - use dto instead
-    public SessionStatsPane(Session<PC> session) {
+    public SessionStatsPane(Session<PCDTO> session) {
         this.session = session;
 
         var titleLabel = new Label("finished");
@@ -51,8 +53,8 @@ public abstract class SessionStatsPane<PC extends PuzzleConfigAggregate<?>> exte
     private void fireExerciseStartOverEvent(ActionEvent e) {
         e.consume();
 
-        var config = session.puzzleConfig();
-        var exerciseStartedOverEvent = new ExerciseStartedOverEvent<>(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, config);
+        PCDTO puzzleConfigDto = session.puzzleConfigDto();
+        var exerciseStartedOverEvent = new ExerciseStartedOverEvent<>(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, puzzleConfigDto);
         fireEvent(exerciseStartedOverEvent);
     }
 }

@@ -21,6 +21,6 @@ public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfi
     }
 
     public VisualPerfectPitchConfigAggregate createShallowCopy(VisualPerfectPitchConfigAggregate aggregate) {
-        return create(aggregate.targetNumberOfPuzzles, aggregate.statsRecording, aggregate.normalizedNotesForPuzzle, aggregate.normalizedRootNote, aggregate.inputMode);
+        return create(aggregate.getTargetNumberOfPuzzles(), aggregate.getStatsRecording(), aggregate.getNormalizedNotesForPuzzle(), aggregate.getNormalizedRootNote(), aggregate.getInputMode());
     }
 }

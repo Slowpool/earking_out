@@ -39,6 +39,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     protected abstract ExerciseNames getExerciseName();
 
     protected abstract ExerciseTypes getExerciseType();
+    protected abstract void updateConfigSpecificProperty(final String propertyName, final Object propertyValue);
 
     public final String getId() {
         return exercise.toString();
@@ -71,6 +72,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         return pianoKeyboardAggregates.get(pianoKeyboardId);
     }
 
+    // TODO it must not be here
     protected String getPropertyName(final PianoKeyboardId pianoKeyboardId) {
         return switch (pianoKeyboardId) {
         case ROOT_NOTE_PICKER -> NORMALIZED_ROOT_NOTE_PROP;
@@ -80,22 +82,17 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     }
 
     // TODO IT SHOULD BE DELEGATED TO POLYMORPHIC DESCENDANTS
-    public void updateProperty(final String propertyName, final Object propertyValue) {
+    public final void updateProperty(final String propertyName, final Object propertyValue) {
         switch (propertyName) {
-        // TODO how 'bout reflection?
-        case NORMALIZED_ROOT_NOTE_PROP: {
-            var puzzleConfig = (AudioPerfectPitchConfigAggregate) this;
-            puzzleConfig.normalizedNotesForPuzzle = (byte[]) propertyValue;
+        case TARGET_NUMBER_OF_PUZZLES_PROP:
+            targetNumberOfPuzzles = (int) propertyValue;
             break;
-        }
-        case NORMALIZED_NOTES_FOR_PUZZLE_PROP: {
-            var puzzleConfig = (AudioPerfectPitchConfigAggregate) this;
-            puzzleConfig.normalizedRootNote = ((byte[]) propertyValue)[0];
-            // TODO is there any difference between `break; }` and `} break;` here?
+        case STATS_RECORDING_PROP:
+            statsRecording = (boolean) propertyValue;
             break;
-        }
         default:
-            throw new IllegalArgumentException("unknown puzzle config property: " + propertyName);
+            updateConfigSpecificProperty(propertyName, propertyValue);
+            break;
         }
     }
 

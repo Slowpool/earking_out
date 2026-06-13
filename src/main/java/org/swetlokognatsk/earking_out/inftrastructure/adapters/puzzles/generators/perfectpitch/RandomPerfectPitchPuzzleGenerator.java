@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.Random;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.ConfigBasedPuzzleGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.PerfectPitchPuzzleGenerator;
 
-public abstract class RandomPerfectPitchPuzzleGenerator<PC extends PerfectPitchConfigAggregate<?>> extends ConfigBasedPuzzleGenerator<PC> implements PerfectPitchPuzzleGenerator<PC> {
+public abstract class RandomPerfectPitchPuzzleGenerator<PCDTO extends PerfectPitchConfigDTO<?>> extends ConfigBasedPuzzleGenerator<PCDTO> implements PerfectPitchPuzzleGenerator<PCDTO> {
     protected final Random random;
     protected final Solution[] possibleSolutions;
 
-    public RandomPerfectPitchPuzzleGenerator(final PC puzzleConfig) {
+    public RandomPerfectPitchPuzzleGenerator(final PCDTO puzzleConfig) {
         super(puzzleConfig);
 
         random = new Random();
@@ -20,7 +20,7 @@ public abstract class RandomPerfectPitchPuzzleGenerator<PC extends PerfectPitchC
     }
 
     protected Solution[] buildPossibleSolutions() {
-        Byte[] ByteNotes = ArrayUtils.toObject(puzzleConfig.normalizedNotesForPuzzle);
+        Byte[] ByteNotes = ArrayUtils.toObject(puzzleConfigDto.normalizedNotesForPuzzle);
         Solution[] possibleSolutions = Arrays.stream(ByteNotes).map(possibleNote -> new Solution(String.valueOf(possibleNote))).toArray(Solution[]::new);
         return possibleSolutions;
     }
