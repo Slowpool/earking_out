@@ -9,6 +9,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 
 public class RandomAudioPerfectPitchPuzzleGeneratorTest {
     protected static int ITERATIONS_NUMBER = 100;
@@ -18,8 +21,7 @@ public class RandomAudioPerfectPitchPuzzleGeneratorTest {
     @Test
     public void generateSolutionTest() {
         var notes = new byte[] { 4, 5 };
-        var puzzleConfig = factory.create(0, false, notes, null, null);
-        var generator = new RandomAudioPerfectPitchPuzzleGenerator(puzzleConfig);
+        var generator = createPuzzleGenerator(0, false, notes, null, null);
 
         Byte[] ByteNotes = ArrayUtils.toObject(notes);
         Stream<Byte> stream = Arrays.stream(ByteNotes);
@@ -30,5 +32,12 @@ public class RandomAudioPerfectPitchPuzzleGeneratorTest {
             generatedSolution = generator.generateSolution();
             assertTrue(ArrayUtils.contains(possibleSolutions, generatedSolution));
         }
+    }
+
+    protected static RandomAudioPerfectPitchPuzzleGenerator createPuzzleGenerator(final int targetNumberOfPuzzles, final boolean statsRecording, final byte[] normalizedNotesForPuzzle, final Byte normalizedRootNote, final PerfectPitchInputMode inputMode) {
+        var puzzleConfig = factory.create(targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode);
+        AudioPerfectPitchConfigDTO puzzleConfigDto = PuzzleConfigDTOAssembler.assemble(puzzleConfig);
+        var generator = new RandomAudioPerfectPitchPuzzleGenerator(puzzleConfigDto);
+        return generator;
     }
 }

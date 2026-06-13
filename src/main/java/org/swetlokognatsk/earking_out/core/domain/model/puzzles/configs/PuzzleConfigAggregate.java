@@ -60,7 +60,9 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         pianoKeyboard.pressKey(keyNumber);
 
         var propertyName = getPropertyName(pianoKeyboardId);
-        updateProperty(propertyName, pianoKeyboard.getSelectedKeyNumbers());
+        // TODO where is validation?
+        var newNormalizedRootNote = pianoKeyboard.getSelectedKeyNumbers()[0];
+        updateProperty(propertyName, newNormalizedRootNote);
     }
 
     // minor optimization. using create-if-not-exists strategy to avoid redundant writes of unchanged pianoKeyboards on `repository.save(this)`

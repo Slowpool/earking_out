@@ -55,15 +55,13 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         switch (propertyName) {
         // TODO how 'bout reflection?
         case NORMALIZED_ROOT_NOTE_PROP: {
-            normalizedNotesForPuzzle = (byte[]) propertyValue;
-        }
+            normalizedRootNote = (Byte) propertyValue;
             break;
+        }
         case NORMALIZED_NOTES_FOR_PUZZLE_PROP: {
-            // this property is `selectedKeys` property of PianoKeyboard, so it has a type `byte[]`, not just `byte`
-            normalizedRootNote = ((byte[]) propertyValue)[0];
-            // TODO is there any difference between `break; }` and `} break;` here?
-        }
+            normalizedNotesForPuzzle = (byte[]) propertyValue;
             break;
+        }
         default:
             throw new IllegalArgumentException("unknown puzzle config property: " + propertyName);
         }

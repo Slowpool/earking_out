@@ -24,25 +24,26 @@ public final class InMemoryPuzzleConfigRepositoryTest {
     @Test
     public void changeAggregatePropertyWithoutSave() {
         var audioPerfectPitchConfigAggregate = getAudioPerfectPitchConfigAggregate();
-        assertEquals(null, audioPerfectPitchConfigAggregate.normalizedRootNote);
+        assertEquals(null, audioPerfectPitchConfigAggregate.getNormalizedRootNote());
 
-        audioPerfectPitchConfigAggregate.normalizedRootNote = 9;
+        Byte newNormalizedRootNote = 9;
+        audioPerfectPitchConfigAggregate.updateProperty(AudioPerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP, newNormalizedRootNote);
 
         audioPerfectPitchConfigAggregate = getAudioPerfectPitchConfigAggregate();
-        assertEquals(null, audioPerfectPitchConfigAggregate.normalizedRootNote);
+        assertEquals(null, audioPerfectPitchConfigAggregate.getNormalizedRootNote());
     }
 
     @Test
     public void changeAggregatePropertyWithSave() {
         var audioPerfectPitchConfigAggregate = getAudioPerfectPitchConfigAggregate();
-        assertEquals(null, audioPerfectPitchConfigAggregate.normalizedRootNote);
+        assertEquals(null, audioPerfectPitchConfigAggregate.getNormalizedRootNote());
 
         Byte newNormalizedRootNote = 9;
-        audioPerfectPitchConfigAggregate.normalizedRootNote = newNormalizedRootNote;
+        audioPerfectPitchConfigAggregate.updateProperty(AudioPerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP, newNormalizedRootNote);
         repository.save(audioPerfectPitchConfigAggregate);
 
         audioPerfectPitchConfigAggregate = getAudioPerfectPitchConfigAggregate();
-        assertEquals(newNormalizedRootNote, audioPerfectPitchConfigAggregate.normalizedRootNote);
+        assertEquals(newNormalizedRootNote, audioPerfectPitchConfigAggregate.getNormalizedRootNote());
     }
 
     protected AudioPerfectPitchConfigAggregate getAudioPerfectPitchConfigAggregate() {
