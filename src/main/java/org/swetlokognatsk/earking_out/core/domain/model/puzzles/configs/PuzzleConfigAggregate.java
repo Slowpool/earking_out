@@ -17,6 +17,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     public static final String STATS_RECORDING_PROP = "statsRecording";
 
     // TODO make getters read-only
+    // TODO ALAAARM it should store only PianoKeyboardId, whereas aggregates should be obtained on-demand. if remain it as-is, it violates consistency of PuzzleConfigRepository.save() because it's ambiguous how to store these aggregates.... what i've written???
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardRepository pianoKeyboardRepository;
     protected int targetNumberOfPuzzles;

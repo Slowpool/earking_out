@@ -5,7 +5,4 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRepository;
 
 public interface PianoKeyboardRepository extends AggregateRepository<PianoKeyboardId, PianoKeyboardAggregate> {
-    // // TODO delete?
-    // PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId);
-    // void save(final PianoKeyboardAggregate pianoKeyboardAggregate);
 }
