@@ -4,17 +4,13 @@ import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 
-public final class PianoKey extends Entity {
+public final class PianoKey extends Entity<Byte> {
     public final byte keyNumber;
     public final PianoKeyColor color;
     private final SoundPlayerService soundPlayer;
     private final PianoKeyMode mode;
     private boolean isSelected;
     private boolean isPressed;
-
-    public String getId() {
-        return String.valueOf(keyNumber);
-    }
 
     public boolean getIsSelected() {
         return isSelected;
@@ -33,6 +29,7 @@ public final class PianoKey extends Entity {
     }
 
     public PianoKey(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final SoundPlayerService soundPlayer) {
+        super(keyNumber);
         this.keyNumber = keyNumber;
         this.mode = mode;
         this.color = colorService.getColor(keyNumber);

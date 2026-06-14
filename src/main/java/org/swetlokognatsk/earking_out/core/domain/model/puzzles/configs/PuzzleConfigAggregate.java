@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -19,7 +16,6 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     public static final String TARGET_NUMBER_OF_PUZZLES_PROP = "targetNumberOfPuzzles";
     public static final String STATS_RECORDING_PROP = "statsRecording";
 
-    public final E exercise = assembleExercise();
     // TODO make getters read-only
     protected int targetNumberOfPuzzles;
     protected boolean statsRecording;
@@ -35,20 +31,11 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardRepository pianoKeyboardRepository;
 
-    protected abstract ExerciseNames getExerciseName();
-
-    protected abstract ExerciseTypes getExerciseType();
     protected abstract void updateConfigSpecificProperty(final String propertyName, final Object propertyValue);
 
-    public final String getId() {
-        return exercise.toString();
-    }
+    public PuzzleConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyboardRepository pianoKeyboardRepository) {
+        super(exercise);
 
-    private final E assembleExercise() {
-        return (E) ExercisesFactory.create(getExerciseName(), getExerciseType());
-    }
-
-    public PuzzleConfigAggregate(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyboardRepository pianoKeyboardRepository) {
         this.targetNumberOfPuzzles = targetNumberOfPuzzles;
         this.statsRecording = statsRecording;
         this.pianoKeyboardRepository = pianoKeyboardRepository;

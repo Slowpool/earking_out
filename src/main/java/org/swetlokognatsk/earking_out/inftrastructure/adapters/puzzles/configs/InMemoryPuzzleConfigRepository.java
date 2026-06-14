@@ -42,7 +42,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     }
 
     protected <PCA extends PuzzleConfigAggregate<?>> PCA createShallowCopy(final PCA puzzleConfigAggregate) {
-        var puzzleConfigAggregateFactory = (PuzzleConfigAggregatesFactory<PCA>) createFactory(puzzleConfigAggregate.exercise);
+        var puzzleConfigAggregateFactory = (PuzzleConfigAggregatesFactory<PCA>) createFactory(puzzleConfigAggregate.getId());
         PCA puzzleConfigAggregateCopy = puzzleConfigAggregateFactory.createShallowCopy(puzzleConfigAggregate);
         return (PCA) puzzleConfigAggregateCopy;
     }
@@ -50,7 +50,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     // TODO transaction stuff?
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var puzzleConfigAggregateCopy = createShallowCopy(puzzleConfigAggregate);
-        aggregates.put(puzzleConfigAggregateCopy.exercise, puzzleConfigAggregateCopy);
+        aggregates.put(puzzleConfigAggregateCopy.getId(), puzzleConfigAggregateCopy);
     }
 
     public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {

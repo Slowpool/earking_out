@@ -35,7 +35,7 @@ public final class PianoKeyboardTestHelper {
         PianoKey pianoKeyObj;
         Byte[] ByteExpectedPianoKeys = ArrayUtils.toObject(expectedPianoKeys);
         for (var pianoKey : ByteExpectedPianoKeys) {
-            pianoKeyObj = pianoKeyboard.pianoKeys.get(pianoKey);
+            pianoKeyObj = pianoKeyboard.getPianoKeys().get(pianoKey);
             assertTrue(pianoKeyObj.getIsSelected());
         }
     }

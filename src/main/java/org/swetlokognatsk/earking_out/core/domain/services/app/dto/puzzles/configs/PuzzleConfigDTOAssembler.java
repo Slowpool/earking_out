@@ -33,7 +33,7 @@ public final class PuzzleConfigDTOAssembler {
     }
 
     public static <E extends Exercise, PCA extends PuzzleConfigAggregate<E>, PCDTO extends PuzzleConfigDTO<E>> PCDTO assemble(final PCA aggregate) {
-        var endDtoAssembler = (EndPuzzleConfigDTOAssembler<E, PCA, PCDTO>) endDtoAssemblers.get(aggregate.exercise);
+        var endDtoAssembler = (EndPuzzleConfigDTOAssembler<E, PCA, PCDTO>) endDtoAssemblers.get(aggregate.getId());
         var dto = endDtoAssembler.assemble(aggregate);
         return dto;
     }

@@ -1,12 +1,34 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters;
 
 import static org.junit.Assert.*;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 
-public final class InMemoryPianoKeyboardRepositoryTest {
+public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, InMemoryPianoKeyboardRepository> {
     protected InMemoryPianoKeyboardRepository repository;
+
+    protected PianoKeyboardAggregate getSomeAggregate() {
+        return repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
+    }
+
+    protected InMemoryPianoKeyboardRepository getRepository() {
+        return repository;
+    }
+
+    protected void makeMinorChange(final PianoKeyboardAggregate aggregate) {
+        aggregate.touchKey(someRootNote);
+    }
+
+    protected static final byte someRootNote = 50;
+
+    protected void assertAreDifferentByMinorChange(final PianoKeyboardAggregate freshman, final PianoKeyboardAggregate suspect) {
+        assertFalse(ArrayUtils.contains(freshman.getSelectedKeyNumbers(), someRootNote));
+        assertTrue(ArrayUtils.contains(suspect.getSelectedKeyNumbers(), someRootNote));
+    }
 
     @Before
     public void setup() {
@@ -41,20 +63,5 @@ public final class InMemoryPianoKeyboardRepositoryTest {
 
         rootNotePicker = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
         assertArrayEquals(new byte[] { someRootNote }, rootNotePicker.getSelectedKeyNumbers());
-    }
-
-    @Test
-    public void ensureReferentialConsistencyWithoutSave() {
-        var rootNotePicker1 = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
-        var rootNotePicker2 = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
-        assertNotEquals(rootNotePicker1, rootNotePicker2);
-    }
-
-    @Test
-    public void ensureReferentialConsistencyWithSave() {
-        var rootNotePicker1 = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
-        repository.save(rootNotePicker1);
-        var rootNotePicker2 = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
-        assertNotEquals(rootNotePicker1, rootNotePicker2);
     }
 }

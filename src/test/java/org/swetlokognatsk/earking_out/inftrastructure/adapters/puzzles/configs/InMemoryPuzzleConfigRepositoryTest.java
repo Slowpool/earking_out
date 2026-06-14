@@ -73,7 +73,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
         Byte newNormalizedRootNote = 9;
         aggregate.updateProperty(AudioPerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP, newNormalizedRootNote);
-        repository.save(aggregate);
+        repository.genericSave(aggregate);
 
         aggregate = getPerfectPitchConfigAggregate();
         assertEquals(newNormalizedRootNote, aggregate.getNormalizedRootNote());
@@ -81,7 +81,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     protected AudioPerfectPitchConfigAggregate getPerfectPitchConfigAggregate() {
         var exercise = new AudioPerfectPitchExercise();
-        AudioPerfectPitchConfigAggregate aggregate = repository.get(exercise);
+        AudioPerfectPitchConfigAggregate aggregate = repository.genericGet(exercise);
         return aggregate;
     }
 

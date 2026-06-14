@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch;
 
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
@@ -13,11 +14,11 @@ public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfi
     }
 
     public VisualPerfectPitchConfigAggregate createDefault() {
-        return new VisualPerfectPitchConfigAggregate(0, true, new byte[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, pianoKeyboardRepository);
+        return create(0, true, new byte[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO);
     }
 
     public VisualPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final byte[] normalizedNotesForPuzzle, final Byte normalizedRootNote, final PerfectPitchInputMode inputMode) {
-        return new VisualPerfectPitchConfigAggregate(targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, pianoKeyboardRepository);
+        return new VisualPerfectPitchConfigAggregate(new VisualPerfectPitchExercise(), targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, pianoKeyboardRepository);
     }
 
     public VisualPerfectPitchConfigAggregate createShallowCopy(VisualPerfectPitchConfigAggregate aggregate) {

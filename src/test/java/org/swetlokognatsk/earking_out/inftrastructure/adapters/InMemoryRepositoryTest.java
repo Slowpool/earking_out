@@ -13,7 +13,7 @@ public abstract class InMemoryRepositoryTest<ID, A extends Aggregate<ID>, AR ext
 
     protected abstract void makeMinorChange(final A aggregate);
 
-    protected abstract void assertAreDifferentByMinorChange(final A sourceAggregate, final A editedAggregate);
+    protected abstract void assertAreDifferentByMinorChange(final A freshman, final A suspect);
 
     @Test
     public void ensureGetMethodGivesCopyWithoutSave() {
@@ -39,13 +39,13 @@ public abstract class InMemoryRepositoryTest<ID, A extends Aggregate<ID>, AR ext
      */
     @Test
     public void ensureSaveMethodPersistsCopy() {
-        var aggregate1 = getSomeAggregate();
+        var suspect = getSomeAggregate();
 
-        getRepository().save(aggregate1);
-        makeMinorChange(aggregate1);
+        getRepository().save(suspect);
+        makeMinorChange(suspect);
 
-        var aggregate2 = getSomeAggregate();
-        assertAreDifferentByMinorChange(aggregate1, aggregate2);
+        var freshman = getSomeAggregate();
+        assertAreDifferentByMinorChange(freshman, suspect);
     }
 
 }

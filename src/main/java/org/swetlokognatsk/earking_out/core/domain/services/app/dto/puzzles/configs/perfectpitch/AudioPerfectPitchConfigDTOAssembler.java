@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 public class AudioPerfectPitchConfigDTOAssembler extends PerfectPitchConfigDTOAssembler<AudioPerfectPitchExercise, AudioPerfectPitchConfigAggregate, AudioPerfectPitchConfigDTO> {
 
     public AudioPerfectPitchConfigDTO assemble(final AudioPerfectPitchConfigAggregate aggregate) {
-        var dto = new AudioPerfectPitchConfigDTO(aggregate.exercise, aggregate.getTargetNumberOfPuzzles(), aggregate.getStatsRecording(), aggregate.getNormalizedNotesForPuzzle(), aggregate.getNormalizedRootNote(), aggregate.getInputMode());
+        var dto = new AudioPerfectPitchConfigDTO(aggregate.getId(), aggregate.getTargetNumberOfPuzzles(), aggregate.getStatsRecording(), aggregate.getNormalizedNotesForPuzzle(), aggregate.getNormalizedRootNote(), aggregate.getInputMode());
         return dto;
     }
 }

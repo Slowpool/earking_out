@@ -12,9 +12,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 
-public final class PianoKeyboardAggregate extends Aggregate {
+public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     // TODO make all variables immutable for public read-only aggregate state
-    protected final PianoKeyboardId id;
     protected final PianoKeyboardMode mode;
     protected final Map<Byte, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
@@ -56,16 +55,12 @@ public final class PianoKeyboardAggregate extends Aggregate {
         return mode.isTouchMode();
     }
 
-    public String getId() {
-        return id.toString();
-    }
-
     public PianoKeyboardAggregate(final PianoKeyboardId id) {
         this(id, new byte[0]);
     }
 
     public PianoKeyboardAggregate(final PianoKeyboardId id, final byte[] selectedKeyNumbers) {
-        this.id = id;
+        super(id);
         this.mode = getModeById(id);
 
         pianoKeys = buildPianoKeys(selectedKeyNumbers);

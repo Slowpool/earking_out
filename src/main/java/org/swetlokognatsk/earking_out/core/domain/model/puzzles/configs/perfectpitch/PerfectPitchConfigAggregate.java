@@ -28,16 +28,12 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         return inputMode;
     }
 
-    public PerfectPitchConfigAggregate(final int targetNumberOfPuzzles, final boolean statsRecording, final byte[] normalizedNotesForPuzzle, final Byte normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardRepository pianoKeyboardRepository) {
-        super(targetNumberOfPuzzles, statsRecording, pianoKeyboardRepository);
+    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final byte[] normalizedNotesForPuzzle, final Byte normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardRepository pianoKeyboardRepository) {
+        super(exercise, targetNumberOfPuzzles, statsRecording, pianoKeyboardRepository);
 
         this.normalizedNotesForPuzzle = normalizedNotesForPuzzle;
         this.normalizedRootNote = normalizedRootNote;
         this.inputMode = inputMode;
-    }
-
-    protected final ExerciseNames getExerciseName() {
-        return ExerciseNames.PERFECT_PITCH;
     }
 
     public String[] getErrors() {
