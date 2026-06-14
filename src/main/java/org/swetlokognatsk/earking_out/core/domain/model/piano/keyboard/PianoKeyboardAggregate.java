@@ -16,12 +16,20 @@ public final class PianoKeyboardAggregate extends Aggregate {
     // TODO make all variables immutable for public read-only aggregate state
     protected final PianoKeyboardId id;
     protected final PianoKeyboardMode mode;
-    public final Map<Byte, PianoKey> pianoKeys;
+    protected final Map<Byte, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
     protected PianoKey pressedKey;
 
+    public PianoKeyboardId getPianoKeyboardId() {
+        return id;
+    }
+
     public PianoKeyboardMode getMode() {
         return mode;
+    }
+
+    public Map<Byte, PianoKey> getPianoKeys() {
+        return pianoKeys;
     }
 
     public byte[] getSelectedKeyNumbers() {
@@ -50,10 +58,6 @@ public final class PianoKeyboardAggregate extends Aggregate {
 
     public String getId() {
         return id.toString();
-    }
-
-    public PianoKeyboardId getPianoKeyboardId() {
-        return id;
     }
 
     public PianoKeyboardAggregate(final PianoKeyboardId id) {

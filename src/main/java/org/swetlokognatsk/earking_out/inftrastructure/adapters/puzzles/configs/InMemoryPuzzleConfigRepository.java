@@ -31,7 +31,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     public InMemoryPuzzleConfigRepository() {
     }
 
-    public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA get(E exercise) {
+    public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
         var puzzleConfigAggregate = aggregates.get(exercise);
         if (puzzleConfigAggregate == null) {
             throw new IllegalArgumentException("unknown exercise: " + exercise);
@@ -48,8 +48,16 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     }
 
     // TODO transaction stuff?
-    public void save(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
+    public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var puzzleConfigAggregateCopy = createShallowCopy(puzzleConfigAggregate);
         aggregates.put(puzzleConfigAggregateCopy.exercise, puzzleConfigAggregateCopy);
+    }
+
+    public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {
+        return genericGet(exercise);
+    }
+
+    public void save(final PuzzleConfigAggregate<Exercise> aggregate) {
+        genericSave(aggregate);
     }
 }

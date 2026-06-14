@@ -10,13 +10,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFacto
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
 
 // TODO store it in database as json
 // TODO it must extend Model
-public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregate {
+public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregate<E> {
     public static final String TARGET_NUMBER_OF_PUZZLES_PROP = "targetNumberOfPuzzles";
     public static final String STATS_RECORDING_PROP = "statsRecording";
 
