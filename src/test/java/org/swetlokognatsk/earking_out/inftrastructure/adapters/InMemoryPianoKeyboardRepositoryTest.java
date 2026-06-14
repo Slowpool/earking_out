@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 
 public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, InMemoryPianoKeyboardRepository> {
@@ -32,7 +33,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
 
     @Before
     public void setup() {
-        repository = new InMemoryPianoKeyboardRepository();
+        repository = DI.get(InMemoryPianoKeyboardRepository.class);
     }
 
     @Test

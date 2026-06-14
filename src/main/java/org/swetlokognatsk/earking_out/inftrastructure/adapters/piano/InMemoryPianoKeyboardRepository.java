@@ -3,15 +3,18 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.piano;
 import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
 public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository {
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
+    protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
 
-    public InMemoryPianoKeyboardRepository() {
+    public InMemoryPianoKeyboardRepository(final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory) {
         initPianoKeyboards();
+        this.pianoKeyboardAggregatesFactory = pianoKeyboardAggregatesFactory;
     }
 
     protected void initPianoKeyboards() {
@@ -27,7 +30,9 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository 
         if (pianoKeyboard == null) {
             throw new IllegalArgumentException("piano keyboard with such an id is not found: " + pianoKeyboardId);
         }
-        return pianoKeyboard;
+
+        var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboard);
+        return pianoKeyboardCopy;
     }
 
     public void save(final PianoKeyboardAggregate pianoKeyboardAggregate) {
@@ -36,7 +41,9 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository 
         if (pianoKeyboard == null) {
             throw new IllegalArgumentException("piano keyboard with such an id is not found: " + pianoKeyboardId);
         }
-        pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
+
+        var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregate);
+        pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboardCopy);
     }
 
 }

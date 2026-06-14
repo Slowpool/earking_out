@@ -18,15 +18,16 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
     }
 
     protected PuzzleConfigAggregate<Exercise> getSomeAggregate() {
-        return getPerfectPitchConfigAggregate();
+        PuzzleConfigAggregate<?> someAggregate = getPerfectPitchConfigAggregate();
+        return (PuzzleConfigAggregate<Exercise>) someAggregate;
     }
 
-    protected void makeMinorChange(final PuzzleConfigAggregate<?> aggregate) {
+    protected void makeMinorChange(final PuzzleConfigAggregate<Exercise> aggregate) {
         var targetNumberOfPuzzles = aggregate.getTargetNumberOfPuzzles();
         aggregate.updateProperty(PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP, ++targetNumberOfPuzzles);
     }
 
-    protected void assertAreDifferentByMinorChange(final PuzzleConfigAggregate<?> sourceAggregate, final PuzzleConfigAggregate<?> editedAggregate) {
+    protected void assertAreDifferentByMinorChange(final PuzzleConfigAggregate<Exercise> sourceAggregate, final PuzzleConfigAggregate<Exercise> editedAggregate) {
         assertEquals(sourceAggregate.getTargetNumberOfPuzzles() + 1, editedAggregate.getTargetNumberOfPuzzles());
     }
 

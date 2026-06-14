@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
-public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<VisualPerfectPitchConfigAggregate> {
+public final class VisualPerfectPitchConfigAggregatesFactory implements PuzzleConfigAggregatesFactory<VisualPerfectPitchConfigAggregate> {
     protected final PianoKeyboardRepository pianoKeyboardRepository;
 
     public VisualPerfectPitchConfigAggregatesFactory(final PianoKeyboardRepository pianoKeyboardRepository) {
@@ -21,7 +21,7 @@ public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfi
         return new VisualPerfectPitchConfigAggregate(new VisualPerfectPitchExercise(), targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, pianoKeyboardRepository);
     }
 
-    public VisualPerfectPitchConfigAggregate createShallowCopy(VisualPerfectPitchConfigAggregate aggregate) {
+    public VisualPerfectPitchConfigAggregate createDeepCopy(VisualPerfectPitchConfigAggregate aggregate) {
         return create(aggregate.getTargetNumberOfPuzzles(), aggregate.getStatsRecording(), aggregate.getNormalizedNotesForPuzzle(), aggregate.getNormalizedRootNote(), aggregate.getInputMode());
     }
 }

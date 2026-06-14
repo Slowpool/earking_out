@@ -4,6 +4,7 @@ import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsFromHintsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
@@ -39,6 +40,7 @@ public final class DI {
 
     // singleton lifetime simulation
     protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
+    protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
 
     private DI() {
     }
@@ -79,14 +81,24 @@ public final class DI {
             if (inMemoryPuzzleConfigRepository == null) {
                 inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository();
             }
-            
+
             return (T) inMemoryPuzzleConfigRepository;
 
         } else if (className.equals(PianoKeyboardRepository.class.getName())) {
-            return (T) new InMemoryPianoKeyboardRepository();
+            return (T) get(InMemoryPianoKeyboardRepository.class);
+
+        } else if (className.equals(InMemoryPianoKeyboardRepository.class.getName())) {
+            return (T) new InMemoryPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
 
         } else if (className.equals(SessionService.class.getName())) {
             return (T) new SessionService(DI.get(PuzzleConfigRepository.class));
+
+        } else if (className.equals(PianoKeyboardAggregatesFactory.class.getName())) {
+            if (pianoKeyboardAggregatesFactory == null) {
+                pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
+            }
+
+            return (T) pianoKeyboardAggregatesFactory;
 
         } else {
             return null;
@@ -96,5 +108,6 @@ public final class DI {
     // TODO wanna believe there's such a feature in SpringBoot. it's required for pure junit tests, so that each starts in the same DI-container state
     public void clear() {
         inMemoryPuzzleConfigRepository = null;
+        pianoKeyboardAggregatesFactory = null;
     }
 }

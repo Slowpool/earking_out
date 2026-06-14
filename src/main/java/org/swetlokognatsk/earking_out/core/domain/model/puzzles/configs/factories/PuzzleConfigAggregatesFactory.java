@@ -1,9 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories;
 
+import org.swetlokognatsk.earking_out.core.domain.model.base.Factory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 
-public abstract class PuzzleConfigAggregatesFactory<PCA extends PuzzleConfigAggregate<?>> {
-    public abstract PCA createDefault();
+public abstract interface PuzzleConfigAggregatesFactory<PCA extends PuzzleConfigAggregate<?>> extends Factory<PCA> {
 
-    public abstract PCA createShallowCopy(final PCA puzzleConfigAggregate);
 }

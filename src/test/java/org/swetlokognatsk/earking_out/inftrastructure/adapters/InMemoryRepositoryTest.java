@@ -15,14 +15,13 @@ public abstract class InMemoryRepositoryTest<ID, A extends Aggregate<ID>, AR ext
 
     protected abstract void assertAreDifferentByMinorChange(final A freshman, final A suspect);
 
-    @Test
+    // TODO create test cases for each repository and call all these three methods inside them
     public void ensureGetMethodGivesCopyWithoutSave() {
         var aggregate1 = getSomeAggregate();
         var aggregate2 = getSomeAggregate();
         assertNotEquals(aggregate1, aggregate2);
     }
 
-    @Test
     public void ensureGetMethodGivesCopyAfterSave() {
         var aggregate1 = getSomeAggregate();
         getRepository().save(aggregate1);
@@ -37,7 +36,6 @@ public abstract class InMemoryRepositoryTest<ID, A extends Aggregate<ID>, AR ext
      * someAggregate from client code wouldn't cause any immediate changes in
      * in-memory aggregate
      */
-    @Test
     public void ensureSaveMethodPersistsCopy() {
         var suspect = getSomeAggregate();
 

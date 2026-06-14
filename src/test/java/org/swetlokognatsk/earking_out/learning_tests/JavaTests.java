@@ -432,9 +432,39 @@ public class JavaTests {
     protected void setPersonToNull(Person person) {
         person = null;
     }
+
+    @Test
+    public void genericTest6() {
+        getSomething();
+    }
+
+    protected Generic<Id> getSomething() {
+        // // error
+        // Finite finite = new Finite();
+        // Generic<Id> casted = finite;
+        
+        // // error
+        // Finite finite = new Finite();
+        // Generic<Id> casted = (Generic<Id>) finite;
+
+        // fine, though warning
+        Generic<?> finite = new Finite();
+        Generic<Id> casted = (Generic<Id>) finite;
+        
+        return casted;
+    }
+}
+
+class Generic<T> {
+}
+
+class Finite extends Generic<PersonId> {
 }
 
 abstract class Id {
+}
+
+class PersonId extends AliveId {
 }
 
 abstract class RockId extends Id {
@@ -443,8 +473,7 @@ abstract class RockId extends Id {
 abstract class AliveId extends Id {
 }
 
-class PersonId extends AliveId {
-}
+
 
 class AnimalId extends AliveId {
 }

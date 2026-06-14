@@ -37,19 +37,19 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
             throw new IllegalArgumentException("unknown exercise: " + exercise);
         }
 
-        puzzleConfigAggregate = createShallowCopy(puzzleConfigAggregate);
+        puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
         return (PCA) puzzleConfigAggregate;
     }
 
-    protected <PCA extends PuzzleConfigAggregate<?>> PCA createShallowCopy(final PCA puzzleConfigAggregate) {
+    protected <PCA extends PuzzleConfigAggregate<?>> PCA createDeepCopy(final PCA puzzleConfigAggregate) {
         var puzzleConfigAggregateFactory = (PuzzleConfigAggregatesFactory<PCA>) createFactory(puzzleConfigAggregate.getId());
-        PCA puzzleConfigAggregateCopy = puzzleConfigAggregateFactory.createShallowCopy(puzzleConfigAggregate);
+        PCA puzzleConfigAggregateCopy = puzzleConfigAggregateFactory.createDeepCopy(puzzleConfigAggregate);
         return (PCA) puzzleConfigAggregateCopy;
     }
 
     // TODO transaction stuff?
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
-        var puzzleConfigAggregateCopy = createShallowCopy(puzzleConfigAggregate);
+        var puzzleConfigAggregateCopy = createDeepCopy(puzzleConfigAggregate);
         aggregates.put(puzzleConfigAggregateCopy.getId(), puzzleConfigAggregateCopy);
     }
 
