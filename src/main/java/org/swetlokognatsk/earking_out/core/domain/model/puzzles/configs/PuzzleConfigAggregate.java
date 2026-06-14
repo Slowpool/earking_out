@@ -17,8 +17,12 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     public static final String STATS_RECORDING_PROP = "statsRecording";
 
     // TODO make getters read-only
+    protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
+    protected final PianoKeyboardRepository pianoKeyboardRepository;
     protected int targetNumberOfPuzzles;
     protected boolean statsRecording;
+
+    protected abstract void updateConfigSpecificProperty(final String propertyName, final Object propertyValue);
 
     public int getTargetNumberOfPuzzles() {
         return targetNumberOfPuzzles;
@@ -27,11 +31,6 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     public boolean getStatsRecording() {
         return statsRecording;
     }
-
-    protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
-    protected final PianoKeyboardRepository pianoKeyboardRepository;
-
-    protected abstract void updateConfigSpecificProperty(final String propertyName, final Object propertyValue);
 
     public PuzzleConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyboardRepository pianoKeyboardRepository) {
         super(exercise);
@@ -51,8 +50,10 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         updateProperty(propertyName, newNormalizedRootNote);
     }
 
+    // TODO actually all of them should be created in constructor according to received `exercise` parameter
+    // TODO there should be two methods: one that returns read-only object and another one that returns original pianoKeyboard.
     // minor optimization. using create-if-not-exists strategy to avoid redundant writes of unchanged pianoKeyboards on `repository.save(this)`
-    protected PianoKeyboardAggregate getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
+    public PianoKeyboardAggregate getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
         if (!pianoKeyboardAggregates.containsKey(pianoKeyboardId)) {
             var pianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
             pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
@@ -69,7 +70,6 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         };
     }
 
-    // TODO IT SHOULD BE DELEGATED TO POLYMORPHIC DESCENDANTS
     public final void updateProperty(final String propertyName, final Object propertyValue) {
         switch (propertyName) {
         case TARGET_NUMBER_OF_PUZZLES_PROP:

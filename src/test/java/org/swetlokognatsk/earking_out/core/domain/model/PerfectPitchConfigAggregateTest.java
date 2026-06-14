@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboardTestHelper.*;
 
 public final class PerfectPitchConfigAggregateTest {
 
@@ -23,11 +24,16 @@ public final class PerfectPitchConfigAggregateTest {
 
     @Test
     public void ensureRootNoteUpdatingAlsoCausesPianoKeyboardUpdate() {
-        var aggregate = getPerfectPitchAggregate();
+        var pianoKeyboardId = PianoKeyboardId.ROOT_NOTE_PICKER;
+        var configAggregate = getPerfectPitchAggregate();
+        var pianoKeyboard = configAggregate.getPianoKeyboard(pianoKeyboardId);
+        assertNoSelectedKeys(pianoKeyboard);
 
         Byte newRootNote = 4;
-        aggregate.updateViaPianoKeyPressing(PianoKeyboardId.ROOT_NOTE_PICKER, newRootNote);
+        configAggregate.updateViaPianoKeyPressing(pianoKeyboardId, newRootNote);
 
+        assertOnlyThisKeyIsSelected(newRootNote, pianoKeyboard);
+        assertEquals(1, pianoKeyboard.getSelectedKeyNumbers().length);
     }
 
     protected PerfectPitchConfigAggregate<?> getPerfectPitchAggregate() {

@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters;
 
 import static org.junit.Assert.*;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
@@ -64,5 +63,20 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
 
         rootNotePicker = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
         assertArrayEquals(new byte[] { someRootNote }, rootNotePicker.getSelectedKeyNumbers());
+    }
+
+    @Test
+    public void ensureGetMethodGivesCopyWithoutSaveProxy() {
+        ensureGetMethodGivesCopyWithoutSave();
+    }
+
+    @Test
+    public void ensureGetMethodGivesCopyAfterSaveProxy() {
+        ensureGetMethodGivesCopyAfterSave();
+    }
+
+    @Test
+    public void ensureSaveMethodPersistsCopyProxy() {
+        ensureSaveMethodPersistsCopy();
     }
 }

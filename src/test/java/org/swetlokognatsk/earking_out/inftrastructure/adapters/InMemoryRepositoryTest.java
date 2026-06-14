@@ -15,7 +15,6 @@ public abstract class InMemoryRepositoryTest<ID, A extends Aggregate<ID>, AR ext
 
     protected abstract void assertAreDifferentByMinorChange(final A freshman, final A suspect);
 
-    // TODO create test cases for each repository and call all these three methods inside them
     public void ensureGetMethodGivesCopyWithoutSave() {
         var aggregate1 = getSomeAggregate();
         var aggregate2 = getSomeAggregate();

@@ -89,4 +89,19 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
     protected PuzzleConfigAggregate<?> getSomePuzzleConfigAggregate() {
         return getPerfectPitchConfigAggregate();
     }
+
+    @Test
+    public void ensureGetMethodGivesCopyWithoutSaveProxy() {
+        ensureGetMethodGivesCopyWithoutSave();
+    }
+
+    @Test
+    public void ensureGetMethodGivesCopyAfterSaveProxy() {
+        ensureGetMethodGivesCopyAfterSave();
+    }
+
+    @Test
+    public void ensureSaveMethodPersistsCopyProxy() {
+        ensureSaveMethodPersistsCopy();
+    }
 }
