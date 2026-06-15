@@ -6,7 +6,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory.*;
 
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
@@ -47,10 +50,15 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         return (PCA) puzzleConfigAggregateCopy;
     }
 
-    // TODO transaction stuff?
+    // TODO this method must be synchronous distributed transaction.
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var puzzleConfigAggregateCopy = createDeepCopy(puzzleConfigAggregate);
         aggregates.put(puzzleConfigAggregateCopy.getId(), puzzleConfigAggregateCopy);
+        // draft version
+        // var pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
+        // for(var pianoKeyboard : puzzleConfigAggregate.get)
+        // pianoKeyboard
+
     }
 
     public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {

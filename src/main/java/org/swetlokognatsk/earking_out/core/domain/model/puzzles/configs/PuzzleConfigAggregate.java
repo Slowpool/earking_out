@@ -1,15 +1,16 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
 
+// TODO review all aggregates: do they follow transactional consistency (in-memory)?
 // TODO store it in database as json
 // TODO it must extend Model
 public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregate<E> {
@@ -17,8 +18,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     public static final String STATS_RECORDING_PROP = "statsRecording";
 
     // TODO make getters read-only
-    // TODO ALAAARM it should store only PianoKeyboardId, whereas aggregates should be obtained on-demand. if remain it as-is, it violates consistency of PuzzleConfigRepository.save() because it's ambiguous how to store these aggregates.... what i've written???
-    protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
+    protected final PianoKeyboardId[] pianoKeyboardIds;
     protected final PianoKeyboardRepository pianoKeyboardRepository;
     protected int targetNumberOfPuzzles;
     protected boolean statsRecording;
@@ -35,10 +35,21 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
 
     public PuzzleConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyboardRepository pianoKeyboardRepository) {
         super(exercise);
+        pianoKeyboardIds = findPianoKeyboardIds((Exercise) exercise);
 
         this.targetNumberOfPuzzles = targetNumberOfPuzzles;
         this.statsRecording = statsRecording;
         this.pianoKeyboardRepository = pianoKeyboardRepository;
+    }
+
+    // TODO it must not be here. probably inside PianoKeyboardId?
+    protected static PianoKeyboardId[] findPianoKeyboardIds(final Exercise exercise) {
+        var pianoKeyboardIds = switch (exercise) {
+        case AudioPerfectPitchExercise e -> new PianoKeyboardId[] { PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, PianoKeyboardId.ROOT_NOTE_PICKER };
+        case VisualPerfectPitchExercise e -> new PianoKeyboardId[] { PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, PianoKeyboardId.ROOT_NOTE_PICKER };
+        default -> throw new IllegalArgumentException("unknown exercise: " + exercise);
+        };
+        return pianoKeyboardIds;
     }
 
     public void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
@@ -51,15 +62,10 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         updateProperty(propertyName, newNormalizedRootNote);
     }
 
-    // TODO actually all of them should be created in constructor according to received `exercise` parameter
-    // TODO there should be two methods: one that returns read-only object and another one that returns original pianoKeyboard.
-    // minor optimization. using create-if-not-exists strategy to avoid redundant writes of unchanged pianoKeyboards on `repository.save(this)`
+    // TODO there should be two methods: one that returns read-only object (public method) and another one that returns original pianoKeyboard (protected method)
     public PianoKeyboardAggregate getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
-        if (!pianoKeyboardAggregates.containsKey(pianoKeyboardId)) {
-            var pianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
-            pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
-        }
-        return pianoKeyboardAggregates.get(pianoKeyboardId);
+        var pianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
+        return pianoKeyboard;
     }
 
     // TODO it must not be here
