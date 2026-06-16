@@ -5,6 +5,7 @@ import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsFromHintsSer
 import org.swetlokognatsk.earking_out.app.desktop.services.KeySoundsService;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
@@ -100,6 +101,9 @@ public final class DI {
                 pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
             }
             return (T) pianoKeyboardAggregatesFactory;
+
+        } else if (className.equals(PianoKeyboardService.class.getName())) {
+            return (T) new PianoKeyboardService(get(PianoKeyboardRepository.class));
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
