@@ -2,18 +2,23 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.PerfectPitchConfigDependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
-
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory.*;
 
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     protected final Map<Exercise, PuzzleConfigAggregate<?>> aggregates;
+
+    protected final PianoKeyboardRepository pianoKeyboardRepository;
 
     {
         // var notes = new byte[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST).normalize() };
@@ -22,16 +27,40 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         aggregates = new HashMap<>();
 
         var exercises = ExercisesFactory.getAll();
-        PuzzleConfigAggregatesFactory<?> factory;
         PuzzleConfigAggregate<?> puzzleConfigAggregate;
         for (var exercise : exercises) {
-            factory = createFactory(exercise);
-            puzzleConfigAggregate = factory.createDefault();
+            var factory = createFactory(exercise);
+            puzzleConfigAggregate = createDefault(factory, exercise);
             aggregates.put(exercise, puzzleConfigAggregate);
         }
     }
 
-    public InMemoryPuzzleConfigRepository() {
+    protected <DADTO extends DependentAggregatesDTO, E extends Exercise, F extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, DADTO>> PuzzleConfigAggregate<E> createDefault(final F factory, final E exercise) {
+        var defaultPuzzleConfig = switch (exercise) {
+        case AudioPerfectPitchExercise e -> {
+            var dependentAggregates = getAudioPerfectPitchConfigDependentAggregates(exercise);
+            var audioPerfectPitchConfig = factory.createDefault((DADTO) dependentAggregates);
+            yield audioPerfectPitchConfig;
+        }
+        default -> throw new IllegalArgumentException("unknown exercise: " + exercise);
+        };
+
+        return defaultPuzzleConfig;
+    }
+
+    // TODO polymorphic stuff??
+    protected PerfectPitchConfigDependentAggregatesDTO getAudioPerfectPitchConfigDependentAggregates(final Exercise exercise) {
+        var pianoKeyboardIds = PianoKeyboardId.getPianoKeyboardIds(exercise);
+        var pianoKeyboards = new PianoKeyboardAggregate[pianoKeyboardIds.length];
+        for (int i = 0; i < pianoKeyboards.length; i++) {
+            pianoKeyboards[i] = pianoKeyboardRepository.get(pianoKeyboardIds[i]);
+        }
+        var dependentAggregates = new PerfectPitchConfigDependentAggregatesDTO(pianoKeyboards);
+        return dependentAggregates;
+    }
+
+    public InMemoryPuzzleConfigRepository(final PianoKeyboardRepository pianoKeyboardRepository) {
+        this.pianoKeyboardRepository = pianoKeyboardRepository;
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
@@ -45,7 +74,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     }
 
     protected <PCA extends PuzzleConfigAggregate<?>> PCA createDeepCopy(final PCA puzzleConfigAggregate) {
-        var puzzleConfigAggregateFactory = (PuzzleConfigAggregatesFactory<PCA>) createFactory(puzzleConfigAggregate.getId());
+        var puzzleConfigAggregateFactory = (PuzzleConfigAggregatesFactory<PCA, ?>) createFactory(puzzleConfigAggregate.getId());
         PCA puzzleConfigAggregateCopy = puzzleConfigAggregateFactory.createDeepCopy(puzzleConfigAggregate);
         return (PCA) puzzleConfigAggregateCopy;
     }
@@ -54,10 +83,13 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var puzzleConfigAggregateCopy = createDeepCopy(puzzleConfigAggregate);
         aggregates.put(puzzleConfigAggregateCopy.getId(), puzzleConfigAggregateCopy);
-        // draft version
-        // var pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
-        // for(var pianoKeyboard : puzzleConfigAggregate.get)
-        // pianoKeyboard
+        // draft version. i'm not sure whether should repository be used here cuz PianoKeyboardAggregate is not a root aggregate. whilst in classic ddd only root aggregates should have repository
+        var pianoKeyboardsToSave = puzzleConfigAggregate.pianoKeyboardAggregates;
+        PianoKeyboardAggregate pianoKeyboard;
+        for (var pianoKeyboardId : pianoKeyboardsToSave.keySet()) {
+            pianoKeyboard = pianoKeyboardsToSave.get(pianoKeyboardId);
+            pianoKeyboardRepository.save(pianoKeyboard);
+        }
 
     }
 

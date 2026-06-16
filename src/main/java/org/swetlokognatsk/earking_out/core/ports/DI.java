@@ -79,7 +79,7 @@ public final class DI {
 
         } else if (className.equals(PuzzleConfigRepository.class.getName())) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository();
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PianoKeyboardRepository.class));
             }
 
             return (T) inMemoryPuzzleConfigRepository;

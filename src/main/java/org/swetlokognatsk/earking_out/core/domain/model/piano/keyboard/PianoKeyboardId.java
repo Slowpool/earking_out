@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 
 /**
  * This specific enum is used for each PianoKeyboard id because: app has finite
@@ -19,5 +20,15 @@ public enum PianoKeyboardId {
 
     private PianoKeyboardId(final Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public static PianoKeyboardId[] getPianoKeyboardIds(final Exercise exercise) {
+        // TODO stream/loop refactoring
+        var pianoKeyboardIds = switch (exercise) {
+        case AudioPerfectPitchExercise e -> new PianoKeyboardId[] { PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, PianoKeyboardId.ROOT_NOTE_PICKER };
+        case VisualPerfectPitchExercise e -> new PianoKeyboardId[] { PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, PianoKeyboardId.ROOT_NOTE_PICKER };
+        default -> throw new IllegalArgumentException("unknown exercise: " + exercise);
+        };
+        return pianoKeyboardIds;
     }
 }
