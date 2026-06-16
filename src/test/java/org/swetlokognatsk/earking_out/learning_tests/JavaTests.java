@@ -4,11 +4,14 @@ import static org.junit.Assert.*;
 import java.util.concurrent.Executor;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.typed.VisualPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryReadPuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.VisualPerfectPitchConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
 import javafx.collections.ObservableSet;
@@ -345,23 +348,6 @@ public class JavaTests {
     }
 
     @Test
-    public void genericTest3() {
-        var service = new InMemoryReadPuzzleConfigService();
-
-        Exercise audioPerfectPitchExercise = new AudioPerfectPitchExercise();
-        AudioPerfectPitchConfig audioConfig = (AudioPerfectPitchConfig) service.fetch(audioPerfectPitchExercise.getClass(), audioPerfectPitchExercise);
-
-        Exercise visualPerfectPitchExercise = new VisualPerfectPitchExercise();
-        VisualPerfectPitchConfig visualConfig = (VisualPerfectPitchConfig) service.fetch(visualPerfectPitchExercise.getClass(), visualPerfectPitchExercise);
-
-        try {
-            service.fetch(audioPerfectPitchExercise.getClass(), visualPerfectPitchExercise);
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-    }
-
-    @Test
     public void weirdoCast() {
         Object object = new Object();
         try {
@@ -403,15 +389,14 @@ public class JavaTests {
         Object objBook = book;
         try {
             Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
-        }
-        catch (ClassCastException e) {
+        } catch (ClassCastException e) {
 
         }
     }
 
     @Test
     public void theMostWildThingIVeSeenTest() {
-        
+
     }
 
     // protected static int test = 5;
@@ -421,6 +406,115 @@ public class JavaTests {
 
     static final int first = 126;
     static final byte second = first + 1;
+
+    @Test
+    public void genericsTest5() {
+
+    }
+
+    public static <I extends Id, EF extends EntitiesFactory<? extends Entity<I>>> EF createFactory(final I id) {
+        var factory = switch (id) {
+        case PersonId i -> new PersonsFactory();
+        case AnimalId i -> new AnimalsFactory();
+        case RockId i -> new RocksFactory();
+        default -> throw new IllegalArgumentException("unknown id: " + id);
+        };
+        return (EF) factory;
+    }
+
+    @Test
+    public void nullTest() {
+        Person person = new Person();
+        setPersonToNull(person);
+        assertNotEquals(null, person);
+    }
+
+    protected void setPersonToNull(Person person) {
+        person = null;
+    }
+
+    @Test
+    public void genericTest6() {
+        getSomething();
+    }
+
+    protected Generic<Id> getSomething() {
+        // // error
+        // Finite finite = new Finite();
+        // Generic<Id> casted = finite;
+        
+        // // error
+        // Finite finite = new Finite();
+        // Generic<Id> casted = (Generic<Id>) finite;
+
+        // fine, though warning
+        Generic<?> finite = new Finite();
+        Generic<Id> casted = (Generic<Id>) finite;
+        
+        return casted;
+    }
+}
+
+class Generic<T> {
+}
+
+class Finite extends Generic<PersonId> {
+}
+
+abstract class Id {
+}
+
+class PersonId extends AliveId {
+}
+
+abstract class RockId extends Id {
+}
+
+abstract class AliveId extends Id {
+}
+
+
+
+class AnimalId extends AliveId {
+}
+
+
+abstract class EntitiesFactory<E extends Entity<?>> {
+    public abstract E create();
+}
+
+class PersonsFactory extends EntitiesFactory<Person> {
+    public Person create() {
+        return new Person();
+    }
+}
+
+class AnimalsFactory extends EntitiesFactory<Animal> {
+    public Animal create() {
+        return new Animal();
+    }
+}
+
+class RocksFactory extends EntitiesFactory<Rock> {
+    public Rock create() {
+        return new Rock();
+    }
+}
+
+abstract class Entity<I extends Id> {
+
+}
+
+abstract class AliveEntity<I extends AliveId> {
+}
+
+class Person extends Entity<PersonId> {
+}
+
+class Animal extends Entity<AnimalId> {
+}
+
+class Rock extends Entity<RockId> {
 }
 
 class Parent {
@@ -469,7 +563,7 @@ class Book<Cover> {
     public Cover cover;
 }
 
-abstract class Person {
+abstract class Person2 {
     public abstract void doSomething();
 }
 

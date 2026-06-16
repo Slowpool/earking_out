@@ -6,16 +6,22 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.AudioPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 
 public class RandomAudioPerfectPitchPuzzleGeneratorTest {
     protected static int ITERATIONS_NUMBER = 100;
 
+    protected static AudioPerfectPitchConfigAggregatesFactory factory = AbstractPuzzleConfigAggregatesFactory.createFactory(new AudioPerfectPitchExercise());
+
     @Test
     public void generateSolutionTest() {
         var notes = new byte[] { 4, 5 };
-        var puzzleConfig = new AudioPerfectPitchConfig(0, false, notes, null, null);
-        var generator = new RandomAudioPerfectPitchPuzzleGenerator(puzzleConfig);
+        var generator = createPuzzleGenerator(notes);
 
         Byte[] ByteNotes = ArrayUtils.toObject(notes);
         Stream<Byte> stream = Arrays.stream(ByteNotes);
@@ -26,5 +32,15 @@ public class RandomAudioPerfectPitchPuzzleGeneratorTest {
             generatedSolution = generator.generateSolution();
             assertTrue(ArrayUtils.contains(possibleSolutions, generatedSolution));
         }
+    }
+
+    protected static RandomAudioPerfectPitchPuzzleGenerator createPuzzleGenerator(final byte[] normalizedNotesForPuzzle) {
+        // TODO how to validate aggregate?
+        // TODO can it be in invalid state at all?
+        // firstly creating puzzleConfig for validation
+        var puzzleConfig = factory.create(0, false, normalizedNotesForPuzzle, null, null, new PianoKeyboardAggregate[0]);
+        AudioPerfectPitchConfigDTO puzzleConfigDto = PuzzleConfigDTOAssembler.assemble(puzzleConfig);
+        var generator = new RandomAudioPerfectPitchPuzzleGenerator(puzzleConfigDto);
+        return generator;
     }
 }

@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 
-public abstract class ExerciseStateChanged<E extends Exercise, PC extends PuzzleConfig<E>> extends DomainEvent {
+public abstract class ExerciseStateChanged<E extends Exercise, PC extends PuzzleConfigAggregate<E>> extends DomainEvent {
     public final UUID sessionId;
 
     public ExerciseStateChanged(final LocalDateTime timestamp, final UUID sessionId) {

@@ -9,7 +9,7 @@ public final class ExerciseFinishedEvent extends Event {
 
     public final Session<?> session;
 
-    public ExerciseFinishedEvent(final EventType<?> eventType, Session<?> session) {
+    public ExerciseFinishedEvent(final EventType<?> eventType, final Session<?> session) {
         super(eventType);
         this.session = session;
 

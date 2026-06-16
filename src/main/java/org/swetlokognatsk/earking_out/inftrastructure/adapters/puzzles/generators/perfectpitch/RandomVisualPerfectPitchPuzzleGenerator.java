@@ -1,11 +1,11 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch;
 
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.typed.VisualPerfectPitchConfig;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.VisualPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchPuzzleGenerator;
 
-public final class RandomVisualPerfectPitchPuzzleGenerator extends RandomPerfectPitchPuzzleGenerator<VisualPerfectPitchConfig> implements VisualPerfectPitchPuzzleGenerator {
+public final class RandomVisualPerfectPitchPuzzleGenerator extends RandomPerfectPitchPuzzleGenerator<VisualPerfectPitchConfigDTO> implements VisualPerfectPitchPuzzleGenerator {
 
-    public RandomVisualPerfectPitchPuzzleGenerator(VisualPerfectPitchConfig puzzleConfig) {
+    public RandomVisualPerfectPitchPuzzleGenerator(VisualPerfectPitchConfigDTO puzzleConfig) {
         super(puzzleConfig);
 
     }

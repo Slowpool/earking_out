@@ -1,3 +1,5 @@
+// TODO running all test in one click makes all of them failed, whereas running each test package separately passes all of them fine
+
 module org.swetlokognatsk {
     requires javafx.controls;
     requires javafx.media;

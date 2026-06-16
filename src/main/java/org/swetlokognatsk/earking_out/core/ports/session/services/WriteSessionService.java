@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports.session.services;
 
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 
 public interface WriteSessionService {
-    <PC extends PuzzleConfig<?>> void createSession(PC puzzleConfig);
+    <PCDTO extends PuzzleConfigDTO<?>> void createSession(PCDTO puzzleConfig);
 }

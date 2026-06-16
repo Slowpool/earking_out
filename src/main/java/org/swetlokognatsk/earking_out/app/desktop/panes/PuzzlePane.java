@@ -6,8 +6,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
-import org.swetlokognatsk.earking_out.core.domain.services.puzzles.generators.PuzzleGeneratorsFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.PuzzleGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -18,9 +19,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>, H extends Hint, PG extends PuzzleGenerator, P extends Puzzle<E, PC, H, PG>> extends BorderPane {
-    protected final Session<PC> session;
-    protected final PC puzzleConfig;
+// TODO full revision to comply with srp and ddd principles
+public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, H extends Hint, PG extends PuzzleGenerator, P extends Puzzle<E, PCDTO, H, PG>> extends BorderPane {
+    protected final Session<PCDTO> session;
+    protected final PCDTO puzzleConfigDto;
     protected final PG puzzleGenerator;
     protected P puzzle;
 
@@ -34,15 +36,15 @@ public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>,
 
     protected abstract void demonstrateHint();
 
-    public PuzzlePane(final Session<PC> session, double width, double height) {
+    public PuzzlePane(final Session<PCDTO> session, double width, double height) {
         setWidth(width);
         setHeight(height);
 
         this.session = session;
-        this.puzzleConfig = session.puzzleConfig();
-        this.puzzleGenerator = PuzzleGeneratorsFactory.create(puzzleConfig);
+        this.puzzleConfigDto = session.puzzleConfigDto();
+        this.puzzleGenerator = PuzzleGeneratorsFactory.create(puzzleConfigDto);
 
-        var puzzleProgressLabel = new Label(interpolatePuzzleProgress(0, puzzleConfig.targetNumberOfPuzzles));
+        var puzzleProgressLabel = new Label(interpolatePuzzleProgress(0, puzzleConfigDto.targetNumberOfPuzzles));
         puzzlesProgressBar = new ProgressBar(0.0);
         var puzzlesProgress = new VBox(puzzleProgressLabel, puzzlesProgressBar);
         puzzlesProgress.setAlignment(Pos.CENTER);
@@ -74,7 +76,7 @@ public abstract class PuzzlePane<E extends Exercise, PC extends PuzzleConfig<E>,
     }
 
     protected void createNextPuzzle() {
-        puzzle = PuzzlesFactory.create(puzzleConfig, puzzleGenerator);
+        puzzle = PuzzlesFactory.create(puzzleConfigDto, puzzleGenerator);
     }
 
 }

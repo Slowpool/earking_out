@@ -12,12 +12,12 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFact
 import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfig;
+import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
+import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.config.ReadPuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.ports.config.WritePuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
-import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -27,6 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+// TODO pianoKeyboard is not saved yet to repository, though it should be. in both `updateProperty()` and `updateViaPianoKeyboardPressing()`
 public final class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
@@ -92,63 +93,49 @@ public final class EarkingOutApplication extends Application {
     }
 
     private void showConfigPane(Exercise exercise) {
-        var configPane = buildConfigPane(exercise.getClass(), exercise);
+        var configPane = buildConfigPane(exercise);
         showAsContent(configPane);
     }
 
-    private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfig<E>>> CP buildConfigPane(Class<E> exerciseClass, Exercise exercise) {
-        if (!exerciseClass.equals(exercise.getClass())) {
-            throw new IllegalArgumentException("exercise class does not correspond to exerciseClass");
-        }
+    private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfigDTO<E>>> CP buildConfigPane(final E exercise) {
+        var puzzleConfigDto = PuzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
 
-        var puzzleConfigService = DI.get(ReadPuzzleConfigService.class);
-        var puzzleConfig = puzzleConfigService.fetch(exerciseClass, exercise);
-
-        var configPane = ConfigPanesFactory.create(puzzleConfig, WIDTH, HEIGHT);
+        var configPane = ConfigPanesFactory.create(puzzleConfigDto, WIDTH, HEIGHT);
         configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
         configPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
         return (CP) configPane;
     }
 
-    private void tryOpenPuzzlePane(ExerciseStartedEvent<?> e) {
-        var readPuzzleConfigService = DI.get(ReadPuzzleConfigService.class);
-        var exercise = e.exercise;
-        var puzzleConfig = readPuzzleConfigService.fetch(exercise.getClass(), exercise);
-
-        if (puzzleConfig.isValid()) {
-            var session = startSession(puzzleConfig);
+    private void tryOpenPuzzlePane(final ExerciseStartedEvent<?> event) {
+        var sessionService = DI.get(SessionService.class);
+        try {
+            // TODO draft version
+            var session = sessionService.startSession(event.exercise);
             showPuzzlePane(session);
-        } else {
+        } catch (InvalidPuzzleConfigException e) {
             // TODO message
             // DialogPane.
         }
     }
 
-    private static <PC extends PuzzleConfig<?>> Session<PC> startSession(PC puzzleConfig) {
-        var writeSessionService = DI.get(WriteSessionService.class);
-        writeSessionService.createSession(puzzleConfig);
-
-        var readSessionService = DI.get(ReadSessionService.class);
-        var session = (Session<PC>) readSessionService.getCurrentSession();
-
-        return session;
-    }
-
-    private void showPuzzlePane(Session<?> session) {
+    private void showPuzzlePane(final Session<?> session) {
         var puzzlePane = buildPuzzlePane(session);
         showAsContent(puzzlePane);
     }
 
-    private void updateConfigProperty(ConfigPropertyUpdatingEvent e) {
-        var writePuzzleConfigService = DI.get(WritePuzzleConfigService.class);
-        writePuzzleConfigService.updateProperty(e.exercise, e.configProperty, e.newValue);
+    // TODO it definitely must be somewhere else, not here. though, it mustn't be encapsulated inside configPage.
+    // app-level delivering mechanism
+    private void updateConfigProperty(final ConfigPropertyUpdatingEvent event) {
+        // TODO can app service be skipped here so that the infrastructure service is used here instead?
+        var puzzleConfigService = DI.get(PuzzleConfigService.class);
+        puzzleConfigService.updateProperty(event.exercise, event.configProperty, event.newValue);
     }
 
-    private void openConfigPaneOver(ExerciseStartedOverEvent<?> e) {
-        exercisesMenu.fireExercise(e.puzzleConfig.exercise);
+    private void openConfigPaneOver(final ExerciseStartedOverEvent<?> e) {
+        exercisesMenu.fireExercise(e.puzzleConfigDto.exercise);
     }
 
-    private Pane buildPuzzlePane(Session<? extends PuzzleConfig<?>> session) {
+    private Pane buildPuzzlePane(final Session<? extends PuzzleConfigDTO<?>> session) {
         var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT);
 
         puzzlePane.addEventHandler(ExerciseFinishedEvent.EXERCISE_FINISHED, this::openExerciseFinish);
@@ -156,13 +143,13 @@ public final class EarkingOutApplication extends Application {
         return puzzlePane;
     }
 
-    private void openExerciseFinish(ExerciseFinishedEvent e) {
+    private void openExerciseFinish(final ExerciseFinishedEvent e) {
         showExerciseFinishPane(e.session);
         // TODO actually exerciseFinishingService.finish(e.session) should be here
         closeSession(e.session);
     }
 
-    private void showExerciseFinishPane(Session<?> session) {
+    private void showExerciseFinishPane(final Session<?> session) {
         var sessionStatsPane = buildSessionStatsPane(session);
         showAsContent(sessionStatsPane);
     }
@@ -172,7 +159,7 @@ public final class EarkingOutApplication extends Application {
         session = null;
     }
 
-    private Pane buildSessionStatsPane(Session<?> session) {
+    private Pane buildSessionStatsPane(final Session<?> session) {
         var sessionStatsPane = StatsPanesFactory.create(session);
         sessionStatsPane.addEventHandler(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
         return sessionStatsPane;

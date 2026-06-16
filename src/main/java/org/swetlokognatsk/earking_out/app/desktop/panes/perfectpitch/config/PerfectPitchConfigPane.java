@@ -2,12 +2,13 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHelper;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
+import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboardMode;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfig;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -15,8 +16,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
 
-abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends PerfectPitchConfig<E>> extends ConfigPane<E, PC> {
+abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO extends PerfectPitchConfigDTO<E>> extends ConfigPane<E, PCDTO> {
     protected final PianoKeyboard pianoKeyboard;
     protected final VBox pianoKeyboardBox;
 
@@ -34,17 +36,17 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         return getWidth();
     }
 
-    public PerfectPitchConfigPane(final PC puzzleConfig, double width, double height) {
-        super(puzzleConfig, width, height);
+    public PerfectPitchConfigPane(final PCDTO puzzleConfigDto, double width, double height) {
+        super(puzzleConfigDto, width, height);
 
-        pianoKeyboard = buildPianoKeyboard(puzzleConfig.normalizedNotesForPuzzle);
+        pianoKeyboard = buildPianoKeyboard(puzzleConfigDto.normalizedNotesForPuzzle);
         pianoKeyboardBox = buildPianoKeyboardBox(pianoKeyboard);
 
-        rootNotePicker = buildRootNotePicker(puzzleConfig.normalizedRootNote);
-        rootNoteBox = buildRootNotePickerBox(rootNotePicker, puzzleConfig.inputMode);
+        rootNotePicker = buildRootNotePicker(puzzleConfigDto.normalizedRootNote);
+        rootNoteBox = buildRootNotePickerBox(rootNotePicker, puzzleConfigDto.inputMode);
 
         inputModeToggleGroup = new ToggleGroup();
-        var inputModeRadioButtons = buildInputModeRadioButtons(inputModeToggleGroup, puzzleConfig.inputMode);
+        var inputModeRadioButtons = buildInputModeRadioButtons(inputModeToggleGroup, puzzleConfigDto.inputMode);
         inputModeBox = buildInputModeBox(inputModeRadioButtons);
 
         addCustomFields();
@@ -54,9 +56,13 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
         setAlignment(Pos.CENTER);
     }
 
-    protected PianoKeyboard buildPianoKeyboard(byte[] selectedKeys) {
-        var pianoKeyboard = new PianoKeyboard(PianoKeyboardMode.SEVERAL_KEYS_SELECT, getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
-        pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
+    protected PianoKeyboard buildPianoKeyboard(final byte[] selectedKeys) {
+        var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesPicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
+
+        PianoKeyboardHelper.addPianoKeyEventsHandlers(pianoKeyboard);
+
+        // TODO this listener should be added to domain model???
+        // pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
         return pianoKeyboard;
     }
 
@@ -69,8 +75,12 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected PianoKeyboard buildRootNotePicker(Byte selectedRootNote) {
         var wrappedSelectedRootNote = selectedRootNote == null ? new byte[0] : new byte[] { selectedRootNote };
-        var rootNotePicker = new PianoKeyboard(PianoKeyboardMode.ONE_KEY_SELECT, getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
-        rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
+        var rootNotePicker = PianoKeyboardsFactory.createRootNotePicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
+
+        PianoKeyboardHelper.addPianoKeyEventsHandlers(rootNotePicker);
+
+        // TODO this listener should be added to domain model???
+        // rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
         return rootNotePicker;
     }
 
@@ -87,7 +97,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected RadioButton[] buildInputModeRadioButtons(ToggleGroup inputModeToggleGroup, PerfectPitchInputMode selectedInputMode) {
         var inputModeRadioButtons = RadioButtonHelper.makeList(PerfectPitchInputMode.class, inputModeToggleGroup, selectedInputMode, this::handleRadioButtonSelected);
-        inputModeToggleGroup.selectedToggleProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.INPUT_MODE_PROP));
+        inputModeToggleGroup.selectedToggleProperty().addListener(createConfigPropertyUpadtingEvent(INPUT_MODE_PROP));
 
         return inputModeRadioButtons;
     }
@@ -119,19 +129,20 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PC extends
 
     protected Object castCustomConfigPropertyNewValue(String configProperty, Object newValue) {
         return switch (configProperty) {
-        case PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP -> {
+        case NORMALIZED_NOTES_FOR_PUZZLE_PROP -> {
             var set = (ObservableSet<Byte>) newValue;
             var objArray = set.toArray(new Byte[0]);
             var primitiveArray = ArrayUtils.toPrimitive(objArray);
             yield primitiveArray;
         }
-        case PerfectPitchConfig.INPUT_MODE_PROP -> {
+        case INPUT_MODE_PROP -> {
             var radioButton = (RadioButton) newValue;
             var enumValue = radioButton.getId();
             var enumElement = PerfectPitchInputMode.valueOf(enumValue);
             yield enumElement;
         }
-        case PerfectPitchConfig.NORMALIZED_ROOT_NOTE -> {
+        case NORMALIZED_ROOT_NOTE_PROP -> {
+            // TODO remaking
             var set = (ObservableSet<Byte>) newValue;
             var numberOfSelectedKeys = set.size();
             // TODO DRY violation, copy-pasted from PianoKeyboard
