@@ -7,9 +7,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 
@@ -21,7 +21,7 @@ public class RandomAudioPerfectPitchPuzzleGeneratorTest {
     @Test
     public void generateSolutionTest() {
         var notes = new byte[] { 4, 5 };
-        var generator = createPuzzleGenerator(0, false, notes, null, null);
+        var generator = createPuzzleGenerator(notes);
 
         Byte[] ByteNotes = ArrayUtils.toObject(notes);
         Stream<Byte> stream = Arrays.stream(ByteNotes);
@@ -34,8 +34,11 @@ public class RandomAudioPerfectPitchPuzzleGeneratorTest {
         }
     }
 
-    protected static RandomAudioPerfectPitchPuzzleGenerator createPuzzleGenerator(final int targetNumberOfPuzzles, final boolean statsRecording, final byte[] normalizedNotesForPuzzle, final Byte normalizedRootNote, final PerfectPitchInputMode inputMode) {
-        var puzzleConfig = factory.create(targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode);
+    protected static RandomAudioPerfectPitchPuzzleGenerator createPuzzleGenerator(final byte[] normalizedNotesForPuzzle) {
+        // TODO how to validate aggregate?
+        // TODO can it be in invalid state at all?
+        // firstly creating puzzleConfig for validation
+        var puzzleConfig = factory.create(0, false, normalizedNotesForPuzzle, null, null, new PianoKeyboardAggregate[0]);
         AudioPerfectPitchConfigDTO puzzleConfigDto = PuzzleConfigDTOAssembler.assemble(puzzleConfig);
         var generator = new RandomAudioPerfectPitchPuzzleGenerator(puzzleConfigDto);
         return generator;

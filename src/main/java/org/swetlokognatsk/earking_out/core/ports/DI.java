@@ -79,10 +79,12 @@ public final class DI {
 
         } else if (className.equals(PuzzleConfigRepository.class.getName())) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PianoKeyboardRepository.class));
+                inMemoryPuzzleConfigRepository = get(InMemoryPuzzleConfigRepository.class);
             }
-
             return (T) inMemoryPuzzleConfigRepository;
+
+        } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
+            return (T) new InMemoryPuzzleConfigRepository(get(PianoKeyboardRepository.class));
 
         } else if (className.equals(PianoKeyboardRepository.class.getName())) {
             return (T) get(InMemoryPianoKeyboardRepository.class);
@@ -97,11 +99,10 @@ public final class DI {
             if (pianoKeyboardAggregatesFactory == null) {
                 pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
             }
-
             return (T) pianoKeyboardAggregatesFactory;
 
         } else {
-            return null;
+            throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
         }
     }
 
