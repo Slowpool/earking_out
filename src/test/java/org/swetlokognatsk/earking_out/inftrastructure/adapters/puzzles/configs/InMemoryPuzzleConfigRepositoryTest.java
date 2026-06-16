@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
 
@@ -33,7 +34,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     @Before
     public void setup() {
-        repository = new InMemoryPuzzleConfigRepository();
+        repository = DI.get(InMemoryPuzzleConfigRepository.class);
     }
 
     @Test

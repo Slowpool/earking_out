@@ -51,7 +51,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     }
 
     public void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
-        var pianoKeyboard = getPianoKeyboard(pianoKeyboardId);
+        var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
         pianoKeyboard.pressKey(keyNumber);
 
         var propertyName = getPropertyName(pianoKeyboardId);
@@ -60,10 +60,14 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         updateProperty(propertyName, newNormalizedRootNote);
     }
 
-    // TODO there should be two methods: one that returns read-only object (public method) and another one that returns original pianoKeyboard (protected method)
-    public PianoKeyboardAggregate getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
+    public PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = pianoKeyboardAggregates.get(pianoKeyboardId);
         return pianoKeyboard;
+    }
+
+    // TODO return read-only object
+    public PianoKeyboardAggregate getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
+        return getPianoKeyboardAggregate(pianoKeyboardId);
     }
 
     // TODO it must not be here

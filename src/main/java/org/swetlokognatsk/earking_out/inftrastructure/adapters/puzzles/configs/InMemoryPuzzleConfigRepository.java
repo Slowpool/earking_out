@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregates
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -16,31 +17,22 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory.*;
 
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
-    protected final Map<Exercise, PuzzleConfigAggregate<?>> aggregates;
+    protected final Map<Exercise, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
     protected final PianoKeyboardRepository pianoKeyboardRepository;
 
-    {
-        // var notes = new byte[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST).normalize() };
-        // appc = new AudioPerfectPitchConfigAggregate(100, false, notes, Byte.valueOf((byte) 25), PerfectPitchInputMode.NOTES_AS_CHARACTERS);
-        // vppc = new VisualPerfectPitchConfigAggregate(0, false, new byte[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO);
-        aggregates = new HashMap<>();
-
-        var exercises = ExercisesFactory.getAll();
-        PuzzleConfigAggregate<?> puzzleConfigAggregate;
-        for (var exercise : exercises) {
-            var factory = createFactory(exercise);
-            puzzleConfigAggregate = createDefault(factory, exercise);
-            aggregates.put(exercise, puzzleConfigAggregate);
-        }
-    }
-
     protected <DADTO extends DependentAggregatesDTO, E extends Exercise, F extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, DADTO>> PuzzleConfigAggregate<E> createDefault(final F factory, final E exercise) {
         var defaultPuzzleConfig = switch (exercise) {
+        // TODO refactoring. probably via factory - earlier i thought it should not utilize repositories, but now it seems completely fine.
         case AudioPerfectPitchExercise e -> {
             var dependentAggregates = getAudioPerfectPitchConfigDependentAggregates(exercise);
             var audioPerfectPitchConfig = factory.createDefault((DADTO) dependentAggregates);
             yield audioPerfectPitchConfig;
+        }
+        case VisualPerfectPitchExercise e -> {
+            var dependentAggregates = getAudioPerfectPitchConfigDependentAggregates(exercise);
+            var visualPerfectPitchConfig = factory.createDefault((DADTO) dependentAggregates);
+            yield visualPerfectPitchConfig;
         }
         default -> throw new IllegalArgumentException("unknown exercise: " + exercise);
         };
@@ -61,6 +53,22 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
 
     public InMemoryPuzzleConfigRepository(final PianoKeyboardRepository pianoKeyboardRepository) {
         this.pianoKeyboardRepository = pianoKeyboardRepository;
+
+        seedConfigs();
+    }
+
+    protected void seedConfigs() {
+        // TODO what is this??
+        // var notes = new byte[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST).normalize() };
+        // appc = new AudioPerfectPitchConfigAggregate(100, false, notes, Byte.valueOf((byte) 25), PerfectPitchInputMode.NOTES_AS_CHARACTERS);
+        // vppc = new VisualPerfectPitchConfigAggregate(0, false, new byte[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO);
+        var exercises = ExercisesFactory.getAll();
+        PuzzleConfigAggregate<?> puzzleConfigAggregate;
+        for (var exercise : exercises) {
+            var factory = createFactory(exercise);
+            puzzleConfigAggregate = createDefault(factory, exercise);
+            aggregates.put(exercise, puzzleConfigAggregate);
+        }
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {

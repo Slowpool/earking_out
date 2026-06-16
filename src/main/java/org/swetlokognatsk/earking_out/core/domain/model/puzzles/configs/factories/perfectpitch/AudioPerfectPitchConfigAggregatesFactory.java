@@ -27,7 +27,7 @@ public final class AudioPerfectPitchConfigAggregatesFactory implements PuzzleCon
 
     public AudioPerfectPitchConfigAggregate createDeepCopy(final AudioPerfectPitchConfigAggregate aggregate) {
         var pianoKeyboardAggregates = aggregate.pianoKeyboardAggregates.values().toArray(PianoKeyboardAggregate[]::new);
-        var pianoKeyboardAggregatesCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregates);
+        PianoKeyboardAggregate[] pianoKeyboardAggregatesCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregates);
         return create(aggregate.getTargetNumberOfPuzzles(), aggregate.getStatsRecording(), aggregate.getNormalizedNotesForPuzzle(), aggregate.getNormalizedRootNote(), aggregate.getInputMode(), pianoKeyboardAggregatesCopy);
     }
 }
