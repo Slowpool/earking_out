@@ -10,10 +10,10 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleGuessingSer
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import javafx.event.EventHandler;
 
-// TODO Helper or Utility?
-public final class PianoKeyboardHelper {
+// TODO actually everything this class do is responsibilities violation. ConfigPane must just throw PianoKeyboardKeyPressed event on app level, that's it. so, ConfigPane must be just a dummy view that throws events, whereas the code from this class must be somewhere out of configPane
+public final class PianoKeyboardHandlersRegister {
 
-    private PianoKeyboardHelper() {
+    private PianoKeyboardHandlersRegister() {
     }
 
     public static void addPianoKeyEventsHandlers(PianoKeyboard pianoKeyboard) {

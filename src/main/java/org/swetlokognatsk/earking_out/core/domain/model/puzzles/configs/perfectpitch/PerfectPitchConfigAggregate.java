@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -44,6 +45,22 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         // errors.addAll(validateSelectedNotes);
         return errors.toArray(new String[] {});
 
+    }
+
+    @Override
+    protected void updatePropertyViaPianoKeyboard(final String propertyName, final PianoKeyboardAggregate pianoKeyboard) {
+        switch (propertyName) {
+        case PerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP:
+            normalizedRootNote = pianoKeyboard.getSelectedKeyNumbers()[0];
+            break;
+        case PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP:
+            var oldSelectedKeyNumbers = pianoKeyboard.getSelectedKeyNumbers();
+            var selectedKeyNumbersCopy = Arrays.copyOf(oldSelectedKeyNumbers, oldSelectedKeyNumbers.length);
+            normalizedNotesForPuzzle = selectedKeyNumbersCopy;
+            break;
+        default:
+            throw new RuntimeException();
+        }
     }
 
     protected void updateConfigSpecificProperty(final String propertyName, final Object propertyValue) {

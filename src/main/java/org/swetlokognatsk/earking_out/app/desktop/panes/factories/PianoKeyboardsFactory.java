@@ -13,8 +13,9 @@ public final class PianoKeyboardsFactory {
         return create(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, width, height, selectedKeys);
     }
 
-    public static PianoKeyboard createRootNotePicker(final double width, final double height, final byte[] selectedKeys) {
-        return create(PianoKeyboardId.ROOT_NOTE_PICKER, width, height, selectedKeys);
+    public static PianoKeyboard createRootNotePicker(final double width, final double height, final Byte selectedKey) {
+        var wrappedSelectedKey = selectedKey == null ? new byte[0] : new byte[] { selectedKey };
+        return create(PianoKeyboardId.ROOT_NOTE_PICKER, width, height, wrappedSelectedKey);
     }
 
     public static PianoKeyboard createPerfectPitchNotesGuessing(final double width, final double height) {

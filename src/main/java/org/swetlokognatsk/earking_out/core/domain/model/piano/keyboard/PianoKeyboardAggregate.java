@@ -19,16 +19,24 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
     protected PianoKey pressedKey;
 
-    public PianoKeyboardId getPianoKeyboardId() {
-        return id;
+    public final PianoKeyboardId getPianoKeyboardId() {
+        return getId();
     }
 
-    public PianoKeyboardMode getMode() {
+    public final PianoKeyboardMode getMode() {
         return mode;
     }
 
-    public Map<Byte, PianoKey> getPianoKeys() {
+    public final Map<Byte, PianoKey> getPianoKeys() {
         return pianoKeys;
+    }
+
+    public final PianoKey getPianoKey(final Byte keyNumber) {
+        var pianoKey = pianoKeys.get(keyNumber);
+        if (pianoKey == null) {
+            throw new IllegalArgumentException("such a pianoKey is not found: " + keyNumber);
+        }
+        return pianoKey;
     }
 
     public byte[] getSelectedKeyNumbers() {
@@ -37,9 +45,14 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return byteSelectedKeys;
     }
 
+    // TODO make read-only
+    public final PianoKey getPressedPianoKey() {
+        return pressedKey;
+    }
+
     protected PianoKey getPianoKey(byte keyNumber) {
         var ByteKeyNumber = Byte.valueOf(keyNumber);
-        var pianoKey = pianoKeys.get(ByteKeyNumber);
+        var pianoKey = getPianoKey(ByteKeyNumber);
 
         if (pianoKey == null) {
             throw new IllegalArgumentException("there is no such a piano key: " + keyNumber);

@@ -2,7 +2,7 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
-import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHelper;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
@@ -19,8 +19,8 @@ import javafx.scene.layout.VBox;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
 
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO extends PerfectPitchConfigDTO<E>> extends ConfigPane<E, PCDTO> {
-    protected final PianoKeyboard pianoKeyboard;
-    protected final VBox pianoKeyboardBox;
+    protected final PianoKeyboard notesPickerKeyboard;
+    protected final VBox notesPickerKeyboardBox;
 
     protected final PianoKeyboard rootNotePicker;
     protected final VBox rootNoteBox;
@@ -36,11 +36,11 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         return getWidth();
     }
 
-    public PerfectPitchConfigPane(final PCDTO puzzleConfigDto, double width, double height) {
+    public PerfectPitchConfigPane(final PCDTO puzzleConfigDto, final double width, final double height) {
         super(puzzleConfigDto, width, height);
 
-        pianoKeyboard = buildPianoKeyboard(puzzleConfigDto.normalizedNotesForPuzzle);
-        pianoKeyboardBox = buildPianoKeyboardBox(pianoKeyboard);
+        notesPickerKeyboard = buildNotesPickerKeyboard(puzzleConfigDto.normalizedNotesForPuzzle);
+        notesPickerKeyboardBox = buildPianoKeyboardBox(notesPickerKeyboard);
 
         rootNotePicker = buildRootNotePicker(puzzleConfigDto.normalizedRootNote);
         rootNoteBox = buildRootNotePickerBox(rootNotePicker, puzzleConfigDto.inputMode);
@@ -56,10 +56,10 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         setAlignment(Pos.CENTER);
     }
 
-    protected PianoKeyboard buildPianoKeyboard(final byte[] selectedKeys) {
+    protected PianoKeyboard buildNotesPickerKeyboard(final byte[] selectedKeys) {
         var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesPicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
 
-        PianoKeyboardHelper.addPianoKeyEventsHandlers(pianoKeyboard);
+        PianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(pianoKeyboard);
 
         // TODO this listener should be added to domain model???
         // pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
@@ -73,11 +73,10 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         return pianoKeyboardBox;
     }
 
-    protected PianoKeyboard buildRootNotePicker(Byte selectedRootNote) {
-        var wrappedSelectedRootNote = selectedRootNote == null ? new byte[0] : new byte[] { selectedRootNote };
-        var rootNotePicker = PianoKeyboardsFactory.createRootNotePicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
+    protected PianoKeyboard buildRootNotePicker(final Byte selectedRootNote) {
+        var rootNotePicker = PianoKeyboardsFactory.createRootNotePicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedRootNote);
 
-        PianoKeyboardHelper.addPianoKeyEventsHandlers(rootNotePicker);
+        PianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(rootNotePicker);
 
         // TODO this listener should be added to domain model???
         // rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
@@ -114,7 +113,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
     }
 
     protected void addCustomFields() {
-        getChildren().addAll(pianoKeyboardBox, rootNoteBox, inputModeBox);
+        getChildren().addAll(notesPickerKeyboardBox, rootNoteBox, inputModeBox);
     }
 
     protected void handleRadioButtonSelected(ActionEvent e) {

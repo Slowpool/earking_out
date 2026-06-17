@@ -1,5 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
@@ -26,8 +29,10 @@ public final class AudioPerfectPitchConfigAggregatesFactory implements PuzzleCon
     }
 
     public AudioPerfectPitchConfigAggregate createDeepCopy(final AudioPerfectPitchConfigAggregate aggregate) {
+        var oldNormalizedNotes = aggregate.getNormalizedNotesForPuzzle();
+        var normalizedNotesForPuzzleCopy = Arrays.copyOf(oldNormalizedNotes, oldNormalizedNotes.length);
         var pianoKeyboardAggregates = aggregate.pianoKeyboardAggregates.values().toArray(PianoKeyboardAggregate[]::new);
         PianoKeyboardAggregate[] pianoKeyboardAggregatesCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregates);
-        return create(aggregate.getTargetNumberOfPuzzles(), aggregate.getStatsRecording(), aggregate.getNormalizedNotesForPuzzle(), aggregate.getNormalizedRootNote(), aggregate.getInputMode(), pianoKeyboardAggregatesCopy);
+        return create(aggregate.getTargetNumberOfPuzzles(), aggregate.getStatsRecording(), normalizedNotesForPuzzleCopy, aggregate.getNormalizedRootNote(), aggregate.getInputMode(), pianoKeyboardAggregatesCopy);
     }
 }

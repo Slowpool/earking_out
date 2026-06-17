@@ -42,6 +42,7 @@ public final class DI {
     // singleton lifetime simulation
     protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
     protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
+    protected static InMemoryPianoKeyboardRepository inMemoryPianoKeyboardRepository;
 
     private DI() {
     }
@@ -79,19 +80,22 @@ public final class DI {
             return (T) new PuzzleConfigService(get(PuzzleConfigRepository.class));
 
         } else if (className.equals(PuzzleConfigRepository.class.getName())) {
-            if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = get(InMemoryPuzzleConfigRepository.class);
-            }
-            return (T) inMemoryPuzzleConfigRepository;
+            return (T) get(InMemoryPuzzleConfigRepository.class);
 
         } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
-            return (T) new InMemoryPuzzleConfigRepository(get(PianoKeyboardRepository.class));
+            if (inMemoryPuzzleConfigRepository == null) {
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PianoKeyboardRepository.class));
+            }
+            return (T) inMemoryPuzzleConfigRepository;
 
         } else if (className.equals(PianoKeyboardRepository.class.getName())) {
             return (T) get(InMemoryPianoKeyboardRepository.class);
 
         } else if (className.equals(InMemoryPianoKeyboardRepository.class.getName())) {
-            return (T) new InMemoryPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
+            if (inMemoryPianoKeyboardRepository == null) {
+                inMemoryPianoKeyboardRepository = new InMemoryPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
+            }
+            return (T) inMemoryPianoKeyboardRepository;
 
         } else if (className.equals(SessionService.class.getName())) {
             return (T) new SessionService(DI.get(PuzzleConfigRepository.class));
@@ -114,5 +118,6 @@ public final class DI {
     public void clear() {
         inMemoryPuzzleConfigRepository = null;
         pianoKeyboardAggregatesFactory = null;
+        inMemoryPianoKeyboardRepository = null;
     }
 }

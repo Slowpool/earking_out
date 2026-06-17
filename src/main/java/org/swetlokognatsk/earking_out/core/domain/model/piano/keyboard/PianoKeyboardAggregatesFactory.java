@@ -11,8 +11,9 @@ public final class PianoKeyboardAggregatesFactory implements Factory<PianoKeyboa
     }
 
     public PianoKeyboardAggregate createDeepCopy(final PianoKeyboardAggregate pianoKeyboardAggregate) {
+        // TODO implement it via serialization
         byte[] oldSelectedKeyNumbers = pianoKeyboardAggregate.getSelectedKeyNumbers();
-        byte[] selectedKeyNumbersCopy = Arrays.copyOf(oldSelectedKeyNumbers, pianoKeyboardAggregate.selectedKeys.size());
+        byte[] selectedKeyNumbersCopy = Arrays.copyOf(oldSelectedKeyNumbers, oldSelectedKeyNumbers.length);
         var copy = new PianoKeyboardAggregate(pianoKeyboardAggregate.getId(), selectedKeyNumbersCopy);
         return copy;
     }

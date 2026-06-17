@@ -27,7 +27,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-// TODO pianoKeyboard is not saved yet to repository, though it should be. in both `updateProperty()` and `updateViaPianoKeyboardPressing()`
 public final class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
@@ -124,6 +123,7 @@ public final class EarkingOutApplication extends Application {
     }
 
     // TODO it definitely must be somewhere else, not here. though, it mustn't be encapsulated inside configPage.
+    // TODO is `delivering mechanism` correct/existing term here?
     // app-level delivering mechanism
     private void updateConfigProperty(final ConfigPropertyUpdatingEvent event) {
         // TODO can app service be skipped here so that the infrastructure service is used here instead?

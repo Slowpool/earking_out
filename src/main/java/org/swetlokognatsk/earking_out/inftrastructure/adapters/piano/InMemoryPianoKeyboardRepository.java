@@ -25,11 +25,16 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository 
         }
     }
 
-    public PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId) {
+    protected PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = pianoKeyboardAggregates.get(pianoKeyboardId);
         if (pianoKeyboard == null) {
             throw new IllegalArgumentException("piano keyboard with such an id is not found: " + pianoKeyboardId);
         }
+        return pianoKeyboard;
+    }
+
+    public PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId) {
+        var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
 
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboard);
         return pianoKeyboardCopy;
@@ -37,10 +42,8 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository 
 
     public void save(final PianoKeyboardAggregate pianoKeyboardAggregate) {
         var pianoKeyboardId = pianoKeyboardAggregate.getPianoKeyboardId();
-        var pianoKeyboard = pianoKeyboardAggregates.get(pianoKeyboardId);
-        if (pianoKeyboard == null) {
-            throw new IllegalArgumentException("piano keyboard with such an id is not found: " + pianoKeyboardId);
-        }
+        // ensuring it exists
+        getPianoKeyboardAggregate(pianoKeyboardId);
 
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregate);
         pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboardCopy);
