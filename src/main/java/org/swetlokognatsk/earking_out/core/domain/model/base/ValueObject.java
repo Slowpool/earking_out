@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.base;
 
-public abstract class ValueObject {
+import java.io.Serializable;
+
+public abstract class ValueObject implements Serializable {
 
 }

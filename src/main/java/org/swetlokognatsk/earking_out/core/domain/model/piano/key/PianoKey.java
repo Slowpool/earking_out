@@ -5,9 +5,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 
 public final class PianoKey extends Entity<Byte> {
+    private static final long serialVersionUID = 1L;
+
     public final byte keyNumber;
     public final PianoKeyColor color;
-    private final SoundPlayerService soundPlayer;
     private final PianoKeyMode mode;
     private boolean isSelected;
     private boolean isPressed;
@@ -28,12 +29,11 @@ public final class PianoKey extends Entity<Byte> {
         return isPressed;
     }
 
-    public PianoKey(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final SoundPlayerService soundPlayer) {
+    public PianoKey(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService) {
         super(keyNumber);
         this.keyNumber = keyNumber;
         this.mode = mode;
         this.color = colorService.getColor(keyNumber);
-        this.soundPlayer = soundPlayer;
 
         setIsSelected(isSelected);
     }
@@ -70,7 +70,7 @@ public final class PianoKey extends Entity<Byte> {
 
     public void release() {
         if (!getIsPressed()) {
-            throw new IllegalStateException("piano key is already released");
+            throw new IllegalStateException("piano key that is not pressed so it cannot be released");
         }
 
         switch (mode) {
@@ -84,11 +84,12 @@ public final class PianoKey extends Entity<Byte> {
         }
     }
 
+    // TODO yank
     protected void playSound() {
-        soundPlayer.stopAndPlay();
+        // soundPlayer.stopAndPlay();
     }
 
     protected void stopSound() {
-        soundPlayer.stop();
+        // soundPlayer.stop();
     }
 }

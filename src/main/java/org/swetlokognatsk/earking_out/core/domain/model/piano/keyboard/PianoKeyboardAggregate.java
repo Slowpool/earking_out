@@ -13,6 +13,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 
 public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
+    private static final long serialVersionUID = 1L;
+
     // TODO make all variables immutable for public read-only aggregate state
     protected final PianoKeyboardMode mode;
     protected final Map<Byte, PianoKey> pianoKeys;
