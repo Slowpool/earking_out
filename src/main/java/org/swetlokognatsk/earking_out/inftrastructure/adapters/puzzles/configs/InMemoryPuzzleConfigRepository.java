@@ -78,6 +78,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         }
 
         puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
+        // TODO how to update pianoKeyboardAggregates before returning?
         return (PCA) puzzleConfigAggregate;
     }
 
@@ -88,10 +89,9 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     }
 
     // TODO this method must be synchronous distributed transaction.
-    public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
-        var puzzleConfigAggregateCopy = createDeepCopy(puzzleConfigAggregate);
-        aggregates.put(puzzleConfigAggregateCopy.getId(), puzzleConfigAggregateCopy);
-        // TODO draft version. i'm not sure whether should repository be used here cuz PianoKeyboardAggregate is not a root aggregate. whilst in classic ddd only root aggregates should have repository
+    public void genericSave(PuzzleConfigAggregate<?> puzzleConfigAggregate) {
+        puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
+        // TODO draft version. i'm not sure whether should repository be used here cuz PianoKeyboardAggregate is not a root aggregate. whilst in classic ddd only root aggregates should have repository. p.s.: should it be extracted to `saveDependentAggregates()`???
         var pianoKeyboardsToSave = puzzleConfigAggregate.pianoKeyboardAggregates;
         PianoKeyboardAggregate pianoKeyboard;
         for (var pianoKeyboardId : pianoKeyboardsToSave.keySet()) {
@@ -99,6 +99,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
             pianoKeyboardRepository.save(pianoKeyboard);
         }
 
+        aggregates.put(puzzleConfigAggregate.getId(), puzzleConfigAggregate);
     }
 
     public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {

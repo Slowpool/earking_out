@@ -9,14 +9,15 @@ import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 public final class SerializationCloner implements ObjectCloner {
 
     public <T> T clone(final T object) {
-        var out = new ByteArrayOutputStream();
-        try {
+        try (var out = new ByteArrayOutputStream()) {
             var objOut = new ObjectOutputStream(out);
             objOut.writeObject(object);
 
             var in = new ByteArrayInputStream(out.toByteArray());
             var objIn = new ObjectInputStream(in);
-            return (T) objIn.readObject();
+            var clone = objIn.readObject();
+            in.close();
+            return (T) clone;
         } catch (Exception e) {
             throw new IllegalArgumentException("clonning error", e);
         }

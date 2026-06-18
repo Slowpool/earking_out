@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.app;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
+@Deprecated
 public final class PianoKeyboardService {
 
     protected final PianoKeyboardRepository repository;

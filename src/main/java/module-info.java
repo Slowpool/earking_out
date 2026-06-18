@@ -1,3 +1,4 @@
+// TODO how to run junit via console
 module org.swetlokognatsk {
     requires javafx.controls;
     requires javafx.media;

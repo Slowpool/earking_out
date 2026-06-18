@@ -20,7 +20,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     protected int targetNumberOfPuzzles;
     protected boolean statsRecording;
 
-    // TODO dirty workaround. also, i think it should be in descendant classes
+    // TODO dirty workaround
     public final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates;
 
     // TODO how this pattern is called?
@@ -54,7 +54,6 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     public final void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
         var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
         pianoKeyboard.pressKey(keyNumber);
-        pianoKeyboardAggregates.put(pianoKeyboard.getId(), pianoKeyboard);
         // TODO if further code fails, the aggregate state would be inconsistent
         var propertyName = getPropertyName(pianoKeyboardId);
         // TODO where is validation?
@@ -68,6 +67,9 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
 
     public final PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = pianoKeyboardAggregates.get(pianoKeyboardId);
+        if (pianoKeyboard == null) {
+            throw new IllegalArgumentException("pianoKeyboard is not found. pianoKeyboardId: " + pianoKeyboardId);
+        }
         return pianoKeyboard;
     }
 
@@ -99,8 +101,8 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         }
     }
 
-    public void clearDependentAggregates() {
-        pianoKeyboardAggregates.clear();
+    public void releasePianoKey(final PianoKeyboardId pianoKeyboardId) {
+        var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
+        pianoKeyboard.releaseKey();
     }
-
 }

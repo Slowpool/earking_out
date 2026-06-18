@@ -12,7 +12,11 @@ public final class PuzzleGuessingService {
     }
 
     public void guessViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
-        
+        // TODO
+    }
+
+    public void releasePianoKey(final PianoKeyboardId pianoKeyboardId) {
+        // TODO
     }
 
 }

@@ -22,10 +22,19 @@ public final class PianoKeyboardHandlersRegister {
     }
 
     public static EventHandler<PianoKeyReleasedEvent> createReleaseKeyHandler(final PianoKeyboardId pianoKeyboardId) {
-        final var pianoKeyboardService = getPianoKeyboardService();
-        return e -> {
-            pianoKeyboardService.releaseKey(e.pianoKeyboardId);
+        EventHandler<PianoKeyReleasedEvent> handler = switch (pianoKeyboardId) {
+        case ROOT_NOTE_PICKER -> e -> {
+            getConfigService().releasePianoKey(e.pianoKeyboardId);
         };
+        case PERFECT_PITCH_NOTES_PICKER -> e -> {
+            getConfigService().releasePianoKey(e.pianoKeyboardId);
+        };
+        case PERFECT_PITCH_NOTES_GUESSING -> e -> {
+            getPuzzleGuessingService().releasePianoKey(e.pianoKeyboardId);
+        };
+        default -> throw new RuntimeException("unknown piano keyboard id: " + pianoKeyboardId);
+        };
+        return handler;
     }
 
     public static EventHandler<PianoKeyPressedEvent> createPressKeyHandler(final PianoKeyboardId pianoKeyboardId) {
@@ -42,10 +51,6 @@ public final class PianoKeyboardHandlersRegister {
         default -> throw new RuntimeException("unknown piano keyboard id: " + pianoKeyboardId);
         };
         return handler;
-    }
-
-    protected static PianoKeyboardService getPianoKeyboardService() {
-        return DI.get(PianoKeyboardService.class);
     }
 
     protected static PuzzleConfigService getConfigService() {
