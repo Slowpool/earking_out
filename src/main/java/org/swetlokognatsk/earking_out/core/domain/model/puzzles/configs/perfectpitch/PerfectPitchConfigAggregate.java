@@ -54,8 +54,8 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
             normalizedRootNote = pianoKeyboard.getSelectedKeyNumbers()[0];
             break;
         case PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP:
-            var oldSelectedKeyNumbers = pianoKeyboard.getSelectedKeyNumbers();
-            var selectedKeyNumbersCopy = Arrays.copyOf(oldSelectedKeyNumbers, oldSelectedKeyNumbers.length);
+            var selectedKeyNumbers = pianoKeyboard.getSelectedKeyNumbers();
+            var selectedKeyNumbersCopy = Arrays.copyOf(selectedKeyNumbers, selectedKeyNumbers.length);
             normalizedNotesForPuzzle = selectedKeyNumbersCopy;
             break;
         default:

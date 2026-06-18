@@ -73,15 +73,7 @@ public final class PianoKey extends Entity<Byte> {
             throw new IllegalStateException("piano key that is not pressed so it cannot be released");
         }
 
-        switch (mode) {
-        case TOUCH:
-            this.setIsPressed(false);
-            break;
-        case SELECT:
-            break;
-        default:
-            throw new RuntimeException("unkown PianoKeyMode");
-        }
+        this.setIsPressed(false);
     }
 
     // TODO yank

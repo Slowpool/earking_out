@@ -99,4 +99,8 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         }
     }
 
+    public void clearDependentAggregates() {
+        pianoKeyboardAggregates.clear();
+    }
+
 }
