@@ -1,7 +1,8 @@
-package org.swetlokognatsk.earking_out.core.domain.model;
+package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
 import static org.junit.Assert.*;
 import org.junit.*;
+import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
@@ -14,6 +15,7 @@ public class PuzzleTest {
 
     @Before
     public void setup() {
+        DI.clear();
         puzzleHelper = new PuzzleTestHelper(DI.get(PuzzleConfigRepository.class));
     }
 

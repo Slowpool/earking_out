@@ -9,6 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 
 public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, AggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
@@ -34,6 +35,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     @Before
     public void setup() {
+        DI.clear();
         repository = DI.get(InMemoryPuzzleConfigRepository.class);
     }
 
@@ -46,7 +48,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     /**
      * See
-     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
+     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
      * regarding @Deprecated
      */
     @Test
@@ -64,7 +66,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     /**
      * See
-     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
+     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
      * regarding @Deprecated
      */
     @Test

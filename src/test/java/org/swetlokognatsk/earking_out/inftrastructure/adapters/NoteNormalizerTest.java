@@ -3,14 +3,14 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.swetlokognatsk.earking_out.core.domain.model.NoteWithAccidentalTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
+import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidentalTest;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
-public class NoteNormalizerTest {
+public final class NoteNormalizerTest {
     static NoteNormalizer noteNormalizer;
     static NoteWithAccidental[] notesWithAccidental = NoteWithAccidentalTest.notesWithAccidental;
     static byte[] normalizedValues = NoteWithAccidentalTest.normalizedValues;

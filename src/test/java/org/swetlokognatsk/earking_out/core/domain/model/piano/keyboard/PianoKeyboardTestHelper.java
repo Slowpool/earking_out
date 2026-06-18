@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.piano;
+package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import static org.junit.Assert.*;
 import org.apache.commons.lang3.ArrayUtils;

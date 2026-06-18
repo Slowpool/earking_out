@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.piano;
+package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

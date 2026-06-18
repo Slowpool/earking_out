@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model;
+package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -15,5 +15,4 @@ public final class AbstractPuzzleConfigAggregatesFactoryTest {
         assertEquals(AudioPerfectPitchConfigAggregatesFactory.class.getName(), audioPerfectPitchFactory.getClass().getName());
     }
 
-    
 }

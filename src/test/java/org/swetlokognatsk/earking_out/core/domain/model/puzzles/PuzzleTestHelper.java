@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model;
+package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
 import static org.junit.Assert.assertNotNull;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;

@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.inftrastructure.adapters;
+package org.swetlokognatsk.earking_out.inftrastructure.adapters.piano;
 
 import static org.junit.Assert.*;
 import org.apache.commons.lang3.ArrayUtils;
@@ -6,6 +6,7 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 
 public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, InMemoryPianoKeyboardRepository> {
@@ -32,6 +33,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
 
     @Before
     public void setup() {
+        DI.clear();
         repository = DI.get(InMemoryPianoKeyboardRepository.class);
     }
 
@@ -49,7 +51,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
 
     /**
      * See
-     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
+     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
      * regarding @Deprecated
      */
     @Test

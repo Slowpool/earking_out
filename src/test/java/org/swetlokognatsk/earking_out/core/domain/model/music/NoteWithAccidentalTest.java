@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model;
+package org.swetlokognatsk.earking_out.core.domain.model.music;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

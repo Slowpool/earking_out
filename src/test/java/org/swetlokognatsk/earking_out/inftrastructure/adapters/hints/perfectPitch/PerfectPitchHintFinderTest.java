@@ -1,11 +1,11 @@
-package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints;
+package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch;
 
 import static org.junit.Assert.*;
 import org.junit.*;
-import org.swetlokognatsk.earking_out.core.domain.model.PuzzleTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzleTestHelper;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
@@ -17,6 +17,7 @@ public class PerfectPitchHintFinderTest {
 
     @Before
     public void setup() {
+        DI.clear();
         puzzleHelper = new PuzzleTestHelper(DI.get(PuzzleConfigRepository.class));
     }
 

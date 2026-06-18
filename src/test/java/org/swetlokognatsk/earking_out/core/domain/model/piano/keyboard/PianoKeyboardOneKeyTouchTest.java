@@ -1,8 +1,9 @@
-package org.swetlokognatsk.earking_out.core.domain.model.piano;
+package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.piano.PianoKeyboardTestHelper.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
+
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 
