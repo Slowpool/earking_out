@@ -126,7 +126,6 @@ public final class EarkingOutApplication extends Application {
     // TODO is `delivering mechanism` correct/existing term here?
     // app-level delivering mechanism
     private void updateConfigProperty(final ConfigPropertyUpdatingEvent event) {
-        // TODO can app service be skipped here so that the infrastructure service is used here instead?
         var puzzleConfigService = DI.get(PuzzleConfigService.class);
         puzzleConfigService.updateProperty(event.exercise, event.configProperty, event.newValue);
     }
