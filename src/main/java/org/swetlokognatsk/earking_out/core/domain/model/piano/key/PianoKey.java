@@ -17,7 +17,7 @@ public final class PianoKey extends Entity<Byte> {
         return isSelected;
     }
 
-    public void setIsSelected(boolean value) {
+    protected void setIsSelected(boolean value) {
         isSelected = value;
     }
 
@@ -27,6 +27,10 @@ public final class PianoKey extends Entity<Byte> {
 
     public boolean getIsPressed() {
         return isPressed;
+    }
+
+    public PianoKeyMode getMode() {
+        return mode;
     }
 
     public PianoKey(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService) {

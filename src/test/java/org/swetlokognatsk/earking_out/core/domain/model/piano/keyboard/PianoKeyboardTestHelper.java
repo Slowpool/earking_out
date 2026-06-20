@@ -5,17 +5,16 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 
 public final class PianoKeyboardTestHelper {
-
-    private PianoKeyboardTestHelper() {
-    }
+    // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up. // TODO will they?
+    protected final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
 
     public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
-        var pianoKeyboard = PianoKeyboardAggregatesFactory.create(id);
+        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id);
         return pianoKeyboard;
     }
 
     public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final byte[] selectedKeys) {
-        var pianoKeyboard = PianoKeyboardAggregatesFactory.create(id, selectedKeys);
+        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, selectedKeys);
         return pianoKeyboard;
     }
 

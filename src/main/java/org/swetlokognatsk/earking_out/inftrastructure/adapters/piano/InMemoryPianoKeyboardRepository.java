@@ -13,14 +13,14 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository 
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
 
     public InMemoryPianoKeyboardRepository(final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory) {
-        initPianoKeyboards();
         this.pianoKeyboardAggregatesFactory = pianoKeyboardAggregatesFactory;
+        initPianoKeyboards();
     }
 
     protected void initPianoKeyboards() {
         PianoKeyboardAggregate pianoKeyboard;
         for (var pianoKeyboardId : PianoKeyboardId.values()) {
-            pianoKeyboard = PianoKeyboardAggregatesFactory.create(pianoKeyboardId);
+            pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId);
             pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
         }
     }

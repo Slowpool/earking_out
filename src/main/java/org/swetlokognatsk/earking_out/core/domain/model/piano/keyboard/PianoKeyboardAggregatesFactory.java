@@ -9,11 +9,11 @@ public final class PianoKeyboardAggregatesFactory implements Factory<PianoKeyboa
         throw new RuntimeException("not implemented");
     }
 
-    public static PianoKeyboardAggregate create(final PianoKeyboardId id) {
+    public PianoKeyboardAggregate create(final PianoKeyboardId id) {
         return create(id, new byte[0]);
     }
 
-    public static PianoKeyboardAggregate create(final PianoKeyboardId id, final byte[] selectedKeys) {
+    public PianoKeyboardAggregate create(final PianoKeyboardId id, final byte[] selectedKeys) {
         return new PianoKeyboardAggregate(id, selectedKeys);
     }
 }

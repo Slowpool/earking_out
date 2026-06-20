@@ -47,9 +47,8 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return byteSelectedKeys;
     }
 
-    // TODO make read-only
-    public final PianoKey getPressedPianoKey() {
-        return pressedKey;
+    public final Byte getPressedPianoKeyNumber() {
+        return pressedKey == null ? null : pressedKey.keyNumber;
     }
 
     protected PianoKey getPianoKey(byte keyNumber) {
