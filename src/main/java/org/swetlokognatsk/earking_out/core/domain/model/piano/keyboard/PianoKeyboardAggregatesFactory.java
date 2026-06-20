@@ -8,4 +8,12 @@ public final class PianoKeyboardAggregatesFactory implements Factory<PianoKeyboa
     public PianoKeyboardAggregate createDefault(final DependentAggregatesDTO dependentAggregates) {
         throw new RuntimeException("not implemented");
     }
+
+    public static PianoKeyboardAggregate create(final PianoKeyboardId id) {
+        return create(id, new byte[0]);
+    }
+
+    public static PianoKeyboardAggregate create(final PianoKeyboardId id, final byte[] selectedKeys) {
+        return new PianoKeyboardAggregate(id, selectedKeys);
+    }
 }

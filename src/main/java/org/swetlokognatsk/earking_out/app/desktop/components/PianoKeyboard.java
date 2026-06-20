@@ -62,6 +62,10 @@ public final class PianoKeyboard extends Region {
         children.addAll(blackPianoKeys);
     }
 
+    public void updateState(final PianoKeyboardState newState) {
+
+    }
+
     // protected void toggleSelection(PianoKey pianoKey) {
     //     pianoKey.toggleSelection();
 

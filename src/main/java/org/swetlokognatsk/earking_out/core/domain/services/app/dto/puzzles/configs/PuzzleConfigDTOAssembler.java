@@ -5,7 +5,6 @@ import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.EndPuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
@@ -17,7 +16,7 @@ public final class PuzzleConfigDTOAssembler {
     static {
         EndPuzzleConfigDTOAssembler<?, ?, ?> dtoAssembler;
         for (var exercise : ExercisesFactory.getAll()) {
-            dtoAssembler = EndDTOAssemblersFactory.create(exercise);
+            dtoAssembler = EndPuzzleConfigDTOAssemblersFactory.create(exercise);
             endDtoAssemblers.put(exercise, dtoAssembler);
         }
     }
