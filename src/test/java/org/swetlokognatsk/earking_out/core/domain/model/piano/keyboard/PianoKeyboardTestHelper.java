@@ -3,21 +3,19 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.junit.Assert.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 
 public final class PianoKeyboardTestHelper {
 
     private PianoKeyboardTestHelper() {
     }
 
-    public static PianoKeyboardAggregate createPianoKeyboard(PianoKeyboardId id) {
-        var pianoKeyboard = new PianoKeyboardAggregate(id);
+    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
+        var pianoKeyboard = PianoKeyboardAggregatesFactory.create(id);
         return pianoKeyboard;
     }
 
-    public static PianoKeyboardAggregate createPianoKeyboard(PianoKeyboardId id, byte[] selectedKeys) {
-        var pianoKeyboard = new PianoKeyboardAggregate(id, selectedKeys);
+    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final byte[] selectedKeys) {
+        var pianoKeyboard = PianoKeyboardAggregatesFactory.create(id, selectedKeys);
         return pianoKeyboard;
     }
 

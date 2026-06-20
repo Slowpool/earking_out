@@ -20,7 +20,7 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository 
     protected void initPianoKeyboards() {
         PianoKeyboardAggregate pianoKeyboard;
         for (var pianoKeyboardId : PianoKeyboardId.values()) {
-            pianoKeyboard = new PianoKeyboardAggregate(pianoKeyboardId);
+            pianoKeyboard = PianoKeyboardAggregatesFactory.create(pianoKeyboardId);
             pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
         }
     }

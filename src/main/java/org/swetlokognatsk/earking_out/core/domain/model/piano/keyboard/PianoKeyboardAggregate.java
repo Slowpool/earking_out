@@ -70,10 +70,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return mode.isTouchMode();
     }
 
-    public PianoKeyboardAggregate(final PianoKeyboardId id) {
-        this(id, new byte[0]);
-    }
-
     public PianoKeyboardAggregate(final PianoKeyboardId id, final byte[] selectedKeyNumbers) {
         super(id);
         this.mode = getModeById(id);
@@ -234,13 +230,13 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
     }
 
-    protected void selectKey(PianoKey pianoKey) {
+    protected void selectKey(final PianoKey pianoKey) {
         selectedKeys.add(pianoKey);
-        pianoKey.setIsSelected(true);
+        pianoKey.select();
     }
 
-    protected void unselectKey(PianoKey pianoKey) {
+    protected void unselectKey(final PianoKey pianoKey) {
         selectedKeys.remove(pianoKey);
-        pianoKey.setIsSelected(false);
+        pianoKey.unselect();
     }
 }

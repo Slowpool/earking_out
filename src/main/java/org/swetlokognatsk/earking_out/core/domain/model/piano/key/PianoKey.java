@@ -84,4 +84,22 @@ public final class PianoKey extends Entity<Byte> {
     protected void stopSound() {
         // soundPlayer.stop();
     }
+
+    public void select() {
+        validateSelection();
+        this.setIsSelected(true);
+    }
+
+    public void unselect() {
+        validateUnselection();
+        this.setIsSelected(false);
+    }
+
+    protected void validateSelection() {
+        // TODO
+    }
+
+    protected void validateUnselection() {
+        // TODO
+    }
 }
