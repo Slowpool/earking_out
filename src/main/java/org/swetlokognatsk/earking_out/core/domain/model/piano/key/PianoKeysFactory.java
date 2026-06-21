@@ -8,13 +8,13 @@ public final class PianoKeysFactory {
     private PianoKeysFactory() {
     }
 
-    public static PianoKey create(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected) {
+    public static PianoKey create(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected) {
         var keyColorService = DI.get(PianoKeyColorService.class);
         var pianoKey = new PianoKey(keyNumber, mode, isSelected, keyColorService);
         return pianoKey;
     }
 
-    public static PianoKey create(final byte keyNumber, final PianoKeyMode mode) {
+    public static PianoKey create(final PianoKeyNumber keyNumber, final PianoKeyMode mode) {
         return create(keyNumber, mode, false);
     }
 

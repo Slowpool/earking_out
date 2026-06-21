@@ -1,13 +1,21 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard;
 
 import static org.junit.Assert.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import org.junit.*;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 
 /**
- * idea: to test the dto assembling itself, we need only 2 pairs of aggregate and corresponding dto. both aggregates' fields must be different, so that aggregate.x != dto.x for each field. then, if mapping of x is correct for first and second pair, then mapping of this field works fine. this way we test each field and if mapping works fine for these 2 pairs, then the whole mapping works fine. using extra pairs (third, fourth and further) for mapping itself is redundant.
+ * idea: to test the dto assembling itself, we need only 2 pairs of aggregate
+ * and corresponding dto. both aggregates' fields must be different, so that
+ * aggregate.x != dto.x for each field. then, if mapping of x is correct for
+ * first and second pair, then mapping of this field works fine. this way we
+ * test each field and if mapping works fine for these 2 pairs, then the whole
+ * mapping works fine. using extra pairs (third, fourth and further) for mapping
+ * itself is redundant.
  */
 public final class PianoKeyboardDTOAssemblerTest {
     protected final PianoKeyboardAggregatesFactory pianoKeyboardFactory;
@@ -21,11 +29,12 @@ public final class PianoKeyboardDTOAssemblerTest {
     public PianoKeyboardDTOAssemblerTest() {
         pianoKeyboardFactory = new PianoKeyboardAggregatesFactory();
 
-        pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, new byte[] { 4, 5 });
+        var selectedKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
+        pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, selectedKeys);
         dto1 = PianoKeyboardDtoAssembler.assemble(pianoKeyboard1);
 
         pianoKeyboard2 = pianoKeyboardFactory.create(PianoKeyboardId.ROOT_NOTE_PICKER);
-        pianoKeyboard2.pressKey((byte) 7);
+        pianoKeyboard2.pressKey(FIRST_NOTE_NUMBER.add(3));
         dto2 = PianoKeyboardDtoAssembler.assemble(pianoKeyboard2);
     }
 

@@ -5,10 +5,20 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.
 
 public final class PianoKeyNumber extends ValueObject {
     public final byte value;
+    public final byte octaveScopedKeyNumber;
+
+    protected byte calculateOctaveScopedKeyNumber() {
+        return (byte) ((value - SHIFT - 1) % KEYS_IN_OCTAVE + 1);
+    }
+
+    public byte getOctaveScopedKeyNumber() {
+        return octaveScopedKeyNumber;
+    }
 
     private PianoKeyNumber(final int keyNumber) {
         validate(keyNumber);
-        this.value = (byte) keyNumber;
+        value = (byte) keyNumber;
+        octaveScopedKeyNumber = calculateOctaveScopedKeyNumber();
     }
 
     // TODO try to use the same optimization as in any Object-version of primitive type (Integer, Byte)
@@ -21,11 +31,10 @@ public final class PianoKeyNumber extends ValueObject {
     }
 
     public static void validate(final int keyNumber) {
-        if (keyNumber < FIRST_NOTE_NUMBER) {
+        if (keyNumber < BYTE_FIRST_NOTE_NUMBER) {
             throw new IllegalArgumentException("keyNumber is too small: " + keyNumber);
         }
-        var lastKeyNumber = FIRST_NOTE_NUMBER + PIANO_KEYS_NUMBER - 1;
-        if (keyNumber > lastKeyNumber) {
+        if (keyNumber > BYTE_LAST_NOTE_NUMBER) {
             throw new IllegalArgumentException("keyNumber is too big: " + keyNumber);
         }
     }
@@ -44,4 +53,41 @@ public final class PianoKeyNumber extends ValueObject {
         var other = (PianoKeyNumber) obj;
         return other.value == value;
     }
+
+    public PianoKeyNumber add(final byte number) {
+        return add((int) number);
+    }
+
+    public PianoKeyNumber add(final int number) {
+        var keyNumber = Math.addExact(value, number);
+        try {
+            var newKeyNumber = PianoKeyNumber.valueOf(keyNumber);
+            return newKeyNumber;
+        } catch (IllegalArgumentException e) {
+            throw new ArithmeticException("piano key number overflow");
+        }
+    }
+
+    public PianoKeyNumber increment() {
+        return add(1);
+    }
+
+    public PianoKeyNumber subtract(final byte number) {
+        return subtract((int) number);
+    }
+
+    public PianoKeyNumber subtract(final int number) {
+        var keyNumber = Math.subtractExact(value, number);
+        try {
+            var newKeyNumber = PianoKeyNumber.valueOf(keyNumber);
+            return newKeyNumber;
+        } catch (IllegalArgumentException e) {
+            throw new ArithmeticException("piano key number overflow");
+        }
+    }
+
+    public PianoKeyNumber decrement() {
+        return subtract(1);
+    }
+
 }

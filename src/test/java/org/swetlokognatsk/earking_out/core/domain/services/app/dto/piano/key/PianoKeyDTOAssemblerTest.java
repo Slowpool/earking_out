@@ -1,9 +1,11 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key;
 
 import static org.junit.Assert.assertEquals;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 
 /**
@@ -20,10 +22,10 @@ public final class PianoKeyDTOAssemblerTest {
     protected final PianoKeyDTO dto2;
 
     public PianoKeyDTOAssemblerTest() {
-        pianoKey1 = PianoKeysFactory.create((byte) 4, PianoKeyMode.SELECT);
+        pianoKey1 = PianoKeysFactory.create(FIRST_NOTE_NUMBER, PianoKeyMode.SELECT);
         dto1 = PianoKeyDTOAssembler.assemble(pianoKey1);
 
-        pianoKey2 = PianoKeysFactory.create((byte) 5, PianoKeyMode.TOUCH);
+        pianoKey2 = PianoKeysFactory.create(FIRST_NOTE_NUMBER.increment(), PianoKeyMode.TOUCH);
         pianoKey2.press();
         pianoKey2.select();
         dto2 = PianoKeyDTOAssembler.assemble(pianoKey2);

@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import org.junit.Before;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.DI;
@@ -21,7 +22,7 @@ abstract class PianoKeyboardTest {
         return PianoKeyboardTestHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode);
     }
 
-    protected PianoKeyboardAggregate createPianoKeyboard(byte[] selectedKeys) {
+    protected PianoKeyboardAggregate createPianoKeyboard(final PianoKeyNumber[] selectedKeys) {
         return PianoKeyboardTestHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode, selectedKeys);
     }
 

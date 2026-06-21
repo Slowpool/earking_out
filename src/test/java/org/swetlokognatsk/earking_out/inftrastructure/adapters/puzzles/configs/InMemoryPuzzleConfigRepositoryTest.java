@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.DI;
@@ -57,7 +58,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
         var aggregate = getPerfectPitchConfigAggregate();
         assertEquals(null, aggregate.getNormalizedRootNote());
 
-        Byte newNormalizedRootNote = 9;
+        PianoKeyNumber newNormalizedRootNote = PianoKeyNumber.valueOf(9);
         aggregate.updateProperty(AudioPerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP, newNormalizedRootNote);
 
         aggregate = getPerfectPitchConfigAggregate();
@@ -75,7 +76,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
         var aggregate = getPerfectPitchConfigAggregate();
         assertEquals(null, aggregate.getNormalizedRootNote());
 
-        Byte newNormalizedRootNote = 9;
+        PianoKeyNumber newNormalizedRootNote = PianoKeyNumber.valueOf(9);
         aggregate.updateProperty(AudioPerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP, newNormalizedRootNote);
         repository.genericSave(aggregate);
 

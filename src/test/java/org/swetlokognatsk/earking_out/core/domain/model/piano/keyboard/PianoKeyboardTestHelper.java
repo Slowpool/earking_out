@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.junit.Assert.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public final class PianoKeyboardTestHelper {
     // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up. // TODO will they? is it fine for factory to be instantiable at all? if yes, keep making them instantiable everywhere. if not, make all of them static
@@ -13,12 +14,12 @@ public final class PianoKeyboardTestHelper {
         return pianoKeyboard;
     }
 
-    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final byte[] selectedKeys) {
+    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys) {
         var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, selectedKeys);
         return pianoKeyboard;
     }
 
-    public static void assertOnlyTheseKeysAreSelected(byte[] expectedPianoKeys, PianoKeyboardAggregate pianoKeyboard) {
+    public static void assertOnlyTheseKeysAreSelected(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyboardAggregate pianoKeyboard) {
         var selectedPianoKeys = pianoKeyboard.getSelectedKeyNumbers();
 
         assertEquals(expectedPianoKeys.length, selectedPianoKeys.length);
@@ -30,18 +31,17 @@ public final class PianoKeyboardTestHelper {
 
         // check the states of PianoKeys of PianoKeyboard
         PianoKey pianoKeyObj;
-        Byte[] ByteExpectedPianoKeys = ArrayUtils.toObject(expectedPianoKeys);
-        for (var pianoKey : ByteExpectedPianoKeys) {
+        for (var pianoKey : expectedPianoKeys) {
             pianoKeyObj = pianoKeyboard.getPianoKeys().get(pianoKey);
             assertTrue(pianoKeyObj.getIsSelected());
         }
     }
 
-    public static void assertOnlyThisKeyIsSelected(byte expectedKey, PianoKeyboardAggregate pianoKeyboard) {
-        assertOnlyTheseKeysAreSelected(new byte[] { expectedKey }, pianoKeyboard);
+    public static void assertOnlyThisKeyIsSelected(final PianoKeyNumber expectedKey, final PianoKeyboardAggregate pianoKeyboard) {
+        assertOnlyTheseKeysAreSelected(new PianoKeyNumber[] { expectedKey }, pianoKeyboard);
     }
 
-    public static void assertNoSelectedKeys(PianoKeyboardAggregate pianoKeyboard) {
-        assertOnlyTheseKeysAreSelected(new byte[0], pianoKeyboard);
+    public static void assertNoSelectedKeys(final PianoKeyboardAggregate pianoKeyboard) {
+        assertOnlyTheseKeysAreSelected(new PianoKeyNumber[0], pianoKeyboard);
     }
 }

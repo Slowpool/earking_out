@@ -2,11 +2,11 @@ package org.swetlokognatsk.earking_out.app.desktop.services;
 
 import java.util.Map;
 
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+
 public interface KeySoundsService {
     /**
-     * Byte - key number
-     * {@link org.swetlokognatsk.earking_out.core.domain.model.music.Invariants#FIRST_NOTE_NUMBER}
-     * String - absolute path to sound file
+     * 2nd param (String) - absolute path to sound file
      */
-    Map<Byte, String> getMap();
+    Map<PianoKeyNumber, String> getMap();
 }

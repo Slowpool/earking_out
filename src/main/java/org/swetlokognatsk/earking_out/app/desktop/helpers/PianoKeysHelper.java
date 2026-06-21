@@ -6,8 +6,10 @@ import java.util.function.Consumer;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 
 public final class PianoKeysHelper {
     public static final int WHITE_KEYS = 0;
@@ -24,13 +26,13 @@ public final class PianoKeysHelper {
      * @param pianoKeys
      * @return
      */
-    public static PianoKey[][] dichotomize(Map<Byte, PianoKey> pianoKeys) {
+    public static PianoKey[][] dichotomize(Map<PianoKeyNumber, PianoKey> pianoKeys) {
         var whiteKeys = new ArrayList<PianoKey>(Invariants.WHITE_PIANO_KEYS_NUMBER);
         var blackKeys = new ArrayList<PianoKey>(Invariants.BLACK_PIANO_KEYS_NUMBER);
 
         ArrayList<PianoKey> someKeys;
         PianoKeyColor color;
-        for (Byte pianoKeyNumber : pianoKeys.keySet()) {
+        for (PianoKeyNumber pianoKeyNumber : pianoKeys.keySet()) {
             color = colorService.getColor(pianoKeyNumber);
             someKeys = color == PianoKeyColor.WHITE ? whiteKeys : blackKeys;
             someKeys.add(pianoKeys.get(pianoKeyNumber));
@@ -42,8 +44,10 @@ public final class PianoKeysHelper {
         return dichotomizedKeys;
     }
 
-    public static void forEachKey(Consumer<Byte> action) {
-        for (Byte keyNumber = Invariants.FIRST_NOTE_NUMBER; keyNumber < Invariants.PIANO_KEYS_NUMBER + Invariants.FIRST_NOTE_NUMBER; keyNumber++) {
+    public static void forEachKey(Consumer<PianoKeyNumber> action) {
+        PianoKeyNumber keyNumber;
+        for (var byteKeyNumber = FIRST_NOTE_NUMBER.value; byteKeyNumber < LAST_NOTE_NUMBER.value + 1; byteKeyNumber++) {
+            keyNumber = PianoKeyNumber.valueOf(byteKeyNumber);
             action.accept(keyNumber);
         }
     }

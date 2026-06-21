@@ -1,10 +1,10 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch;
 
 import static org.junit.Assert.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzleTestHelper;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -44,7 +44,7 @@ public class PerfectPitchHintFinderTest {
 
         String fakeSolution;
         String expectedSubstring;
-        for (byte i = Invariants.FIRST_NOTE_NUMBER; i < 90; i++) {
+        for (byte i = FIRST_NOTE_NUMBER.value; i < PIANO_KEYS_NUMBER; i++) {
             for (var exerciseType : ExerciseTypes.values()) {
                 expectedSubstring = String.valueOf(i);
                 fakeSolution = String.valueOf(i);

@@ -1,12 +1,15 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch;
 
 import static org.junit.Assert.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.FIRST_NOTE_NUMBER;
+
 import java.util.Arrays;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
@@ -21,12 +24,11 @@ public class RandomAudioPerfectPitchPuzzleGeneratorTest {
 
     @Test
     public void generateSolutionTest() {
-        var notes = new byte[] { 4, 5 };
+        var notes = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
         var generator = createPuzzleGenerator(notes);
 
-        Byte[] ByteNotes = ArrayUtils.toObject(notes);
-        Stream<Byte> stream = Arrays.stream(ByteNotes);
-        var map = stream.map((Byte noteNumber) -> new Solution(String.valueOf(noteNumber)));
+        Stream<PianoKeyNumber> stream = Arrays.stream(notes);
+        var map = stream.map((PianoKeyNumber keyNumber) -> new Solution(String.valueOf(keyNumber.value)));
         Solution[] possibleSolutions = map.toArray(Solution[]::new);
         Solution generatedSolution;
         for (int i = 0; i < ITERATIONS_NUMBER; i++) {
@@ -35,7 +37,7 @@ public class RandomAudioPerfectPitchPuzzleGeneratorTest {
         }
     }
 
-    protected static RandomAudioPerfectPitchPuzzleGenerator createPuzzleGenerator(final byte[] normalizedNotesForPuzzle) {
+    protected static RandomAudioPerfectPitchPuzzleGenerator createPuzzleGenerator(final PianoKeyNumber[] normalizedNotesForPuzzle) {
         // TODO how to validate aggregate?
         // TODO can it be in invalid state at all?
         // firstly creating puzzleConfig for validation

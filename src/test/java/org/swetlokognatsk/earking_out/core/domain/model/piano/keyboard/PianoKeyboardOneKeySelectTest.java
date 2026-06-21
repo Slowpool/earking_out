@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
@@ -21,7 +21,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
     @Test
     // TODO use https://github.com/piotr-yuxuan/custom-ignore-annotation/
     public void initKeyboardWithKey() {
-        var presetKeys = new byte[] { FIRST_NOTE_NUMBER };
+        var presetKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER };
         var pianoKeyboard = createPianoKeyboard(presetKeys);
 
         assertOnlyTheseKeysAreSelected(presetKeys, pianoKeyboard);
@@ -29,7 +29,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void initKeyboardWithKeys() {
-        var presetKeys = new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER + 1 };
+        var presetKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
         try {
             createPianoKeyboard(presetKeys);
             fail();
@@ -39,41 +39,28 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void touchOneKey() {
-        byte pianoKey = FIRST_NOTE_NUMBER;
+        PianoKeyNumber keyNumber = FIRST_NOTE_NUMBER;
 
-        pianoKeyboard.touchKey(pianoKey);
+        pianoKeyboard.touchKey(keyNumber);
 
-        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
+        assertOnlyThisKeyIsSelected(keyNumber, pianoKeyboard);
     }
 
     @Test
     public void touchTheSameNote() {
-        byte pianoKey = FIRST_NOTE_NUMBER;
+        PianoKeyNumber keyNumber = FIRST_NOTE_NUMBER;
 
         final int NUMBER_OF_TOUCHES = 2;
         for (int i = 0; i < NUMBER_OF_TOUCHES; i++) {
-            pianoKeyboard.touchKey(pianoKey);
+            pianoKeyboard.touchKey(keyNumber);
         }
 
-        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
-    }
-
-    @Test
-    public void touchNonExistingKeys() {
-        var nonExistingPianoKeys = new byte[] { FIRST_NOTE_NUMBER - 1, (byte) (FIRST_NOTE_NUMBER + PIANO_KEYS_NUMBER) };
-
-        for (var nonExistingPianoKey : nonExistingPianoKeys) {
-            try {
-                pianoKeyboard.touchKey(nonExistingPianoKey);
-                fail();
-            } catch (IndexOutOfBoundsException e) {
-            }
-        }
+        assertOnlyThisKeyIsSelected(keyNumber, pianoKeyboard);
     }
 
     @Test
     public void touchSeveralKeys() {
-        var pianoKeys = new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER + 1 };
+        var pianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
 
         for (var pianoKey : pianoKeys) {
             pianoKeyboard.touchKey(pianoKey);
@@ -84,7 +71,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void initWithDuplicateKeys() {
-        var presetKeys = new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER };
+        var presetKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER };
         try {
             createPianoKeyboard(presetKeys);
             fail();

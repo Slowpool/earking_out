@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -25,7 +26,7 @@ public final class PuzzleConfigService {
     }
 
     // TODO should it be here or in separated PerfectPitchConfigService?
-    public void updatePropertyViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
+    public void updatePropertyViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber keyNumber) {
         var puzzleConfigAggregate = getPuzzleConfigAggregate(pianoKeyboardId.exercise);
         try {
             puzzleConfigAggregate.updateViaPianoKeyPressing(pianoKeyboardId, keyNumber);

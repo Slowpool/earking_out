@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -51,7 +52,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         return pianoKeyboardsMap;
     }
 
-    public final void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
+    public final void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber keyNumber) {
         var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
         pianoKeyboard.pressKey(keyNumber);
         // TODO if further code fails, the aggregate state would be inconsistent

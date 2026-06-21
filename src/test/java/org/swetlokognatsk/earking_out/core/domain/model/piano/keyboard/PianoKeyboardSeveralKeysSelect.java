@@ -1,8 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import org.junit.Test;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
@@ -20,14 +19,14 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
     @Test
     public void initKeyboardWithOneKey() {
         var pianoKey = FIRST_NOTE_NUMBER;
-        pianoKeyboard = createPianoKeyboard(new byte[] { pianoKey });
+        pianoKeyboard = createPianoKeyboard(new PianoKeyNumber[] { pianoKey });
 
         assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
     }
 
     @Test
     public void initKeyboardWithSeveralKeys() {
-        var selectedPianoKeys = new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER + 1 };
+        var selectedPianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
         pianoKeyboard = createPianoKeyboard(selectedPianoKeys);
 
         assertOnlyTheseKeysAreSelected(selectedPianoKeys, pianoKeyboard);
@@ -36,7 +35,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
     @Test
     public void touchingSeveralKeys() {
-        var pianoKeys = new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER + 1 };
+        var pianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
 
         pianoKeyboard.touchKey(pianoKeys[0]);
         pianoKeyboard.touchKey(pianoKeys[1]);

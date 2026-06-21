@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 
@@ -11,7 +12,7 @@ public final class PuzzleGuessingService {
         // TODO use this method for NOTES_AS_CHARACTERS case
     }
 
-    public void guessViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
+    public void guessViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber keyNumber) {
         // TODO
     }
 

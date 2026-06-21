@@ -4,17 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
 
 public final class KeySoundsFromHintsService implements KeySoundsService {
-    public Map<Byte, String> getMap() {
-        var map = new HashMap<Byte, String>();
+    public Map<PianoKeyNumber, String> getMap() {
+        var map = new HashMap<PianoKeyNumber, String>();
         var audioHints = DI.get(AudioPerfectPitchHints.class);
 
-        PianoKeysHelper.forEachKey((Byte keyNumber) -> {
+        PianoKeysHelper.forEachKey((PianoKeyNumber keyNumber) -> {
             // yes, a bit awkward, but that's how the cookie crumbles
-            String key = String.valueOf(keyNumber);
+            String key = String.valueOf(keyNumber.value);
             Solution solution = new Solution(key);
             String hintValue = audioHints.find(solution).getValue();
             map.put(keyNumber, hintValue);

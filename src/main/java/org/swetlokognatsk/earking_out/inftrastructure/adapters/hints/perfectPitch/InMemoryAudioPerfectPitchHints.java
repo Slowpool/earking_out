@@ -6,6 +6,7 @@ import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
 
 public final class InMemoryAudioPerfectPitchHints implements AudioPerfectPitchHints {
@@ -13,8 +14,8 @@ public final class InMemoryAudioPerfectPitchHints implements AudioPerfectPitchHi
 
     // TODO Java resources - i think it solves the problem of direct access to file system
     public InMemoryAudioPerfectPitchHints() {
-        PianoKeysHelper.forEachKey((Byte keyNumber) -> {
-            String key = String.valueOf(keyNumber);
+        PianoKeysHelper.forEachKey((PianoKeyNumber keyNumber) -> {
+            String key = String.valueOf(keyNumber.value);
             // TODO path should be taken from config?
             String filePath = String.format("/piano_keys/key%s.wav", key);
             UsualHint hint = new UsualHint(filePath);

@@ -1,10 +1,11 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch;
 
 import static org.junit.Assert.assertEquals;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
-
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.DI;
@@ -17,7 +18,7 @@ public final class PerfectPitchConfigAggregateTest {
         var aggregate = getPerfectPitchAggregate();
         assertEquals(null, aggregate.getNormalizedRootNote());
 
-        Byte newRootNote = 4;
+        PianoKeyNumber newRootNote = FIRST_NOTE_NUMBER;
         aggregate.updateViaPianoKeyPressing(PianoKeyboardId.ROOT_NOTE_PICKER, newRootNote);
 
         assertEquals(newRootNote, aggregate.getNormalizedRootNote());
@@ -30,7 +31,7 @@ public final class PerfectPitchConfigAggregateTest {
         var pianoKeyboard = configAggregate.getPianoKeyboardAggregate(pianoKeyboardId);
         assertNoSelectedKeys(pianoKeyboard);
 
-        Byte newRootNote = 4;
+        PianoKeyNumber newRootNote = FIRST_NOTE_NUMBER;
         configAggregate.updateViaPianoKeyPressing(pianoKeyboardId, newRootNote);
 
         assertOnlyThisKeyIsSelected(newRootNote, pianoKeyboard);

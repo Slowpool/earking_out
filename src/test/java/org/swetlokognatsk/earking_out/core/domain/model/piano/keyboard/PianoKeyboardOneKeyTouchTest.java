@@ -3,9 +3,8 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
-
 import org.junit.Test;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
@@ -21,7 +20,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     @Test
     public void initWithSelectedKey() {
         try {
-            createPianoKeyboard(new byte[] { FIRST_NOTE_NUMBER });
+            createPianoKeyboard(new PianoKeyNumber[] { FIRST_NOTE_NUMBER });
             fail();
         } catch (IllegalArgumentException e) {
         }
@@ -30,7 +29,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     @Test
     public void initWithSelectedKeys() {
         try {
-            createPianoKeyboard(new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER + 1 });
+            createPianoKeyboard(new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() });
             fail();
         } catch (IllegalArgumentException e) {
         }
@@ -38,7 +37,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
     @Test
     public void touchOneKey() {
-        byte pianoKey = FIRST_NOTE_NUMBER;
+        PianoKeyNumber pianoKey = FIRST_NOTE_NUMBER;
 
         pianoKeyboard.touchKey(pianoKey);
 
@@ -47,7 +46,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
     @Test
     public void pressOneKey() {
-        byte pianoKey = FIRST_NOTE_NUMBER;
+        PianoKeyNumber pianoKey = FIRST_NOTE_NUMBER;
 
         pianoKeyboard.pressKey(pianoKey);
         assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
@@ -58,7 +57,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
     @Test
     public void pressKeyTwice() {
-        byte pianoKey = FIRST_NOTE_NUMBER;
+        PianoKeyNumber pianoKey = FIRST_NOTE_NUMBER;
 
         pianoKeyboard.pressKey(pianoKey);
         try {
@@ -70,7 +69,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
     @Test
     public void pressTwoKeys() {
-        byte[] pianoKeys = new byte[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER + 1 };
+        PianoKeyNumber[] pianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
 
         pianoKeyboard.pressKey(pianoKeys[0]);
         try {

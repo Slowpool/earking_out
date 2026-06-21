@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Factory;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public final class PianoKeyboardAggregatesFactory implements Factory<PianoKeyboardAggregate, DependentAggregatesDTO> {
 
@@ -10,10 +11,10 @@ public final class PianoKeyboardAggregatesFactory implements Factory<PianoKeyboa
     }
 
     public PianoKeyboardAggregate create(final PianoKeyboardId id) {
-        return create(id, new byte[0]);
+        return create(id, new PianoKeyNumber[0]);
     }
 
-    public PianoKeyboardAggregate create(final PianoKeyboardId id, final byte[] selectedKeys) {
+    public PianoKeyboardAggregate create(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys) {
         return new PianoKeyboardAggregate(id, selectedKeys);
     }
 }
