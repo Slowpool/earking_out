@@ -5,11 +5,11 @@ public enum Accidentals {
 
     public final byte shift;
 
-    private Accidentals(byte shift) {
+    private Accidentals(final byte shift) {
         this.shift = shift;
     }
 
-    public static byte getShift(Accidentals accidental) {
+    public static byte getShift(final Accidentals accidental) {
         var shift = accidental == null ? 0 : accidental.shift;
         return shift;
     }

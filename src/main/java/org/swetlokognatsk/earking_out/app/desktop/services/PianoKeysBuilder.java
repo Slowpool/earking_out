@@ -58,7 +58,7 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
     }
 
     private byte getCurrentKeyNumberInOctave() {
-        return (byte) (currentKeyIndex % Invariants.KEYS_IN_OCTAVE + 1);
+        return getCurrentKeyNumber().octaveScopedKeyNumber;
     }
 
     public PianoKeysBuilder(final double keyboardWidth, final double keyboardHeight, final PianoKeyNumber[] selectedKeys, final Map<PianoKeyNumber, String> keySounds, final PianoKeyColorService colorService) {

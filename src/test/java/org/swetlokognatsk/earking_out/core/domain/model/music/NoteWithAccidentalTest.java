@@ -1,15 +1,18 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music;
 
 import static org.junit.Assert.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.FIRST_NOTE_NUMBER;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.LAST_NOTE_NUMBER;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-public class NoteWithAccidentalTest {
+public final class NoteWithAccidentalTest {
     public static final NoteWithAccidental[] notesWithAccidental;
-    public static final byte[] normalizedValues;
+    public static final PianoKeyNumber[] normalizedValues;
 
     static final Accidentals[] accidentals;
     static final byte[] accidentalShifts;
@@ -21,13 +24,13 @@ public class NoteWithAccidentalTest {
         // TODO fix auto-formatting
         notesWithAccidental = new NoteWithAccidental[] { new NoteWithAccidental(NoteNames.C, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.E, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.F, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.G, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.A, null, Octaves.FIRST), new NoteWithAccidental(NoteNames.B, null, Octaves.FIRST) };
 
-        normalizedValues = new byte[] { 4, // C1
-                6, // D1
-                8, // E1
-                9, // F1
-                11, // G1
-                13, // A1
-                15 // B1
+        normalizedValues = new PianoKeyNumber[] { PianoKeyNumber.valueOf(4), // C1
+                PianoKeyNumber.valueOf(6), // D1
+                PianoKeyNumber.valueOf(8), // E1
+                PianoKeyNumber.valueOf(9), // F1
+                PianoKeyNumber.valueOf(11), // G1
+                PianoKeyNumber.valueOf(13), // A1
+                PianoKeyNumber.valueOf(15) // B1
         };
 
         // TODO pretty sure more elegant way exists
@@ -89,14 +92,27 @@ public class NoteWithAccidentalTest {
         assertEquals(normalizedCSharp, normalizedDFlat);
     }
 
-    private void checkOctaveNormalizing(Octaves octave, byte octaveShift, Accidentals accidental, byte accidentalShift) {
+    private void checkOctaveNormalizing(final Octaves octave, final byte octaveShift, final Accidentals accidental, final byte accidentalShift) {
         NoteWithAccidental noteWithAccidental;
-        byte correctNormalizedValue;
+        PianoKeyNumber correctNormalizedValue;
         for (int i = 0; i < notesWithAccidental.length; i++) {
             noteWithAccidental = applyOctaveAndAccidentals(notesWithAccidental[i], octave, accidental);
+            if (thisNoteExistsButIsNotUsedInApp(normalizedValues[i], accidentalShift)) {
+                continue;
+            }
             correctNormalizedValue = adjustCorrectNoteValue(normalizedValues[i], octaveShift, accidentalShift);
-            checkNoteNormalizing(noteWithAccidental, correctNormalizedValue);
+            assertNoteNormalizing(noteWithAccidental, correctNormalizedValue);
         }
+    }
+
+    /** Tests traverse all combinations of all notes/accidentals/octaves used in app, though there's edge cases like C1b - the combination of note/accidental/octave is permissible, though normalized value of this note is 3 - there's no PianoKeyNumber in app with such a note. btw from the point of view of domain, note 3 exists. */
+    protected boolean thisNoteExistsButIsNotUsedInApp(final PianoKeyNumber keyNumber, final byte accidentalShift) {
+        if (keyNumber.equals(FIRST_NOTE_NUMBER) && accidentalShift == Accidentals.FLAT.shift) {
+            return true;
+        } else if (keyNumber.equals(LAST_NOTE_NUMBER) && accidentalShift == Accidentals.SHARP.shift) {
+            return true;
+        }
+        return false;
     }
 
     private NoteWithAccidental applyOctaveAndAccidentals(NoteWithAccidental noteWithAccidental, Octaves octave, Accidentals accidental) {
@@ -109,14 +125,14 @@ public class NoteWithAccidentalTest {
         return noteWithAccidental;
     }
 
-    private byte adjustCorrectNoteValue(byte correctNormalizedValue, byte octaveShift, byte accidentalShift) {
-        correctNormalizedValue += octaveShift;
-        correctNormalizedValue += accidentalShift;
+    private PianoKeyNumber adjustCorrectNoteValue(PianoKeyNumber correctNormalizedValue, final byte octaveShift, final byte accidentalShift) {
+        correctNormalizedValue = correctNormalizedValue.add(octaveShift);
+        correctNormalizedValue = correctNormalizedValue.add(accidentalShift);
         return correctNormalizedValue;
     }
 
-    private void checkNoteNormalizing(NoteWithAccidental noteWithAccidental, byte correctNormalizedValue) {
+    private void assertNoteNormalizing(final NoteWithAccidental noteWithAccidental, final PianoKeyNumber expectedtNormalizedValue) {
         var normalizedValue = noteWithAccidental.normalize();
-        assertEquals(correctNormalizedValue, normalizedValue);
+        assertEquals(expectedtNormalizedValue, normalizedValue);
     }
 }

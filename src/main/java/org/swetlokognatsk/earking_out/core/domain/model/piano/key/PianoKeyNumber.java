@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 
+/** `Note number` is synonym for `key number`. Both of them mean both the key on keyboard and according note. */
 public final class PianoKeyNumber extends ValueObject {
     public final byte value;
     public final byte octaveScopedKeyNumber;
@@ -64,7 +65,7 @@ public final class PianoKeyNumber extends ValueObject {
             var newKeyNumber = PianoKeyNumber.valueOf(keyNumber);
             return newKeyNumber;
         } catch (IllegalArgumentException e) {
-            throw new ArithmeticException("piano key number overflow");
+            throw new ArithmeticException("piano key number overflow: " + number);
         }
     }
 
