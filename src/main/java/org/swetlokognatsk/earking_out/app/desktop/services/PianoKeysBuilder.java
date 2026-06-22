@@ -80,17 +80,14 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
     }
 
     public boolean hasNext() {
-        return currentKeyIndex < Invariants.PIANO_KEYS_NUMBER;
+        return (currentKeyIndex + 1) < Invariants.PIANO_KEYS_NUMBER;
     }
 
     public PianoKey next() {
         currentKeyIndex++;
 
-        // var sound = keySounds.get(getCurrentKeyNumber());
-        // var soundFile = new File(sound);
-        // var fileSoundPlayer = new FileSoundPlayer(soundFile);
         var isSelected = ArrayUtils.contains(selectedKeys, getCurrentKeyNumber());
-        var pianoKey = isWhite() ? new WhitePianoKey(isSelected) : new BlackPianoKey(isSelected);
+        var pianoKey = isWhite() ? new WhitePianoKey(getCurrentKeyNumber(), isSelected) : new BlackPianoKey(getCurrentKeyNumber(), isSelected);
 
         calculatePosition(pianoKey);
         calculateDimensions(pianoKey);

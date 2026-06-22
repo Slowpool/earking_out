@@ -2,9 +2,12 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.piano;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
 public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository {
@@ -47,6 +50,12 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository 
 
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregate);
         pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboardCopy);
+    }
+
+    public PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId) {
+        var pianoKeyboard = get(pianoKeyboardId);
+        var dto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        return dto;
     }
 
 }

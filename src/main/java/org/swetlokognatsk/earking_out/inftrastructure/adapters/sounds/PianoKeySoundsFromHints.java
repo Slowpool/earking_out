@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.app.desktop.services;
+package org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +7,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.ports.sounds.PianoKeySounds;
 
-public final class KeySoundsFromHintsService implements KeySoundsService {
+public final class PianoKeySoundsFromHints implements PianoKeySounds<String> {
     public Map<PianoKeyNumber, String> getMap() {
         var map = new HashMap<PianoKeyNumber, String>();
         var audioHints = DI.get(AudioPerfectPitchHints.class);

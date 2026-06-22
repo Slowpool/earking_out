@@ -1,8 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
-import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
 
 public final class PianoKey extends Entity<PianoKeyNumber> {
     private static final long serialVersionUID = 1L;
@@ -12,6 +12,8 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
     private final PianoKeyMode mode;
     private boolean isSelected;
     private boolean isPressed;
+
+    private final SoundPlayer soundPlayer;
 
     public boolean getIsSelected() {
         return isSelected;
@@ -33,11 +35,12 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         return mode;
     }
 
-    public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService) {
+    public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final SoundPlayer soundPlayer) {
         super(keyNumber);
         this.keyNumber = keyNumber;
         this.mode = mode;
         this.color = colorService.getColor(keyNumber);
+        this.soundPlayer = soundPlayer;
 
         setIsSelected(isSelected);
     }
@@ -63,7 +66,7 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
     }
 
     protected void validatePressingInTouchMode() {
-        if (getIsPressed()) {
+        if (isPressed) {
             throw new IllegalStateException("this key is already pressed");
         }
     }
@@ -73,37 +76,40 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
     }
 
     public void release() {
-        if (!getIsPressed()) {
+        if (!isPressed) {
             throw new IllegalStateException("piano key that is not pressed so it cannot be released");
         }
 
         this.setIsPressed(false);
     }
 
-    // TODO yank
     protected void playSound() {
-        // soundPlayer.stopAndPlay();
+        soundPlayer.stopAndPlay();
     }
 
     protected void stopSound() {
-        // soundPlayer.stop();
+        soundPlayer.stop();
     }
 
     public void select() {
-        validateSelection();
+        validateSelecting();
         this.setIsSelected(true);
     }
 
     public void unselect() {
-        validateUnselection();
+        validateUnselecting();
         this.setIsSelected(false);
     }
 
-    protected void validateSelection() {
-        // TODO
+    protected void validateSelecting() {
+        if (isSelected) {
+            throw new IllegalStateException("pianoKey is already selected");
+        }
     }
 
-    protected void validateUnselection() {
-        // TODO
+    protected void validateUnselecting() {
+        if (!isSelected) {
+            throw new IllegalStateException("pianoKey is already unselected");
+        }
     }
 }

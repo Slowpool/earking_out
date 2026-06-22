@@ -9,6 +9,7 @@ import org.swetlokognatsk.earking_out.app.desktop.services.PianoKeysBuildersFact
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import javafx.scene.layout.Region;
 
 public final class PianoKeyboard extends Region {
@@ -66,8 +67,12 @@ public final class PianoKeyboard extends Region {
         children.addAll(blackPianoKeys);
     }
 
-    public void updateState(final PianoKeyboardState newState) {
-
+    public void hydrateState(final PianoKeyboardDTO newState) {
+        PianoKey pianoKeyComponent;
+        for (var pianoKey : newState.pianoKeys()) {
+            pianoKeyComponent = pianoKeys.get(pianoKey.keyNumber());
+            pianoKeyComponent.hydrateState(pianoKey);
+        }
     }
 
     // protected void toggleSelection(PianoKey pianoKey) {

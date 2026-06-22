@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.components;
 
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -18,8 +20,8 @@ public final class WhitePianoKey extends PianoKey {
         return notSelectedBackground;
     }
 
-    public WhitePianoKey(final boolean isSelected) {
-        super(isSelected);
+    public WhitePianoKey(final PianoKeyNumber keyNumber, final boolean isSelected) {
+        super(keyNumber, isSelected);
 
     }
 }

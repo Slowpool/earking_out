@@ -1,9 +1,10 @@
-package org.swetlokognatsk.earking_out.app.desktop.services;
+package org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds;
 
 import java.io.File;
+import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
 import javafx.scene.media.AudioClip;
 
-public final class FileSoundPlayer implements SoundPlayerService {
+public final class FileSoundPlayer implements SoundPlayer {
     protected AudioClip audioClip;
 
     public FileSoundPlayer(File file) {

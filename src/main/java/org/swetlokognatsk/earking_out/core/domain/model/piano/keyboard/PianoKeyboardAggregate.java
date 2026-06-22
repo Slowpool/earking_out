@@ -12,6 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 
 public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private static final long serialVersionUID = 1L;
@@ -80,11 +81,13 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
 
         final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
         final PianoKeyMode pianoKeyMode = getPianoKeyMode();
+        // TODO it seems awkward to get factory from DI here
+        var pianoKeysFactory = DI.get(PianoKeysFactory.class);
 
         PianoKeysHelper.forEachKey((PianoKeyNumber keyNumber) -> {
             final boolean isSelected = ArrayUtils.contains(selectedKeyNumbers, keyNumber);
 
-            final var pianoKey = PianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected);
+            final var pianoKey = pianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected);
             pianoKeys.put(keyNumber, pianoKey);
 
             tryAddAsSelected(pianoKey);

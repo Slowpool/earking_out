@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 
 /**
  * See
@@ -14,6 +15,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFacto
  * class description for explanation.
  */
 public final class PianoKeyDTOAssemblerTest {
+    protected final PianoKeysFactory pianoKeysFactory;
 
     protected final PianoKey pianoKey1;
     protected final PianoKeyDTO dto1;
@@ -22,10 +24,12 @@ public final class PianoKeyDTOAssemblerTest {
     protected final PianoKeyDTO dto2;
 
     public PianoKeyDTOAssemblerTest() {
-        pianoKey1 = PianoKeysFactory.create(FIRST_NOTE_NUMBER, PianoKeyMode.SELECT);
+        pianoKeysFactory = DI.get(PianoKeysFactory.class);
+
+        pianoKey1 = pianoKeysFactory.create(FIRST_NOTE_NUMBER, PianoKeyMode.SELECT);
         dto1 = PianoKeyDTOAssembler.assemble(pianoKey1);
 
-        pianoKey2 = PianoKeysFactory.create(FIRST_NOTE_NUMBER.increment(), PianoKeyMode.TOUCH);
+        pianoKey2 = pianoKeysFactory.create(FIRST_NOTE_NUMBER.increment(), PianoKeyMode.TOUCH);
         pianoKey2.press();
         pianoKey2.select();
         dto2 = PianoKeyDTOAssembler.assemble(pianoKey2);

@@ -85,6 +85,6 @@ public final class PianoKeyboardHandlersRegister {
     protected static void updatePianoKeyboardView(final PianoKeyboard pianoKeyboard) {
         // TODO what is correct approach? this approach is hand-made
         var pianoKeyboardView = getPianoKeyboardRepository().getViewDto(pianoKeyboard.id);
-        pianoKeyboard.updateState(pianoKeyboardView);
+        pianoKeyboard.hydrateState(pianoKeyboardView);
     }
 }
