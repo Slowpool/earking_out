@@ -1,12 +1,13 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
+import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
-import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
 import javafx.geometry.Pos;
@@ -21,10 +22,10 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
 
     // it is executed in super()
     protected Pane buildPuzzlePane() {
-        var hearAgainButton = buildHintReplayButton();
+        var hintReplayButton = buildHintReplayButton();
 
         var pianoKeyboardForGuessing = buildPianoKeyboardForGuessing();
-        var pane = new VBox(hearAgainButton, pianoKeyboardForGuessing);
+        var pane = new VBox(hintReplayButton, pianoKeyboardForGuessing);
 
         pane.setAlignment(Pos.CENTER);
         pane.setSpacing(20);
@@ -44,7 +45,8 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     protected Button buildHintReplayButton() {
         var button = new Button("hear again");
         button.setOnAction(e -> {
-            demonstrateHint();
+            var hearAgainEvent = new HearAgainEvent(HearAgainEvent.HEAR_AGAIN_EVENT);
+            fireEvent(hearAgainEvent);
         });
         return button;
     }

@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model;
+package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 

@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.events.exercises;
 
-import org.swetlokognatsk.earking_out.core.domain.model.Session;
+import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
 
 import javafx.event.*;
 

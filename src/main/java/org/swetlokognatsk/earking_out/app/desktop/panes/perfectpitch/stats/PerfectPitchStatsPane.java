@@ -1,8 +1,8 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats;
 
 import org.swetlokognatsk.earking_out.app.desktop.panes.SessionStatsPane;
-import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
 
 import javafx.geometry.Pos;

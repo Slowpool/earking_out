@@ -2,7 +2,7 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.factories;
 
 import org.swetlokognatsk.earking_out.app.desktop.panes.SessionStatsPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.PerfectPitchStatsPane;
-import org.swetlokognatsk.earking_out.core.domain.model.Session;
+import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
 

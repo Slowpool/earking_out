@@ -12,6 +12,7 @@ public abstract class Exercise extends ValueObject {
     public abstract String tType();
 
     public Exercise(final ExerciseNames name, final ExerciseTypes type) {
+        // TODO apply these checks in everywhere (at least in puzzleConfig, PianoKeyboard)
         Objects.nonNull(name);
         Objects.nonNull(type);
 

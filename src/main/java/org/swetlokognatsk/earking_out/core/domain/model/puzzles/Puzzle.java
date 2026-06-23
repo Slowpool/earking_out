@@ -16,6 +16,9 @@ public abstract class Puzzle<E extends Exercise, PCDTO extends PuzzleConfigDTO<E
     public final PCDTO config;
     public final H hint;
 
+    // TODO hashCode, equals
+
+    // TODO pull config and puzzleGenerator out of it. receive only (Exercise, Solution, Hint) in constructor moving all the related logic to factory
     public Puzzle(final PCDTO config, final PG puzzleGenerator) {
         Objects.requireNonNull(puzzleGenerator, "PuzzleGenerator cannot be null");
 

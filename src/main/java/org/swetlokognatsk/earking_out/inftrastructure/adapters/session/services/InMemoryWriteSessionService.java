@@ -1,8 +1,9 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services;
 
 import java.util.UUID;
-import org.swetlokognatsk.earking_out.core.domain.model.Session;
-import org.swetlokognatsk.earking_out.core.domain.model.SessionStats;
+
+import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
 
