@@ -16,7 +16,7 @@ public abstract class Puzzle<E extends Exercise, PCDTO extends PuzzleConfigDTO<E
     public final PCDTO config;
     public final H hint;
 
-    public Puzzle(PCDTO config, PG puzzleGenerator) {
+    public Puzzle(final PCDTO config, final PG puzzleGenerator) {
         Objects.requireNonNull(puzzleGenerator, "PuzzleGenerator cannot be null");
 
         this.config = config;
@@ -30,7 +30,7 @@ public abstract class Puzzle<E extends Exercise, PCDTO extends PuzzleConfigDTO<E
         return hint;
     }
 
-    public boolean guess(Guess guess) {
+    public boolean guess(final Guess guess) {
         return guess.equals(solution);
     }
 }
