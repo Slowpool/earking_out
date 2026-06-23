@@ -1,12 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.piano;
 
-import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 // btw interface is redundant here cuz i can't imagine different implementation
 public class PianoKeyColorServiceImpl implements PianoKeyColorService {
-    public PianoKeyColor getColor(byte keyNumber) {
-        var octaveScopedKeyNumber = (byte) ((keyNumber - Invariants.SHIFT - 1) % Invariants.KEYS_IN_OCTAVE + 1);
+    public PianoKeyColor getColor(final PianoKeyNumber keyNumber) {
+        var octaveScopedKeyNumber = keyNumber.getOctaveScopedKeyNumber();
 
         var color = switch (octaveScopedKeyNumber) {
         case 1, 3, 5, 6, 8, 10, 12 -> PianoKeyColor.WHITE;

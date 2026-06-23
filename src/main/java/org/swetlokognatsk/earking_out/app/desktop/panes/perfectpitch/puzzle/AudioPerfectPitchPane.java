@@ -44,7 +44,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     protected Button buildHintReplayButton() {
         var button = new Button("hear again");
         button.setOnAction(e -> {
-            demonstrateNewHint();
+            demonstrateHint();
         });
         return button;
     }

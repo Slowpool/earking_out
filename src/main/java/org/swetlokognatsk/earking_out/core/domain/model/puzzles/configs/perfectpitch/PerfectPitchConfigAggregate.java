@@ -1,7 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 
@@ -11,15 +13,15 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
     public static final String INPUT_MODE_PROP = "inputMode";
 
     // TODO replace getters with read-only types
-    protected byte[] normalizedNotesForPuzzle;
-    protected Byte normalizedRootNote;
+    protected PianoKeyNumber[] normalizedNotesForPuzzle;
+    protected PianoKeyNumber normalizedRootNote;
     protected PerfectPitchInputMode inputMode;
 
-    public byte[] getNormalizedNotesForPuzzle() {
+    public PianoKeyNumber[] getNormalizedNotesForPuzzle() {
         return normalizedNotesForPuzzle;
     }
 
-    public Byte getNormalizedRootNote() {
+    public PianoKeyNumber getNormalizedRootNote() {
         return normalizedRootNote;
     }
 
@@ -27,7 +29,7 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         return inputMode;
     }
 
-    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final byte[] normalizedNotesForPuzzle, final Byte normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
+    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
         super(exercise, targetNumberOfPuzzles, statsRecording, pianoKeyboardAggregates);
 
         this.normalizedNotesForPuzzle = normalizedNotesForPuzzle;
@@ -46,15 +48,31 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
 
     }
 
+    @Override
+    protected void updatePropertyViaPianoKeyboard(final String propertyName, final PianoKeyboardAggregate pianoKeyboard) {
+        switch (propertyName) {
+        case PerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP:
+            normalizedRootNote = pianoKeyboard.getSelectedKeyNumbers()[0];
+            break;
+        case PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP:
+            var selectedKeyNumbers = pianoKeyboard.getSelectedKeyNumbers();
+            var selectedKeyNumbersCopy = Arrays.copyOf(selectedKeyNumbers, selectedKeyNumbers.length);
+            normalizedNotesForPuzzle = selectedKeyNumbersCopy;
+            break;
+        default:
+            throw new RuntimeException();
+        }
+    }
+
     protected void updateConfigSpecificProperty(final String propertyName, final Object propertyValue) {
         switch (propertyName) {
         // TODO how 'bout reflection?
         case NORMALIZED_ROOT_NOTE_PROP: {
-            normalizedRootNote = (Byte) propertyValue;
+            normalizedRootNote = (PianoKeyNumber) propertyValue;
             break;
         }
         case NORMALIZED_NOTES_FOR_PUZZLE_PROP: {
-            normalizedNotesForPuzzle = (byte[]) propertyValue;
+            normalizedNotesForPuzzle = (PianoKeyNumber[]) propertyValue;
             break;
         }
         default:

@@ -1,15 +1,19 @@
 package org.swetlokognatsk.earking_out.core.domain.model.base;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 
 // TODO how 'bout using Command-like pattern for `repository/factory/aggreagate_constructor` chain? to avoid lengthy params duplications
 // TODO use this interface for all factories
+// TODO explore Factory/Factory method/Abstract factory
 public abstract interface Factory<O, DADTO extends DependentAggregatesDTO> {
     abstract O createDefault(final DADTO dependentAggregates);
 
-    abstract O createDeepCopy(final O o);
+    default O createDeepCopy(final O o) {
+        var cloner = DI.get(ObjectCloner.class);
+        return cloner.clone(o);
+    }
 
     default O[] createDeepCopy(final O[] os) {
         var oType = os.getClass().getComponentType();

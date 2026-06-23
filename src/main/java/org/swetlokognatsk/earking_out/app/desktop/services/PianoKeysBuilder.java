@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.services;
 
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 // import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,16 +10,17 @@ import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
 import org.swetlokognatsk.earking_out.app.desktop.components.WhitePianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 
 public final class PianoKeysBuilder implements Iterator<PianoKey> {
-    protected final byte firstNoteNumber = Invariants.FIRST_NOTE_NUMBER;
+    protected final PianoKeyNumber firstNoteNumber = FIRST_NOTE_NUMBER;
     protected final double keyboardWidth;
     protected final double keyboardHeight;
 
-    protected final byte[] selectedKeys;
+    protected final PianoKeyNumber[] selectedKeys;
     protected final PianoKeyColorService colorService;
-    protected final Map<Byte, String> keySounds;
+    protected final Map<PianoKeyNumber, String> keySounds;
 
     protected final double whiteKeyWidth;
     protected final double whiteKeyHeight;
@@ -26,8 +28,9 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
     protected final double blackKeyWidth;
     protected final double blackKeyHeight;
 
+    // -1 is acceptable value for Iterator<?>
     protected byte currentKeyIndex = -1;
-    protected double currentWhiteX = 0;
+    protected double currentWhiteX;
     protected double currentBlackX;
 
     private double calculateWhiteKeyWidth() {
@@ -50,15 +53,15 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
         return whiteKeyWidth - (blackKeyWidth / 2);
     }
 
-    public byte getCurrentKeyNumber() {
-        return (byte) (currentKeyIndex + firstNoteNumber);
+    public PianoKeyNumber getCurrentKeyNumber() {
+        return firstNoteNumber.add(currentKeyIndex);
     }
 
     private byte getCurrentKeyNumberInOctave() {
-        return (byte) (currentKeyIndex % Invariants.KEYS_IN_OCTAVE + 1);
+        return getCurrentKeyNumber().octaveScopedKeyNumber;
     }
 
-    public PianoKeysBuilder(final double keyboardWidth, final double keyboardHeight, final byte[] selectedKeys, final Map<Byte, String> keySounds, final PianoKeyColorService colorService) {
+    public PianoKeysBuilder(final double keyboardWidth, final double keyboardHeight, final PianoKeyNumber[] selectedKeys, final Map<PianoKeyNumber, String> keySounds, final PianoKeyColorService colorService) {
         this.keyboardWidth = keyboardWidth;
         this.keyboardHeight = keyboardHeight;
         this.selectedKeys = selectedKeys;
@@ -71,22 +74,20 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
         blackKeyWidth = calculateBlackKeyWidth();
         blackKeyHeight = calculateBlackKeyHeight();
 
+        currentWhiteX = 0;
         // it must be here, not in `protected double currentBlackX = ...` line due to the order of other properties assigning
         currentBlackX = initBlackX();
     }
 
     public boolean hasNext() {
-        return currentKeyIndex < Invariants.PIANO_KEYS_NUMBER;
+        return (currentKeyIndex + 1) < Invariants.PIANO_KEYS_NUMBER;
     }
 
     public PianoKey next() {
         currentKeyIndex++;
 
-        // var sound = keySounds.get(getCurrentKeyNumber());
-        // var soundFile = new File(sound);
-        // var fileSoundPlayer = new FileSoundPlayer(soundFile);
         var isSelected = ArrayUtils.contains(selectedKeys, getCurrentKeyNumber());
-        var pianoKey = isWhite() ? new WhitePianoKey(isSelected) : new BlackPianoKey(isSelected);
+        var pianoKey = isWhite() ? new WhitePianoKey(getCurrentKeyNumber(), isSelected) : new BlackPianoKey(getCurrentKeyNumber(), isSelected);
 
         calculatePosition(pianoKey);
         calculateDimensions(pianoKey);

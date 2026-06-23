@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports.music;
 
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 /**
  * Note normalizing - mapping the note to key number. E.g. different notes C#1
@@ -8,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental
  * 5th, so both of their normalized values must be "5"
  */
 public interface NoteNormalizer {
-    byte normalize(NoteWithAccidental noteWithAccidental);
+    PianoKeyNumber normalize(NoteWithAccidental noteWithAccidental);
 
     /**
      * Normalizes the note, ignoring the octave of note - instead, it takes

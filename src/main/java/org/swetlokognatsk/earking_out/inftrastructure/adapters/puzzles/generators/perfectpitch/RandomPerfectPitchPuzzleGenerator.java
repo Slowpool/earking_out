@@ -20,8 +20,8 @@ public abstract class RandomPerfectPitchPuzzleGenerator<PCDTO extends PerfectPit
     }
 
     protected Solution[] buildPossibleSolutions() {
-        Byte[] ByteNotes = ArrayUtils.toObject(puzzleConfigDto.normalizedNotesForPuzzle);
-        Solution[] possibleSolutions = Arrays.stream(ByteNotes).map(possibleNote -> new Solution(String.valueOf(possibleNote))).toArray(Solution[]::new);
+        var stream = Arrays.stream(puzzleConfigDto.normalizedNotesForPuzzle);
+        Solution[] possibleSolutions = stream.map(possibleNote -> new Solution(String.valueOf(possibleNote.value))).toArray(Solution[]::new);
         return possibleSolutions;
     }
 

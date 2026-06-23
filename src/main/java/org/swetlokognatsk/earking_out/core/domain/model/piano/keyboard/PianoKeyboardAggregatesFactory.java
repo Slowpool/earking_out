@@ -1,8 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
-import java.util.Arrays;
 import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Factory;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public final class PianoKeyboardAggregatesFactory implements Factory<PianoKeyboardAggregate, DependentAggregatesDTO> {
 
@@ -10,10 +10,11 @@ public final class PianoKeyboardAggregatesFactory implements Factory<PianoKeyboa
         throw new RuntimeException("not implemented");
     }
 
-    public PianoKeyboardAggregate createDeepCopy(final PianoKeyboardAggregate pianoKeyboardAggregate) {
-        byte[] oldSelectedKeyNumbers = pianoKeyboardAggregate.getSelectedKeyNumbers();
-        byte[] selectedKeyNumbersCopy = Arrays.copyOf(oldSelectedKeyNumbers, pianoKeyboardAggregate.selectedKeys.size());
-        var copy = new PianoKeyboardAggregate(pianoKeyboardAggregate.getId(), selectedKeyNumbersCopy);
-        return copy;
+    public PianoKeyboardAggregate create(final PianoKeyboardId id) {
+        return create(id, new PianoKeyNumber[0]);
+    }
+
+    public PianoKeyboardAggregate create(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys) {
+        return new PianoKeyboardAggregate(id, selectedKeys);
     }
 }

@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 
 public final class VisualPerfectPitchConfigPane extends PerfectPitchConfigPane<VisualPerfectPitchExercise, VisualPerfectPitchConfigDTO> {
 
-    public VisualPerfectPitchConfigPane(final VisualPerfectPitchConfigDTO puzzleConfigDto, double width, double height) {
+    public VisualPerfectPitchConfigPane(final VisualPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height) {
         super(puzzleConfigDto, width, height);
 
     }

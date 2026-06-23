@@ -1,22 +1,25 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
-import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
 
-public final class PianoKey extends Entity<Byte> {
-    public final byte keyNumber;
+public final class PianoKey extends Entity<PianoKeyNumber> {
+    private static final long serialVersionUID = 1L;
+
+    public final PianoKeyNumber keyNumber;
     public final PianoKeyColor color;
-    private final SoundPlayerService soundPlayer;
     private final PianoKeyMode mode;
     private boolean isSelected;
     private boolean isPressed;
+
+    private final SoundPlayer soundPlayer;
 
     public boolean getIsSelected() {
         return isSelected;
     }
 
-    public void setIsSelected(boolean value) {
+    protected void setIsSelected(boolean value) {
         isSelected = value;
     }
 
@@ -28,7 +31,11 @@ public final class PianoKey extends Entity<Byte> {
         return isPressed;
     }
 
-    public PianoKey(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final SoundPlayerService soundPlayer) {
+    public PianoKeyMode getMode() {
+        return mode;
+    }
+
+    public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final SoundPlayer soundPlayer) {
         super(keyNumber);
         this.keyNumber = keyNumber;
         this.mode = mode;
@@ -59,7 +66,7 @@ public final class PianoKey extends Entity<Byte> {
     }
 
     protected void validatePressingInTouchMode() {
-        if (getIsPressed()) {
+        if (isPressed) {
             throw new IllegalStateException("this key is already pressed");
         }
     }
@@ -69,19 +76,11 @@ public final class PianoKey extends Entity<Byte> {
     }
 
     public void release() {
-        if (!getIsPressed()) {
-            throw new IllegalStateException("piano key is already released");
+        if (!isPressed) {
+            throw new IllegalStateException("piano key that is not pressed so it cannot be released");
         }
 
-        switch (mode) {
-        case TOUCH:
-            this.setIsPressed(false);
-            break;
-        case SELECT:
-            break;
-        default:
-            throw new RuntimeException("unkown PianoKeyMode");
-        }
+        this.setIsPressed(false);
     }
 
     protected void playSound() {
@@ -90,5 +89,27 @@ public final class PianoKey extends Entity<Byte> {
 
     protected void stopSound() {
         soundPlayer.stop();
+    }
+
+    public void select() {
+        validateSelecting();
+        this.setIsSelected(true);
+    }
+
+    public void unselect() {
+        validateUnselecting();
+        this.setIsSelected(false);
+    }
+
+    protected void validateSelecting() {
+        if (isSelected) {
+            throw new IllegalStateException("pianoKey is already selected");
+        }
+    }
+
+    protected void validateUnselecting() {
+        if (!isSelected) {
+            throw new IllegalStateException("pianoKey is already unselected");
+        }
     }
 }

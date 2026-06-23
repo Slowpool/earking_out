@@ -2,11 +2,12 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
-import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHelper;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
 import javafx.collections.ObservableSet;
@@ -19,8 +20,8 @@ import javafx.scene.layout.VBox;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
 
 abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO extends PerfectPitchConfigDTO<E>> extends ConfigPane<E, PCDTO> {
-    protected final PianoKeyboard pianoKeyboard;
-    protected final VBox pianoKeyboardBox;
+    protected final PianoKeyboard notesPickerKeyboard;
+    protected final VBox notesPickerKeyboardBox;
 
     protected final PianoKeyboard rootNotePicker;
     protected final VBox rootNoteBox;
@@ -36,11 +37,11 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         return getWidth();
     }
 
-    public PerfectPitchConfigPane(final PCDTO puzzleConfigDto, double width, double height) {
+    public PerfectPitchConfigPane(final PCDTO puzzleConfigDto, final double width, final double height) {
         super(puzzleConfigDto, width, height);
 
-        pianoKeyboard = buildPianoKeyboard(puzzleConfigDto.normalizedNotesForPuzzle);
-        pianoKeyboardBox = buildPianoKeyboardBox(pianoKeyboard);
+        notesPickerKeyboard = buildNotesPickerKeyboard(puzzleConfigDto.normalizedNotesForPuzzle);
+        notesPickerKeyboardBox = buildPianoKeyboardBox(notesPickerKeyboard);
 
         rootNotePicker = buildRootNotePicker(puzzleConfigDto.normalizedRootNote);
         rootNoteBox = buildRootNotePickerBox(rootNotePicker, puzzleConfigDto.inputMode);
@@ -56,10 +57,10 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         setAlignment(Pos.CENTER);
     }
 
-    protected PianoKeyboard buildPianoKeyboard(final byte[] selectedKeys) {
+    protected PianoKeyboard buildNotesPickerKeyboard(final PianoKeyNumber[] selectedKeys) {
         var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesPicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
 
-        PianoKeyboardHelper.addPianoKeyEventsHandlers(pianoKeyboard);
+        PianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(pianoKeyboard);
 
         // TODO this listener should be added to domain model???
         // pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
@@ -73,11 +74,10 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         return pianoKeyboardBox;
     }
 
-    protected PianoKeyboard buildRootNotePicker(Byte selectedRootNote) {
-        var wrappedSelectedRootNote = selectedRootNote == null ? new byte[0] : new byte[] { selectedRootNote };
-        var rootNotePicker = PianoKeyboardsFactory.createRootNotePicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), wrappedSelectedRootNote);
+    protected PianoKeyboard buildRootNotePicker(final PianoKeyNumber selectedRootNote) {
+        var rootNotePicker = PianoKeyboardsFactory.createRootNotePicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedRootNote);
 
-        PianoKeyboardHelper.addPianoKeyEventsHandlers(rootNotePicker);
+        PianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(rootNotePicker);
 
         // TODO this listener should be added to domain model???
         // rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
@@ -114,7 +114,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
     }
 
     protected void addCustomFields() {
-        getChildren().addAll(pianoKeyboardBox, rootNoteBox, inputModeBox);
+        getChildren().addAll(notesPickerKeyboardBox, rootNoteBox, inputModeBox);
     }
 
     protected void handleRadioButtonSelected(ActionEvent e) {
@@ -130,10 +130,9 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
     protected Object castCustomConfigPropertyNewValue(String configProperty, Object newValue) {
         return switch (configProperty) {
         case NORMALIZED_NOTES_FOR_PUZZLE_PROP -> {
-            var set = (ObservableSet<Byte>) newValue;
-            var objArray = set.toArray(new Byte[0]);
-            var primitiveArray = ArrayUtils.toPrimitive(objArray);
-            yield primitiveArray;
+            var set = (ObservableSet<PianoKeyNumber>) newValue;
+            var array = set.toArray(PianoKeyNumber[]::new);
+            yield array;
         }
         case INPUT_MODE_PROP -> {
             var radioButton = (RadioButton) newValue;
@@ -143,7 +142,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         }
         case NORMALIZED_ROOT_NOTE_PROP -> {
             // TODO remaking
-            var set = (ObservableSet<Byte>) newValue;
+            var set = (ObservableSet<PianoKeyNumber>) newValue;
             var numberOfSelectedKeys = set.size();
             // TODO DRY violation, copy-pasted from PianoKeyboard
             if (numberOfSelectedKeys == 0) {

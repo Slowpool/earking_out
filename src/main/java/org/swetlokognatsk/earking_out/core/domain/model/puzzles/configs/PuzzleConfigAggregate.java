@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -12,6 +13,7 @@ import java.util.Map;
 // TODO review all aggregates: do they follow transactional consistency (in-memory)?
 // TODO store it in database as json
 public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregate<E> {
+    private static final long serialVersionUID = 1L;
     public static final String TARGET_NUMBER_OF_PUZZLES_PROP = "targetNumberOfPuzzles";
     public static final String STATS_RECORDING_PROP = "statsRecording";
 
@@ -19,7 +21,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     protected int targetNumberOfPuzzles;
     protected boolean statsRecording;
 
-    // TODO dirty workaround. also, i think it should be in descendant classes
+    // TODO dirty workaround
     public final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates;
 
     // TODO how this pattern is called?
@@ -42,7 +44,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         this.pianoKeyboardAggregates = createPianoKeyboardsMap(pianoKeyboardAggregates);
     }
 
-    private Map<PianoKeyboardId, PianoKeyboardAggregate> createPianoKeyboardsMap(final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
+    private final Map<PianoKeyboardId, PianoKeyboardAggregate> createPianoKeyboardsMap(final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
         Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardsMap = new HashMap<>();
         for (var pianoKeyboardAggregate : pianoKeyboardAggregates) {
             pianoKeyboardsMap.put(pianoKeyboardAggregate.getId(), pianoKeyboardAggregate);
@@ -50,23 +52,30 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         return pianoKeyboardsMap;
     }
 
-    public void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final byte keyNumber) {
+    public final void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber keyNumber) {
         var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
         pianoKeyboard.pressKey(keyNumber);
-
+        // TODO if further code fails, the aggregate state would be inconsistent
         var propertyName = getPropertyName(pianoKeyboardId);
         // TODO where is validation?
-        var newNormalizedRootNote = pianoKeyboard.getSelectedKeyNumbers()[0];
-        updateProperty(propertyName, newNormalizedRootNote);
+        updatePropertyViaPianoKeyboard(propertyName, pianoKeyboard);
     }
 
-    public PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
+    // abstract-though-not-mandatory-to-implement-like behavior
+    protected void updatePropertyViaPianoKeyboard(final String propertyName, final PianoKeyboardAggregate pianoKeyboard) {
+        throw new IllegalStateException("updatePropertyViaPianoKeyboard is not implemented");
+    }
+
+    public final PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = pianoKeyboardAggregates.get(pianoKeyboardId);
+        if (pianoKeyboard == null) {
+            throw new IllegalArgumentException("pianoKeyboard is not found. pianoKeyboardId: " + pianoKeyboardId);
+        }
         return pianoKeyboard;
     }
 
     // TODO return read-only object
-    public PianoKeyboardAggregate getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
+    public final PianoKeyboardAggregate getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
         return getPianoKeyboardAggregate(pianoKeyboardId);
     }
 
@@ -93,4 +102,8 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         }
     }
 
+    public void releasePianoKey(final PianoKeyboardId pianoKeyboardId) {
+        var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
+        pianoKeyboard.releaseKey();
+    }
 }

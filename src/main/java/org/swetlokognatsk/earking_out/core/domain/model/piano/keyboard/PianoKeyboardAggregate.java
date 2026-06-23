@@ -10,41 +10,46 @@ import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 
 public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
+    private static final long serialVersionUID = 1L;
+
     // TODO make all variables immutable for public read-only aggregate state
     protected final PianoKeyboardMode mode;
-    protected final Map<Byte, PianoKey> pianoKeys;
+    protected final Map<PianoKeyNumber, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
     protected PianoKey pressedKey;
 
-    public PianoKeyboardId getPianoKeyboardId() {
-        return id;
+    public final PianoKeyboardId getPianoKeyboardId() {
+        return getId();
     }
 
-    public PianoKeyboardMode getMode() {
+    public final PianoKeyboardMode getMode() {
         return mode;
     }
 
-    public Map<Byte, PianoKey> getPianoKeys() {
+    public final Map<PianoKeyNumber, PianoKey> getPianoKeys() {
         return pianoKeys;
     }
 
-    public byte[] getSelectedKeyNumbers() {
-        var ByteSelectedKeys = this.selectedKeys.stream().map(pianoKey -> (byte) pianoKey.keyNumber).toArray(Byte[]::new);
-        var byteSelectedKeys = ArrayUtils.toPrimitive(ByteSelectedKeys);
-        return byteSelectedKeys;
-    }
-
-    protected PianoKey getPianoKey(byte keyNumber) {
-        var ByteKeyNumber = Byte.valueOf(keyNumber);
-        var pianoKey = pianoKeys.get(ByteKeyNumber);
-
+    public final PianoKey getPianoKey(final PianoKeyNumber keyNumber) {
+        var pianoKey = pianoKeys.get(keyNumber);
         if (pianoKey == null) {
-            throw new IllegalArgumentException("there is no such a piano key: " + keyNumber);
+            throw new IllegalArgumentException("such a pianoKey is not found: " + keyNumber);
         }
         return pianoKey;
+    }
+
+    public PianoKeyNumber[] getSelectedKeyNumbers() {
+        var selectedKeys = this.selectedKeys.stream().map(pianoKey -> pianoKey.keyNumber).toArray(PianoKeyNumber[]::new);
+        return selectedKeys;
+    }
+
+    public final PianoKeyNumber getPressedPianoKeyNumber() {
+        return pressedKey == null ? null : pressedKey.keyNumber;
     }
 
     protected boolean isSelectMode() {
@@ -55,11 +60,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return mode.isTouchMode();
     }
 
-    public PianoKeyboardAggregate(final PianoKeyboardId id) {
-        this(id, new byte[0]);
-    }
-
-    public PianoKeyboardAggregate(final PianoKeyboardId id, final byte[] selectedKeyNumbers) {
+    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers) {
         super(id);
         this.mode = getModeById(id);
 
@@ -75,16 +76,18 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         };
     }
 
-    private Map<Byte, PianoKey> buildPianoKeys(final byte[] selectedKeyNumbers) {
+    private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeyNumber[] selectedKeyNumbers) {
         validateKeyNumbersToSelect(selectedKeyNumbers);
 
-        final var pianoKeys = new HashMap<Byte, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
+        final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
         final PianoKeyMode pianoKeyMode = getPianoKeyMode();
+        // TODO it seems awkward to get factory from DI here
+        var pianoKeysFactory = DI.get(PianoKeysFactory.class);
 
-        PianoKeysHelper.forEachKey((Byte keyNumber) -> {
-            final boolean isSelected = ArrayUtils.contains(selectedKeyNumbers, (byte) keyNumber);
+        PianoKeysHelper.forEachKey((PianoKeyNumber keyNumber) -> {
+            final boolean isSelected = ArrayUtils.contains(selectedKeyNumbers, keyNumber);
 
-            final var pianoKey = PianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected);
+            final var pianoKey = pianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected);
             pianoKeys.put(keyNumber, pianoKey);
 
             tryAddAsSelected(pianoKey);
@@ -92,7 +95,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return pianoKeys;
     }
 
-    protected void validateKeyNumbersToSelect(byte[] keyNumbers) {
+    protected void validateKeyNumbersToSelect(final PianoKeyNumber[] keyNumbers) {
         if (!isSelectMode() && ArrayUtils.isNotEmpty(keyNumbers)) {
             throw new IllegalArgumentException("PianoKeyboard keys cannot be selected in this mode");
         }
@@ -120,12 +123,12 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
     }
 
-    public void touchKey(byte keyNumber) {
+    public void touchKey(final PianoKeyNumber keyNumber) {
         pressKey(keyNumber);
         releaseKey();
     }
 
-    public void pressKey(byte keyNumber) {
+    public void pressKey(final PianoKeyNumber keyNumber) {
         validatePianoKeyToPress(keyNumber);
 
         updateOtherKeysState();
@@ -136,7 +139,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         pressedKey = pianoKey;
     }
 
-    protected void validatePianoKeyToPress(byte keyNumber) {
+    protected void validatePianoKeyToPress(final PianoKeyNumber keyNumber) {
         if (pressedKey != null) {
             throw new IllegalStateException("another key is already pressed");
         }
@@ -219,13 +222,13 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
     }
 
-    protected void selectKey(PianoKey pianoKey) {
+    protected void selectKey(final PianoKey pianoKey) {
         selectedKeys.add(pianoKey);
-        pianoKey.setIsSelected(true);
+        pianoKey.select();
     }
 
-    protected void unselectKey(PianoKey pianoKey) {
+    protected void unselectKey(final PianoKey pianoKey) {
         selectedKeys.remove(pianoKey);
-        pianoKey.setIsSelected(false);
+        pianoKey.unselect();
     }
 }

@@ -1,32 +1,26 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
-import org.swetlokognatsk.earking_out.app.desktop.services.SoundPlayerService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundPlayersFactory;
 
 public final class PianoKeysFactory {
+    protected final PianoKeySoundPlayersFactory keySoundPlayersFactory;
+    protected final PianoKeyColorService keyColorService;
 
-    private PianoKeysFactory() {
+    public PianoKeysFactory() {
+        keySoundPlayersFactory = DI.get(PianoKeySoundPlayersFactory.class);
+        keyColorService = DI.get(PianoKeyColorService.class);
     }
 
-    public static PianoKey create(final byte keyNumber, final PianoKeyMode mode, final boolean isSelected) {
-        var keyColorService = DI.get(PianoKeyColorService.class);
-        // TODO use hints? this logic is already implemented somewhere
-        var soundPlayerLatch = new SoundPlayerService() {
-            public void play() {
-            }
+    public PianoKey create(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected) {
+        var soundPlayer = keySoundPlayersFactory.create(keyNumber);
 
-            public void stopAndPlay() {
-            }
-
-            public void stop() {
-            }
-        };
-        var pianoKey = new PianoKey(keyNumber, mode, isSelected, keyColorService, soundPlayerLatch);
+        var pianoKey = new PianoKey(keyNumber, mode, isSelected, keyColorService, soundPlayer);
         return pianoKey;
     }
 
-    public static PianoKey create(final byte keyNumber, final PianoKeyMode mode) {
+    public PianoKey create(final PianoKeyNumber keyNumber, final PianoKeyMode mode) {
         return create(keyNumber, mode, false);
     }
 
