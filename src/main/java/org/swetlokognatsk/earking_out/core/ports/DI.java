@@ -18,7 +18,7 @@ import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfec
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundPlayersFactory;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
 import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
 import org.swetlokognatsk.earking_out.core.ports.sounds.PianoKeySounds;
@@ -33,8 +33,8 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.FilePianoKe
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundPlayersFactory;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryReadSessionService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryWriteSessionService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.MockSoundPlayer;
@@ -71,8 +71,8 @@ public final class DI {
         } else if (className.equals(ReadSessionService.class.getName())) {
             return (T) new InMemoryReadSessionService();
 
-        } else if (className.equals(AudioPerfectPitchPuzzleGenerator.class.getName())) {
-            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchPuzzleGenerator() : new RandomAudioPerfectPitchPuzzleGenerator((AudioPerfectPitchConfigDTO) args[0]));
+        } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
+            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(AudioHintPlayer.class.getName())) {
             return (T) new AudioClipHintPlayer();

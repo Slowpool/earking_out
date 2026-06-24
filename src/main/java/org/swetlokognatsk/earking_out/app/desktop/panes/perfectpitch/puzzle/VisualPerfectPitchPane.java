@@ -5,11 +5,11 @@ import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.VisualPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.VisualPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public final class VisualPerfectPitchPane extends PerfectPitchPane<VisualPerfectPitchExercise, VisualPerfectPitchConfigDTO, UsualHint, VisualPerfectPitchPuzzleGenerator, VisualPerfectPitchPuzzle> {
+public final class VisualPerfectPitchPane extends PerfectPitchPane<VisualPerfectPitchExercise, VisualPerfectPitchConfigDTO, UsualHint, VisualPerfectPitchSolutionGenerator, VisualPerfectPitchPuzzle> {
 
     public VisualPerfectPitchPane(Session<VisualPerfectPitchConfigDTO> session, double width, double height) {
         super(session, width, height);

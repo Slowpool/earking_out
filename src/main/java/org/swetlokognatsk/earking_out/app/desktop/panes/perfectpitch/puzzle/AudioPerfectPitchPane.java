@@ -9,13 +9,13 @@ import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, UsualHint, AudioPerfectPitchPuzzleGenerator, AudioPerfectPitchPuzzle> {
+public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, UsualHint, AudioPerfectPitchSolutionGenerator, AudioPerfectPitchPuzzle> {
 
     protected final AudioHintPlayer<UsualHint> audioHintPlayer;
     protected final PianoKeyboard pianoKeyboardForGuessing;

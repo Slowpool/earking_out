@@ -1,12 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators;
 
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.SolutionGenerator;
 
-public abstract class ConfigBasedPuzzleGenerator<PCDTO extends PuzzleConfigDTO<?>> implements PuzzleGenerator {
+public abstract class ConfigBasedSolutionGenerator<PCDTO extends PuzzleConfigDTO<?>> implements SolutionGenerator {
     protected PCDTO puzzleConfigDto;
 
-    public ConfigBasedPuzzleGenerator(final PCDTO puzzleConfigDto) {
+    public ConfigBasedSolutionGenerator(final PCDTO puzzleConfigDto) {
         this.puzzleConfigDto = puzzleConfigDto;
 
     }

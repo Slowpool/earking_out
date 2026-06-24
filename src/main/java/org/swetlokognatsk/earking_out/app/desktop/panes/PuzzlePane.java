@@ -8,8 +8,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.PuzzleGeneratorsFactory;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.SolutionGenerator;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -20,10 +20,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 // TODO full revision to comply with srp and ddd principles
-public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, H extends Hint, PG extends PuzzleGenerator, P extends Puzzle<E, PCDTO, H, PG>> extends BorderPane {
+public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, H extends Hint, PG extends SolutionGenerator, P extends Puzzle<E, PCDTO, H, PG>> extends BorderPane {
     protected final Session<PCDTO> session;
     protected final PCDTO puzzleConfigDto;
-    protected final PG puzzleGenerator;
+    protected final PG solutionGenerator;
     protected P puzzle;
 
     protected final Pane puzzlePane;
@@ -42,7 +42,7 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
 
         this.session = session;
         this.puzzleConfigDto = session.puzzleConfigDto();
-        this.puzzleGenerator = PuzzleGeneratorsFactory.create(puzzleConfigDto);
+        this.solutionGenerator = SolutionGeneratorsFactory.create(puzzleConfigDto);
 
         var puzzleProgressLabel = new Label(interpolatePuzzleProgress(0, puzzleConfigDto.targetNumberOfPuzzles));
         puzzlesProgressBar = new ProgressBar(0.0);
@@ -76,7 +76,7 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
     }
 
     protected void createNextPuzzle() {
-        puzzle = PuzzlesFactory.create(puzzleConfigDto, puzzleGenerator);
+        puzzle = PuzzlesFactory.create(puzzleConfigDto, solutionGenerator);
     }
 
 }

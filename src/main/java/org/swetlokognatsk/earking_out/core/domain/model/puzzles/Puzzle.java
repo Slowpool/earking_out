@@ -6,34 +6,40 @@ import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
 
-public abstract class Puzzle<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, H extends Hint, PG extends PuzzleGenerator> extends ValueObject {
+public abstract class Puzzle<E extends Exercise, H extends Hint> extends ValueObject {
+    public final E exercise;
     public final Solution solution;
-    public final PCDTO config;
     public final H hint;
 
     // TODO hashCode, equals
+    public Puzzle(final E exercise, final Solution solution, final H hint) {
+        Objects.requireNonNull(exercise, "exercise cannot be null");
+        Objects.requireNonNull(solution, "solution cannot be null");
+        Objects.requireNonNull(hint, "solution cannot be null");
 
-    // TODO pull config and puzzleGenerator out of it. receive only (Exercise, Solution, Hint) in constructor moving all the related logic to factory
-    public Puzzle(final PCDTO config, final PG puzzleGenerator) {
-        Objects.requireNonNull(puzzleGenerator, "PuzzleGenerator cannot be null");
-
-        this.config = config;
-        this.solution = puzzleGenerator.generateSolution();
-        this.hint = findHint();
-    }
-
-    private H findHint() {
-        var hintFinder = DI.get(HintFinder.class);
-        H hint = hintFinder.find(this);
-        return hint;
+        this.exercise = exercise;
+        this.solution = solution;
+        this.hint = hint;
     }
 
     public boolean guess(final Guess guess) {
         return guess.equals(solution);
     }
+
+    public int hashCode() {
+        return exercise.hashCode() + solution.hashCode() + hint.hashCode();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Puzzle)) {
+            return false;
+        }
+        var other = (Puzzle<?, ?>) obj;
+        return exercise == other.exercise && solution.equals(other.solution) && hint.equals(other.hint);
+    }
+
 }

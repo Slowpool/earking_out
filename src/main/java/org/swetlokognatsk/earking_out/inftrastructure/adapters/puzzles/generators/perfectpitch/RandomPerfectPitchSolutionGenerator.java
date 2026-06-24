@@ -5,14 +5,14 @@ import java.util.Random;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.ConfigBasedPuzzleGenerator;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.PerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.ConfigBasedSolutionGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.PerfectPitchSolutionGenerator;
 
-public abstract class RandomPerfectPitchPuzzleGenerator<PCDTO extends PerfectPitchConfigDTO<?>> extends ConfigBasedPuzzleGenerator<PCDTO> implements PerfectPitchPuzzleGenerator<PCDTO> {
+public abstract class RandomPerfectPitchSolutionGenerator<PCDTO extends PerfectPitchConfigDTO<?>> extends ConfigBasedSolutionGenerator<PCDTO> implements PerfectPitchSolutionGenerator<PCDTO> {
     protected final Random random;
     protected final Solution[] possibleSolutions;
 
-    public RandomPerfectPitchPuzzleGenerator(final PCDTO puzzleConfig) {
+    public RandomPerfectPitchSolutionGenerator(final PCDTO puzzleConfig) {
         super(puzzleConfig);
 
         random = new Random();
@@ -26,7 +26,7 @@ public abstract class RandomPerfectPitchPuzzleGenerator<PCDTO extends PerfectPit
     }
 
     // TODO actually all logic in current class (except this method) is core logic, whereas this method should be implemented via infrastructure service
-    public Solution generateSolution() {
+    public Solution generate() {
         var solutionValue = random.nextInt(0, possibleSolutions.length);
         var solution = possibleSolutions[solutionValue];
         return solution;
