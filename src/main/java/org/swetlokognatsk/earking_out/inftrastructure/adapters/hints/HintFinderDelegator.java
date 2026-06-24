@@ -6,6 +6,8 @@ import org.swetlokognatsk.earking_out.core.ports.hints.EndHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.domain.model.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
@@ -16,19 +18,18 @@ import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
  */
 public final class HintFinderDelegator implements HintFinder {
 
-    public <H extends Hint, P extends Puzzle<?, ?, H, ?>> H find(P puzzle) {
+    public Hint find(final Exercise exercise, final Solution solution) {
         // TODO cache only the last hintFinder in memory
-        var specificHintFinder = createSpecificHintFinder(puzzle);
-        return specificHintFinder.find(puzzle.solution);
+        var specificHintFinder = createSpecificHintFinder(exercise);
+        return specificHintFinder.find(solution);
     }
 
-    private <H extends Hint, P extends Puzzle<?, ?, H, ?>> EndHintFinder<H> createSpecificHintFinder(P puzzle) {
-        var exercise = puzzle.config.exercise;
+    private <E extends Exercise, P extends Puzzle<E, ?>> EndHintFinder<?, P> createSpecificHintFinder(final E exercise) {
         var specificHintFinder = switch (exercise) {
         case AudioPerfectPitchExercise e -> AudioPerfectPitchHints.class;
         case VisualPerfectPitchExercise e -> VisualPerfectPitchHints.class;
         default -> throw new RuntimeException("unknown exercise on looking for specificHintFinder: " + exercise);
         };
-        return (EndHintFinder<H>) DI.get(specificHintFinder);
+        return (EndHintFinder<?, P>) DI.get(specificHintFinder);
     }
 }

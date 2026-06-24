@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
+import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -51,12 +52,14 @@ public class PuzzleTest {
      */
     public void hintCorrespondsToSolution() {
         var fakeSolution = "4";
-        var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise(), fakeSolution);
+        var exercise = new AudioPerfectPitchExercise();
 
+        var puzzle = puzzleHelper.createPuzzle(exercise, fakeSolution);
         var hint = puzzle.hint;
         var hintFinder = DI.get(HintFinder.class);
-        var correctHint = hintFinder.find(puzzle).getValue();
+        var correctHint = hintFinder.find(exercise, new Solution(fakeSolution));
+        var correctHintValue = correctHint.getValue();
 
-        assertEquals(correctHint, hint.getValue());
+        assertEquals(correctHintValue, hint.getValue());
     }
 }

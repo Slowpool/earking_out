@@ -4,12 +4,14 @@ import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorServiceImpl;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
@@ -124,6 +126,12 @@ public final class DI {
 
         } else if (className.equals(PianoKeySoundPlayersFactory.class.getName())) {
             return (T) (env.equals(PROD_ENV) ? new FilePianoKeySoundPlayersFactory() : new MockPianoKeySoundPlayersFactory());
+
+        } else if (className.equals(PuzzlesFactory.class.getName())) {
+            return (T) new PuzzlesFactory();
+
+        } else if (className.equals(SolutionGeneratorsFactory.class.getName())) {
+            return (T) new SolutionGeneratorsFactory();
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());

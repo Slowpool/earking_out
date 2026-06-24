@@ -8,16 +8,16 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 
 public final class SolutionGeneratorsFactory {
 
-    private SolutionGeneratorsFactory() {
+    public SolutionGeneratorsFactory() {
     }
 
-    public static <PG extends SolutionGenerator> PG create(final PuzzleConfigDTO<?> puzzleConfig) {
+    public <PG extends SolutionGenerator> PG create(final PuzzleConfigDTO<?> puzzleConfig) {
         var exercise = puzzleConfig.exercise;
         var solutionGenerator = switch (exercise) {
-        // case VISUAL -> 
         case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSolutionGenerator.class, puzzleConfig);
-        default -> throw new RuntimeException("unknown exercise for puzzle generator: " + exercise);
+        default -> throw new RuntimeException("unknown exercise for solution generator: " + exercise);
         };
         return (PG) solutionGenerator;
     }
+
 }

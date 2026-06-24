@@ -1,30 +1,29 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
-import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.VisualPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.SolutionGenerator;
 
 public final class PuzzlesFactory {
     protected final HintFinder hintFinder;
+    protected final SolutionGeneratorsFactory solutionGeneratorsFactory;
 
     public PuzzlesFactory() {
         hintFinder = DI.get(HintFinder.class);
         solutionGeneratorsFactory = DI.get(SolutionGeneratorsFactory.class);
     }
 
-    public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, r, P extends Puzzle<E, ?>> P create(final PCDTO puzzleConfig) {
-        var exercise = puzzleConfig.exercise;
-        var solutionGenerator = solutionGeneratorsFactory.create(puzzleConfig);
+    public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, r, P extends Puzzle<E, ?>> P create(final Exercise exercise) {
+        var puzzleConfigDto = PuzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
+        var solutionGenerator = solutionGeneratorsFactory.create(puzzleConfigDto);
         var solution = solutionGenerator.generate();
         var hint = hintFinder.find(exercise, solution);
 

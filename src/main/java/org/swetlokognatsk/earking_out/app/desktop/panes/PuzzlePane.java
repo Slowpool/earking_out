@@ -76,7 +76,7 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
     }
 
     protected void createNextPuzzle() {
-        puzzle = PuzzlesFactory.create(puzzleConfigDto, solutionGenerator);
+        puzzle = (new PuzzlesFactory()).create(puzzleConfigDto, solutionGenerator);
     }
 
 }

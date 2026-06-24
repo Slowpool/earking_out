@@ -27,14 +27,15 @@ public class PerfectPitchHintFinderTest {
         var hintFinder = DI.get(HintFinder.class);
 
         String fakeSolution;
-        for (var exerciseType : ExerciseTypes.values()) {
+        for (var exercise : ExercisesFactory.getAll(ExerciseNames.PERFECT_PITCH)) {
             // TODO looks wrong
-            var expectedSubstring = exerciseType == ExerciseTypes.AUDIO ? FakeAudioPerfectPitchHints.TYPE : FakeVisualPerfectPitchHints.TYPE;
-            for (Integer i = 4; i < 90; i++) {
+            var expectedSubstring = exercise.type == ExerciseTypes.AUDIO ? FakeAudioPerfectPitchHints.TYPE : FakeVisualPerfectPitchHints.TYPE;
+            for (Byte i = FIRST_NOTE_NUMBER.value; i < LAST_NOTE_NUMBER.value; i++) {
                 // TODO is it a good idea to depend on other test suites' static methods?
                 fakeSolution = i.toString();
-                var puzzle = puzzleHelper.createPuzzle(ExerciseNames.PERFECT_PITCH, exerciseType, fakeSolution);
-                var hint = hintFinder.find(puzzle).getValue();
+                // TODO WAIT! HOW IT WORKED BEFORE?
+                var puzzle = puzzleHelper.createPuzzle(exercise, fakeSolution);
+                var hint = hintFinder.find(exercise, puzzle.solution).getValue();
                 assertTrue(hint.contains(expectedSubstring));
             }
         }
@@ -51,7 +52,7 @@ public class PerfectPitchHintFinderTest {
                 expectedSubstring = String.valueOf(i);
                 fakeSolution = String.valueOf(i);
                 var puzzle = puzzleHelper.createPuzzle(exercise, fakeSolution);
-                var hint = hintFinder.find(puzzle).getValue();
+                var hint = hintFinder.find(exercise, puzzle.solution).getValue();
                 // TODO seems awkward
                 assertTrue(hint.endsWith(expectedSubstring));
             }
