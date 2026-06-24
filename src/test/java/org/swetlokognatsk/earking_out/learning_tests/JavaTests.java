@@ -12,8 +12,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.VisualPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
 import javafx.collections.ObservableSet;
 import scala.Int;
 
@@ -343,8 +343,8 @@ public class JavaTests {
     @Test
     public void staticVariableInheritanceTest1() {
         var fakeSolution = "bazinga";
-        FakeAudioPerfectPitchPuzzleGenerator.fakeSolution = fakeSolution;
-        assertEquals(fakeSolution, FakeVisualPerfectPitchPuzzleGenerator.fakeSolution);
+        FakeAudioPerfectPitchSolutionGenerator.fakeSolution = fakeSolution;
+        assertEquals(fakeSolution, FakeVisualPerfectPitchSolutionGenerator.fakeSolution);
     }
 
     @Test

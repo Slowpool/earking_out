@@ -12,7 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.FakePuzzleGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.FakeSolutionGenerator;
 
 public final class SessionAggregateTest {
     protected static final String FAKE_SOLUTION = "any";
@@ -26,7 +26,7 @@ public final class SessionAggregateTest {
     }
 
     protected SessionAggregate<AudioPerfectPitchConfigDTO> createAudioPerfectPitchSession(final String fakeSolution) {
-        FakePuzzleGenerator.fakeSolution = fakeSolution;
+        FakeSolutionGenerator.fakeSolution = fakeSolution;
 
         return sessionAggregatesFactory.create(new AudioPerfectPitchExercise());
     }
