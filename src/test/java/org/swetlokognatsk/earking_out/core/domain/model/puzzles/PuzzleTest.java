@@ -5,6 +5,7 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -22,21 +23,21 @@ public class PuzzleTest {
     @Test
     // TODO it checks whether puzzle.create indeed creates the object of `Puzzle` type, that's it. is it ok to test such a thing or it is redundant?
     public void createPerfectPitchPuzzle() {
-        var puzzle = puzzleHelper.createPuzzle(ExerciseNames.PERFECT_PITCH, ExerciseTypes.AUDIO);
+        var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise());
         assertTrue(puzzle instanceof Puzzle);
     }
 
     @Test
     public void perfectPitchCorrectPuzzleGuess() {
         var solution = "4";
-        var puzzle = puzzleHelper.createPuzzle(ExerciseNames.PERFECT_PITCH, ExerciseTypes.AUDIO, solution);
+        var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise(), solution);
         boolean correctAnswer = puzzle.guess(new Guess(solution));
         assertTrue(correctAnswer);
     }
 
     @Test
     public void perfectPitchWrongPuzzleGuess() {
-        var puzzle = puzzleHelper.createPuzzle(ExerciseNames.PERFECT_PITCH, ExerciseTypes.AUDIO, "4");
+        var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise(), "4");
         boolean correctAnswer = puzzle.guess(new Guess("5"));
         assertFalse(correctAnswer);
     }
@@ -50,7 +51,7 @@ public class PuzzleTest {
      */
     public void hintCorrespondsToSolution() {
         var fakeSolution = "4";
-        var puzzle = puzzleHelper.createPuzzle(ExerciseNames.PERFECT_PITCH, ExerciseTypes.AUDIO, fakeSolution);
+        var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise(), fakeSolution);
 
         var hint = puzzle.hint;
         var hintFinder = DI.get(HintFinder.class);

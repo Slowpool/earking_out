@@ -22,22 +22,24 @@ public final class PuzzleTestHelper {
         this.puzzleConfigRepository = puzzleConfigRepository;
     }
 
-    public <P extends Puzzle<?, ?, ?, ?>> P createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType, String fakeSolution) {
-        FakePuzzleGenerator.fakeSolution = fakeSolution;
-        return createPuzzle(exerciseName, exerciseType);
-    }
-
-    public <P extends Puzzle<?, ?, ?, ?>> P createPuzzle(ExerciseNames exerciseName, ExerciseTypes exerciseType) {
-        var exercise = ExercisesFactory.create(exerciseName, exerciseType);
-        assertNotNull(exercise);
-
+    public <E extends Exercise, P extends Puzzle<E, ?, ?, ?>> P createPuzzle(final E exercise) {
         var puzzleConfigDto = PuzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
 
         var puzzleGenerator = getFakePuzzleGenerator(exercise);
         return (P) PuzzlesFactory.create(puzzleConfigDto, puzzleGenerator);
     }
 
-    private static <PG extends PuzzleGenerator> PG getFakePuzzleGenerator(Exercise exercise) {
+    public <E extends Exercise, P extends Puzzle<E, ?, ?, ?>> P createPuzzle(final E exercise, final String fakeSolution) {
+        FakePuzzleGenerator.fakeSolution = fakeSolution;
+        return createPuzzle(exercise);
+    }
+
+    public <P extends Puzzle<?, ?, ?, ?>> P createPuzzle(final ExerciseNames exerciseName, final ExerciseTypes exerciseType, final String fakeSolution) {
+        var exercise = ExercisesFactory.create(exerciseName, exerciseType);
+        return (P) createPuzzle(exercise, fakeSolution);
+    }
+
+    private static <PG extends PuzzleGenerator> PG getFakePuzzleGenerator(final Exercise exercise) {
         var puzzleGenerator = switch (exercise.name) {
         case PERFECT_PITCH -> switch (exercise.type) {
         case VISUAL -> new FakeVisualPerfectPitchPuzzleGenerator();
