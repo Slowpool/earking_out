@@ -23,6 +23,7 @@ public final class PuzzlesFactory {
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, r, P extends Puzzle<E, ?>> P create(final Exercise exercise) {
         var puzzleConfigDto = PuzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
+        // TODO cache?
         var solutionGenerator = solutionGeneratorsFactory.create(puzzleConfigDto);
         var solution = solutionGenerator.generate();
         var hint = hintFinder.find(exercise, solution);

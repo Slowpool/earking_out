@@ -12,7 +12,7 @@ abstract class PianoKeyboardTest {
 
     @Before
     public void before() {
-        DI.clear();
+        DI.deleteSingletons();
         pianoKeyboard = createPianoKeyboard();
     }
 

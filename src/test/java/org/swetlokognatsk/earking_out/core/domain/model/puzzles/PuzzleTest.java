@@ -17,7 +17,7 @@ public class PuzzleTest {
 
     @Before
     public void setup() {
-        DI.clear();
+        DI.deleteSingletons();
         puzzleHelper = new PuzzleTestHelper(DI.get(PuzzleConfigRepository.class));
     }
 

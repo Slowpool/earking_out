@@ -5,6 +5,7 @@ import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
@@ -140,13 +141,16 @@ public final class DI {
         } else if (className.equals(SolutionGeneratorsFactory.class.getName())) {
             return (T) new SolutionGeneratorsFactory();
 
+        } else if (className.equals(SessionAggregatesFactory.class.getName())) {
+            return (T) new SessionAggregatesFactory();
+
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
         }
     }
 
     // TODO wanna believe there's such a feature in SpringBoot. it's required for pure junit tests, so that each starts in the same DI-container state
-    public static void clear() {
+    public static void deleteSingletons() {
         inMemoryPuzzleConfigRepository = null;
         pianoKeyboardAggregatesFactory = null;
         inMemoryPianoKeyboardRepository = null;
