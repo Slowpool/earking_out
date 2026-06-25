@@ -22,15 +22,15 @@ public final class SessionAggregateTest {
     protected static final int SEVERAL_PUZZLES = 10;
 
     // TODO create aggregateRoot, use it everywhere
-    protected final SessionAggregatesFactory sessionAggregatesFactory;
+    protected SessionAggregatesFactory sessionAggregatesFactory;
 
     @Before
     public void setup() {
         DI.deleteSingletons();
+        sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 
     public SessionAggregateTest() {
-        sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 
     protected SessionAggregate<?, ?, AudioPerfectPitchConfigDTO> createAudioPerfectPitchSession(final String fakeSolution) {
@@ -176,7 +176,7 @@ public final class SessionAggregateTest {
         updateTargetNumberOfPuzzlesOfSomeSession(0);
 
         try {
-            createSomeSessionAndGuess(SOLUTION);
+            createSomeSession();
             fail();
         } catch (InvalidPuzzleConfigException e) {
         }
@@ -203,10 +203,10 @@ public final class SessionAggregateTest {
         var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
 
         try {
-            // puzzle guessing is already finished and there's no current puzzle, consequently there's no any guesses of current puzzle
             sessionAggregate.getNumberOfGuessesOfCurrentPuzzle();
             fail();
         } catch (IllegalStateException e) {
+            // e.message = "puzzle guessing is already finished and there's no current puzzle", consequently there's no any guesses of current puzzle
         }
     }
 

@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
@@ -51,7 +50,7 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     }
 
     public int getPuzzlesCompletedCorrectly() {
-        return stats.puzzlesCompleted;
+        return stats.puzzlesCompletedCorrectly;
     }
 
     public P getPuzzle() {
@@ -61,11 +60,6 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     protected void setPuzzle(final P puzzle) {
         this.puzzle = puzzle;
     }
-
-    // // TODO seems awkward
-    // public Hint getHint() {
-    //     return puzzle.hint;
-    // }
 
     public boolean getPrevGuessIsSuccessful() {
         // TODO return it back when PositiveNumber VO is used instead
@@ -81,6 +75,9 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     }
 
     public int getNumberOfGuessesOfCurrentPuzzle() {
+        if (puzzle == null) {
+            throw new IllegalStateException("puzzle guessing is already finished and there's no current puzzle");
+        }
         return numberOfGuessesOfCurrentPuzzle;
     }
 
@@ -111,6 +108,7 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     }
 
     public void guess(final Guess guess) {
+        validateGuessing();
         var success = puzzle.guess(guess);
         if (success) {
             handleSuccessfulGuess();
@@ -120,14 +118,27 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
         setPrevGuessIsSuccessful(success);
     }
 
+    protected void validateGuessing() {
+        if (getPuzzlesCompleted() == puzzleConfigDto.targetNumberOfPuzzles) {
+            throw new IllegalStateException("all puzzles are already guessed for this session");
+        }
+    }
+
     protected void handleSuccessfulGuess() {
         var newStats = isCorrectlyGuessedPuzzle() ? stats.incrementCorrectlyCompletedPuzzle() : stats.incrementCompletedPuzzle();
         setStats(newStats);
 
-        if (stats.puzzlesCompleted == puzzleConfigDto.targetNumberOfPuzzles) {
+        if (isLastPuzzle()) {
             setState(SessionStates.COMPLETED);
+            setPuzzle(null);
+        } else {
+            nextPuzzle();
         }
 
+    }
+
+    protected boolean isLastPuzzle() {
+        return stats.puzzlesCompleted == puzzleConfigDto.targetNumberOfPuzzles;
     }
 
     protected boolean isCorrectlyGuessedPuzzle() {
