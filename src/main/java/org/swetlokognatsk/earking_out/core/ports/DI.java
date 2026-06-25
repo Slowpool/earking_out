@@ -9,6 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardServ
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.VisualPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorServiceImpl;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
@@ -21,6 +22,7 @@ import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundPlayersFactory;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
 import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
 import org.swetlokognatsk.earking_out.core.ports.sounds.PianoKeySounds;
@@ -36,7 +38,9 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPia
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundPlayersFactory;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryReadSessionService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryWriteSessionService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.MockSoundPlayer;
@@ -75,6 +79,9 @@ public final class DI {
 
         } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
+
+        } else if (className.equals(VisualPerfectPitchSolutionGenerator.class.getName())) {
+            return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(AudioHintPlayer.class.getName())) {
             return (T) new AudioClipHintPlayer();

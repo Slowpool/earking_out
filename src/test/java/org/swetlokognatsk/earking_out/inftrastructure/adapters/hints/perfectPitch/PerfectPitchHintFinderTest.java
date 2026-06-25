@@ -33,7 +33,6 @@ public class PerfectPitchHintFinderTest {
             for (Byte i = FIRST_NOTE_NUMBER.value; i < LAST_NOTE_NUMBER.value; i++) {
                 // TODO is it a good idea to depend on other test suites' static methods?
                 fakeSolution = i.toString();
-                // TODO WAIT! HOW IT WORKED BEFORE?
                 var puzzle = puzzleHelper.createPuzzle(exercise, fakeSolution);
                 var hint = hintFinder.find(exercise, puzzle.solution).getValue();
                 assertTrue(hint.contains(expectedSubstring));
