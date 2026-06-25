@@ -60,13 +60,13 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     public boolean getPrevGuessIsSuccessful() {
         // TODO return it back when PositiveNumber VO is used instead
         // if (stats.puzzlesCompleted.equals(Integer.valueOf(0))) {
-        if (yetNoAnyGuessesInSession()) {
+        if (thereAreNoAnyGuessesInSession()) {
             throw new IllegalStateException("");
         }
         return prevGuessIsSuccessful;
     }
 
-    protected boolean yetNoAnyGuessesInSession() {
+    protected boolean thereAreNoAnyGuessesInSession() {
         return stats.puzzlesCompleted == 0 && numberOfGuessesOfCurrentPuzzle == 0;
     }
 
