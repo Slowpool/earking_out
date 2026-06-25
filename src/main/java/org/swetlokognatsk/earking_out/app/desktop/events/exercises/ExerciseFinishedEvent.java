@@ -1,17 +1,16 @@
 package org.swetlokognatsk.earking_out.app.desktop.events.exercises;
 
-import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
-
+import java.util.UUID;
 import javafx.event.*;
 
 public final class ExerciseFinishedEvent extends Event {
     public static final EventType<ExerciseFinishedEvent> EXERCISE_FINISHED = new EventType<>("EXERCISE_FINISHED");
 
-    public final Session<?> session;
+    public final UUID sessionId;
 
-    public ExerciseFinishedEvent(final EventType<?> eventType, final Session<?> session) {
+    public ExerciseFinishedEvent(final EventType<?> eventType, final UUID sessionId) {
         super(eventType);
-        this.session = session;
+        this.sessionId = sessionId;
 
     }
 }

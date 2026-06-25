@@ -3,14 +3,14 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 import java.util.Objects;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
+import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 
-public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, PCDTO extends PuzzleConfigDTO<E>> {
-    private final UUID id;
+public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
 
@@ -20,10 +20,6 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     private int numberOfGuessesOfCurrentPuzzle;
 
     private final PuzzlesFactory puzzlesFactory;
-
-    public UUID getId() {
-        return id;
-    }
 
     public PCDTO getPuzzleConfig() {
         return puzzleConfigDto;
@@ -90,10 +86,10 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     }
 
     public SessionAggregate(final UUID id, final PCDTO puzzleConfigDto, final SessionStats stats) {
+        super(id);
         Objects.nonNull(puzzleConfigDto);
         Objects.nonNull(stats);
 
-        this.id = id;
         this.puzzleConfigDto = puzzleConfigDto;
         setStats(stats);
 

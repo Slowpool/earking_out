@@ -3,14 +3,13 @@ package org.swetlokognatsk.earking_out.core.domain.services.app;
 import java.util.ServiceLoader;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
+// import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
-import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
+import org.swetlokognatsk.earking_out.core.ports.session.services.SessionRepository;
 
 public final class SessionService {
     protected final PuzzleConfigRepository puzzleConfigRepository;
@@ -37,7 +36,7 @@ public final class SessionService {
         var writeSessionService = DI.get(WriteSessionService.class);
         writeSessionService.createSession(puzzleConfigDto);
 
-        var readSessionService = DI.get(ReadSessionService.class);
+        var readSessionService = DI.get(SessionRepository.class);
         var session = (Session<PCDTO>) readSessionService.getCurrentSession();
 
         return session;

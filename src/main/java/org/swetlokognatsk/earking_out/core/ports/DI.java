@@ -24,8 +24,7 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundPlayersFacto
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
-import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
-import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
+import org.swetlokognatsk.earking_out.core.ports.session.services.SessionRepository;
 import org.swetlokognatsk.earking_out.core.ports.sounds.PianoKeySounds;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizerImpl;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
@@ -42,7 +41,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generator
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryReadSessionService;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.InMemorySessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryWriteSessionService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.MockSoundPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.PianoKeySoundsFromHints;
@@ -73,10 +72,8 @@ public final class DI {
         } else if (className == AudioPerfectPitchHints.class.getName()) {
             return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchHints() : new InMemoryAudioPerfectPitchHints());
 
-        } else if (className.equals(WriteSessionService.class.getName())) {
-            return (T) new InMemoryWriteSessionService();
-        } else if (className.equals(ReadSessionService.class.getName())) {
-            return (T) new InMemoryReadSessionService();
+        } else if (className.equals(SessionRepository.class.getName())) {
+            return (T) new InMemorySessionRepository();
 
         } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
