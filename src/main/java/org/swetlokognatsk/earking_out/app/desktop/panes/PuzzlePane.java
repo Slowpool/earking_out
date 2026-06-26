@@ -22,12 +22,13 @@ import javafx.scene.layout.VBox;
 public abstract class PuzzlePane<PCDTO extends PuzzleConfigDTO<?>> extends BorderPane {
     protected final UUID sessionId;
 
-    protected final Pane puzzlePane;
+    protected final Pane innerPuzzlePane;
     protected final ProgressBar puzzlesProgressBar;
     protected final Button finishButton;
     protected final Label puzzleProgressLabel;
 
-    protected abstract Pane buildPuzzlePane(final PCDTO puzzleConfigDto);
+    protected abstract Pane buildInnerPuzzlePane(final PCDTO puzzleConfigDto);
+    public abstract void resetStateForNewPuzzle();
 
     public PuzzlePane(final UUID sessionId, final PCDTO puzzleConfigDto, final double width, final double height) {
         this.sessionId = sessionId;
@@ -41,8 +42,8 @@ public abstract class PuzzlePane<PCDTO extends PuzzleConfigDTO<?>> extends Borde
         puzzlesProgress.setAlignment(Pos.CENTER);
         setTop(puzzlesProgress);
 
-        puzzlePane = buildPuzzlePane(puzzleConfigDto);
-        setCenter(puzzlePane);
+        innerPuzzlePane = buildInnerPuzzlePane(puzzleConfigDto);
+        setCenter(innerPuzzlePane);
 
         finishButton = new Button("finish");
         finishButton.setOnAction(this::finishExercise);
@@ -62,14 +63,11 @@ public abstract class PuzzlePane<PCDTO extends PuzzleConfigDTO<?>> extends Borde
         return String.format("%d of %d are guessed", numberOfPuzzles, targetNumberOfPuzzles);
     }
 
+    // TODO further code is definitely not for current whereabouts
     protected void finishExercise(ActionEvent e) {
         var exerciseFinishedEvent = new ExerciseFinishedEvent(ExerciseFinishedEvent.EXERCISE_FINISHED, sessionId);
         fireEvent(exerciseFinishedEvent);
     }
 
-    protected void nextPuzzle() {
-        createNextPuzzle();
-        demonstrateNewHint();
-    }
 
 }

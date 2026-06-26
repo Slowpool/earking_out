@@ -118,7 +118,7 @@ public final class EarkingOutApplication extends Application {
     }
 
     private void showPuzzlePane(final Session<?> session) {
-        var puzzlePane = buildPuzzlePane(session);
+        var puzzlePane = buildInnerPuzzlePane(session);
         showAsContent(puzzlePane);
     }
 
