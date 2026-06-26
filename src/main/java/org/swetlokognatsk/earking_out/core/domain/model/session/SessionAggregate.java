@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import java.util.Objects;
 import java.util.UUID;
+
+import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
@@ -154,4 +156,15 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     public void abort() {
         setState(SessionStates.ABORTED);
     }
+
+    // // TODO refactoring
+    // protected void demonstrateNewHint() {
+    //     var audioHintPlayer = DI.get(AudioHintPlayer.class);
+    //     audioHintPlayer.prepareHint(puzzle.hint);
+    //     demonstrateHint();
+    // }
+
+    // protected void demonstrateHint() {
+    //     audioHintPlayer.stopAndPlay();
+    // }
 }

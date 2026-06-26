@@ -35,6 +35,8 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         return mode;
     }
 
+    // TODO refactoring SoundPlayer via PianoKeyPressed domain event
+    // injecting SoundPlayer is DDD pure-domain-entity violation. this approach is justified by redandant complexity the domain event would add here. also testability is simpler. also SoundPlayer is not supposed to do any write actions, only read-only ones. proper alternative to make sound on piano key press is via PianoKeyPressed domain event handler.
     public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final SoundPlayer soundPlayer) {
         super(keyNumber);
         this.keyNumber = keyNumber;

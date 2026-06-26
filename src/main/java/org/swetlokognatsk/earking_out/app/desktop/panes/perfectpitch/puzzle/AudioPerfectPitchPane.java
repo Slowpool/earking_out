@@ -4,8 +4,6 @@ import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
-import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,8 +12,6 @@ import javafx.scene.layout.VBox;
 
 public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchConfigDTO> {
 
-    // TODO sort it out
-    // protected final AudioHintPlayer<UsualHint> audioHintPlayer;
     protected final PianoKeyboard pianoKeyboardForGuessing;
 
     // it is executed in super()
@@ -34,8 +30,6 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     public AudioPerfectPitchPane(final UUID sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height) {
         super(sessionId, puzzleConfigDto, width, height);
 
-        // TODO final AudioHintPlayer<UsualHint> audioHintPlayer
-        // this.audioHintPlayer = audioHintPlayer;
         pianoKeyboardForGuessing = (PianoKeyboard) innerPuzzlePane.getChildren().get(1);
     }
 
@@ -58,15 +52,5 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     public void resetStateForNewPuzzle() {
         // TODO clear selected notes
     }
-
-    // // TODO cut out
-    // protected void demonstrateNewHint() {
-    //     audioHintPlayer.prepareHint(puzzle.hint);
-    //     demonstrateHint();
-    // }
-
-    // protected void demonstrateHint() {
-    //     audioHintPlayer.stopAndPlay();
-    // }
 
 }

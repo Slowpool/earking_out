@@ -41,9 +41,9 @@ public abstract class PuzzlePane<PCDTO extends PuzzleConfigDTO<?>> extends Borde
 
         abortButton = buildAbortButton();
         // frontend hack to align button
-        var finishButtonBox = new VBox(abortButton);
-        finishButtonBox.setAlignment(Pos.CENTER);
-        setBottom(finishButtonBox);
+        var abortButtonBox = new VBox(abortButton);
+        abortButtonBox.setAlignment(Pos.CENTER);
+        setBottom(abortButtonBox);
     }
 
     protected Label buildPuzzleProgressLabel(final PCDTO puzzleConfigDto) {
