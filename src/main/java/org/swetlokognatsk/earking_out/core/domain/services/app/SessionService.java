@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.app;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.services.SessionRepository;
 
@@ -22,7 +23,6 @@ public final class SessionService {
         sessionRepository.save(session);
         return session.getId();
     }
-
 
     public void abort(final UUID sessionId) {
         var session = sessionRepository.get(sessionId);

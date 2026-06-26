@@ -19,8 +19,6 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     private boolean prevGuessIsSuccessful;
     private int numberOfGuessesOfCurrentPuzzle;
 
-    private final PuzzlesFactory puzzlesFactory;
-
     public PCDTO getPuzzleConfig() {
         return puzzleConfigDto;
     }
@@ -50,6 +48,9 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     }
 
     public P getPuzzle() {
+        if (state != SessionStates.IN_PROGRESS) {
+            throw new IllegalStateException("session cannot have a puzzle if it is not in progress");
+        }
         return puzzle;
     }
 
@@ -71,7 +72,9 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     }
 
     public int getNumberOfGuessesOfCurrentPuzzle() {
-        if (puzzle == null) {
+        try {
+            getPuzzle();
+        } catch (IllegalStateException e) {
             throw new IllegalStateException("puzzle guessing is already finished and there's no current puzzle");
         }
         return numberOfGuessesOfCurrentPuzzle;
@@ -94,12 +97,16 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
         setStats(stats);
 
         setState(SessionStates.IN_PROGRESS);
-        puzzlesFactory = DI.get(PuzzlesFactory.class);
         nextPuzzle();
     }
 
+    protected PuzzlesFactory getPuzzlesFactory() {
+        return DI.get(PuzzlesFactory.class);
+    }
+
     protected void nextPuzzle() {
-        setPuzzle(puzzlesFactory.create(puzzleConfigDto.exercise));
+        P puzzle = getPuzzlesFactory().create(puzzleConfigDto.exercise);
+        setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
     }
 
@@ -130,7 +137,6 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
         } else {
             nextPuzzle();
         }
-
     }
 
     protected boolean isLastPuzzle() {
@@ -148,5 +154,4 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     public void abort() {
         setState(SessionStates.ABORTED);
     }
-
 }

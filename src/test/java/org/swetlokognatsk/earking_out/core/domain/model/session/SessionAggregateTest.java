@@ -54,6 +54,12 @@ public final class SessionAggregateTest {
         return sessionAggregate;
     }
 
+    protected SessionAggregate<?, ?, ?> createSomeSessionAndAbort() {
+        var sessionAggregate = createSomeSession();
+        sessionAggregate.abort();
+        return sessionAggregate;
+    }
+
     protected void updateTargetNumberOfPuzzlesOfSomeSession(int targetNumberOfPuzzles) {
         var puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         var puzzleConfig = puzzleConfigRepository.get(new AudioPerfectPitchExercise());
@@ -72,6 +78,18 @@ public final class SessionAggregateTest {
         var sessionAggregate = createAudioPerfectPitchSession();
 
         assertTrue(sessionAggregate.getPuzzle() instanceof AudioPerfectPitchPuzzle);
+    }
+
+    @Test
+    public void puzzleAfterLastSuccessfulGuess() {
+        updateTargetNumberOfPuzzlesOfSomeSession(1);
+        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+
+        try {
+            sessionAggregate.getPuzzle();
+            fail();
+        } catch (IllegalStateException e) {
+        }
     }
 
     @Test
@@ -255,21 +273,29 @@ public final class SessionAggregateTest {
     }
 
     @Test
-    public void abort() {
-        var sessionAggregate = createSomeSession();
-        sessionAggregate.abort();
+    public void stateAfterAbort() {
+        var session = createSomeSessionAndAbort();
 
-
+        assertEquals(session.getState(), SessionStates.ABORTED);
     }
 
     @Test
-    public void abort(final UUID sessionId) {
-        var session = sessionRepository.get(sessionId);
-
-        session.abort();
+    public void puzzleAfterAbort() {
+        var session = createSomeSessionAndAbort();
 
         try {
             session.getPuzzle();
+            fail();
+        } catch (IllegalStateException e) {
+        }
+    }
+
+    @Test
+    public void numberOfGuessesOfCurrentPuzzleAfterAbort() {
+        var session = createSomeSessionAndAbort();
+
+        try {
+            session.getNumberOfGuessesOfCurrentPuzzle();
             fail();
         } catch (IllegalStateException e) {
         }

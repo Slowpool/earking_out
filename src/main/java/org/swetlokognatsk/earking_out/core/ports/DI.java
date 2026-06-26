@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
+import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
@@ -55,6 +56,7 @@ public final class DI {
     protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
     protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
     protected static InMemoryPianoKeyboardRepository inMemoryPianoKeyboardRepository;
+    protected static InMemorySessionRepository inMemorySessionRepository;
 
     private DI() {
     }
@@ -72,7 +74,13 @@ public final class DI {
             return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchHints() : new InMemoryAudioPerfectPitchHints());
 
         } else if (className.equals(SessionRepository.class.getName())) {
-            return (T) new InMemorySessionRepository();
+            return (T) get(InMemorySessionRepository.class);
+
+        } else if (className.equals(InMemorySessionRepository.class.getName())) {
+            if (inMemorySessionRepository == null) {
+                inMemorySessionRepository = new InMemorySessionRepository(get(SessionAggregatesFactory.class));
+            }
+            return (T) inMemorySessionRepository;
 
         } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
@@ -140,6 +148,9 @@ public final class DI {
         } else if (className.equals(SessionAggregatesFactory.class.getName())) {
             return (T) new SessionAggregatesFactory();
 
+        } else if (className.equals(PuzzlePanesFactory.class.getName())) {
+            return (T) new PuzzlePanesFactory();
+
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
         }
@@ -150,5 +161,6 @@ public final class DI {
         inMemoryPuzzleConfigRepository = null;
         pianoKeyboardAggregatesFactory = null;
         inMemoryPianoKeyboardRepository = null;
+        inMemorySessionRepository = null;
     }
 }

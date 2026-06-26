@@ -1,6 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import java.util.UUID;
+
+import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregatesDTO;
+import org.swetlokognatsk.earking_out.core.domain.model.base.Factory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
@@ -9,7 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.Invali
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
-public final class SessionAggregatesFactory {
+public final class SessionAggregatesFactory extends Factory<SessionAggregate<?,?,?>, DependentAggregatesDTO> {
     protected final PuzzleConfigRepository puzzleConfigRepository;
 
     public SessionAggregatesFactory() {
@@ -17,8 +20,13 @@ public final class SessionAggregatesFactory {
 
     }
 
+    public SessionAggregate<?,?,?> createDefault(final DependentAggregatesDTO dependentAggregates) {
+        throw new RuntimeException("there are no default sessions. it must have some exercise");
+    }
+
     public <E extends Exercise> SessionAggregate<E, ?, ? extends PuzzleConfigDTO<E>> create(final E exercise) {
         var puzzleConfigDto = validateConfigAndGet(exercise);
+        // TODO SessionStatsFactory
         var sessionStats = new SessionStats(0, 0);
         var sessionAggregate = new SessionAggregate(UUID.randomUUID(), puzzleConfigDto, sessionStats);
         return sessionAggregate;
