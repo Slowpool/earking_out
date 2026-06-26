@@ -10,7 +10,7 @@ public final class ExerciseFinishedEvent extends Event {
 
     public ExerciseFinishedEvent(final EventType<?> eventType, final UUID sessionId) {
         super(eventType);
-        this.sessionId = sessionId;
 
+        this.sessionId = sessionId;
     }
 }

@@ -254,4 +254,24 @@ public final class SessionAggregateTest {
         assertEquals(0, sessionAggregate.getPuzzlesCompletedCorrectly());
     }
 
+    @Test
+    public void abort() {
+        var sessionAggregate = createSomeSession();
+        sessionAggregate.abort();
+
+
+    }
+
+    @Test
+    public void abort(final UUID sessionId) {
+        var session = sessionRepository.get(sessionId);
+
+        session.abort();
+
+        try {
+            session.getPuzzle();
+            fail();
+        } catch (IllegalStateException e) {
+        }
+    }
 }

@@ -1,32 +1,23 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.VisualPerfectPitchPuzzle;
-import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
+import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.VisualPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public final class VisualPerfectPitchPane extends PerfectPitchPane<VisualPerfectPitchExercise, VisualPerfectPitchConfigDTO, UsualHint, VisualPerfectPitchSolutionGenerator, VisualPerfectPitchPuzzle> {
+public final class VisualPerfectPitchPane extends PerfectPitchPane<VisualPerfectPitchConfigDTO> {
 
-    public VisualPerfectPitchPane(Session<VisualPerfectPitchConfigDTO> session, double width, double height) {
-        super(session, width, height);
+    public VisualPerfectPitchPane(final UUID sessionId, final VisualPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height) {
+        super(sessionId, puzzleConfigDto, width, height);
 
     }
 
-    protected Pane buildPuzzlePane() {
+    protected Pane buildInnerPuzzlePane(final VisualPerfectPitchConfigDTO puzzleConfigDto) {
         return new VBox();
     }
 
-    // TODO
-    protected void demonstrateNewHint() {
-        throw new RuntimeException("demonstrating the hint");
+    public void resetStateForNewPuzzle() {
+        // TODO
     }
 
-    // TODO
-    protected void demonstrateHint() {
-        throw new RuntimeException("demonstrating the hint");
-    }
 }

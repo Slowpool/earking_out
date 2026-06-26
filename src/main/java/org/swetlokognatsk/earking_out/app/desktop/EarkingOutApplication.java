@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
+import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
@@ -11,7 +12,6 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFac
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.model.session.Session;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
@@ -108,17 +108,16 @@ public final class EarkingOutApplication extends Application {
     private void tryOpenPuzzlePane(final ExerciseStartedEvent<?> event) {
         var sessionService = DI.get(SessionService.class);
         try {
-            // TODO draft version
-            var session = sessionService.startSession(event.exercise);
-            showPuzzlePane(session);
+            var sessionId = sessionService.start(event.exercise);
+            showPuzzlePane(sessionId);
         } catch (InvalidPuzzleConfigException e) {
             // TODO message
             // DialogPane.
         }
     }
 
-    private void showPuzzlePane(final Session<?> session) {
-        var puzzlePane = buildInnerPuzzlePane(session);
+    private void showPuzzlePane(final UUID sessionId) {
+        var puzzlePane = buildPuzzlePane(sessionId);
         showAsContent(puzzlePane);
     }
 
@@ -134,8 +133,9 @@ public final class EarkingOutApplication extends Application {
         exercisesMenu.fireExercise(e.puzzleConfigDto.exercise);
     }
 
-    private Pane buildPuzzlePane(final Session<? extends PuzzleConfigDTO<?>> session) {
-        var puzzlePane = PuzzlePanesFactory.create(session, WIDTH, HEIGHT);
+    private Pane buildPuzzlePane(final UUID sessionId) {
+        var puzzlePanesFactory = DI.get(PuzzlePanesFactory.class);
+        var puzzlePane = puzzlePanesFactory.create(sessionId, WIDTH, HEIGHT);
 
         puzzlePane.addEventHandler(ExerciseFinishedEvent.EXERCISE_FINISHED, this::openExerciseFinish);
 
@@ -143,23 +143,21 @@ public final class EarkingOutApplication extends Application {
     }
 
     private void openExerciseFinish(final ExerciseFinishedEvent e) {
-        showExerciseFinishPane(e.session);
-        // TODO actually exerciseFinishingService.finish(e.session) should be here
-        closeSession(e.session);
+        // TODO where it should be? app constructor does not seem to be suitable for that purpose due to extra cluttering 
+        var sessionService = DI.get(SessionService.class);
+        sessionService.abort(e.sessionId);
+        showExerciseFinishPane(e.sessionId);
     }
 
-    private void showExerciseFinishPane(final Session<?> session) {
-        var sessionStatsPane = buildSessionStatsPane(session);
+    private void showExerciseFinishPane(final UUID sessionId) {
+        var sessionStatsPane = buildSessionStatsPane(sessionId);
         showAsContent(sessionStatsPane);
     }
 
-    private void closeSession(Session<?> session) {
-        // TODO delegate to service
-        session = null;
-    }
+    private Pane buildSessionStatsPane(final UUID sessionId) {
+        var statsPanesFactory = DI.get(StatsPanesFactory.class);
+        var sessionStatsPane = statsPanesFactory.create(sessionId);
 
-    private Pane buildSessionStatsPane(final Session<?> session) {
-        var sessionStatsPane = StatsPanesFactory.create(session);
         sessionStatsPane.addEventHandler(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
         return sessionStatsPane;
     }

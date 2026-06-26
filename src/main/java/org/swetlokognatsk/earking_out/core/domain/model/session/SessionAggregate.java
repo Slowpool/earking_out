@@ -145,4 +145,8 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
         setNumberOfGuessesOfCurrentPuzzle(numberOfGuessesOfCurrentPuzzle + 1);
     }
 
+    public void abort() {
+        setState(SessionStates.ABORTED);
+    }
+
 }

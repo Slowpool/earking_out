@@ -31,9 +31,10 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         return pane;
     }
 
-    public AudioPerfectPitchPane(final UUID sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height, final AudioHintPlayer<UsualHint> audioHintPlayer) {
+    public AudioPerfectPitchPane(final UUID sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height) {
         super(sessionId, puzzleConfigDto, width, height);
 
+        // TODO final AudioHintPlayer<UsualHint> audioHintPlayer
         // this.audioHintPlayer = audioHintPlayer;
         pianoKeyboardForGuessing = (PianoKeyboard) innerPuzzlePane.getChildren().get(1);
     }

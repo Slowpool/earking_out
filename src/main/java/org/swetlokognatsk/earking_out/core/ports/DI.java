@@ -42,7 +42,6 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generator
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.InMemorySessionRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryWriteSessionService;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.MockSoundPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.PianoKeySoundsFromHints;
 
@@ -115,7 +114,7 @@ public final class DI {
             return (T) inMemoryPianoKeyboardRepository;
 
         } else if (className.equals(SessionService.class.getName())) {
-            return (T) new SessionService(DI.get(PuzzleConfigRepository.class));
+            return (T) new SessionService(get(PuzzleConfigRepository.class), get(SessionRepository.class), get(SessionAggregatesFactory.class));
 
         } else if (className.equals(PianoKeyboardAggregatesFactory.class.getName())) {
             if (pianoKeyboardAggregatesFactory == null) {
