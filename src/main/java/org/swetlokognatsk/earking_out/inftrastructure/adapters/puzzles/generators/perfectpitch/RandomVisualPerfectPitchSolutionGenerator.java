@@ -7,6 +7,5 @@ public final class RandomVisualPerfectPitchSolutionGenerator extends RandomPerfe
 
     public RandomVisualPerfectPitchSolutionGenerator(final VisualPerfectPitchConfigDTO puzzleConfig) {
         super(puzzleConfig);
-
     }
 }

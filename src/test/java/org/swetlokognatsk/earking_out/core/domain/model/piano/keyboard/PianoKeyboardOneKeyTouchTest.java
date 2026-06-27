@@ -86,6 +86,5 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
             fail();
         } catch (IllegalStateException e) {
         }
-
     }
 }

@@ -1,19 +1,18 @@
-package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch;
+package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.finders.perfectpitch;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.perfectpitch.PerfectPitchHint;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.perfectpitch.PerfectPitchHints;
 
-public final class InMemoryAudioPerfectPitchHints implements AudioPerfectPitchHints {
-    protected Map<String, UsualHint> hints = new HashMap<>();
+public final class HashMapAudioPerfectPitchHintFinder implements PerfectPitchHints {
+    protected Map<String, PerfectPitchHint> hints = new HashMap<>();
 
     // TODO Java resources - i think it solves the problem of direct access to file system
-    public InMemoryAudioPerfectPitchHints() {
+    public HashMapAudioPerfectPitchHintFinder() {
         PianoKeysHelper.forEachKey((PianoKeyNumber keyNumber) -> {
             String key = String.valueOf(keyNumber.value);
             // TODO path should be taken from config?

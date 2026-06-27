@@ -8,6 +8,5 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 public final class AudioPerfectPitchConfigUpdated extends PerfectPitchConfigUpdated<AudioPerfectPitchExercise, AudioPerfectPitchConfigAggregate> {
     public AudioPerfectPitchConfigUpdated(LocalDateTime timestamp, AudioPerfectPitchExercise exercise, AudioPerfectPitchConfigAggregate newConfig) {
         super(timestamp, exercise, newConfig);
-
     }
 }

@@ -9,6 +9,5 @@ public abstract class PerfectPitchPane<PCDTO extends PerfectPitchConfigDTO<? ext
 
     public PerfectPitchPane(final UUID sessionId, final PCDTO config, final double width, final double height) {
         super(sessionId, config, width, height);
-
     }
 }

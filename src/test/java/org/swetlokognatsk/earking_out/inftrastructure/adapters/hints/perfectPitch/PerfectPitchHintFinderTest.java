@@ -6,11 +6,13 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.perfectpitch.PerfectPitchHint;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzleTestHelper;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.HintFinder;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.perfectpitch.FakeAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 
 public class PerfectPitchHintFinderTest {
@@ -28,14 +30,11 @@ public class PerfectPitchHintFinderTest {
 
         String fakeSolution;
         for (var exercise : ExercisesFactory.getAll(ExerciseNames.PERFECT_PITCH)) {
-            // TODO looks wrong
-            var expectedSubstring = exercise.type == ExerciseTypes.AUDIO ? FakeAudioPerfectPitchHints.TYPE : FakeVisualPerfectPitchHints.TYPE;
-            for (Byte i = FIRST_NOTE_NUMBER.value; i < LAST_NOTE_NUMBER.value; i++) {
-                // TODO is it a good idea to depend on other test suites' static methods?
-                fakeSolution = i.toString();
+            for (PianoKeyNumber keyNumber = FIRST_NOTE_NUMBER; keyNumber.value < LAST_NOTE_NUMBER.value; keyNumber = keyNumber.increment()) {
+                fakeSolution = keyNumber.toString();
                 var puzzle = puzzleHelper.createPuzzle(exercise, fakeSolution);
-                var hint = hintFinder.find(exercise, puzzle.solution).getValue();
-                assertTrue(hint.contains(expectedSubstring));
+                var hint = hintFinder.find(exercise, puzzle.solution);
+                assertTrue(hint instanceof PerfectPitchHint);
             }
         }
     }

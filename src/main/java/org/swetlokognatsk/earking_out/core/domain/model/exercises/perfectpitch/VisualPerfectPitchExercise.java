@@ -7,7 +7,6 @@ public final class VisualPerfectPitchExercise extends PerfectPitchExercise {
 
     public VisualPerfectPitchExercise() {
         super(ExerciseTypes.VISUAL);
-
     }
 
     public String tType() {

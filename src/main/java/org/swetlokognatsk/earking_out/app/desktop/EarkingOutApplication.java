@@ -48,7 +48,6 @@ public final class EarkingOutApplication extends Application {
         exercisesMenu = buildExercisesMenu();
         buildAndDisplayMenu();
         mainScene = buildMainScene();
-
     }
 
     private BorderPane buildContentPane() {

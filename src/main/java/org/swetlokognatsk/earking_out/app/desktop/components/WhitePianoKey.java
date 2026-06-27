@@ -22,6 +22,5 @@ public final class WhitePianoKey extends PianoKey {
 
     public WhitePianoKey(final PianoKeyNumber keyNumber, final boolean isSelected) {
         super(keyNumber, isSelected);
-
     }
 }

@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.ports.hints;
+package org.swetlokognatsk.earking_out.core.ports.hints.finders;
 
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;

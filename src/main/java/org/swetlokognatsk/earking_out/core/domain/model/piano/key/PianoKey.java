@@ -74,7 +74,6 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
     }
 
     protected void validatePressingInSelectMode() {
-
     }
 
     public void release() {

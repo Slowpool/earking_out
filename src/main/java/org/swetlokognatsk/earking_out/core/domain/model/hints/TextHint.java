@@ -1,9 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.model.hints;
 
-public final class UsualHint extends Hint {
+public abstract class TextHint extends Hint {
     final String hint;
 
-    public UsualHint(String hint) {
+    public TextHint(final String hint) {
         this.hint = hint;
     }
 

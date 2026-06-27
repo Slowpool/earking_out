@@ -1,11 +1,10 @@
-package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints;
+package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.finders;
 
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.EndHintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.EndHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.HintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.perfectpitch.PerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -26,8 +25,8 @@ public final class HintFinderDelegator implements HintFinder {
 
     private <E extends Exercise, P extends Puzzle<E, ?>> EndHintFinder<?, P> createSpecificHintFinder(final E exercise) {
         var specificHintFinder = switch (exercise) {
-        case AudioPerfectPitchExercise e -> AudioPerfectPitchHints.class;
-        case VisualPerfectPitchExercise e -> VisualPerfectPitchHints.class;
+        case AudioPerfectPitchExercise e -> PerfectPitchHints.class;
+        // case VisualPerfectPitchExercise e -> VisualPerfectPitchHints.class;
         default -> throw new RuntimeException("unknown exercise on looking for specificHintFinder: " + exercise);
         };
         return (EndHintFinder<?, P>) DI.get(specificHintFinder);

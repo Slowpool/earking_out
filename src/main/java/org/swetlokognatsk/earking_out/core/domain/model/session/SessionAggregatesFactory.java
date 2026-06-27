@@ -17,7 +17,6 @@ public final class SessionAggregatesFactory extends Factory<SessionAggregate<?,?
 
     public SessionAggregatesFactory() {
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
-
     }
 
     public SessionAggregate<?,?,?> createDefault(final DependentAggregatesDTO dependentAggregates) {

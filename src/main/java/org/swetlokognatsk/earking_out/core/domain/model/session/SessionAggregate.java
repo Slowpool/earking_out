@@ -2,7 +2,6 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import java.util.Objects;
 import java.util.UUID;
-
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
@@ -12,7 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 
-public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
+public abstract class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
 
@@ -20,6 +19,9 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     private P puzzle;
     private boolean prevGuessIsSuccessful;
     private int numberOfGuessesOfCurrentPuzzle;
+
+    protected abstract void demonstrateHint();
+    protected abstract void demonstrateNewHint();
 
     public PCDTO getPuzzleConfig() {
         return puzzleConfigDto;
@@ -156,15 +158,4 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
     public void abort() {
         setState(SessionStates.ABORTED);
     }
-
-    // // TODO refactoring
-    // protected void demonstrateNewHint() {
-    //     var audioHintPlayer = DI.get(AudioHintPlayer.class);
-    //     audioHintPlayer.prepareHint(puzzle.hint);
-    //     demonstrateHint();
-    // }
-
-    // protected void demonstrateHint() {
-    //     audioHintPlayer.stopAndPlay();
-    // }
 }

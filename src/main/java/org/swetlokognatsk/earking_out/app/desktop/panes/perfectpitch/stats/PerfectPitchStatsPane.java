@@ -15,7 +15,6 @@ public final class PerfectPitchStatsPane<PCDTO extends PerfectPitchConfigDTO<? e
 
     public PerfectPitchStatsPane(final Session<PCDTO> session) {
         super(session);
-
     }
 
     protected Pane buildStatsPane() {

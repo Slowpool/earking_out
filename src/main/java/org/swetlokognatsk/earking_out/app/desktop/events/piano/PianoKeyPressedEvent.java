@@ -10,6 +10,5 @@ public final class PianoKeyPressedEvent extends PianoKeyEvent {
 
     public PianoKeyPressedEvent(final EventType<?> eventType, final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber keyNumber) {
         super(eventType, pianoKeyboardId, keyNumber);
-
     }
 }

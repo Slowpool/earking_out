@@ -161,7 +161,6 @@ public class JavaTests {
             fail();
         } catch (RuntimeException e) {
         }
-
     }
 
     private boolean doSwitch(Day day) {
@@ -396,7 +395,6 @@ public class JavaTests {
 
     @Test
     public void theMostWildThingIVeSeenTest() {
-
     }
 
     // protected static int test = 5;
@@ -409,7 +407,6 @@ public class JavaTests {
 
     @Test
     public void genericsTest5() {
-
     }
 
     public static <I extends Id, EF extends EntitiesFactory<? extends Entity<I>>> EF createFactory(final I id) {
@@ -575,6 +572,5 @@ interface Doinger {
 class John extends Person implements Doinger {
     // you'll get fired by compiler if this method is absent (yes, from your job)
     public void doSomething() {
-
     }
 }

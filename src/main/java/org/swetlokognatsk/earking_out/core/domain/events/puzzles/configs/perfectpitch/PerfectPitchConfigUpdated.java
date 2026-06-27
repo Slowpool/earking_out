@@ -10,6 +10,5 @@ abstract class PerfectPitchConfigUpdated<E extends PerfectPitchExercise, PC exte
 
     public PerfectPitchConfigUpdated(final LocalDateTime timestamp, final E exercise, final PC newConfig) {
         super(timestamp, exercise, newConfig);
-
     }
 }

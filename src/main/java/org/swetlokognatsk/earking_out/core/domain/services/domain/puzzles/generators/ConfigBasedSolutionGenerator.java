@@ -8,6 +8,5 @@ public abstract class ConfigBasedSolutionGenerator<PCDTO extends PuzzleConfigDTO
 
     public ConfigBasedSolutionGenerator(final PCDTO puzzleConfigDto) {
         this.puzzleConfigDto = puzzleConfigDto;
-
     }
 };

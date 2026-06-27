@@ -47,7 +47,6 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
             errors.add("targetNumberOfPuzzles cannot be negative or zero");
         }
         return errors;
-
     }
 
     @Override

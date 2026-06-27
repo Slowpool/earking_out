@@ -17,8 +17,8 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKey
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.HintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.perfectpitch.PerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundPlayersFactory;
@@ -29,10 +29,10 @@ import org.swetlokognatsk.earking_out.core.ports.session.services.SessionReposit
 import org.swetlokognatsk.earking_out.core.ports.sounds.PianoKeySounds;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizerImpl;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.HintFinderDelegator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.perfectpitch.FakeAudioPerfectPitchHints;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.finders.HintFinderDelegator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.finders.perfectpitch.HashMapAudioPerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.InMemoryAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.InMemoryVisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.FilePianoKeySoundPlayersFactory;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
@@ -70,8 +70,8 @@ public final class DI {
             return (T) new HintFinderDelegator();
         } else if (className.equals(VisualPerfectPitchHints.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchHints() : new InMemoryVisualPerfectPitchHints());
-        } else if (className == AudioPerfectPitchHints.class.getName()) {
-            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchHints() : new InMemoryAudioPerfectPitchHints());
+        } else if (className == PerfectPitchHints.class.getName()) {
+            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchHints() : new HashMapAudioPerfectPitchHintFinder());
 
         } else if (className.equals(SessionRepository.class.getName())) {
             return (T) get(InMemorySessionRepository.class);

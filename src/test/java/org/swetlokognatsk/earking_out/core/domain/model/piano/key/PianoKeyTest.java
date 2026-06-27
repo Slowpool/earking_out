@@ -19,7 +19,6 @@ public final class PianoKeyTest {
     // TODO @BeforeClass or constructor?
     public PianoKeyTest() {
         pianoKeysFactory = DI.get(PianoKeysFactory.class);
-
     }
 
     @Before

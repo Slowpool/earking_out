@@ -9,6 +9,5 @@ public final class AudioPerfectPitchConfigAggregate extends PerfectPitchConfigAg
 
     public AudioPerfectPitchConfigAggregate(final AudioPerfectPitchExercise exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
         super(exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, pianoKeyboardAggregates);
-
     }
 }

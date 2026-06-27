@@ -9,7 +9,6 @@ public final class VisualPerfectPitchPane extends PerfectPitchPane<VisualPerfect
 
     public VisualPerfectPitchPane(final UUID sessionId, final VisualPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height) {
         super(sessionId, puzzleConfigDto, width, height);
-
     }
 
     protected Pane buildInnerPuzzlePane(final VisualPerfectPitchConfigDTO puzzleConfigDto) {

@@ -7,7 +7,6 @@ public final class RandomAudioPerfectPitchSolutionGenerator extends RandomPerfec
 
     public RandomAudioPerfectPitchSolutionGenerator(final AudioPerfectPitchConfigDTO puzzleConfigDto) {
         super(puzzleConfigDto);
-
     }
 
 }

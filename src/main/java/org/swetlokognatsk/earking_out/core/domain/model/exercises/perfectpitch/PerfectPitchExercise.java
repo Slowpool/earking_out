@@ -8,7 +8,6 @@ public abstract class PerfectPitchExercise extends Exercise {
 
     public PerfectPitchExercise(ExerciseTypes type) {
         super(ExerciseNames.PERFECT_PITCH, type);
-
     }
 
     public String tName() {

@@ -8,6 +8,5 @@ public final class HearAgainEvent extends Event {
 
     public HearAgainEvent(final EventType<?> eventType) {
         super(eventType);
-
     }
 }

@@ -7,6 +7,5 @@ public final class Solution extends Guess {
 
     public Solution(String solution) {
         super(solution);
-
     }
 }
