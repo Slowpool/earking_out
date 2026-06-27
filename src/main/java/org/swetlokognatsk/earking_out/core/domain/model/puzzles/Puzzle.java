@@ -1,11 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
 import java.util.Objects;
-import org.swetlokognatsk.earking_out.core.domain.model.Guess;
-import org.swetlokognatsk.earking_out.core.domain.model.Solution;
+
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 
 public abstract class Puzzle<E extends Exercise, H extends Hint> extends ValueObject {
     public final E exercise;

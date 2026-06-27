@@ -3,12 +3,14 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.finders.pe
 import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
-import org.swetlokognatsk.earking_out.core.domain.model.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.hints.perfectpitch.AudioPerfectPitchHint;
 import org.swetlokognatsk.earking_out.core.domain.model.hints.perfectpitch.PerfectPitchHint;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.ports.hints.finders.perfectpitch.PerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.perfectpitch.AudioPerfectPitchHintFinder;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.perfectpitch.PerfectPitchHintFinder;
 
-public final class HashMapAudioPerfectPitchHintFinder implements PerfectPitchHints {
+public final class HashMapAudioPerfectPitchHintFinder implements AudioPerfectPitchHintFinder {
     protected Map<String, PerfectPitchHint> hints = new HashMap<>();
 
     // TODO Java resources - i think it solves the problem of direct access to file system
@@ -22,7 +24,7 @@ public final class HashMapAudioPerfectPitchHintFinder implements PerfectPitchHin
         });
     }
 
-    public UsualHint find(Solution solution) {
+    public AudioPerfectPitchHint find(Solution solution) {
         return hints.get(solution.value);
     }
 }

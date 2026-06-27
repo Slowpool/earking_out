@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generato
 import java.util.Arrays;
 import java.util.Random;
 import org.apache.commons.lang3.ArrayUtils;
-import org.swetlokognatsk.earking_out.core.domain.model.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.ConfigBasedSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.PerfectPitchSolutionGenerator;

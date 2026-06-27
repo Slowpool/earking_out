@@ -2,12 +2,12 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
 import static org.junit.Assert.*;
 import org.junit.*;
-import org.swetlokognatsk.earking_out.core.domain.model.Guess;
-import org.swetlokognatsk.earking_out.core.domain.model.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.hints.finders.HintFinder;

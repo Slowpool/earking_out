@@ -3,8 +3,8 @@ package org.swetlokognatsk.earking_out.core.domain.events.puzzles;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.Guess;
-import org.swetlokognatsk.earking_out.core.domain.model.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 
 public final class UserTriedToGuessPuzzle extends DomainEvent {
     public final UUID sessionId;

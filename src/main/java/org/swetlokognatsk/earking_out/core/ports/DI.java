@@ -17,8 +17,9 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKey
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.finders.HintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.finders.perfectpitch.PerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.ports.hints.finders.perfectpitch.PerfectPitchHintFinder;
 import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundPlayersFactory;
@@ -70,7 +71,7 @@ public final class DI {
             return (T) new HintFinderDelegator();
         } else if (className.equals(VisualPerfectPitchHints.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchHints() : new InMemoryVisualPerfectPitchHints());
-        } else if (className == PerfectPitchHints.class.getName()) {
+        } else if (className == PerfectPitchHintFinder.class.getName()) {
             return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchHints() : new HashMapAudioPerfectPitchHintFinder());
 
         } else if (className.equals(SessionRepository.class.getName())) {
@@ -150,6 +151,11 @@ public final class DI {
 
         } else if (className.equals(PuzzlePanesFactory.class.getName())) {
             return (T) new PuzzlePanesFactory();
+
+        } else if (className.equals(HintDemonstrator.class.getName())) {
+            return (T) new HintDemonstratorDelegator();
+
+
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());

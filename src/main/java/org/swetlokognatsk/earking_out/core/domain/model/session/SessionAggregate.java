@@ -3,15 +3,16 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 import java.util.Objects;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
-import org.swetlokognatsk.earking_out.core.domain.model.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
-public abstract class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
+public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
 
@@ -19,9 +20,6 @@ public abstract class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?
     private P puzzle;
     private boolean prevGuessIsSuccessful;
     private int numberOfGuessesOfCurrentPuzzle;
-
-    protected abstract void demonstrateHint();
-    protected abstract void demonstrateNewHint();
 
     public PCDTO getPuzzleConfig() {
         return puzzleConfigDto;
@@ -112,6 +110,8 @@ public abstract class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?
         P puzzle = getPuzzlesFactory().create(puzzleConfigDto.exercise);
         setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
+        // TODO refactoring via domain event NewPuzzleDisplayed
+        demonstrateHint();
     }
 
     public void guess(final Guess guess) {
@@ -157,5 +157,10 @@ public abstract class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?
 
     public void abort() {
         setState(SessionStates.ABORTED);
+    }
+
+    protected void demonstrateHint() {
+        var hintDemonstrator = DI.get(HintDemonstrator.class);
+        hintDemonstrator.demonstrate(puzzle.hint);
     }
 }

@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
-import org.swetlokognatsk.earking_out.core.domain.model.Guess;
+import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.DI;

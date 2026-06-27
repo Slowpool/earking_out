@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.events.session;
 
-import org.swetlokognatsk.earking_out.core.domain.model.Guess;
+import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
+
 import javafx.event.Event;
 import javafx.event.EventType;
 
