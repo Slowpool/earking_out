@@ -1,27 +1,27 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators;
 
-import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.perfectpitch.AudioPerfectPitchHint;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.perfectpitch.VisualPerfectPitchHint;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.SoundHarmonicIntervalSolution;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.SingleSoundSolution;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.EndHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
-import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.perfectpitch.AudioPerfectPitchHintDemonstrator;
-import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.perfectpitch.VisualPerfectPitchHintDemonstrator;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SingleSoundHintDemonstrator;
 
-public final class HintDemonstratorDelegator implements HintDemonstrator<Hint> {
+public final class HintDemonstratorDelegator implements HintDemonstrator<Solution> {
 
-    public void demonstrate(final Hint hint) {
-        var specificHintDemonstrator = createSpecificHintDemonstrator(hint);
-        specificHintDemonstrator.demonstrate(hint);
+    public void demonstrateHint(final Solution solution) {
+        var specificHintDemonstrator = createSpecificHintDemonstrator(solution);
+        specificHintDemonstrator.demonstrateHint(solution);
     }
 
-    protected <H extends Hint> EndHintDemonstrator<H> createSpecificHintDemonstrator(final H hint) {
-        var specificHintDemonstrator = switch (hint) {
-            case AudioPerfectPitchHint _h -> AudioPerfectPitchHintDemonstrator.class;
-            case VisualPerfectPitchHint _h -> VisualPerfectPitchHintDemonstrator.class;
-            default -> throw new IllegalArgumentException("unknown hint type");
+    // TODO grasp why generics here are useless
+    protected <S extends Solution> EndHintDemonstrator<S> createSpecificHintDemonstrator(final S solution) {
+        var specificHintDemonstrator = switch (solution) {
+        case SingleSoundSolution _s -> SingleSoundHintDemonstrator.class;
+        // case SoundHarmonicIntervalSolution _s -> AudioClipSoundHarmonicIntervalHintDemonstrator.class;
+        default -> throw new IllegalArgumentException("unknown solution type");
         };
-        return (EndHintDemonstrator<H>) DI.get(specificHintDemonstrator);
+        return (EndHintDemonstrator<S>) DI.get(specificHintDemonstrator);
     }
 }

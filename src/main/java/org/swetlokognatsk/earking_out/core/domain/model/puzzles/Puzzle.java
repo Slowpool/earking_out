@@ -4,32 +4,27 @@ import java.util.Objects;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 
-public abstract class Puzzle<E extends Exercise, H extends Hint> extends ValueObject {
+public abstract class Puzzle<E extends Exercise, S extends Solution> extends ValueObject {
     public final E exercise;
-    public final Solution solution;
-    public final H hint;
+    public final S solution;
 
     // TODO hashCode, equals
-    public Puzzle(final E exercise, final Solution solution, final H hint) {
+    public Puzzle(final E exercise, final S solution) {
         Objects.requireNonNull(exercise, "exercise cannot be null");
         Objects.requireNonNull(solution, "solution cannot be null");
-        Objects.requireNonNull(hint, "solution cannot be null");
 
         this.exercise = exercise;
         this.solution = solution;
-        this.hint = hint;
     }
 
-    public boolean guess(final Guess guess) {
+    public boolean guess(final S guess) {
         return guess.equals(solution);
     }
 
     public int hashCode() {
-        return exercise.hashCode() + solution.hashCode() + hint.hashCode();
+        return exercise.hashCode() + solution.hashCode();
     }
 
     public boolean equals(Object obj) {
@@ -40,7 +35,7 @@ public abstract class Puzzle<E extends Exercise, H extends Hint> extends ValueOb
             return false;
         }
         var other = (Puzzle<?, ?>) obj;
-        return exercise == other.exercise && solution.equals(other.solution) && hint.equals(other.hint);
+        return exercise == other.exercise && solution.equals(other.solution);
     }
 
 }

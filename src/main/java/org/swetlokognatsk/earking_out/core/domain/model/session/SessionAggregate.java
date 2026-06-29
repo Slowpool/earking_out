@@ -161,6 +161,6 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
 
     protected void demonstrateHint() {
         var hintDemonstrator = DI.get(HintDemonstrator.class);
-        hintDemonstrator.demonstrate(puzzle.hint);
+        hintDemonstrator.demonstrateHint(puzzle.hint);
     }
 }

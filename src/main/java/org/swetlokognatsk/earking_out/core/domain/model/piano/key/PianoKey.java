@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
 
 public final class PianoKey extends Entity<PianoKeyNumber> {
@@ -13,7 +14,7 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
     private boolean isSelected;
     private boolean isPressed;
 
-    private final SoundPlayer soundPlayer;
+    private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
 
     public boolean getIsSelected() {
         return isSelected;
@@ -37,12 +38,12 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
 
     // TODO refactoring SoundPlayer via PianoKeyPressed domain event
     // injecting SoundPlayer is DDD pure-domain-entity violation. this approach is justified by redandant complexity the domain event would add here. also testability is simpler. also SoundPlayer is not supposed to do any write actions, only read-only ones. proper alternative to make sound on piano key press is via PianoKeyPressed domain event handler.
-    public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final SoundPlayer soundPlayer) {
+    public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final PianoKeySoundsPlayer pianoKeySoundsPlayer) {
         super(keyNumber);
         this.keyNumber = keyNumber;
         this.mode = mode;
         this.color = colorService.getColor(keyNumber);
-        this.soundPlayer = soundPlayer;
+        this.pianoKeySoundsPlayer = pianoKeySoundsPlayer;
 
         setIsSelected(isSelected);
     }
@@ -85,11 +86,11 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
     }
 
     protected void playSound() {
-        soundPlayer.stopAndPlay();
+        pianoKeySoundsPlayer.stopAndPlay(keyNumber);
     }
 
     protected void stopSound() {
-        soundPlayer.stop();
+        pianoKeySoundsPlayer.stop(keyNumber);
     }
 
     public void select() {

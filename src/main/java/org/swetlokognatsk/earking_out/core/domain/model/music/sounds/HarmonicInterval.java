@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.sounds;
+package org.swetlokognatsk.earking_out.core.domain.model.music.sounds;
 
 public class HarmonicInterval extends Interval {
 

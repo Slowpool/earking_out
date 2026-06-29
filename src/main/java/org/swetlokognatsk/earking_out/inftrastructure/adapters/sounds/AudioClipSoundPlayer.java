@@ -6,11 +6,11 @@ import java.io.ObjectInputStream;
 import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
 import javafx.scene.media.AudioClip;
 
-public final class FileSoundPlayer implements SoundPlayer {
+public final class AudioClipSoundPlayer implements SoundPlayer {
     protected final String audioClipSource;
     protected transient AudioClip audioClip;
 
-    public FileSoundPlayer(final File file) {
+    public AudioClipSoundPlayer(final File file) {
         var absoluteFilePath = file.getAbsolutePath();
         if (!file.exists()) {
             throw new RuntimeException("File does not exist: " + absoluteFilePath);

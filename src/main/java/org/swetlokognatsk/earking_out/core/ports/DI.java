@@ -7,7 +7,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFacto
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
@@ -18,11 +17,9 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.genera
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
-import org.swetlokognatsk.earking_out.core.ports.hints.finders.HintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.finders.perfectpitch.PerfectPitchHintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundPlayersFactory;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
@@ -30,21 +27,19 @@ import org.swetlokognatsk.earking_out.core.ports.session.services.SessionReposit
 import org.swetlokognatsk.earking_out.core.ports.sounds.PianoKeySounds;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizerImpl;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.perfectpitch.FakeAudioPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.finders.HintFinderDelegator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.finders.perfectpitch.HashMapAudioPerfectPitchHintFinder;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.InMemoryVisualPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.FilePianoKeySoundPlayersFactory;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.AudioClipSoundHarmonicIntervalHintDemonstrator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.FakeSoundHarmonicIntervalHintDemonstrator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.AudioClipPianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundPlayersFactory;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.PianoKeySoundFilesBuilder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.InMemorySessionRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.MockSoundPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.PianoKeySoundsFromHints;
 
 // TODO for now this class was made strictly in test purposes, to postpone DI in java
@@ -58,6 +53,7 @@ public final class DI {
     protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
     protected static InMemoryPianoKeyboardRepository inMemoryPianoKeyboardRepository;
     protected static InMemorySessionRepository inMemorySessionRepository;
+    protected static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
 
     private DI() {
     }
@@ -67,12 +63,10 @@ public final class DI {
         if (className.equals(NoteNormalizer.class.getName())) {
             return (T) new NoteNormalizerImpl();
 
-        } else if (className.equals(HintFinder.class.getName())) {
-            return (T) new HintFinderDelegator();
-        } else if (className.equals(VisualPerfectPitchHints.class.getName())) {
-            return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchHints() : new InMemoryVisualPerfectPitchHints());
-        } else if (className == PerfectPitchHintFinder.class.getName()) {
-            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchHints() : new HashMapAudioPerfectPitchHintFinder());
+        } else if (className.equals(HintDemonstrator.class.getName())) {
+            return (T) new HintDemonstratorDelegator();
+        } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
+            return (T) (env.equals(TEST_ENV) ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
         } else if (className.equals(SessionRepository.class.getName())) {
             return (T) get(InMemorySessionRepository.class);
@@ -137,9 +131,6 @@ public final class DI {
         } else if (className.equals(ObjectCloner.class.getName())) {
             return (T) new SerializationCloner();
 
-        } else if (className.equals(PianoKeySoundPlayersFactory.class.getName())) {
-            return (T) (env.equals(PROD_ENV) ? new FilePianoKeySoundPlayersFactory() : new MockPianoKeySoundPlayersFactory());
-
         } else if (className.equals(PuzzlesFactory.class.getName())) {
             return (T) new PuzzlesFactory();
 
@@ -155,7 +146,20 @@ public final class DI {
         } else if (className.equals(HintDemonstrator.class.getName())) {
             return (T) new HintDemonstratorDelegator();
 
+        } else if (className.equals(PianoKeySoundsPlayer.class.getName())) {
+            return (T) (env.equals(TEST_ENV) ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
 
+        } else if (className.equals(MockPianoKeySoundsPlayer.class.getName())) {
+            return (T) new MockPianoKeySoundsPlayer();
+
+        } else if (className.equals(AudioClipPianoKeySoundsPlayer.class.getName())) {
+            if (audioClipPianoKeySoundsPlayer == null) {
+                audioClipPianoKeySoundsPlayer = new AudioClipPianoKeySoundsPlayer();
+            }
+            return (T) audioClipPianoKeySoundsPlayer;
+
+        } else if (className.equals(PianoKeySoundFilesBuilder.class.getName())) {
+            return (T) new PianoKeySoundFilesBuilder();
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
@@ -168,5 +172,6 @@ public final class DI {
         pianoKeyboardAggregatesFactory = null;
         inMemoryPianoKeyboardRepository = null;
         inMemorySessionRepository = null;
+        audioClipPianoKeySoundsPlayer = null;
     }
 }

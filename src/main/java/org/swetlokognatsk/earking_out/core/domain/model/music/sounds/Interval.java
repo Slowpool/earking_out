@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.sounds;
+package org.swetlokognatsk.earking_out.core.domain.model.music.sounds;
 
 public abstract class Interval extends Sound {
     public final SingleSound firstSound;

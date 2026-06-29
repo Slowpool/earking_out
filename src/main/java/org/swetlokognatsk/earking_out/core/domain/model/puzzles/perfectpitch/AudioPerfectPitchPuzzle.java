@@ -1,12 +1,11 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.sound.SingleSoundHint;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.SingleSoundSolution;
 
-public final class AudioPerfectPitchPuzzle extends PerfectPitchPuzzle<AudioPerfectPitchExercise, SingleSoundHint> {
+public final class AudioPerfectPitchPuzzle extends PerfectPitchPuzzle<AudioPerfectPitchExercise, SingleSoundSolution> {
 
-    public AudioPerfectPitchPuzzle(final AudioPerfectPitchExercise exercise, final Solution solution, final SingleSoundHint hint) {
-        super(exercise, solution, hint);
+    public AudioPerfectPitchPuzzle(final AudioPerfectPitchExercise exercise, final SingleSoundSolution solution) {
+        super(exercise, solution);
     }
 }
