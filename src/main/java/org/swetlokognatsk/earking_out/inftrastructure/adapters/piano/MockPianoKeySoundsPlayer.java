@@ -4,6 +4,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 
 public class MockPianoKeySoundsPlayer implements PianoKeySoundsPlayer {
+    public boolean stopAndPlayIsPressed = false;
+
     public void play(final PianoKeyNumber keyNumber) {
     }
 
@@ -11,5 +13,6 @@ public class MockPianoKeySoundsPlayer implements PianoKeySoundsPlayer {
     }
 
     public void stopAndPlay(final PianoKeyNumber keyNumber) {
+        stopAndPlayIsPressed = true;
     }
 }

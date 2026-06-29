@@ -1,18 +1,19 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
 import static org.junit.Assert.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
+import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.SingleSound;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.SingleSoundSolution;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.hints.finders.HintFinder;
 
-public class PuzzleTest {
+public class AudioPerfectPitchPuzzleTest {
     protected PuzzleTestHelper puzzleHelper;
 
     @Before
@@ -30,9 +31,9 @@ public class PuzzleTest {
 
     @Test
     public void perfectPitchCorrectPuzzleGuess() {
-        var solution = "4";
+        var solution = FIRST_NOTE_NUMBER;
         var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise(), solution);
-        boolean correctAnswer = puzzle.guess(new Guess(solution));
+        boolean correctAnswer = puzzle.guess(new SingleSoundSolution(new SingleSound(solution)));
         assertTrue(correctAnswer);
     }
 
@@ -43,23 +44,24 @@ public class PuzzleTest {
         assertFalse(correctAnswer);
     }
 
-    // TODO is it normal to test X and then write the test Y which also does X?
-    @Test
-    /**
-     * Well, actually the only thing this test does is checking that Puzzle()
-     * constructor successfully assigned the object variable `IHintFinder` as a
-     * dependency
-     */
-    public void hintCorrespondsToSolution() {
-        var fakeSolution = "4";
-        var exercise = new AudioPerfectPitchExercise();
+    // TODO delete
+    // // TODO is it normal to test X and then write the test Y which also does X?
+    // @Test
+    // /**
+    //  * Well, actually the only thing this test does is checking that Puzzle()
+    //  * constructor successfully assigned the object variable `IHintFinder` as a
+    //  * dependency
+    //  */
+    // public void hintCorrespondsToSolution() {
+    //     var fakeSolution = "4";
+    //     var exercise = new AudioPerfectPitchExercise();
 
-        var puzzle = puzzleHelper.createPuzzle(exercise, fakeSolution);
-        var hint = puzzle.hint;
-        var hintFinder = DI.get(HintFinder.class);
-        var correctHint = hintFinder.find(exercise, new Solution(fakeSolution));
-        var correctHintValue = correctHint.getValue();
+    //     var puzzle = puzzleHelper.createPuzzle(exercise, fakeSolution);
+    //     var hint = puzzle.hint;
+    //     var hintFinder = DI.get(HintFinder.class);
+    //     var correctHint = hintFinder.find(exercise, new Solution(fakeSolution));
+    //     var correctHintValue = correctHint.getValue();
 
-        assertEquals(correctHintValue, hint.getValue());
-    }
+    //     assertEquals(correctHintValue, hint.getValue());
+    // }
 }

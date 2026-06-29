@@ -7,6 +7,7 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.MockSoundPlayer;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 
@@ -14,7 +15,7 @@ public final class PianoKeyTest {
     protected static PianoKeyNumber ANY_PIANO_KEY_NUMBER = FIRST_NOTE_NUMBER;
     protected final PianoKeysFactory pianoKeysFactory;
 
-    protected MockSoundPlayer mockSoundPlayer;
+    protected MockPianoKeySoundsPlayer mockSoundPlayer;
 
     // TODO @BeforeClass or constructor?
     public PianoKeyTest() {
@@ -24,7 +25,7 @@ public final class PianoKeyTest {
     @Before
     public void setup() {
         // TODO mockito?
-        mockSoundPlayer = new MockSoundPlayer();
+        mockSoundPlayer = new MockPianoKeySoundsPlayer();
     }
 
     @Test
@@ -82,7 +83,7 @@ public final class PianoKeyTest {
 
     @Test
     public void playSoundOnPress() {
-        var pianoKey = new PianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH, false, DI.get(PianoKeyColorService.class), (SoundPlayer) mockSoundPlayer);
+        var pianoKey = new PianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH, false, DI.get(PianoKeyColorService.class), mockSoundPlayer);
         pianoKey.press();
         assertTrue(mockSoundPlayer.stopAndPlayIsPressed);
     }

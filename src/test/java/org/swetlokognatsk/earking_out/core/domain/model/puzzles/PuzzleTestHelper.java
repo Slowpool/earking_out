@@ -5,8 +5,11 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.SingleSoundSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -29,13 +32,14 @@ public final class PuzzleTestHelper {
         return (P) puzzlesFactory.create(exercise);
     }
 
-    public <E extends Exercise, P extends Puzzle<E, ?>> P createPuzzle(final E exercise, final String fakeSolution) {
-        FakeSolutionGenerator.fakeSolution = fakeSolution;
+    public <E extends Exercise, S extends Solution, P extends Puzzle<E, S>> P createPuzzle(final E exercise, final S fakeSolution) {
+        switch (exercise) {
+        case AudioPerfectPitchExercise e:
+            FakeAudioPerfectPitchSolutionGenerator.fakeSolution = (SingleSoundSolution) fakeSolution;
+            break;
+        default:
+            throw new IllegalArgumentException("unknown exercise: " + exercise);
+        }
         return createPuzzle(exercise);
-    }
-
-    public <P extends Puzzle<?, ?>> P createPuzzle(final ExerciseNames exerciseName, final ExerciseTypes exerciseType, final String fakeSolution) {
-        var exercise = ExercisesFactory.create(exerciseName, exerciseType);
-        return (P) createPuzzle(exercise, fakeSolution);
     }
 }

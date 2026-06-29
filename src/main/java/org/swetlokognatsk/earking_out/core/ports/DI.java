@@ -17,6 +17,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.genera
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SingleSoundHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
@@ -28,6 +29,7 @@ import org.swetlokognatsk.earking_out.core.ports.sounds.PianoKeySounds;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizerImpl;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.AudioClipSingleSoundHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.AudioClipSoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.FakeSoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.AudioClipPianoKeySoundsPlayer;
@@ -40,7 +42,6 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generator
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.InMemorySessionRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.PianoKeySoundsFromHints;
 
 // TODO for now this class was made strictly in test purposes, to postpone DI in java
 public final class DI {
@@ -85,12 +86,6 @@ public final class DI {
 
         } else if (className.equals(AudioHintPlayer.class.getName())) {
             return (T) new AudioClipHintPlayer();
-
-        } else if (className.equals(PianoKeySounds.class.getName())) {
-            return (T) get(PianoKeySoundsFromHints.class);
-
-        } else if (className.equals(PianoKeySoundsFromHints.class.getName())) {
-            return (T) new PianoKeySoundsFromHints();
 
         } else if (className.equals(PianoKeyColorService.class.getName())) {
             return (T) new PianoKeyColorServiceImpl();
@@ -160,6 +155,12 @@ public final class DI {
 
         } else if (className.equals(PianoKeySoundFilesBuilder.class.getName())) {
             return (T) new PianoKeySoundFilesBuilder();
+
+        } else if (className.equals(SingleSoundHintDemonstrator.class.getName())) {
+            return (T) get(AudioClipSingleSoundHintDemonstrator.class);
+
+        } else if (className.equals(AudioClipSingleSoundHintDemonstrator.class.getName())) {
+            return (T) new AudioClipSingleSoundHintDemonstrator(get(PianoKeySoundsPlayer.class));
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
