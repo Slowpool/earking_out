@@ -6,8 +6,6 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.perfectpitch.PerfectPitchHint;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
@@ -17,7 +15,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.EndHintDemonstrator;
-import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.perfectpitch.PerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
 import javafx.collections.ObservableSet;
@@ -343,13 +340,6 @@ public class JavaTests {
         var interpolatedValue = "" + Days.MONDAY;
         assertEquals("MONDAY", castedValue);
         assertEquals("MONDAY", interpolatedValue);
-    }
-
-    @Test
-    public void staticVariableInheritanceTest1() {
-        var fakeSolution = "bazinga";
-        FakeAudioPerfectPitchSolutionGenerator.fakeSolution = fakeSolution;
-        assertEquals(fakeSolution, FakeVisualPerfectPitchSolutionGenerator.fakeSolution);
     }
 
     @Test

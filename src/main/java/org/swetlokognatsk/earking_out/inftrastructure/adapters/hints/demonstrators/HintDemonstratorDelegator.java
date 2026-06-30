@@ -1,12 +1,11 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators;
 
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.SoundHarmonicIntervalSolution;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.SingleSoundSolution;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.EndHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
-import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SingleSoundHintDemonstrator;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.AudioPerfectPitchHintDemonstrator;
 
 public final class HintDemonstratorDelegator implements HintDemonstrator<Solution> {
 
@@ -18,7 +17,7 @@ public final class HintDemonstratorDelegator implements HintDemonstrator<Solutio
     // TODO grasp why generics here are useless
     protected <S extends Solution> EndHintDemonstrator<S> createSpecificHintDemonstrator(final S solution) {
         var specificHintDemonstrator = switch (solution) {
-        case SingleSoundSolution _s -> SingleSoundHintDemonstrator.class;
+        case AudioPerfectPitchSolution _s -> AudioPerfectPitchHintDemonstrator.class;
         // case SoundHarmonicIntervalSolution _s -> AudioClipSoundHarmonicIntervalHintDemonstrator.class;
         default -> throw new IllegalArgumentException("unknown solution type");
         };

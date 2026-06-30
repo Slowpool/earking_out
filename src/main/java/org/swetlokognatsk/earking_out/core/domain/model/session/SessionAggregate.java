@@ -5,14 +5,14 @@ import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
-public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
+public class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
 
@@ -114,7 +114,7 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
         demonstrateHint();
     }
 
-    public void guess(final Guess guess) {
+    public void guess(final S guess) {
         validateGuessing();
         var success = puzzle.guess(guess);
         if (success) {
@@ -161,6 +161,6 @@ public final class SessionAggregate<E extends Exercise, P extends Puzzle<E, ?>, 
 
     protected void demonstrateHint() {
         var hintDemonstrator = DI.get(HintDemonstrator.class);
-        hintDemonstrator.demonstrateHint(puzzle.hint);
+        hintDemonstrator.demonstrateHint(puzzle.solution);
     }
 }

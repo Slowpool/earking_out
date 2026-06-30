@@ -1,11 +1,13 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music.sounds;
 
-public abstract class Interval extends Sound {
-    public final SingleSound firstSound;
-    public final SingleSound secondSound;
+import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 
-    public Interval(final SingleSound firstSound, final SingleSound secondSound) {
-        this.firstSound = firstSound;
-        this.secondSound = secondSound;
+public abstract class Interval extends ValueObject {
+    public final Note firstNote;
+    public final Note secondNote;
+
+    public Interval(final Note firstNote, final Note secondNote) {
+        this.firstNote = firstNote;
+        this.secondNote = secondNote;
     }
 }

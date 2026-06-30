@@ -12,9 +12,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 
 public class RandomAudioPerfectPitchSolutionGeneratorTest {
     protected static int ITERATIONS_NUMBER = 100;
@@ -27,7 +27,7 @@ public class RandomAudioPerfectPitchSolutionGeneratorTest {
         var generator = createPuzzleGenerator(notes);
 
         Stream<PianoKeyNumber> stream = Arrays.stream(notes);
-        var map = stream.map((PianoKeyNumber keyNumber) -> new Solution(String.valueOf(keyNumber.value)));
+        var map = stream.map((PianoKeyNumber keyNumber) -> new AudioPerfectPitchSolution(keyNumber));
         Solution[] possibleSolutions = map.toArray(Solution[]::new);
         Solution generatedSolution;
         for (int i = 0; i < ITERATIONS_NUMBER; i++) {

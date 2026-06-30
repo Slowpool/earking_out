@@ -59,7 +59,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
 
     protected void seedConfigs() {
         // TODO what is this??
-        // var notes = new byte[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST).normalize() };
+        // var notes = new byte[] { new Note(NoteNames.D, null, Octaves.FIRST).normalize() };
         // appc = new AudioPerfectPitchConfigAggregate(100, false, notes, Byte.valueOf((byte) 25), PerfectPitchInputMode.NOTES_AS_CHARACTERS);
         // vppc = new VisualPerfectPitchConfigAggregate(0, false, new byte[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO);
         var exercises = ExercisesFactory.getAll();

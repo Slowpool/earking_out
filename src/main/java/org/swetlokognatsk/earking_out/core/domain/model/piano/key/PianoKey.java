@@ -3,7 +3,6 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
 
 public final class PianoKey extends Entity<PianoKeyNumber> {
     private static final long serialVersionUID = 1L;

@@ -1,24 +1,26 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import static org.junit.Assert.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.FakeSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 
 public final class SessionAggregateTest {
-    protected static final String SOLUTION = "any";
-    protected static final String WRONG_SOLUTION = "not any";
+    protected static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
+    protected static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(((AudioPerfectPitchSolution) SOLUTION).keyNumber.increment());
     protected static final int SEVERAL_PUZZLES = 10;
 
     // TODO create aggregateRoot, use it everywhere
@@ -33,28 +35,34 @@ public final class SessionAggregateTest {
     public SessionAggregateTest() {
     }
 
-    protected SessionAggregate<?, ?, AudioPerfectPitchConfigDTO> createAudioPerfectPitchSession(final String fakeSolution) {
-        FakeSolutionGenerator.fakeSolution = fakeSolution;
+    protected AudioPerfectPitchSessionAggregate createAudioPerfectPitchSession(final AudioPerfectPitchSolution fakeSolution) {
+        FakeAudioPerfectPitchSolutionGenerator.fakeSolution = fakeSolution;
 
-        return (SessionAggregate<?, ?, AudioPerfectPitchConfigDTO>) sessionAggregatesFactory.create(new AudioPerfectPitchExercise());
+        return (AudioPerfectPitchSessionAggregate) sessionAggregatesFactory.create(new AudioPerfectPitchExercise());
     }
 
-    protected SessionAggregate<?, ?, AudioPerfectPitchConfigDTO> createAudioPerfectPitchSession() {
+    protected AudioPerfectPitchSessionAggregate createAudioPerfectPitchSession() {
         return createAudioPerfectPitchSession(SOLUTION);
     }
 
-    protected SessionAggregate<?, ?, ?> createSomeSession() {
+    protected SessionAggregate<?, ?, ?, ?> createSomeSession() {
         return createAudioPerfectPitchSession();
     }
 
-    protected SessionAggregate<?, ?, ?> createSomeSessionAndGuess(final String guess) {
+    protected <S extends Solution> SessionAggregate<?, S, ?, ?> createSomeSessionAndGuessCorrectly() {
         // TODO why aggregate is considered to have cqrs design?
-        var sessionAggregate = createSomeSession();
-        sessionAggregate.guess(new Guess(guess));
-        return sessionAggregate;
+        var sessionAggregate = createAudioPerfectPitchSession();
+        sessionAggregate.guess(SOLUTION);
+        return (SessionAggregate<?, S, ?, ?>) sessionAggregate;
     }
 
-    protected SessionAggregate<?, ?, ?> createSomeSessionAndAbort() {
+    protected <S extends Solution> SessionAggregate<?, S, ?, ?> createSomeSessionAndGuessIncorrectly() {
+        var sessionAggregate = createAudioPerfectPitchSession();
+        sessionAggregate.guess(WRONG_SOLUTION);
+        return (SessionAggregate<?, S, ?, ?>) sessionAggregate;
+    }
+
+    protected SessionAggregate<?, ?, ?, ?> createSomeSessionAndAbort() {
         var sessionAggregate = createSomeSession();
         sessionAggregate.abort();
         return sessionAggregate;
@@ -83,7 +91,7 @@ public final class SessionAggregateTest {
     @Test
     public void puzzleAfterLastSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(1);
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
         try {
             sessionAggregate.getPuzzle();
@@ -100,13 +108,6 @@ public final class SessionAggregateTest {
     }
 
     @Test
-    public void hintExistsAfterCreating() {
-        var sessionAggregate = createSomeSession();
-        var hint = sessionAggregate.getPuzzle().hint;
-        assertNotNull(hint);
-    }
-
-    @Test
     public void prevGuessIsSuccessfullBeforeAnyGuessMade() {
         var sessionAggregate = createSomeSession();
 
@@ -119,14 +120,14 @@ public final class SessionAggregateTest {
 
     @Test
     public void prevGuessIsSuccessfullAfterSuccessfulGuess() {
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
         assertTrue(sessionAggregate.getPrevGuessIsSuccessful());
     }
 
     @Test
     public void prevGuessIsSuccessfullAfterWrongGuess() {
-        var sessionAggregate = createSomeSessionAndGuess(WRONG_SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessIncorrectly();
 
         assertFalse(sessionAggregate.getPrevGuessIsSuccessful());
     }
@@ -140,7 +141,7 @@ public final class SessionAggregateTest {
 
     @Test
     public void puzzlesCompletedAfterSuccessfulGuess() {
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
         assertEquals(1, sessionAggregate.getPuzzlesCompleted());
     }
@@ -148,14 +149,14 @@ public final class SessionAggregateTest {
     @Test
     public void puzzlesCompletedAfterLastSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(1);
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
         assertEquals(1, sessionAggregate.getPuzzlesCompleted());
     }
 
     @Test
     public void puzzlesCompletedAfterWrongGuess() {
-        var sessionAggregate = createSomeSessionAndGuess(WRONG_SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessIncorrectly();
 
         assertEquals(0, sessionAggregate.getPuzzlesCompleted());
     }
@@ -172,7 +173,7 @@ public final class SessionAggregateTest {
     public void isCompletedAfterLastSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(1);
 
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
         assertEquals(SessionStates.COMPLETED, sessionAggregate.getState());
     }
@@ -180,10 +181,10 @@ public final class SessionAggregateTest {
     @Test
     public void failToGuessAfterLastSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(1);
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
         try {
-            sessionAggregate.guess(new Guess(SOLUTION));
+            sessionAggregate.guess(SOLUTION);
             fail();
         } catch (IllegalStateException e) {
         }
@@ -210,7 +211,7 @@ public final class SessionAggregateTest {
     @Test
     public void numberOfGuessesOfCurrentPuzzleAfterSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(SEVERAL_PUZZLES);
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
         assertEquals(0, sessionAggregate.getNumberOfGuessesOfCurrentPuzzle());
     }
@@ -218,7 +219,7 @@ public final class SessionAggregateTest {
     @Test
     public void numberOfGuessesOfCurrentPuzzleAfterLastSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(1);
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
         try {
             sessionAggregate.getNumberOfGuessesOfCurrentPuzzle();
@@ -230,10 +231,10 @@ public final class SessionAggregateTest {
 
     @Test
     public void numberOfGuessesOfCurrentPuzzleAfterWrongGuess() {
-        var sessionAggregate = createSomeSessionAndGuess(WRONG_SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessIncorrectly();
         assertEquals(1, sessionAggregate.getNumberOfGuessesOfCurrentPuzzle());
 
-        sessionAggregate.guess(new Guess(WRONG_SOLUTION));
+        sessionAggregate.guess(WRONG_SOLUTION);
         assertEquals(2, sessionAggregate.getNumberOfGuessesOfCurrentPuzzle());
     }
 
@@ -247,7 +248,7 @@ public final class SessionAggregateTest {
     @Test
     public void puzzlesCompletedCorrectlyAfterLastSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(1);
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
         assertEquals(1, sessionAggregate.getPuzzlesCompletedCorrectly());
     }
@@ -256,19 +257,19 @@ public final class SessionAggregateTest {
     public void puzzlesCompletedCorrectlyAfterSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(SEVERAL_PUZZLES);
 
-        var sessionAggregate = createSomeSessionAndGuess(SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessCorrectly();
         assertEquals(1, sessionAggregate.getPuzzlesCompletedCorrectly());
 
-        sessionAggregate.guess(new Guess(SOLUTION));
+        sessionAggregate.guess(SOLUTION);
         assertEquals(2, sessionAggregate.getPuzzlesCompletedCorrectly());
     }
 
     @Test
     public void puzzlesCompletedCorrectlyAfterWrongGuess() {
-        var sessionAggregate = createSomeSessionAndGuess(WRONG_SOLUTION);
+        var sessionAggregate = createSomeSessionAndGuessIncorrectly();
         assertEquals(0, sessionAggregate.getPuzzlesCompletedCorrectly());
 
-        sessionAggregate.guess(new Guess(SOLUTION));
+        sessionAggregate.guess(SOLUTION);
         assertEquals(0, sessionAggregate.getPuzzlesCompletedCorrectly());
     }
 

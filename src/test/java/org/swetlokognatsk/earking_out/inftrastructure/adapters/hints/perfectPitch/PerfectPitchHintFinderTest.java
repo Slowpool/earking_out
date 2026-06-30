@@ -15,6 +15,7 @@ import org.swetlokognatsk.earking_out.core.ports.hints.finders.HintFinder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.perfectpitch.FakeAudioPerfectPitchHints;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
 
+// TODO as i think, it should be deleted. instead PianoKeySoundsService should be tested.
 public class PerfectPitchHintFinderTest {
     protected PuzzleTestHelper puzzleHelper;
 

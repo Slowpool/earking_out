@@ -5,16 +5,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidentalTest;
+import org.swetlokognatsk.earking_out.core.domain.model.music.NoteTest;
+import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
 public final class NoteNormalizerTest {
     static NoteNormalizer noteNormalizer;
-    static NoteWithAccidental[] notesWithAccidental = NoteWithAccidentalTest.notesWithAccidental;
-    static PianoKeyNumber[] normalizedValues = NoteWithAccidentalTest.normalizedValues;
+    static Note[] notesWithAccidental = NoteTest.notesWithAccidental;
+    static PianoKeyNumber[] normalizedValues = NoteTest.normalizedValues;
 
     @BeforeClass
     public static void setup() {

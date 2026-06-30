@@ -1,10 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music.sounds;
 
-public final class Chord extends Sound {
-    public final SingleSound[] sounds;
+import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 
-    public Chord(final SingleSound[] sounds) {
+public final class Chord extends ValueObject {
+    public final Note[] notes;
+
+    public Chord(final Note[] notes) {
         // TODO validate that sounds contains 2+ elements
-        this.sounds = sounds;
+        this.notes = notes;
     }
 }

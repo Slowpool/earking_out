@@ -3,13 +3,9 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
 import org.junit.*;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.SingleSound;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.SingleSoundSolution;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
@@ -24,23 +20,26 @@ public class AudioPerfectPitchPuzzleTest {
 
     @Test
     // TODO it checks whether puzzle.create indeed creates the object of `Puzzle` type, that's it. is it ok to test such a thing or it is redundant?
-    public void createPerfectPitchPuzzle() {
+    public void puzzleClassCorresponds() {
         var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise());
-        assertTrue(puzzle instanceof Puzzle);
+        assertTrue(puzzle instanceof AudioPerfectPitchPuzzle);
     }
 
     @Test
     public void perfectPitchCorrectPuzzleGuess() {
-        var solution = FIRST_NOTE_NUMBER;
+        var solution = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
         var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise(), solution);
-        boolean correctAnswer = puzzle.guess(new SingleSoundSolution(new SingleSound(solution)));
+        boolean correctAnswer = puzzle.guess(solution);
         assertTrue(correctAnswer);
     }
 
     @Test
     public void perfectPitchWrongPuzzleGuess() {
-        var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise(), "4");
-        boolean correctAnswer = puzzle.guess(new Guess("5"));
+        var solution = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
+        var puzzle = puzzleHelper.createPuzzle(new AudioPerfectPitchExercise(), solution);
+
+        var wrongSolution = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER.increment());
+        boolean correctAnswer = puzzle.guess(wrongSolution);
         assertFalse(correctAnswer);
     }
 

@@ -1,6 +1,9 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.piano;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -9,23 +12,27 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.AudioClipSoundPlayer;
 
 // TODO test
-public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer {
-    protected Map<PianoKeyNumber, AudioClipSoundPlayer> soundPlayers;
+public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer, Serializable {
+    protected transient Map<PianoKeyNumber, AudioClipSoundPlayer> soundPlayers = new HashMap<>();
 
     public AudioClipPianoKeySoundsPlayer() {
-        var pianoKeySoundFilesBuilder = DI.get(PianoKeySoundFilesBuilder.class);
-        soundPlayers = buildSoundPlayers(pianoKeySoundFilesBuilder.getFiles());
+        buildSoundPlayers();
     }
 
-    protected Map<PianoKeyNumber, AudioClipSoundPlayer> buildSoundPlayers(final Map<PianoKeyNumber, File> files) {
+    protected void buildSoundPlayers() {
+        var files = getFiles();
         // TODO refactoring via stream
-        Map<PianoKeyNumber, AudioClipSoundPlayer> soundPlayers = new HashMap<>();
         AudioClipSoundPlayer soundPlayer;
         for (var pianoKeyNumber : files.keySet()) {
             soundPlayer = new AudioClipSoundPlayer(files.get(pianoKeyNumber));
             soundPlayers.put(pianoKeyNumber, soundPlayer);
         }
-        return soundPlayers;
+    }
+
+    protected Map<PianoKeyNumber, File> getFiles() {
+        var pianoKeySoundFilesBuilder = DI.get(PianoKeySoundFilesBuilder.class);
+        var files = pianoKeySoundFilesBuilder.getFiles();
+        return files;
     }
 
     protected AudioClipSoundPlayer getSoundPlayer(final PianoKeyNumber keyNumber) {
@@ -50,6 +57,11 @@ public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer
         var soundPlayer = getSoundPlayer(keyNumber);
         soundPlayer.stop();
         soundPlayer.play();
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+        inputStream.defaultReadObject();
+        buildSoundPlayers();
     }
 
 }
