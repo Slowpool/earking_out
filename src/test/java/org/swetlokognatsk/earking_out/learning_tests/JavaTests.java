@@ -435,7 +435,7 @@ public class JavaTests {
         // // error
         // Finite finite = new Finite();
         // Generic<Id> casted = finite;
-        
+
         // // error
         // Finite finite = new Finite();
         // Generic<Id> casted = (Generic<Id>) finite;
@@ -443,8 +443,105 @@ public class JavaTests {
         // fine, though warning
         Generic<?> finite = new Finite();
         Generic<Id> casted = (Generic<Id>) finite;
-        
+
         return casted;
+    }
+
+    @Test
+    public void switchTest6() {
+        Object person = new John();
+        switch (person) {
+        case String s:
+            fail();
+            break;
+        case John p:
+            break;
+        case Person p:
+            fail();
+            break;
+        default:
+            fail();
+            break;
+        }
+    }
+
+    @Test
+    public void switchGenericTest() {
+        Person person = new John();
+        switchGeneric1(person);
+        switchGeneric2(person);
+    }
+
+    protected <P extends Person> void switchGeneric1(P person) {
+        switch (person) {
+        case John p:
+            break;
+        case Person p:
+            fail();
+            break;
+        }
+    }
+
+    protected <P extends Person> void switchGeneric2(P person) {
+        switch (person) {
+        case John p:
+            break;
+        case P p:
+            fail();
+            break;
+        }
+    }
+
+    @Test
+    public void genericTest7() {
+        John john = switchGeneric3();
+    }
+
+    protected <P extends Person> P switchGeneric3() {
+        return (P) new John();
+    }
+
+    @Test
+    public void genericTest8() {
+        John john1 = new John();
+        John john2 = switchGeneric4(john1);
+    }
+
+    protected <P extends Person> P switchGeneric4(P person) {
+        return (P) new John();
+    }
+
+    @Test
+    public void genericTest9() {
+        Steve steve1 = new Steve();
+        try {
+            Steve steve2 = switchGeneric4(steve1);
+            fail();
+        } catch (ClassCastException e) {
+        }
+    }
+
+    @Test
+    public void genericTest10() {
+        John john = switchGeneric5("1");
+        Person person = switchGeneric5("1");
+        Entity entity = switchGeneric5("1");
+        Object anybody = switchGeneric5("1");
+
+        try {
+            Steve steve = switchGeneric5("1");
+            fail();
+        } catch (ClassCastException e) {
+        }
+
+    }
+
+    protected <P extends Person> P switchGeneric5(String string) {
+        return (P) switch (string) {
+        case "1" -> new John();
+        case "2" -> new Steve();
+        default -> throw new IllegalArgumentException();
+        };
     }
 }
 
@@ -466,11 +563,8 @@ abstract class RockId extends Id {
 abstract class AliveId extends Id {
 }
 
-
-
 class AnimalId extends AliveId {
 }
-
 
 abstract class EntitiesFactory<E extends Entity<?>> {
     public abstract E create();
@@ -569,4 +663,7 @@ class John extends Person implements Doinger {
     // you'll get fired by compiler if this method is absent (yes, from your job)
     public void doSomething() {
     }
+}
+
+class Steve extends Person {
 }

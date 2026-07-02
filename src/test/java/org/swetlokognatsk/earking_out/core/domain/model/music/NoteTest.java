@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public final class NoteTest {
-    public static final Note[] notesWithAccidental;
+    public static final Note[] notes;
     public static final PianoKeyNumber[] normalizedValues;
 
     static final Accidentals[] accidentals;
@@ -22,7 +22,7 @@ public final class NoteTest {
 
     static {
         // TODO fix auto-formatting
-        notesWithAccidental = new Note[] { new Note(NoteNames.C, null, Octaves.FIRST), new Note(NoteNames.D, null, Octaves.FIRST), new Note(NoteNames.E, null, Octaves.FIRST), new Note(NoteNames.F, null, Octaves.FIRST), new Note(NoteNames.G, null, Octaves.FIRST), new Note(NoteNames.A, null, Octaves.FIRST), new Note(NoteNames.B, null, Octaves.FIRST) };
+        notes = new Note[] { new Note(NoteNames.C, null, Octaves.FIRST), new Note(NoteNames.D, null, Octaves.FIRST), new Note(NoteNames.E, null, Octaves.FIRST), new Note(NoteNames.F, null, Octaves.FIRST), new Note(NoteNames.G, null, Octaves.FIRST), new Note(NoteNames.A, null, Octaves.FIRST), new Note(NoteNames.B, null, Octaves.FIRST) };
 
         normalizedValues = new PianoKeyNumber[] { PianoKeyNumber.valueOf(4), // C1
                 PianoKeyNumber.valueOf(6), // D1
@@ -42,7 +42,6 @@ public final class NoteTest {
         octaveShifts = new byte[] { 0, 12 };
     }
 
-    // TODO normalizing works via math formulae, so it is enough to check only first and second octave. upd: actually it depends on implementation, whereas tests should not know how it works under the hood.
     @Test
     public void normalizingFirstAndSecondOctave() {
         for (int octave = 0; octave < octaves.length; octave++) {
@@ -95,8 +94,8 @@ public final class NoteTest {
     private void checkOctaveNormalizing(final Octaves octave, final byte octaveShift, final Accidentals accidental, final byte accidentalShift) {
         Note note;
         PianoKeyNumber correctNormalizedValue;
-        for (int i = 0; i < notesWithAccidental.length; i++) {
-            note = applyOctaveAndAccidentals(notesWithAccidental[i], octave, accidental);
+        for (int i = 0; i < notes.length; i++) {
+            note = applyOctaveAndAccidentals(notes[i], octave, accidental);
             if (thisNoteExistsButIsNotUsedInApp(normalizedValues[i], accidentalShift)) {
                 continue;
             }

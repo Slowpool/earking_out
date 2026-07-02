@@ -13,7 +13,7 @@ import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
 public final class NoteNormalizerTest {
     static NoteNormalizer noteNormalizer;
-    static Note[] notesWithAccidental = NoteTest.notesWithAccidental;
+    static Note[] notes = NoteTest.notes;
     static PianoKeyNumber[] normalizedValues = NoteTest.normalizedValues;
 
     @BeforeClass
@@ -34,8 +34,8 @@ public final class NoteNormalizerTest {
     @Test
     public void normalizingInOctave() {
         byte expected;
-        for (int i = 0; i < notesWithAccidental.length; i++) {
-            var normalizedValue = noteNormalizer.normalizeInOctave(notesWithAccidental[i]);
+        for (int i = 0; i < notes.length; i++) {
+            var normalizedValue = noteNormalizer.normalizeInOctave(notes[i]);
             // normalizedValues are defined for FIRST octave, whereas this test checks for octave-scoped value
             expected = normalizedValues[i].value;
             expected -= Invariants.SHIFT;
