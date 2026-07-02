@@ -51,8 +51,8 @@ public abstract class PuzzlePane<PCDTO extends PuzzleConfigDTO<?>> extends Borde
         return new Label(formattedCaption);
     }
 
-    private static String interpolatePuzzleProgress(int numberOfPuzzles, int targetNumberOfPuzzles) {
-        return String.format("%d of %d are guessed", numberOfPuzzles, targetNumberOfPuzzles);
+    private static String interpolatePuzzleProgress(final int numberOfPuzzles, final int targetNumberOfPuzzles) {
+        return String.format("%d of %d are completed", numberOfPuzzles, targetNumberOfPuzzles);
     }
 
     protected VBox buildPuzzlesProgress(final Label puzzleProgressLabel, final ProgressBar puzzlesProgressBar) {

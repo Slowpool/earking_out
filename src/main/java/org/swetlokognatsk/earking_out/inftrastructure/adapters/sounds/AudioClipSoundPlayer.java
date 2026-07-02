@@ -3,10 +3,10 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
+import java.io.Serializable;
 import javafx.scene.media.AudioClip;
 
-public final class AudioClipSoundPlayer implements SoundPlayer {
+public final class AudioClipSoundPlayer implements SoundPlayer, Serializable {
     protected final String audioClipSource;
     protected transient AudioClip audioClip;
 

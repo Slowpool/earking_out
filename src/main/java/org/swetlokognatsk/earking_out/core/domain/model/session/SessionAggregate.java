@@ -2,9 +2,10 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import java.util.Objects;
 import java.util.UUID;
-import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
@@ -12,7 +13,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
-public class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
+public abstract class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
 
@@ -159,8 +160,10 @@ public class SessionAggregate<E extends Exercise, S extends Solution, P extends 
         setState(SessionStates.ABORTED);
     }
 
+    // TODO it should be in specific domain-event handler, not here.
     protected void demonstrateHint() {
         var hintDemonstrator = DI.get(HintDemonstrator.class);
+        // TODO what to do with warning
         hintDemonstrator.demonstrateHint(puzzle.solution);
     }
 }

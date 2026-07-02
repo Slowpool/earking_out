@@ -2,8 +2,11 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
+import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.session.GuessEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -45,8 +48,17 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     protected PianoKeyboard buildPianoKeyboardForGuessing() {
         var pianoKeyboardWidth = getWidth();
         var pianoKeyboardHeight = getHeight() / 4;
+
         var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesGuessing(pianoKeyboardWidth, pianoKeyboardHeight);
+        pianoKeyboard.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, this::fireGuessEvent);
+
         return pianoKeyboard;
+    }
+
+    protected void fireGuessEvent(final PianoKeyPressedEvent e) {
+        Solution solution = null;// TODO e to solution
+        var event = new GuessEvent(GuessEvent.GUESS_EVENT, solution);
+        fireEvent(event);
     }
 
     public void resetStateForNewPuzzle() {

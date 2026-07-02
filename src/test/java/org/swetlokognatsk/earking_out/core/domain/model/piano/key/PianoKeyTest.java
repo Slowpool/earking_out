@@ -6,9 +6,9 @@ import java.util.Objects;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.MockSoundPlayer;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.SoundPlayer;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 
 public final class PianoKeyTest {

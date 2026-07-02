@@ -13,7 +13,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.AudioClipS
 
 // TODO test
 public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer, Serializable {
-    protected transient Map<PianoKeyNumber, AudioClipSoundPlayer> soundPlayers = new HashMap<>();
+    protected transient Map<PianoKeyNumber, AudioClipSoundPlayer> soundPlayers;
 
     public AudioClipPianoKeySoundsPlayer() {
         buildSoundPlayers();
@@ -21,12 +21,14 @@ public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer
 
     protected void buildSoundPlayers() {
         var files = getFiles();
+        var soundPlayers = new HashMap<PianoKeyNumber, AudioClipSoundPlayer>();
         // TODO refactoring via stream
         AudioClipSoundPlayer soundPlayer;
         for (var pianoKeyNumber : files.keySet()) {
             soundPlayer = new AudioClipSoundPlayer(files.get(pianoKeyNumber));
             soundPlayers.put(pianoKeyNumber, soundPlayer);
         }
+        this.soundPlayers = soundPlayers;
     }
 
     protected Map<PianoKeyNumber, File> getFiles() {

@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.core.domain.services.app;
 
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -24,8 +26,23 @@ public final class SessionService {
         return session.getId();
     }
 
+    // TODO test
     public void abort(final UUID sessionId) {
         var session = sessionRepository.get(sessionId);
         session.abort();
+        sessionRepository.save(session);
     }
+
+    // TODO use it
+    public void guessViaPianoKeyPressing(final UUID sessionId, final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber keyNumber) {
+        var session = sessionRepository.get(sessionId);
+        session.guessViaPianoKeyPressing(keyNumber);
+        sessionRepository.save(session);
+    }
+
+    // TODO use it
+    public void releasePianoKey(final PianoKeyboardId pianoKeyboardId) {
+
+    }
+
 }
