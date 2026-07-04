@@ -42,11 +42,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
 
     // TODO polymorphic stuff??
     protected PerfectPitchConfigDependentAggregatesDTO getAudioPerfectPitchConfigDependentAggregates(final Exercise exercise) {
-        var pianoKeyboardIds = PianoKeyboardId.getPianoKeyboardIds(exercise);
-        var pianoKeyboards = new PianoKeyboardAggregate[pianoKeyboardIds.length];
-        for (int i = 0; i < pianoKeyboards.length; i++) {
-            pianoKeyboards[i] = pianoKeyboardRepository.get(pianoKeyboardIds[i]);
-        }
+        var pianoKeyboards = pianoKeyboardRepository.getByExercise(exercise);
         var dependentAggregates = new PerfectPitchConfigDependentAggregatesDTO(pianoKeyboards);
         return dependentAggregates;
     }
@@ -78,7 +74,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         }
 
         puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
-        // TODO how to update pianoKeyboardAggregates before returning?
+        // TODO refresh pianoKeyboardAggregates before returning (pull new ones from pianoKeyboardRepository)
         return (PCA) puzzleConfigAggregate;
     }
 

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.ports.session.services.SessionRepository;
 
 public final class InMemorySessionRepository implements SessionRepository {

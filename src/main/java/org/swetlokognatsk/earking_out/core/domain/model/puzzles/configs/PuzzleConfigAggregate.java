@@ -7,8 +7,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
-import java.util.HashMap;
 import java.util.Map;
+import static org.swetlokognatsk.earking_out.core.domain.helpers.PianoKeyboardHelper.*;
 
 // TODO review all aggregates: do they follow transactional consistency (in-memory)?
 // TODO store it in database as json
@@ -44,13 +44,14 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         this.pianoKeyboardAggregates = createPianoKeyboardsMap(pianoKeyboardAggregates);
     }
 
-    private final Map<PianoKeyboardId, PianoKeyboardAggregate> createPianoKeyboardsMap(final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
-        Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardsMap = new HashMap<>();
-        for (var pianoKeyboardAggregate : pianoKeyboardAggregates) {
-            pianoKeyboardsMap.put(pianoKeyboardAggregate.getId(), pianoKeyboardAggregate);
-        }
-        return pianoKeyboardsMap;
-    }
+    // TODO delete
+    // private final Map<PianoKeyboardId, PianoKeyboardAggregate> createPianoKeyboardsMap(final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
+    //     Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardsMap = new HashMap<>();
+    //     for (var pianoKeyboardAggregate : pianoKeyboardAggregates) {
+    //         pianoKeyboardsMap.put(pianoKeyboardAggregate.getId(), pianoKeyboardAggregate);
+    //     }
+    //     return pianoKeyboardsMap;
+    // }
 
     public final void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber keyNumber) {
         var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);

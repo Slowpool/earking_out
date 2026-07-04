@@ -2,14 +2,11 @@ package org.swetlokognatsk.earking_out.core.domain.services.app;
 
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
+import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.services.SessionRepository;
 
-public final class SessionService {
+public class SessionService {
     protected final PuzzleConfigRepository puzzleConfigRepository;
     protected final SessionRepository sessionRepository;
     protected final SessionAggregatesFactory sessionAggregatesFactory;
@@ -31,18 +28,6 @@ public final class SessionService {
         var session = sessionRepository.get(sessionId);
         session.abort();
         sessionRepository.save(session);
-    }
-
-    // TODO use it
-    public void guessViaPianoKeyPressing(final UUID sessionId, final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber keyNumber) {
-        var session = sessionRepository.get(sessionId);
-        session.guessViaPianoKeyPressing(keyNumber);
-        sessionRepository.save(session);
-    }
-
-    // TODO use it
-    public void releasePianoKey(final PianoKeyboardId pianoKeyboardId) {
-
     }
 
 }
