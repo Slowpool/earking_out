@@ -5,6 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregates
 import org.swetlokognatsk.earking_out.core.domain.model.base.Factory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.perfectpitch.AudioPerfectPitchSessionDependentAggregatesDTO;
@@ -38,9 +39,8 @@ public final class SessionAggregatesFactory extends Factory<SessionAggregate<?, 
 
         var sessionAggregate = switch (exercise) {
         case AudioPerfectPitchExercise _e ->  {
-            var pianoKeyboardAggregates = pianoKeyboardRepository.getByExercise(exercise);
-            var dependentAggregates = new AudioPerfectPitchSessionDependentAggregatesDTO(pianoKeyboardAggregates);
-            var aggregate = new AudioPerfectPitchSessionAggregate(UUID.randomUUID(), (AudioPerfectPitchConfigDTO) puzzleConfigDto, sessionStats, dependentAggregates);
+            var notesGuessingPianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING);
+            var aggregate = new AudioPerfectPitchSessionAggregate(UUID.randomUUID(), (AudioPerfectPitchConfigDTO) puzzleConfigDto, sessionStats, notesGuessingPianoKeyboard);
             yield aggregate;
         }
         default -> throw new IllegalArgumentException("unknown exercise: " + exercise);

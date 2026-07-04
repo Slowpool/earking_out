@@ -4,9 +4,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregates
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 
 public final class AudioPerfectPitchSessionDependentAggregatesDTO extends DependentAggregatesDTO {
-    public final PianoKeyboardAggregate[] pianoKeyboardAggregates;
+    public final PianoKeyboardAggregate notesGuessingPianoKeyboard;
 
-    public AudioPerfectPitchSessionDependentAggregatesDTO(final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
-        this.pianoKeyboardAggregates = pianoKeyboardAggregates;
+    public AudioPerfectPitchSessionDependentAggregatesDTO(final PianoKeyboardAggregate notesGuessingPianoKeyboard) {
+        this.notesGuessingPianoKeyboard = notesGuessingPianoKeyboard;
     }
 }

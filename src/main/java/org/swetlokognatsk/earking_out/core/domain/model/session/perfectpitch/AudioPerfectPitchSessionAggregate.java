@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 
-import java.util.Map;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -10,10 +9,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.Aud
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import static org.swetlokognatsk.earking_out.core.domain.helpers.PianoKeyboardHelper.*;
 
 public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSessionAggregate<AudioPerfectPitchExercise, AudioPerfectPitchSolution, AudioPerfectPitchPuzzle, AudioPerfectPitchConfigDTO> {
     protected final PianoKeyboardAggregate notesGuessingPianoKeyboard;
+
+    public PianoKeyboardAggregate getGuessingPianoKeyboard() {
+        // TODO make it read-only
+        return notesGuessingPianoKeyboard;
+    }
 
     public AudioPerfectPitchSessionAggregate(final UUID id, final AudioPerfectPitchConfigDTO puzzleConfigDto, final SessionStats stats, final PianoKeyboardAggregate notesGuessingPianoKeyboard) {
         super(id, puzzleConfigDto, stats);
