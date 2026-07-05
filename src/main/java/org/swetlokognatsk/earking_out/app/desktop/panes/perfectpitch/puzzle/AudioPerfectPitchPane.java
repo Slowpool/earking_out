@@ -3,17 +3,18 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.session.GuessEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchConfigDTO> {
+public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionService> {
 
     protected final PianoKeyboard pianoKeyboardForGuessing;
 
@@ -30,8 +31,8 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         return pane;
     }
 
-    public AudioPerfectPitchPane(final UUID sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height) {
-        super(sessionId, puzzleConfigDto, width, height);
+    public AudioPerfectPitchPane(final UUID sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height, final AudioPerfectPitchSessionService sessionService) {
+        super(sessionId, puzzleConfigDto, width, height, sessionService);
 
         pianoKeyboardForGuessing = (PianoKeyboard) innerPuzzlePane.getChildren().get(1);
     }
@@ -50,18 +51,19 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         var pianoKeyboardHeight = getHeight() / 4;
 
         var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesGuessing(pianoKeyboardWidth, pianoKeyboardHeight);
-        pianoKeyboard.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, this::fireGuessEvent);
+        pianoKeyboard.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, this::guessViaPianoKeyPressing);
+        pianoKeyboard.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, this::releasePianoKey);
 
         return pianoKeyboard;
     }
 
-    protected void fireGuessEvent(final PianoKeyPressedEvent e) {
-        Solution solution = null;// TODO e to solution
-        var event = new GuessEvent(GuessEvent.GUESS_EVENT, solution);
-        fireEvent(event);
+    protected void guessViaPianoKeyPressing(final PianoKeyPressedEvent e) {
+        sessionService.guessViaPianoKeyPressing(sessionId, e.keyNumber);
+        // TODO update pianoKey selecting
     }
 
-    public void resetStateForNewPuzzle() {
+    public void releasePianoKey(final PianoKeyReleasedEvent e) {
+        sessionService.releasePianoKey(sessionId);
         // TODO clear selected notes
     }
 

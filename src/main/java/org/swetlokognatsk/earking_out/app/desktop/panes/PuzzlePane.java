@@ -2,7 +2,11 @@ package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
+import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -12,8 +16,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class PuzzlePane<PCDTO extends PuzzleConfigDTO<?>> extends BorderPane {
+public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, SS extends SessionService<E, ? extends SessionAggregate<E, ?, ?, PCDTO>, ? extends SessionRepository<?>>> extends BorderPane {
     protected final UUID sessionId;
+    protected final SS sessionService;
 
     protected final Pane innerPuzzlePane;
     protected final ProgressBar puzzlesProgressBar;
@@ -23,10 +28,9 @@ public abstract class PuzzlePane<PCDTO extends PuzzleConfigDTO<?>> extends Borde
 
     protected abstract Pane buildInnerPuzzlePane(final PCDTO puzzleConfigDto);
 
-    public abstract void resetStateForNewPuzzle();
-
-    public PuzzlePane(final UUID sessionId, final PCDTO puzzleConfigDto, final double width, final double height) {
+    public PuzzlePane(final UUID sessionId, final PCDTO puzzleConfigDto, final double width, final double height, final SS sessionService) {
         this.sessionId = sessionId;
+        this.sessionService = sessionService;
 
         setWidth(width);
         setHeight(height);

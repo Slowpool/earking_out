@@ -33,12 +33,15 @@ public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSession
     }
 
     // pianoKeyboardId is not passed because it's constant for this aggregate class - `PERFECT_PITCH_NOTES_GUESSING`
+    // TODO is it fine to have such an aggregate command that calls another command (guess)?
     public void guessViaPianoKeyPressing(final PianoKeyNumber keyNumber) {
-        // pianoKeyboardAggregates
+        notesGuessingPianoKeyboard.pressKey(keyNumber);
+        var solution = new AudioPerfectPitchSolution(keyNumber);
+        guess(solution);
     }
 
     public void releasePianoKey() {
-
+        notesGuessingPianoKeyboard.releaseKey();
     }
 
 }

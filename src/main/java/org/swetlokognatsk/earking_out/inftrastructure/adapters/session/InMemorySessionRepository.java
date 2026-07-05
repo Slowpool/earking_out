@@ -5,28 +5,33 @@ import java.util.Map;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.ports.session.services.SessionRepository;
+import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 
-public final class InMemorySessionRepository implements SessionRepository {
+public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?, ?, ?>> implements SessionRepository<SA> {
     protected final Map<UUID, SessionAggregate<?, ?, ?, ?>> sessionAggregates = new HashMap<>();;
 
     protected final SessionAggregatesFactory sessionAggregatesFactory;
+
+    protected abstract void loadDependentAggregates(final SA sessionAggregate);
+    protected abstract void saveDependentAggregates(final SA sessionAggregate);
 
     public InMemorySessionRepository(final SessionAggregatesFactory sessionAggregatesFactory) {
         this.sessionAggregatesFactory = sessionAggregatesFactory;
     }
 
-    public SessionAggregate<?, ?, ?, ?> get(final UUID id) {
-        var sessionAggregate = sessionAggregates.get(id);
+    public SA get(final UUID id) {
+        var sessionAggregate = (SA) sessionAggregates.get(id);
         if (sessionAggregate == null) {
             throw new IllegalArgumentException("session not found. id: " + id);
         }
+        loadDependentAggregates(sessionAggregate);
         var sessionAggregateCopy = sessionAggregatesFactory.createDeepCopy(sessionAggregate);
-        return sessionAggregateCopy;
+        return (SA) sessionAggregateCopy;
     }
 
-    public void save(final SessionAggregate<?, ?, ?, ?> aggregate) {
-        var aggregateCopy = sessionAggregatesFactory.createDeepCopy(aggregate);
-        sessionAggregates.put(aggregateCopy.getId(), aggregateCopy);
+    public void save(SA sessionAggregate) {
+        sessionAggregate = (SA) sessionAggregatesFactory.createDeepCopy(sessionAggregate);
+        saveDependentAggregates(sessionAggregate);
+        sessionAggregates.put(sessionAggregate.getId(), sessionAggregate);
     }
 }

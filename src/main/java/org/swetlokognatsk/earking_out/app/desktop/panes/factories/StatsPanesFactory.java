@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.session.services.SessionRepository;
+import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 
 public final class StatsPanesFactory {
     protected final PuzzleConfigRepository puzzleConfigRepository;

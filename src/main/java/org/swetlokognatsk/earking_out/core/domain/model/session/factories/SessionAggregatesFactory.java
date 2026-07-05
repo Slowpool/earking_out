@@ -28,6 +28,7 @@ public final class SessionAggregatesFactory extends Factory<SessionAggregate<?, 
         pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
     }
 
+    // TODO do something with this cringe
     public SessionAggregate<?, ?, ?, ?> createDefault(final DependentAggregatesDTO dependentAggregates) {
         throw new RuntimeException("there are no default sessions. it must have some exercise");
     }

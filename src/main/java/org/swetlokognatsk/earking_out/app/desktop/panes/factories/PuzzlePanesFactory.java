@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.Audi
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.session.services.SessionRepository;
+import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 
 public final class PuzzlePanesFactory {
     protected final SessionRepository sessionRepository;
