@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 
 public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, SS extends SessionService<E, ? extends SessionAggregate<E, ?, ?, PCDTO>, ? extends SessionRepository<?>>> extends BorderPane {
     protected final UUID sessionId;
+    protected final E exercise;
     protected final SS sessionService;
 
     protected final Pane innerPuzzlePane;
@@ -30,6 +31,7 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
 
     public PuzzlePane(final UUID sessionId, final PCDTO puzzleConfigDto, final double width, final double height, final SS sessionService) {
         this.sessionId = sessionId;
+        this.exercise = puzzleConfigDto.exercise;
         this.sessionService = sessionService;
 
         setWidth(width);
@@ -71,8 +73,8 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
         return abortButton;
     }
 
-    protected void abortExercise(ActionEvent e) {
-        var exerciseFinishedEvent = new ExerciseFinishedEvent(ExerciseFinishedEvent.EXERCISE_FINISHED, sessionId);
+    protected void abortExercise(final ActionEvent e) {
+        var exerciseFinishedEvent = new ExerciseFinishedEvent<E>(ExerciseFinishedEvent.EXERCISE_FINISHED, sessionId, exercise);
         fireEvent(exerciseFinishedEvent);
     }
 }

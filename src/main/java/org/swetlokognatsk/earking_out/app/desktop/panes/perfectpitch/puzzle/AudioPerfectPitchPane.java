@@ -5,6 +5,7 @@ import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
@@ -57,14 +58,17 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         return pianoKeyboard;
     }
 
+    // this could be in PianoKeyboardHandlersRegister, but because this logic is polymorphic, it's here. also coupling the puzzlePane to sessionService seems wrong because it makes PuzzlePane generics much more difficult to understand
     protected void guessViaPianoKeyPressing(final PianoKeyPressedEvent e) {
         sessionService.guessViaPianoKeyPressing(sessionId, e.keyNumber);
-        // TODO update pianoKey selecting
+        PianoKeyboardHandlersRegister.updatePianoKeyboardView(pianoKeyboardForGuessing);
+        // TODO other ui updates
     }
 
     public void releasePianoKey(final PianoKeyReleasedEvent e) {
         sessionService.releasePianoKey(sessionId);
-        // TODO clear selected notes
+        PianoKeyboardHandlersRegister.updatePianoKeyboardView(pianoKeyboardForGuessing);
+        // TODO other ui updates
     }
 
 }

@@ -11,12 +11,14 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFac
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -104,8 +106,9 @@ public final class EarkingOutApplication extends Application {
         return (CP) configPane;
     }
 
-    private void tryOpenPuzzlePane(final ExerciseStartedEvent<?> event) {
-        var sessionService = DI.get(SessionService.class);
+    // TODO generics are awkward here
+    private <E extends Exercise> void tryOpenPuzzlePane(final ExerciseStartedEvent<E> event) {
+        SessionService<E, ?, ?> sessionService = getSessionService(event.exercise);
         try {
             var sessionId = sessionService.start(event.exercise);
             showPuzzlePane(sessionId);
@@ -113,6 +116,15 @@ public final class EarkingOutApplication extends Application {
             // TODO message
             // DialogPane.
         }
+    }
+
+    // TODO generics are awkward here
+    protected <E extends Exercise> SessionService<E, ?, ?> getSessionService(final E exercise) {
+        var sessionService = switch (exercise) {
+        case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSessionService.class);
+        default -> throw new IllegalArgumentException("unknown exercise: " + exercise);
+        };
+        return (SessionService<E, ?, ?>) sessionService;
     }
 
     private void showPuzzlePane(final UUID sessionId) {
@@ -141,9 +153,10 @@ public final class EarkingOutApplication extends Application {
         return puzzlePane;
     }
 
-    private void openExerciseFinish(final ExerciseFinishedEvent e) {
-        // TODO where it should be? app constructor does not seem to be suitable for that purpose due to extra cluttering 
-        var sessionService = DI.get(SessionService.class);
+    // TODO generics are awkward here
+    private void openExerciseFinish(final ExerciseFinishedEvent<?> e) {
+        // TODO where it should be? app constructor does not seem to be suitable for that purpose due to extra cluttering
+        var sessionService = getSessionService(e.exercise);
         sessionService.abort(e.sessionId);
         showExerciseFinishPane(e.sessionId);
     }
