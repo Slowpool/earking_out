@@ -8,8 +8,11 @@ import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -18,6 +21,7 @@ import javafx.scene.layout.VBox;
 public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionService> {
 
     protected final PianoKeyboard pianoKeyboardForGuessing;
+    protected final SessionAggregatesFactory sessionAggregatesFactory;
 
     // it is executed in super()
     protected Pane buildInnerPuzzlePane(final AudioPerfectPitchConfigDTO puzzleConfigDto) {
@@ -36,13 +40,13 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         super(sessionId, puzzleConfigDto, width, height, sessionService);
 
         pianoKeyboardForGuessing = (PianoKeyboard) innerPuzzlePane.getChildren().get(1);
+        sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 
     protected Button buildHintReplayButton() {
         var button = new Button("hear again");
         button.setOnAction(e -> {
-            var hearAgainEvent = new HearAgainEvent(HearAgainEvent.HEAR_AGAIN_EVENT);
-            fireEvent(hearAgainEvent);
+            sessionService.hearAgain();
         });
         return button;
     }
@@ -63,6 +67,14 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         sessionService.guessViaPianoKeyPressing(sessionId, e.keyNumber);
         PianoKeyboardHandlersRegister.updatePianoKeyboardView(pianoKeyboardForGuessing);
         // TODO other ui updates
+        var session = SessionAggregateDTOAssembler.getSessionAggregateDTO(sessionId);
+
+        // TODO how to compare Boolean and true? keeping in mind it can be null
+        if (session.prevGuessIsSuccessful.equals(true)) {
+            updateCompletedPuzzlesNumber(session.stats.puzzlesCompleted);
+        } else {
+
+        }
     }
 
     public void releasePianoKey(final PianoKeyReleasedEvent e) {

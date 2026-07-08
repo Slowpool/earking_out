@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpitch;
 
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
@@ -16,10 +17,11 @@ public final class InMemoryAudioPerfectPitchSessionRepository extends InMemorySe
     }
 
     protected void loadDependentAggregates(final AudioPerfectPitchSessionAggregate sessionAggregate) {
-
+        var notesGuessingPianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING);
+        sessionAggregate.setGuessingPianoKeyboard(notesGuessingPianoKeyboard);
     }
 
     protected void saveDependentAggregates(final AudioPerfectPitchSessionAggregate sessionAggregate) {
-
+        pianoKeyboardRepository.save(sessionAggregate.getGuessingPianoKeyboard());
     }
 }

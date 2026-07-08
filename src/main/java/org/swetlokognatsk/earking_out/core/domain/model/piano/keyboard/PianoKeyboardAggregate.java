@@ -134,7 +134,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         updateOtherKeysState();
         var pianoKey = getPianoKey(keyNumber);
         pianoKey.press();
-        applySelectingLogic(pianoKey);
+        applySelectingLogicAfterPress(pianoKey);
 
         pressedKey = pianoKey;
     }
@@ -174,13 +174,13 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return selectedKeys.size() == 1;
     }
 
-    protected void applySelectingLogic(PianoKey pianoKey) {
+    protected void applySelectingLogicAfterPress(final PianoKey pianoKey) {
         if (pianoKey.getIsSelected()) {
             switch (mode) {
             case ONE_KEY_SELECT:
                 throw new RuntimeException("this key was supposed to already be unselected in `updateOtherKeysState` method");
             case ONE_KEY_TOUCH:
-                throw new IllegalStateException("pressed key cannot be already touched in one key touch mode");
+                throw new IllegalStateException("pressed key cannot be already selected in one key touch mode");
             case SEVERAL_KEYS_SELECT:
                 unselectKey(pianoKey);
                 break;
@@ -212,6 +212,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         if (isTouchMode()) {
             selectedKeys.remove(pressedKey);
         }
+        applySelectingLogicAfterRelease(pressedKey);
 
         pressedKey = null;
     }
@@ -219,6 +220,33 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     protected void validatePianoKeyToRelease() {
         if (pressedKey == null) {
             throw new IllegalStateException("there is no pressed key on piano keyboard");
+        }
+    }
+
+    // TODO test it (idk how it turned out to be not tested)
+    protected void applySelectingLogicAfterRelease(final PianoKey pianoKey) {
+        if (pianoKey.getIsSelected()) {
+            switch (mode) {
+            case ONE_KEY_SELECT:
+                break;
+            case ONE_KEY_TOUCH:
+                unselectKey(pianoKey);
+                break;
+            case SEVERAL_KEYS_SELECT:
+                break;
+            default:
+                throw new RuntimeException("unknown mode: " + mode);
+            }
+        } else {
+            switch (mode) {
+            case ONE_KEY_SELECT:
+            case ONE_KEY_TOUCH:
+                throw new RuntimeException("this key was supposed to be selected after press");
+            case SEVERAL_KEYS_SELECT:
+                break;
+            default:
+                throw new RuntimeException("unknown mode: " + mode);
+            }
         }
     }
 

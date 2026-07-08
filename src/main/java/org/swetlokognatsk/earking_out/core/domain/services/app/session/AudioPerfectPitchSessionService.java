@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.session;
 
 import java.util.UUID;
+
+import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
@@ -21,10 +23,13 @@ public final class AudioPerfectPitchSessionService extends SessionService<AudioP
         sessionRepository.save(session);
     }
 
-    // TODO use it
     public void releasePianoKey(final UUID sessionId) {
         var session = (AudioPerfectPitchSessionAggregate) sessionRepository.get(sessionId);
         session.releasePianoKey();
         sessionRepository.save(session);
+    }
+
+    public void hearAgain() {
+        
     }
 }

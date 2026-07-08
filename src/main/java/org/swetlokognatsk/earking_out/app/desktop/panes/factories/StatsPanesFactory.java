@@ -2,20 +2,17 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.factories;
 
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.panes.SessionStatsPane;
-import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.PerfectPitchStatsPane;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 
 public final class StatsPanesFactory {
     protected final PuzzleConfigRepository puzzleConfigRepository;
-    protected final SessionRepository sessionRepository;
+    protected final SessionRepositoryDelegator sessionRepository;
 
     public StatsPanesFactory() {
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
-        sessionRepository = DI.get(SessionRepository.class);
+        sessionRepository = DI.get(SessionRepositoryDelegator.class);
     }
 
     public SessionStatsPane<?> create(final UUID sessionId) {

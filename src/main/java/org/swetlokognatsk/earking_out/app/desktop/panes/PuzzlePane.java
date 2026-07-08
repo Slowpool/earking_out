@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -19,6 +20,7 @@ import javafx.scene.layout.VBox;
 public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, SS extends SessionService<E, ? extends SessionAggregate<E, ?, ?, PCDTO>, ? extends SessionRepository<?>>> extends BorderPane {
     protected final UUID sessionId;
     protected final E exercise;
+    protected final int targetNumberOfPuzzles;
     protected final SS sessionService;
 
     protected final Pane innerPuzzlePane;
@@ -32,12 +34,13 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
     public PuzzlePane(final UUID sessionId, final PCDTO puzzleConfigDto, final double width, final double height, final SS sessionService) {
         this.sessionId = sessionId;
         this.exercise = puzzleConfigDto.exercise;
+        this.targetNumberOfPuzzles = puzzleConfigDto.targetNumberOfPuzzles;
         this.sessionService = sessionService;
 
         setWidth(width);
         setHeight(height);
 
-        puzzleProgressLabel = buildPuzzleProgressLabel(puzzleConfigDto);
+        puzzleProgressLabel = buildPuzzleProgressLabel();
         puzzlesProgressBar = new ProgressBar(0.0);
         puzzlesProgress = buildPuzzlesProgress(puzzleProgressLabel, puzzlesProgressBar);
         setTop(puzzlesProgress);
@@ -52,11 +55,12 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
         setBottom(abortButtonBox);
     }
 
-    protected Label buildPuzzleProgressLabel(final PCDTO puzzleConfigDto) {
-        var formattedCaption = interpolatePuzzleProgress(0, puzzleConfigDto.targetNumberOfPuzzles);
+    protected Label buildPuzzleProgressLabel() {
+        var formattedCaption = interpolatePuzzleProgress(0, targetNumberOfPuzzles);
         return new Label(formattedCaption);
     }
 
+    // TODO where to place it
     private static String interpolatePuzzleProgress(final int numberOfPuzzles, final int targetNumberOfPuzzles) {
         return String.format("%d of %d are completed", numberOfPuzzles, targetNumberOfPuzzles);
     }
@@ -76,5 +80,13 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
     protected void abortExercise(final ActionEvent e) {
         var exerciseFinishedEvent = new ExerciseFinishedEvent<E>(ExerciseFinishedEvent.EXERCISE_FINISHED, sessionId, exercise);
         fireEvent(exerciseFinishedEvent);
+    }
+
+    protected void updateCompletedPuzzlesNumber(final int numberOfCompletedPuzzles) {
+        double newProgress = (double) numberOfCompletedPuzzles / targetNumberOfPuzzles;
+        puzzlesProgressBar.setProgress(newProgress);
+
+        var newProgressText = interpolatePuzzleProgress(numberOfCompletedPuzzles, targetNumberOfPuzzles);
+        puzzleProgressLabel.setText(newProgressText);
     }
 }

@@ -11,11 +11,16 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 
 public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSessionAggregate<AudioPerfectPitchExercise, AudioPerfectPitchSolution, AudioPerfectPitchPuzzle, AudioPerfectPitchConfigDTO> {
-    protected final PianoKeyboardAggregate notesGuessingPianoKeyboard;
+    protected PianoKeyboardAggregate notesGuessingPianoKeyboard;
 
     public PianoKeyboardAggregate getGuessingPianoKeyboard() {
         // TODO make it read-only
         return notesGuessingPianoKeyboard;
+    }
+
+    // TODO think about it
+    public void setGuessingPianoKeyboard(final PianoKeyboardAggregate notesGuessingPianoKeyboard) {
+        this.notesGuessingPianoKeyboard = notesGuessingPianoKeyboard;
     }
 
     public AudioPerfectPitchSessionAggregate(final UUID id, final AudioPerfectPitchConfigDTO puzzleConfigDto, final SessionStats stats, final PianoKeyboardAggregate notesGuessingPianoKeyboard) {
