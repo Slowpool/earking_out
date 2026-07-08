@@ -6,7 +6,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
