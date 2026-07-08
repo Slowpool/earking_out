@@ -30,7 +30,6 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
         pianoKeyboard = createPianoKeyboard(selectedPianoKeys);
 
         assertOnlyTheseKeysAreSelected(selectedPianoKeys, pianoKeyboard);
-
     }
 
     @Test

@@ -8,6 +8,5 @@ public final class VisualPerfectPitchConfigDTO extends PerfectPitchConfigDTO<Vis
 
     public VisualPerfectPitchConfigDTO(final VisualPerfectPitchExercise exercise, final int targetNumberOfPuzzles, final boolean statsRecording, PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode) {
         super(exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode);
-
     }
 }

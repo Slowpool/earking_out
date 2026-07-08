@@ -2,19 +2,15 @@ package org.swetlokognatsk.earking_out.learning_tests.vibisility_modifiers;
 
 public class Target {
     public void publicTargetMethod() {
-
     }
 
     protected void protectedTargetMethod() {
-
     }
 
     private void privateTargetMethod() {
-
     }
 
     void modifierlessTargetMethod() {
-
     }
 
 

@@ -3,14 +3,11 @@ package org.swetlokognatsk.earking_out.app.desktop.services;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.sounds.PianoKeySounds;
 
 public class PianoKeysBuildersFactory {
     public static PianoKeysBuilder create(final double width, final double height, final PianoKeyNumber[] selectedKeys) {
-        var keySoundsService = DI.get(PianoKeySounds.class);
-        var keySounds = keySoundsService.getMap();
         var colorService = DI.get(PianoKeyColorService.class);
-        var pianoKeysBuilder = new PianoKeysBuilder(width, height, selectedKeys, keySounds, colorService);
+        var pianoKeysBuilder = new PianoKeysBuilder(width, height, selectedKeys, colorService);
         return pianoKeysBuilder;
     }
 }

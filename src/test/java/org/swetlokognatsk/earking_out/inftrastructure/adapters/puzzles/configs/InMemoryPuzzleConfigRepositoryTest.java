@@ -36,7 +36,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     @Before
     public void setup() {
-        DI.clear();
+        DI.deleteSingletons();
         repository = DI.get(InMemoryPuzzleConfigRepository.class);
     }
 

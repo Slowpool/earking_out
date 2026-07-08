@@ -9,6 +9,5 @@ public final class VisualPerfectPitchConfigUpdated extends PerfectPitchConfigUpd
 
     public VisualPerfectPitchConfigUpdated(final LocalDateTime timestamp, final VisualPerfectPitchExercise exercise, final VisualPerfectPitchConfigAggregate newConfig) {
         super(timestamp, exercise, newConfig);
-
     }
 }

@@ -21,7 +21,6 @@ public final class SerializationCloner implements ObjectCloner {
         } catch (Exception e) {
             throw new IllegalArgumentException("clonning error", e);
         }
-
     }
 
 }

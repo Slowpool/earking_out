@@ -1,12 +1,8 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.Session;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,20 +10,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class SessionStatsPane<PCDTO extends PuzzleConfigDTO<?>> extends BorderPane {
-    protected final Session<PCDTO> session;
+public abstract class SessionStatsPane<SADTO extends SessionAggregateDTO<?, ?, ?, ?>> extends BorderPane {
+    protected final SADTO sessionDto;
 
     protected abstract Pane buildStatsPane();
 
-    // TODO passing Session domain model is a crime against good code - use dto instead
-    public SessionStatsPane(Session<PCDTO> session) {
-        this.session = session;
+    public SessionStatsPane(final SADTO sessionDto) {
+        this.sessionDto = sessionDto;
 
         var titleLabel = new Label("finished");
         var titleLabelBox = new VBox(titleLabel);
         titleLabelBox.setAlignment(Pos.CENTER);
 
-        var stats = session.stats();
+        var stats = sessionDto.stats;
         var briefResultsText = interpolateBriefResult(stats.puzzlesCompletedCorrectly, stats.puzzlesCompleted);
         var briefResultLabel = new Label(briefResultsText);
         var briefResultBox = new VBox(briefResultLabel);
@@ -53,7 +48,7 @@ public abstract class SessionStatsPane<PCDTO extends PuzzleConfigDTO<?>> extends
     private void fireExerciseStartOverEvent(ActionEvent e) {
         e.consume();
 
-        PCDTO puzzleConfigDto = session.puzzleConfigDto();
+        var puzzleConfigDto = sessionDto.puzzleConfigDto;
         var exerciseStartedOverEvent = new ExerciseStartedOverEvent<>(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, puzzleConfigDto);
         fireEvent(exerciseStartedOverEvent);
     }

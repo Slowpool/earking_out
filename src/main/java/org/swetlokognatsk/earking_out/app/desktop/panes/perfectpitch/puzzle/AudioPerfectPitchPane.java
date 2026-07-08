@@ -1,30 +1,35 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
+import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
-import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
-import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.UsualHint;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
+import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, UsualHint, AudioPerfectPitchPuzzleGenerator, AudioPerfectPitchPuzzle> {
+public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionService> {
 
-    protected final AudioHintPlayer<UsualHint> audioHintPlayer;
     protected final PianoKeyboard pianoKeyboardForGuessing;
+    protected final SessionAggregatesFactory sessionAggregatesFactory;
 
     // it is executed in super()
-    protected Pane buildPuzzlePane() {
-        var hearAgainButton = buildHintReplayButton();
+    protected Pane buildInnerPuzzlePane(final AudioPerfectPitchConfigDTO puzzleConfigDto) {
+        var hintReplayButton = buildHintReplayButton();
 
         var pianoKeyboardForGuessing = buildPianoKeyboardForGuessing();
-        var pane = new VBox(hearAgainButton, pianoKeyboardForGuessing);
+        var pane = new VBox(hintReplayButton, pianoKeyboardForGuessing);
 
         pane.setAlignment(Pos.CENTER);
         pane.setSpacing(20);
@@ -32,19 +37,17 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         return pane;
     }
 
-    public AudioPerfectPitchPane(final Session<AudioPerfectPitchConfigDTO> session, final double width, final double height, final AudioHintPlayer<UsualHint> audioHintPlayer) {
-        super(session, width, height);
+    public AudioPerfectPitchPane(final SessionId sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height, final AudioPerfectPitchSessionService sessionService) {
+        super(sessionId, puzzleConfigDto, width, height, sessionService);
 
-        this.audioHintPlayer = audioHintPlayer;
-        pianoKeyboardForGuessing = (PianoKeyboard) puzzlePane.getChildren().get(1);
-
-        nextPuzzle();
+        pianoKeyboardForGuessing = (PianoKeyboard) innerPuzzlePane.getChildren().get(1);
+        sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 
     protected Button buildHintReplayButton() {
         var button = new Button("hear again");
         button.setOnAction(e -> {
-            demonstrateHint();
+            sessionService.hearAgain(sessionId);
         });
         return button;
     }
@@ -52,17 +55,36 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     protected PianoKeyboard buildPianoKeyboardForGuessing() {
         var pianoKeyboardWidth = getWidth();
         var pianoKeyboardHeight = getHeight() / 4;
+
         var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesGuessing(pianoKeyboardWidth, pianoKeyboardHeight);
+        pianoKeyboard.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, this::guessViaPianoKeyPressing);
+        pianoKeyboard.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, this::releasePianoKey);
+
         return pianoKeyboard;
     }
 
-    // TODO refactoring. idea: servicesLocator is injected into each PuzzlePane, then it defines what type of exercise and finds the required service to demonstrate hints.
-    protected void demonstrateNewHint() {
-        audioHintPlayer.prepareHint(puzzle.hint);
-        demonstrateHint();
+    // this could be in PianoKeyboardHandlersRegister, but because this logic is polymorphic, it's here. also coupling the puzzlePane to sessionService seems wrong because it makes PuzzlePane generics much more difficult to understand
+    protected void guessViaPianoKeyPressing(final PianoKeyPressedEvent e) {
+        sessionService.guessViaPianoKeyPressing(sessionId, e.keyNumber);
+        PianoKeyboardHandlersRegister.updatePianoKeyboardView(pianoKeyboardForGuessing);
+        // TODO other ui updates
+        var session = SessionAggregateDTOAssembler.getSessionAggregateDTO(sessionId);
+
+        if (session.state == SessionStates.COMPLETED) {
+            fireExerciseFinishedEvent();
+        }
+        // TODO how to compare Boolean and true? keeping in mind it can be null
+        else if (session.prevGuessIsSuccessful.equals(true)) {
+            updateCompletedPuzzlesNumber(session.stats.puzzlesCompleted);
+        } else {
+
+        }
     }
 
-    protected void demonstrateHint() {
-        audioHintPlayer.stopAndPlay();
+    public void releasePianoKey(final PianoKeyReleasedEvent e) {
+        sessionService.releasePianoKey(sessionId);
+        PianoKeyboardHandlersRegister.updatePianoKeyboardView(pianoKeyboardForGuessing);
+        // TODO other ui updates
     }
+
 }

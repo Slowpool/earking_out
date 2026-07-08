@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch;
 
-import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
@@ -10,8 +9,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
-// TODO dry violation (audio version is almost the same)
-public final class VisualPerfectPitchConfigAggregatesFactory implements PuzzleConfigAggregatesFactory<VisualPerfectPitchConfigAggregate, PerfectPitchConfigDependentAggregatesDTO> {
+// TODO review all factories
+public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<VisualPerfectPitchConfigAggregate, PerfectPitchConfigDependentAggregatesDTO> {
     protected final PianoKeyboardRepository pianoKeyboardRepository;
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
 
@@ -20,7 +19,7 @@ public final class VisualPerfectPitchConfigAggregatesFactory implements PuzzleCo
     }
 
     public VisualPerfectPitchConfigAggregate createDefault(final PerfectPitchConfigDependentAggregatesDTO dependentAggregates) {
-        return create(0, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, dependentAggregates.pianoKeyboardAggregates);
+        return create(100, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, dependentAggregates.pianoKeyboardAggregates);
     }
 
     public VisualPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {

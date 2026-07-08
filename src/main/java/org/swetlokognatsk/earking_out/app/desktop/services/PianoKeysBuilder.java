@@ -1,9 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.services;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
-// import java.io.File;
 import java.util.Iterator;
-import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.BlackPianoKey;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
@@ -20,7 +18,6 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
 
     protected final PianoKeyNumber[] selectedKeys;
     protected final PianoKeyColorService colorService;
-    protected final Map<PianoKeyNumber, String> keySounds;
 
     protected final double whiteKeyWidth;
     protected final double whiteKeyHeight;
@@ -61,11 +58,10 @@ public final class PianoKeysBuilder implements Iterator<PianoKey> {
         return getCurrentKeyNumber().octaveScopedKeyNumber;
     }
 
-    public PianoKeysBuilder(final double keyboardWidth, final double keyboardHeight, final PianoKeyNumber[] selectedKeys, final Map<PianoKeyNumber, String> keySounds, final PianoKeyColorService colorService) {
+    public PianoKeysBuilder(final double keyboardWidth, final double keyboardHeight, final PianoKeyNumber[] selectedKeys, final PianoKeyColorService colorService) {
         this.keyboardWidth = keyboardWidth;
         this.keyboardHeight = keyboardHeight;
         this.selectedKeys = selectedKeys;
-        this.keySounds = keySounds;
         this.colorService = colorService;
 
         whiteKeyWidth = calculateWhiteKeyWidth();

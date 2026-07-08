@@ -14,6 +14,5 @@ abstract class PianoKeyEvent extends Event {
 
         this.pianoKeyboardId = pianoKeyboardId;
         this.keyNumber = keyNumber;
-
     }
 }

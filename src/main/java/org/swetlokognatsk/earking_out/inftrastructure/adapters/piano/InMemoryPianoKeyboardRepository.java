@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.piano;
 import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
@@ -56,6 +57,16 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardRepository 
         var pianoKeyboard = get(pianoKeyboardId);
         var dto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
         return dto;
+    }
+
+    public PianoKeyboardAggregate[] getByExercise(final Exercise exercise) {
+        // TODO stream refactoring
+        var pianoKeyboardIds = PianoKeyboardId.getPianoKeyboardIds(exercise);
+        var pianoKeyboards = new PianoKeyboardAggregate[pianoKeyboardIds.length];
+        for (int i = 0; i < pianoKeyboards.length; i++) {
+            pianoKeyboards[i] = get(pianoKeyboardIds[i]);
+        }
+        return pianoKeyboards;
     }
 
 }

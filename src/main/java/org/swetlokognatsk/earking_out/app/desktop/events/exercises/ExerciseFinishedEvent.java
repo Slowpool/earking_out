@@ -1,17 +1,21 @@
 package org.swetlokognatsk.earking_out.app.desktop.events.exercises;
 
-import org.swetlokognatsk.earking_out.core.domain.model.Session;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 
 import javafx.event.*;
 
-public final class ExerciseFinishedEvent extends Event {
-    public static final EventType<ExerciseFinishedEvent> EXERCISE_FINISHED = new EventType<>("EXERCISE_FINISHED");
+// TODO generics are awkward here
+public final class ExerciseFinishedEvent<E extends Exercise> extends Event {
+    public static final EventType<ExerciseFinishedEvent<?>> EXERCISE_FINISHED = new EventType<>("EXERCISE_FINISHED");
 
-    public final Session<?> session;
+    public final SessionId sessionId;
+    public final E exercise;
 
-    public ExerciseFinishedEvent(final EventType<?> eventType, final Session<?> session) {
+    public ExerciseFinishedEvent(final EventType<?> eventType, final SessionId sessionId, final E exercise) {
         super(eventType);
-        this.session = session;
 
+        this.sessionId = sessionId;
+        this.exercise = exercise;
     }
 }

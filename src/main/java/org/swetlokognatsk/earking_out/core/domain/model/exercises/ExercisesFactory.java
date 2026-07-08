@@ -1,5 +1,11 @@
 package org.swetlokognatsk.earking_out.core.domain.model.exercises;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 
@@ -10,10 +16,15 @@ public final class ExercisesFactory {
         return allExercises;
     }
 
+    public static Exercise[] getAll(final ExerciseNames exerciseName) {
+        var filteredExercises = Arrays.stream(allExercises).filter((Exercise exercise) -> exercise.name == ExerciseNames.PERFECT_PITCH).toArray(Exercise[]::new);
+        return filteredExercises;
+    }
+
     private ExercisesFactory() {
     }
 
-    public static Exercise create(ExerciseNames name, ExerciseTypes type) {
+    public static Exercise create(final ExerciseNames name, final ExerciseTypes type) {
         return switch (name) {
         case PERFECT_PITCH -> switch (type) {
         case VISUAL -> new VisualPerfectPitchExercise();

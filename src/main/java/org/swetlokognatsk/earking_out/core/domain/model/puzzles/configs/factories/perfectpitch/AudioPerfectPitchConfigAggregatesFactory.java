@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
-public final class AudioPerfectPitchConfigAggregatesFactory implements PuzzleConfigAggregatesFactory<AudioPerfectPitchConfigAggregate, PerfectPitchConfigDependentAggregatesDTO> {
+public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<AudioPerfectPitchConfigAggregate, PerfectPitchConfigDependentAggregatesDTO> {
     protected final PianoKeyboardRepository pianoKeyboardRepository;
     // composition
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
@@ -19,7 +19,7 @@ public final class AudioPerfectPitchConfigAggregatesFactory implements PuzzleCon
     }
 
     public AudioPerfectPitchConfigAggregate createDefault(final PerfectPitchConfigDependentAggregatesDTO dependentAggregates) {
-        return create(0, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, dependentAggregates.pianoKeyboardAggregates);
+        return create(10, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, dependentAggregates.pianoKeyboardAggregates);
     }
 
     public AudioPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {

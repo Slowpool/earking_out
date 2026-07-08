@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregates
 import org.swetlokognatsk.earking_out.core.domain.model.base.Factory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-public final class PianoKeyboardAggregatesFactory implements Factory<PianoKeyboardAggregate, DependentAggregatesDTO> {
+public final class PianoKeyboardAggregatesFactory extends Factory<PianoKeyboardAggregate, DependentAggregatesDTO> {
 
     public PianoKeyboardAggregate createDefault(final DependentAggregatesDTO dependentAggregates) {
         throw new RuntimeException("not implemented");

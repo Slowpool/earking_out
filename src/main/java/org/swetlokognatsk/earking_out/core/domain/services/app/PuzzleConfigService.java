@@ -35,7 +35,6 @@ public final class PuzzleConfigService {
         // TODO just Exception?
         catch (Exception e) {
         }
-
     }
 
     protected <E extends Exercise> PuzzleConfigAggregate<E> getPuzzleConfigAggregate(final E exercise) {
@@ -52,6 +51,5 @@ public final class PuzzleConfigService {
         // TODO just Exception?
         catch (Exception e) {
         }
-
     }
 }

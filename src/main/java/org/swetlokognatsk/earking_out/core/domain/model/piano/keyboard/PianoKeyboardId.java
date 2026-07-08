@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
-
+// TODO use DTOs wherever it's possible instead of aggregates
 /**
  * This specific enum is used for each PianoKeyboard id because: app has finite
  * number of piano keyboards, each of which is code-dependent - e.g. the same

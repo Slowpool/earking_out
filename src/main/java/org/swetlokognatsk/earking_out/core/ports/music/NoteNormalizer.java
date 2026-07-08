@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.ports.music;
 
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
+import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 /**
@@ -9,14 +9,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
  * 5th, so both of their normalized values must be "5"
  */
 public interface NoteNormalizer {
-    PianoKeyNumber normalize(NoteWithAccidental noteWithAccidental);
+    PianoKeyNumber normalize(Note note);
 
     /**
      * Normalizes the note, ignoring the octave of note - instead, it takes
      * Octave.FIRST as octave always.
      * 
-     * @param noteWithAccidental
+     * @param note
      * @return
      */
-    byte normalizeInOctave(NoteWithAccidental noteWithAccidental);
+    byte normalizeInOctave(Note note);
 }

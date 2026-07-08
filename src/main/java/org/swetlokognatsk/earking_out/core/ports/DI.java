@@ -1,44 +1,47 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
-import org.swetlokognatsk.earking_out.app.desktop.services.AudioHintPlayer;
-import org.swetlokognatsk.earking_out.app.desktop.services.AudioClipHintPlayer;
+import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
+import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
+import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.VisualPerfectPitchConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorServiceImpl;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.hints.HintFinder;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.AudioPerfectPitchHints;
-import org.swetlokognatsk.earking_out.core.ports.hints.perfectPitch.VisualPerfectPitchHints;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.AudioPerfectPitchHintDemonstrator;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundPlayersFactory;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchPuzzleGenerator;
-import org.swetlokognatsk.earking_out.core.ports.session.services.ReadSessionService;
-import org.swetlokognatsk.earking_out.core.ports.session.services.WriteSessionService;
-import org.swetlokognatsk.earking_out.core.ports.sounds.PianoKeySounds;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.NoteNormalizerImpl;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.HintFinderDelegator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeAudioPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.FakeVisualPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.InMemoryAudioPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.perfectPitch.InMemoryVisualPerfectPitchHints;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.FilePianoKeySoundPlayersFactory;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.AudioClipSoundHarmonicIntervalHintDemonstrator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.FakeSoundHarmonicIntervalHintDemonstrator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.AudioClipPianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundPlayersFactory;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.PianoKeySoundFilesBuilder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchPuzzleGenerator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchPuzzleGenerator;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryReadSessionService;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.services.InMemoryWriteSessionService;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.MockSoundPlayer;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.PianoKeySoundsFromHints;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 
 // TODO for now this class was made strictly in test purposes, to postpone DI in java
 public final class DI {
@@ -50,6 +53,8 @@ public final class DI {
     protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
     protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
     protected static InMemoryPianoKeyboardRepository inMemoryPianoKeyboardRepository;
+    protected static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
+    protected static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
 
     private DI() {
     }
@@ -59,29 +64,16 @@ public final class DI {
         if (className.equals(NoteNormalizer.class.getName())) {
             return (T) new NoteNormalizerImpl();
 
-        } else if (className.equals(HintFinder.class.getName())) {
-            return (T) new HintFinderDelegator();
-        } else if (className.equals(VisualPerfectPitchHints.class.getName())) {
-            return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchHints() : new InMemoryVisualPerfectPitchHints());
-        } else if (className == AudioPerfectPitchHints.class.getName()) {
-            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchHints() : new InMemoryAudioPerfectPitchHints());
+        } else if (className.equals(HintDemonstrator.class.getName())) {
+            return (T) new HintDemonstratorDelegator();
+        } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
+            return (T) (env.equals(TEST_ENV) ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
-        } else if (className.equals(WriteSessionService.class.getName())) {
-            return (T) new InMemoryWriteSessionService();
-        } else if (className.equals(ReadSessionService.class.getName())) {
-            return (T) new InMemoryReadSessionService();
+        } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
+            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
 
-        } else if (className.equals(AudioPerfectPitchPuzzleGenerator.class.getName())) {
-            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchPuzzleGenerator() : new RandomAudioPerfectPitchPuzzleGenerator((AudioPerfectPitchConfigDTO) args[0]));
-
-        } else if (className.equals(AudioHintPlayer.class.getName())) {
-            return (T) new AudioClipHintPlayer();
-
-        } else if (className.equals(PianoKeySounds.class.getName())) {
-            return (T) get(PianoKeySoundsFromHints.class);
-
-        } else if (className.equals(PianoKeySoundsFromHints.class.getName())) {
-            return (T) new PianoKeySoundsFromHints();
+        } else if (className.equals(VisualPerfectPitchSolutionGenerator.class.getName())) {
+            return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(PianoKeyColorService.class.getName())) {
             return (T) new PianoKeyColorServiceImpl();
@@ -107,8 +99,8 @@ public final class DI {
             }
             return (T) inMemoryPianoKeyboardRepository;
 
-        } else if (className.equals(SessionService.class.getName())) {
-            return (T) new SessionService(DI.get(PuzzleConfigRepository.class));
+        } else if (className.equals(AudioPerfectPitchSessionService.class.getName())) {
+            return (T) new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class));
 
         } else if (className.equals(PianoKeyboardAggregatesFactory.class.getName())) {
             if (pianoKeyboardAggregatesFactory == null) {
@@ -122,8 +114,59 @@ public final class DI {
         } else if (className.equals(ObjectCloner.class.getName())) {
             return (T) new SerializationCloner();
 
-        } else if (className.equals(PianoKeySoundPlayersFactory.class.getName())) {
-            return (T) (env.equals(PROD_ENV) ? new FilePianoKeySoundPlayersFactory() : new MockPianoKeySoundPlayersFactory());
+        } else if (className.equals(PuzzlesFactory.class.getName())) {
+            return (T) new PuzzlesFactory();
+
+        } else if (className.equals(SolutionGeneratorsFactory.class.getName())) {
+            return (T) new SolutionGeneratorsFactory();
+
+        } else if (className.equals(SessionAggregatesFactory.class.getName())) {
+            return (T) new SessionAggregatesFactory();
+
+        } else if (className.equals(PuzzlePanesFactory.class.getName())) {
+            return (T) new PuzzlePanesFactory();
+
+        } else if (className.equals(HintDemonstrator.class.getName())) {
+            return (T) new HintDemonstratorDelegator();
+
+        } else if (className.equals(PianoKeySoundsPlayer.class.getName())) {
+            return (T) (env.equals(TEST_ENV) ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
+
+        } else if (className.equals(MockPianoKeySoundsPlayer.class.getName())) {
+            return (T) new MockPianoKeySoundsPlayer();
+
+        } else if (className.equals(AudioClipPianoKeySoundsPlayer.class.getName())) {
+            if (audioClipPianoKeySoundsPlayer == null) {
+                audioClipPianoKeySoundsPlayer = new AudioClipPianoKeySoundsPlayer();
+            }
+            return (T) audioClipPianoKeySoundsPlayer;
+
+        } else if (className.equals(PianoKeySoundFilesBuilder.class.getName())) {
+            return (T) new PianoKeySoundFilesBuilder();
+
+        } else if (className.equals(AudioPerfectPitchHintDemonstrator.class.getName())) {
+            return (T) get(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class);
+
+        } else if (className.equals(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class.getName())) {
+            return (T) new PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(get(PianoKeySoundsPlayer.class));
+
+        } else if (className.equals(AudioPerfectPitchSessionRepository.class.getName())) {
+            return (T) get(InMemoryAudioPerfectPitchSessionRepository.class);
+
+        } else if (className.equals(InMemoryAudioPerfectPitchSessionRepository.class.getName())) {
+            if (inMemoryAudioPerfectPitchSessionRepository == null) {
+                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(PianoKeyboardRepository.class));
+            }
+            return (T) inMemoryAudioPerfectPitchSessionRepository;
+
+        } else if (className.equals(SessionRepositoryDelegator.class.getName())) {
+            return (T) new SessionRepositoryDelegator();
+
+        } else if (className.equals(EndSessionAggregateDTOAssemblersFactory.class.getName())) {
+            return (T) new EndSessionAggregateDTOAssemblersFactory();
+
+        } else if (className.equals(StatsPanesFactory.class.getName())) {
+            return (T) new StatsPanesFactory(get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class));
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
@@ -131,9 +174,11 @@ public final class DI {
     }
 
     // TODO wanna believe there's such a feature in SpringBoot. it's required for pure junit tests, so that each starts in the same DI-container state
-    public static void clear() {
+    public static void deleteSingletons() {
         inMemoryPuzzleConfigRepository = null;
         pianoKeyboardAggregatesFactory = null;
         inMemoryPianoKeyboardRepository = null;
+        audioClipPianoKeySoundsPlayer = null;
+        inMemoryAudioPerfectPitchSessionRepository = null;
     }
 }

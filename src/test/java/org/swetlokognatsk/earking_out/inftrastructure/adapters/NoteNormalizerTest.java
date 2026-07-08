@@ -5,16 +5,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidentalTest;
+import org.swetlokognatsk.earking_out.core.domain.model.music.NoteTest;
+import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
 public final class NoteNormalizerTest {
     static NoteNormalizer noteNormalizer;
-    static NoteWithAccidental[] notesWithAccidental = NoteWithAccidentalTest.notesWithAccidental;
-    static PianoKeyNumber[] normalizedValues = NoteWithAccidentalTest.normalizedValues;
+    static Note[] notes = NoteTest.notes;
+    static PianoKeyNumber[] normalizedValues = NoteTest.normalizedValues;
 
     @BeforeClass
     public static void setup() {
@@ -34,8 +34,8 @@ public final class NoteNormalizerTest {
     @Test
     public void normalizingInOctave() {
         byte expected;
-        for (int i = 0; i < notesWithAccidental.length; i++) {
-            var normalizedValue = noteNormalizer.normalizeInOctave(notesWithAccidental[i]);
+        for (int i = 0; i < notes.length; i++) {
+            var normalizedValue = noteNormalizer.normalizeInOctave(notes[i]);
             // normalizedValues are defined for FIRST octave, whereas this test checks for octave-scoped value
             expected = normalizedValues[i].value;
             expected -= Invariants.SHIFT;

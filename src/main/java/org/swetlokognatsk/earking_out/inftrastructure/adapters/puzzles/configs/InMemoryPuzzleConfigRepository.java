@@ -42,11 +42,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
 
     // TODO polymorphic stuff??
     protected PerfectPitchConfigDependentAggregatesDTO getAudioPerfectPitchConfigDependentAggregates(final Exercise exercise) {
-        var pianoKeyboardIds = PianoKeyboardId.getPianoKeyboardIds(exercise);
-        var pianoKeyboards = new PianoKeyboardAggregate[pianoKeyboardIds.length];
-        for (int i = 0; i < pianoKeyboards.length; i++) {
-            pianoKeyboards[i] = pianoKeyboardRepository.get(pianoKeyboardIds[i]);
-        }
+        var pianoKeyboards = pianoKeyboardRepository.getByExercise(exercise);
         var dependentAggregates = new PerfectPitchConfigDependentAggregatesDTO(pianoKeyboards);
         return dependentAggregates;
     }
@@ -59,7 +55,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
 
     protected void seedConfigs() {
         // TODO what is this??
-        // var notes = new byte[] { new NoteWithAccidental(NoteNames.D, null, Octaves.FIRST).normalize() };
+        // var notes = new byte[] { new Note(NoteNames.D, null, Octaves.FIRST).normalize() };
         // appc = new AudioPerfectPitchConfigAggregate(100, false, notes, Byte.valueOf((byte) 25), PerfectPitchInputMode.NOTES_AS_CHARACTERS);
         // vppc = new VisualPerfectPitchConfigAggregate(0, false, new byte[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO);
         var exercises = ExercisesFactory.getAll();
@@ -78,7 +74,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         }
 
         puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
-        // TODO how to update pianoKeyboardAggregates before returning?
+        // TODO refresh pianoKeyboardAggregates before returning (pull new ones from pianoKeyboardRepository)
         return (PCA) puzzleConfigAggregate;
     }
 

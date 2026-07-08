@@ -7,6 +7,5 @@ public final class VisualPerfectPitchConfigPane extends PerfectPitchConfigPane<V
 
     public VisualPerfectPitchConfigPane(final VisualPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height) {
         super(puzzleConfigDto, width, height);
-
     }
 }

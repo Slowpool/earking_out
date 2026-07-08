@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.events;
 
-import java.util.UUID;
 
 // public class SessionEvent extends DomainEvent {
 // TODO

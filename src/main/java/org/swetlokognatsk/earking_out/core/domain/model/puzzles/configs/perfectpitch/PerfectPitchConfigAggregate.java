@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfect
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
@@ -37,15 +39,14 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         this.inputMode = inputMode;
     }
 
-    public String[] getErrors() {
+    public List<String> getErrors() {
         var errors = new ArrayList<String>();
+        // TODO move it to PuzzleConfig, then create getChildErrors() via polymorphism
         // TODO apply tdd for that first
-        // if (targetNumberOfPuzzles <= 0) {
-        //     errors.add("Number of puzzles cannot be negative or zero");
-        // }
-        // errors.addAll(validateSelectedNotes);
-        return errors.toArray(new String[] {});
-
+        if (targetNumberOfPuzzles <= 0) {
+            errors.add("targetNumberOfPuzzles cannot be negative or zero");
+        }
+        return errors;
     }
 
     @Override

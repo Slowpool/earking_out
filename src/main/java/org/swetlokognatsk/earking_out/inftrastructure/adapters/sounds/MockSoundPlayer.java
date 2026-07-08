@@ -1,8 +1,8 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds;
 
-import org.swetlokognatsk.earking_out.core.ports.sounds.SoundPlayer;
+import java.io.Serializable;
 
-public final class MockSoundPlayer implements SoundPlayer {
+public final class MockSoundPlayer implements SoundPlayer, Serializable {
     public boolean playIsPressed = false;
     public boolean stopIsPressed = false;
     public boolean stopAndPlayIsPressed = false;

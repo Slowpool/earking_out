@@ -7,6 +7,5 @@ public final class AudioPerfectPitchConfigPane extends PerfectPitchConfigPane<Au
 
     public AudioPerfectPitchConfigPane(final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height) {
         super(puzzleConfigDto, width, height);
-
     }
 }

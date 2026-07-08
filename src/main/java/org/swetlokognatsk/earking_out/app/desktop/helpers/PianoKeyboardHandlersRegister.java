@@ -5,7 +5,6 @@ import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEv
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleGuessingService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import javafx.event.EventHandler;
@@ -33,11 +32,6 @@ public final class PianoKeyboardHandlersRegister {
                 getConfigService().updatePropertyViaPianoKeyPressing(e.pianoKeyboardId, e.keyNumber);
             }, pianoKeyboard);
         };
-        case PERFECT_PITCH_NOTES_GUESSING -> e -> {
-            doAndRefreshView(() -> {
-                getPuzzleGuessingService().guessViaPianoKeyPressing(e.pianoKeyboardId, e.keyNumber);
-            }, pianoKeyboard);
-        };
         default -> throw new RuntimeException("unknown piano keyboard id: " + pianoKeyboard.id);
         };
         return handler;
@@ -55,11 +49,6 @@ public final class PianoKeyboardHandlersRegister {
                 getConfigService().releasePianoKey(e.pianoKeyboardId);
             }, pianoKeyboard);
         };
-        case PERFECT_PITCH_NOTES_GUESSING -> e -> {
-            doAndRefreshView(() -> {
-                getPuzzleGuessingService().releasePianoKey(e.pianoKeyboardId);
-            }, pianoKeyboard);
-        };
         default -> throw new RuntimeException("unknown piano keyboard id: " + pianoKeyboard.id);
         };
         return handler;
@@ -67,10 +56,6 @@ public final class PianoKeyboardHandlersRegister {
 
     protected static PuzzleConfigService getConfigService() {
         return DI.get(PuzzleConfigService.class);
-    }
-
-    protected static PuzzleGuessingService getPuzzleGuessingService() {
-        return DI.get(PuzzleGuessingService.class);
     }
 
     protected static PianoKeyboardRepository getPianoKeyboardRepository() {
@@ -82,7 +67,7 @@ public final class PianoKeyboardHandlersRegister {
         updatePianoKeyboardView(pianoKeyboard);
     }
 
-    protected static void updatePianoKeyboardView(final PianoKeyboard pianoKeyboard) {
+    public static void updatePianoKeyboardView(final PianoKeyboard pianoKeyboard) {
         // TODO what is correct approach? this approach is hand-made
         var pianoKeyboardView = getPianoKeyboardRepository().getViewDto(pianoKeyboard.id);
         pianoKeyboard.hydrateState(pianoKeyboardView);

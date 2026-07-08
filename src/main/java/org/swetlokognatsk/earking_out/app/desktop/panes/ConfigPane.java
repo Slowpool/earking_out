@@ -30,8 +30,13 @@ public abstract class ConfigPane<E extends Exercise, PCDTO extends PuzzleConfigD
     protected abstract Object castCustomConfigPropertyNewValue(String configProperty, Object newValue);
 
     {
-        start = new Button("start");
-        start.setOnAction(this::fireExerciseStartedEvent);
+        start = buildStartButton();
+    }
+
+    protected Button buildStartButton() {
+        var startButton = new Button("start");
+        startButton.setOnAction(this::fireExerciseStartedEvent);
+        return startButton;
     }
 
     public ConfigPane(final PCDTO puzzleConfig, double width, double height) {

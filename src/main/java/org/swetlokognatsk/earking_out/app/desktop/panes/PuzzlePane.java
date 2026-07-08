@@ -1,15 +1,13 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.Session;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.hints.Hint;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.PuzzleGeneratorsFactory;
-import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleGenerator;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
+import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,64 +17,81 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-// TODO full revision to comply with srp and ddd principles
-public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, H extends Hint, PG extends PuzzleGenerator, P extends Puzzle<E, PCDTO, H, PG>> extends BorderPane {
-    protected final Session<PCDTO> session;
-    protected final PCDTO puzzleConfigDto;
-    protected final PG puzzleGenerator;
-    protected P puzzle;
+public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, SS extends SessionService<E, ? extends SessionAggregate<E, ?, ?, PCDTO>, ? extends SessionRepository<?>>> extends BorderPane {
+    protected final SessionId sessionId;
+    protected final E exercise;
+    protected final int targetNumberOfPuzzles;
+    protected final SS sessionService;
 
-    protected final Pane puzzlePane;
+    protected final Pane innerPuzzlePane;
     protected final ProgressBar puzzlesProgressBar;
-    protected final Button finishButton;
+    protected final Button abortButton;
+    protected final Label puzzleProgressLabel;
+    protected final VBox puzzlesProgress;
 
-    protected abstract Pane buildPuzzlePane();
+    protected abstract Pane buildInnerPuzzlePane(final PCDTO puzzleConfigDto);
 
-    protected abstract void demonstrateNewHint();
+    public PuzzlePane(final SessionId sessionId, final PCDTO puzzleConfigDto, final double width, final double height, final SS sessionService) {
+        this.sessionId = sessionId;
+        this.exercise = puzzleConfigDto.exercise;
+        this.targetNumberOfPuzzles = puzzleConfigDto.targetNumberOfPuzzles;
+        this.sessionService = sessionService;
 
-    protected abstract void demonstrateHint();
-
-    public PuzzlePane(final Session<PCDTO> session, double width, double height) {
         setWidth(width);
         setHeight(height);
 
-        this.session = session;
-        this.puzzleConfigDto = session.puzzleConfigDto();
-        this.puzzleGenerator = PuzzleGeneratorsFactory.create(puzzleConfigDto);
-
-        var puzzleProgressLabel = new Label(interpolatePuzzleProgress(0, puzzleConfigDto.targetNumberOfPuzzles));
+        puzzleProgressLabel = buildPuzzleProgressLabel();
         puzzlesProgressBar = new ProgressBar(0.0);
-        var puzzlesProgress = new VBox(puzzleProgressLabel, puzzlesProgressBar);
-        puzzlesProgress.setAlignment(Pos.CENTER);
+        puzzlesProgress = buildPuzzlesProgress(puzzleProgressLabel, puzzlesProgressBar);
         setTop(puzzlesProgress);
 
-        puzzlePane = buildPuzzlePane();
-        setCenter(puzzlePane);
+        innerPuzzlePane = buildInnerPuzzlePane(puzzleConfigDto);
+        setCenter(innerPuzzlePane);
 
-        finishButton = new Button("finish");
-        finishButton.setOnAction(this::finishExercise);
+        abortButton = buildAbortButton();
         // frontend hack to align button
-        var finishButtonBox = new VBox(finishButton);
-        finishButtonBox.setAlignment(Pos.CENTER);
-        setBottom(finishButtonBox);
+        var abortButtonBox = new VBox(abortButton);
+        abortButtonBox.setAlignment(Pos.CENTER);
+        setBottom(abortButtonBox);
     }
 
-    private static String interpolatePuzzleProgress(int numberOfPuzzles, int targetNumberOfPuzzles) {
-        return String.format("%d of %d are guessed", numberOfPuzzles, targetNumberOfPuzzles);
+    protected Label buildPuzzleProgressLabel() {
+        var formattedCaption = interpolatePuzzleProgress(0, targetNumberOfPuzzles);
+        return new Label(formattedCaption);
     }
 
-    protected void finishExercise(ActionEvent e) {
-        var exerciseFinishedEvent = new ExerciseFinishedEvent(ExerciseFinishedEvent.EXERCISE_FINISHED, session);
+    // TODO where to place it
+    private static String interpolatePuzzleProgress(final int numberOfPuzzles, final int targetNumberOfPuzzles) {
+        return String.format("%d of %d are completed", numberOfPuzzles, targetNumberOfPuzzles);
+    }
+
+    protected VBox buildPuzzlesProgress(final Label puzzleProgressLabel, final ProgressBar puzzlesProgressBar) {
+        var puzzlesProgress = new VBox(puzzleProgressLabel, puzzlesProgressBar);
+        puzzlesProgress.setAlignment(Pos.CENTER);
+        return puzzlesProgress;
+    }
+
+    protected Button buildAbortButton() {
+        var abortButton = new Button("finish");
+        abortButton.setOnAction(this::abortExercise);
+        return abortButton;
+    }
+
+    protected void abortExercise(final ActionEvent e) {
+        sessionService.abort(sessionId);
+        fireExerciseFinishedEvent();
+    }
+
+    protected void fireExerciseFinishedEvent() {
+        var exerciseFinishedEvent = new ExerciseFinishedEvent<E>(ExerciseFinishedEvent.EXERCISE_FINISHED, sessionId, exercise);
         fireEvent(exerciseFinishedEvent);
     }
 
-    protected void nextPuzzle() {
-        createNextPuzzle();
-        demonstrateNewHint();
-    }
+    protected void updateCompletedPuzzlesNumber(final int numberOfCompletedPuzzles) {
+        double newProgress = (double) numberOfCompletedPuzzles / targetNumberOfPuzzles;
+        puzzlesProgressBar.setProgress(newProgress);
 
-    protected void createNextPuzzle() {
-        puzzle = PuzzlesFactory.create(puzzleConfigDto, puzzleGenerator);
+        var newProgressText = interpolatePuzzleProgress(numberOfCompletedPuzzles, targetNumberOfPuzzles);
+        puzzleProgressLabel.setText(newProgressText);
     }
-
 }

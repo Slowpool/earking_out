@@ -8,7 +8,6 @@ public final class AudioPerfectPitchExercise extends PerfectPitchExercise {
 
     public AudioPerfectPitchExercise() {
         super(ExerciseTypes.AUDIO);
-
     }
 
     public String tType() {

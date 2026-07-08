@@ -40,7 +40,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
 
     @Before
     public void setup() {
-        DI.clear();
+        DI.deleteSingletons();
         repository = DI.get(InMemoryPianoKeyboardRepository.class);
     }
 

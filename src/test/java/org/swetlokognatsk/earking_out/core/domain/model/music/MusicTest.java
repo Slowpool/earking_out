@@ -4,15 +4,15 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
-import org.swetlokognatsk.earking_out.core.domain.model.music.NoteWithAccidental;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
+import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public class MusicTest {
 
     @Test
-    public void createNoteWithAccidental() {
-        var noteWithAccidental = new NoteWithAccidental(NoteNames.C, Accidentals.SHARP, Octaves.FIRST);
+    public void createNote() {
+        var note = new Note(NoteNames.C, Accidentals.SHARP, Octaves.FIRST);
 
         int shift = 3;
         int selectedNote = 1;
@@ -21,6 +21,6 @@ public class MusicTest {
         byte correctNormalizedValue = (byte) (shift + selectedNote + 12 * (octave - 1) + sharp);
         assertEquals(correctNormalizedValue, 5);
         var keyNumber = PianoKeyNumber.valueOf(correctNormalizedValue);
-        assertEquals(noteWithAccidental.normalize(), keyNumber);
+        assertEquals(note.normalize(), keyNumber);
     }
 }
