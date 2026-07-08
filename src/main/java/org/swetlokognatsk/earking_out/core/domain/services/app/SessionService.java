@@ -1,8 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
-import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
@@ -18,14 +18,14 @@ public abstract class SessionService<E extends Exercise, SA extends SessionAggre
         this.sessionAggregatesFactory = sessionAggregatesFactory;
     }
 
-    public final UUID start(final E exercise) {
+    public final SessionId start(final E exercise) {
         var session = (SA) sessionAggregatesFactory.create(exercise);
         sessionRepository.save(session);
         return session.getId();
     }
 
     // TODO test
-    public final void abort(final UUID sessionId) {
+    public final void abort(final SessionId sessionId) {
         var session = sessionRepository.get(sessionId);
         session.abort();
         sessionRepository.save(session);

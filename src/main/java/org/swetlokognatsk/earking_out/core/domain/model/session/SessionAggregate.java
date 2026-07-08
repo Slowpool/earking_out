@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import java.util.Objects;
-import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
@@ -11,7 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
-public abstract class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<UUID> {
+public abstract class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends Aggregate<SessionId> {
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
 
@@ -89,7 +88,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         this.prevGuessIsSuccessful = prevGuessIsSuccessful;
     }
 
-    public SessionAggregate(final UUID id, final PCDTO puzzleConfigDto, final SessionStats stats) {
+    public SessionAggregate(final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
         super(id);
         Objects.nonNull(puzzleConfigDto);
         Objects.nonNull(stats);
@@ -125,6 +124,9 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected void validateGuessing() {
+        if (state != SessionStates.IN_PROGRESS) {
+            throw new IllegalStateException("session is not in progress");
+        }
         if (getPuzzlesCompleted() == puzzleConfigDto.targetNumberOfPuzzles) {
             throw new IllegalStateException("all puzzles are already guessed for this session");
         }
@@ -162,6 +164,6 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     protected void demonstrateHint() {
         var hintDemonstrator = DI.get(HintDemonstrator.class);
         // TODO what to do with warning
-        hintDemonstrator.demonstrateHint(puzzle.solution);
+        hintDemonstrator.demonstrateHint(getPuzzle().solution);
     }
 }

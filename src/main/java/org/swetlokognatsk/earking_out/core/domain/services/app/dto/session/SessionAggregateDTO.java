@@ -13,9 +13,9 @@ public abstract class SessionAggregateDTO<E extends Exercise, P extends Puzzle<E
     public final SessionStates state;
     public final P puzzle;
     public final Boolean prevGuessIsSuccessful;
-    public final int numberOfGuessesOfCurrentPuzzle;
+    public final Integer numberOfGuessesOfCurrentPuzzle;
 
-    public SessionAggregateDTO(final PCDTO puzzleConfigDto, final SessionStats stats, final SessionStates state, final P puzzle, final Boolean prevGuessIsSuccessful, final int numberOfGuessesOfCurrentPuzzle) {
+    public SessionAggregateDTO(final PCDTO puzzleConfigDto, final SessionStats stats, final SessionStates state, final P puzzle, final Boolean prevGuessIsSuccessful, final Integer numberOfGuessesOfCurrentPuzzle) {
         this.puzzleConfigDto = puzzleConfigDto;
         this.stats = stats;
         this.state = state;

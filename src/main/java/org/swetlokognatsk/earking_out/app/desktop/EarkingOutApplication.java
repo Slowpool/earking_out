@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
-import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
@@ -13,6 +12,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFact
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
@@ -127,7 +127,7 @@ public final class EarkingOutApplication extends Application {
         return (SessionService<E, ?, ?>) sessionService;
     }
 
-    private void showPuzzlePane(final UUID sessionId) {
+    private void showPuzzlePane(final SessionId sessionId) {
         var puzzlePane = buildPuzzlePane(sessionId);
         showAsContent(puzzlePane);
     }
@@ -144,7 +144,7 @@ public final class EarkingOutApplication extends Application {
         exercisesMenu.fireExercise(e.puzzleConfigDto.exercise);
     }
 
-    private Pane buildPuzzlePane(final UUID sessionId) {
+    private Pane buildPuzzlePane(final SessionId sessionId) {
         var puzzlePanesFactory = DI.get(PuzzlePanesFactory.class);
         var puzzlePane = puzzlePanesFactory.create(sessionId, WIDTH, HEIGHT);
 
@@ -153,20 +153,16 @@ public final class EarkingOutApplication extends Application {
         return puzzlePane;
     }
 
-    // TODO generics are awkward here
     private void openExerciseFinish(final ExerciseFinishedEvent<?> e) {
-        // TODO where it should be? app constructor does not seem to be suitable for that purpose due to extra cluttering
-        var sessionService = getSessionService(e.exercise);
-        sessionService.abort(e.sessionId);
         showExerciseFinishPane(e.sessionId);
     }
 
-    private void showExerciseFinishPane(final UUID sessionId) {
+    private void showExerciseFinishPane(final SessionId sessionId) {
         var sessionStatsPane = buildSessionStatsPane(sessionId);
         showAsContent(sessionStatsPane);
     }
 
-    private Pane buildSessionStatsPane(final UUID sessionId) {
+    private Pane buildSessionStatsPane(final SessionId sessionId) {
         var statsPanesFactory = DI.get(StatsPanesFactory.class);
         var sessionStatsPane = statsPanesFactory.create(sessionId);
 

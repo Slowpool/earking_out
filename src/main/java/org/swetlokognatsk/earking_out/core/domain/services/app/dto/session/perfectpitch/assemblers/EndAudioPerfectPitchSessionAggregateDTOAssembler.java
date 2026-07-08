@@ -26,7 +26,14 @@ public final class EndAudioPerfectPitchSessionAggregateDTOAssembler extends EndS
             prevGuessIsSuccessful = null;
         }
 
-        var dto = new AudioPerfectPitchSessionAggregateDTO(sessionAggregate.getPuzzleConfig(), sessionAggregate.getStats(), sessionAggregate.getState(), puzzle, prevGuessIsSuccessful, sessionAggregate.getNumberOfGuessesOfCurrentPuzzle());
+        Integer numberOfGuessesOfCurrentPuzzle;
+        try {
+            numberOfGuessesOfCurrentPuzzle = sessionAggregate.getNumberOfGuessesOfCurrentPuzzle();
+        } catch (IllegalStateException e) {
+            numberOfGuessesOfCurrentPuzzle = null;
+        }
+
+        var dto = new AudioPerfectPitchSessionAggregateDTO(sessionAggregate.getPuzzleConfig(), sessionAggregate.getStats(), sessionAggregate.getState(), puzzle, prevGuessIsSuccessful, numberOfGuessesOfCurrentPuzzle);
         return dto;
     }
 }

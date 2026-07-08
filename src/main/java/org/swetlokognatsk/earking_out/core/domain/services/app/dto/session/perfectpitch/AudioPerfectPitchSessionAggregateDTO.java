@@ -10,7 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.Sessi
 
 public final class AudioPerfectPitchSessionAggregateDTO extends SessionAggregateDTO<AudioPerfectPitchExercise, AudioPerfectPitchPuzzle, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionAggregate> {
 
-    public AudioPerfectPitchSessionAggregateDTO(final AudioPerfectPitchConfigDTO puzzleConfigDto, final SessionStats stats, final SessionStates state, final AudioPerfectPitchPuzzle puzzle, final Boolean prevGuessIsSuccessful, final int numberOfGuessesOfCurrentPuzzle) {
+    public AudioPerfectPitchSessionAggregateDTO(final AudioPerfectPitchConfigDTO puzzleConfigDto, final SessionStats stats, final SessionStates state, final AudioPerfectPitchPuzzle puzzle, final Boolean prevGuessIsSuccessful, final Integer numberOfGuessesOfCurrentPuzzle) {
         super(puzzleConfigDto, stats, state, puzzle, prevGuessIsSuccessful, numberOfGuessesOfCurrentPuzzle);
     }
 }

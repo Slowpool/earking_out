@@ -1,9 +1,9 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
-import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
@@ -18,7 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, SS extends SessionService<E, ? extends SessionAggregate<E, ?, ?, PCDTO>, ? extends SessionRepository<?>>> extends BorderPane {
-    protected final UUID sessionId;
+    protected final SessionId sessionId;
     protected final E exercise;
     protected final int targetNumberOfPuzzles;
     protected final SS sessionService;
@@ -31,7 +31,7 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
 
     protected abstract Pane buildInnerPuzzlePane(final PCDTO puzzleConfigDto);
 
-    public PuzzlePane(final UUID sessionId, final PCDTO puzzleConfigDto, final double width, final double height, final SS sessionService) {
+    public PuzzlePane(final SessionId sessionId, final PCDTO puzzleConfigDto, final double width, final double height, final SS sessionService) {
         this.sessionId = sessionId;
         this.exercise = puzzleConfigDto.exercise;
         this.targetNumberOfPuzzles = puzzleConfigDto.targetNumberOfPuzzles;
@@ -78,6 +78,11 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
     }
 
     protected void abortExercise(final ActionEvent e) {
+        sessionService.abort(sessionId);
+        fireExerciseFinishedEvent();
+    }
+
+    protected void fireExerciseFinishedEvent() {
         var exerciseFinishedEvent = new ExerciseFinishedEvent<E>(ExerciseFinishedEvent.EXERCISE_FINISHED, sessionId, exercise);
         fireEvent(exerciseFinishedEvent);
     }

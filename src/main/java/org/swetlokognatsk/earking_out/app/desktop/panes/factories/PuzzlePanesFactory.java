@@ -1,10 +1,10 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.factories;
 
-import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
@@ -16,7 +16,7 @@ public final class PuzzlePanesFactory {
         sessionRepository = DI.get(SessionRepositoryDelegator.class);
     }
 
-    public PuzzlePane<?, ?, ?> create(final UUID sessionId, final double width, final double height) {
+    public PuzzlePane<?, ?, ?> create(final SessionId sessionId, final double width, final double height) {
         var session = sessionRepository.get(sessionId);
         var puzzleConfigDto = session.getPuzzleConfig();
         var exercise = puzzleConfigDto.exercise;

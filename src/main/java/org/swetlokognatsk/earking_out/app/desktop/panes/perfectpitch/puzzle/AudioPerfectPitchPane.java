@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
-import java.util.UUID;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
@@ -8,6 +7,8 @@ import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
@@ -36,7 +37,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         return pane;
     }
 
-    public AudioPerfectPitchPane(final UUID sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height, final AudioPerfectPitchSessionService sessionService) {
+    public AudioPerfectPitchPane(final SessionId sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height, final AudioPerfectPitchSessionService sessionService) {
         super(sessionId, puzzleConfigDto, width, height, sessionService);
 
         pianoKeyboardForGuessing = (PianoKeyboard) innerPuzzlePane.getChildren().get(1);
@@ -46,7 +47,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     protected Button buildHintReplayButton() {
         var button = new Button("hear again");
         button.setOnAction(e -> {
-            sessionService.hearAgain();
+            sessionService.hearAgain(sessionId);
         });
         return button;
     }
@@ -69,8 +70,11 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         // TODO other ui updates
         var session = SessionAggregateDTOAssembler.getSessionAggregateDTO(sessionId);
 
+        if (session.state == SessionStates.COMPLETED) {
+            fireExerciseFinishedEvent();
+        }
         // TODO how to compare Boolean and true? keeping in mind it can be null
-        if (session.prevGuessIsSuccessful.equals(true)) {
+        else if (session.prevGuessIsSuccessful.equals(true)) {
             updateCompletedPuzzlesNumber(session.stats.puzzlesCompleted);
         } else {
 

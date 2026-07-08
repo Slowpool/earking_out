@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
+import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
@@ -163,6 +164,9 @@ public final class DI {
 
         } else if (className.equals(EndSessionAggregateDTOAssemblersFactory.class.getName())) {
             return (T) new EndSessionAggregateDTOAssemblersFactory();
+
+        } else if (className.equals(StatsPanesFactory.class.getName())) {
+            return (T) new StatsPanesFactory(get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class));
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());

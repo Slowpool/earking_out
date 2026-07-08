@@ -2,18 +2,15 @@ package org.swetlokognatsk.earking_out.core.domain.services.app.dto.session;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 
 public final class SessionAggregateDTOAssembler {
     protected final static Map<Exercise, EndSessionAggregateDTOAssembler<?, ?, ?, ?, ?, ?>> endDtoAssemblers = new HashMap<>();
@@ -34,7 +31,7 @@ public final class SessionAggregateDTOAssembler {
         return (SADTO) sessionAggregateDto;
     }
 
-    public static SessionAggregateDTO<?, ?, ?, ?> getSessionAggregateDTO(final UUID sessionId) {
+    public static SessionAggregateDTO<?, ?, ?, ?> getSessionAggregateDTO(final SessionId sessionId) {
         var sessionRepositoryDelegator = DI.get(SessionRepositoryDelegator.class);
         var sessionAggregate = sessionRepositoryDelegator.get(sessionId);
 
