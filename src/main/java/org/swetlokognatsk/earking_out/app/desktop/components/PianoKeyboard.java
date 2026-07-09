@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEv
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.app.desktop.services.PianoKeysBuildersFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
@@ -14,7 +14,7 @@ import javafx.scene.layout.Region;
 
 public final class PianoKeyboard extends Region {
     public final PianoKeyboardId id;
-    protected final Map<PianoKeyNumber, PianoKey> pianoKeys = new HashMap<>(Invariants.PIANO_KEYS_NUMBER);
+    protected final Map<PianoKeyNumber, PianoKey> pianoKeys = new HashMap<>(Constants.PIANO_KEYS_NUMBER);
 
     public PianoKeyboard(final PianoKeyboardId id, final double width, final double height, final PianoKeyNumber[] selectedKeys) {
         this.id = id;

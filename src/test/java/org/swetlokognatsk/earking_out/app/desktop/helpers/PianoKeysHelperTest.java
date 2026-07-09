@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.helpers;
 
 import static org.junit.Assert.assertEquals;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import org.junit.*;
 
 public final class PianoKeysHelperTest {

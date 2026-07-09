@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters;
 
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;

@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -38,7 +38,7 @@ public final class NoteNormalizerTest {
             var normalizedValue = noteNormalizer.normalizeInOctave(notes[i]);
             // normalizedValues are defined for FIRST octave, whereas this test checks for octave-scoped value
             expected = normalizedValues[i].value;
-            expected -= Invariants.SHIFT;
+            expected -= Constants.SHIFT;
             assertEquals(expected, normalizedValue);
         }
     }

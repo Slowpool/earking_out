@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Consumer;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKey;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 
 public final class PianoKeysHelper {
     public static final int WHITE_KEYS = 0;
@@ -27,8 +27,8 @@ public final class PianoKeysHelper {
      * @return
      */
     public static PianoKey[][] dichotomize(Map<PianoKeyNumber, PianoKey> pianoKeys) {
-        var whiteKeys = new ArrayList<PianoKey>(Invariants.WHITE_PIANO_KEYS_NUMBER);
-        var blackKeys = new ArrayList<PianoKey>(Invariants.BLACK_PIANO_KEYS_NUMBER);
+        var whiteKeys = new ArrayList<PianoKey>(Constants.WHITE_PIANO_KEYS_NUMBER);
+        var blackKeys = new ArrayList<PianoKey>(Constants.BLACK_PIANO_KEYS_NUMBER);
 
         ArrayList<PianoKey> someKeys;
         PianoKeyColor color;

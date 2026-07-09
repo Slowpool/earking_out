@@ -2,7 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
 public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
