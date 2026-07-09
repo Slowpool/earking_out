@@ -1,10 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch;
 
+import java.io.Serializable;
+
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 
-public final class VisualPerfectPitchConfigAggregate extends PerfectPitchConfigAggregate<VisualPerfectPitchExercise> {
+public final class VisualPerfectPitchConfigAggregate extends PerfectPitchConfigAggregate<VisualPerfectPitchExercise> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public VisualPerfectPitchConfigAggregate(final VisualPerfectPitchExercise exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {

@@ -1,10 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
+import java.io.Serializable;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 
 // TODO TDD, use OOP, leave it to be ValueObject
-// TODO how 'bout renaming it to SessionProgress?
-public final class SessionStats extends ValueObject {
+public final class SessionStats extends ValueObject implements Serializable {
     // TODO PositiveInt VO
     /**
      * If puzzle was successfully guessed on the first guess, it's considered to be

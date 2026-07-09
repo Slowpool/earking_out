@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;

@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,7 +15,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 
-public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
+public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     // TODO make all variables immutable for public read-only aggregate state

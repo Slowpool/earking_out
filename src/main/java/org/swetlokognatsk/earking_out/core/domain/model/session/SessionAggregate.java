@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
+import java.io.Serializable;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;

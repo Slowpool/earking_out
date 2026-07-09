@@ -1,8 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch;
 
+import java.io.Serializable;
+
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-public final class AudioPerfectPitchSolution extends PerfectPitchSolution {
+public final class AudioPerfectPitchSolution extends PerfectPitchSolution implements Serializable {
 
     public AudioPerfectPitchSolution(final PianoKeyNumber keyNumber) {
         super(keyNumber);

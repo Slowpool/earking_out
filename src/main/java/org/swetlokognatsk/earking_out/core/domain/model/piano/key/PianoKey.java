@@ -1,10 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
+import java.io.Serializable;
+
 import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 
-public final class PianoKey extends Entity<PianoKeyNumber> {
+public final class PianoKey extends Entity<PianoKeyNumber> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final PianoKeyNumber keyNumber;

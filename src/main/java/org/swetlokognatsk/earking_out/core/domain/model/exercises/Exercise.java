@@ -1,9 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.model.exercises;
 
+import java.io.Serializable;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 
-public abstract class Exercise extends ValueObject {
+public abstract class Exercise extends ValueObject implements Serializable {
     public final ExerciseNames name;
     public final ExerciseTypes type;
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 
-public abstract class PuzzleConfigDTO<E extends Exercise> implements Serializable {
+public abstract class PuzzleConfigDTO<E extends Exercise> {
     public final E exercise;
     public final int targetNumberOfPuzzles;
     public final boolean statsRecording;
