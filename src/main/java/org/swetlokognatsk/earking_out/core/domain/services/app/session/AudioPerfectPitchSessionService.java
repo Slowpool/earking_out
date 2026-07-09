@@ -1,5 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.session;
 
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -10,6 +13,10 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 
 public final class AudioPerfectPitchSessionService extends SessionService<AudioPerfectPitchExercise, AudioPerfectPitchSessionAggregate, AudioPerfectPitchSessionRepository> {
+
+    protected AudioPerfectPitchExercise getExercise() {
+        return (AudioPerfectPitchExercise) ExercisesFactory.create(ExerciseNames.PERFECT_PITCH, ExerciseTypes.AUDIO);
+    }
 
     public AudioPerfectPitchSessionService(final PuzzleConfigRepository puzzleConfigRepository, final AudioPerfectPitchSessionRepository sessionRepository, final SessionAggregatesFactory sessionAggregatesFactory) {
         super(puzzleConfigRepository, sessionRepository, sessionAggregatesFactory);

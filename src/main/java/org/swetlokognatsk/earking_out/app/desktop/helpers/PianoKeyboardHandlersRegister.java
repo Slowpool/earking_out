@@ -3,13 +3,11 @@ package org.swetlokognatsk.earking_out.app.desktop.helpers;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import javafx.event.EventHandler;
 
-// TODO responsibilities violation. ConfigPane must just throw PianoKeyboardKeyPressed event on app level, that's it. so, ConfigPane must be just a dummy view that throws events, whereas the code from this class must be somewhere out of configPane
 public final class PianoKeyboardHandlersRegister {
 
     private PianoKeyboardHandlersRegister() {

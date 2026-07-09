@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.TextHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -55,13 +56,8 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
     }
 
     protected Label buildPuzzleProgressLabel() {
-        var formattedCaption = interpolatePuzzleProgress(0, targetNumberOfPuzzles);
+        var formattedCaption = TextHelper.interpolatePuzzleProgress(0, targetNumberOfPuzzles);
         return new Label(formattedCaption);
-    }
-
-    // TODO where to place it
-    private static String interpolatePuzzleProgress(final int numberOfPuzzles, final int targetNumberOfPuzzles) {
-        return String.format("%d of %d are completed", numberOfPuzzles, targetNumberOfPuzzles);
     }
 
     protected VBox buildPuzzlesProgress(final Label puzzleProgressLabel, final ProgressBar puzzlesProgressBar) {
@@ -90,7 +86,7 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
         double newProgress = (double) numberOfCompletedPuzzles / targetNumberOfPuzzles;
         puzzlesProgressBar.setProgress(newProgress);
 
-        var newProgressText = interpolatePuzzleProgress(numberOfCompletedPuzzles, targetNumberOfPuzzles);
+        var newProgressText = TextHelper.interpolatePuzzleProgress(numberOfCompletedPuzzles, targetNumberOfPuzzles);
         puzzleProgressLabel.setText(newProgressText);
     }
 }

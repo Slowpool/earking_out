@@ -12,14 +12,16 @@ public abstract class SessionService<E extends Exercise, SA extends SessionAggre
     protected final SP sessionRepository;
     protected final SessionAggregatesFactory sessionAggregatesFactory;
 
+    protected abstract E getExercise();
+
     public SessionService(final PuzzleConfigRepository puzzleConfigRepository, final SP sessionRepository, final SessionAggregatesFactory sessionAggregatesFactory) {
         this.puzzleConfigRepository = puzzleConfigRepository;
         this.sessionRepository = sessionRepository;
         this.sessionAggregatesFactory = sessionAggregatesFactory;
     }
 
-    public final SessionId start(final E exercise) {
-        var session = (SA) sessionAggregatesFactory.create(exercise);
+    public final SessionId start() {
+        var session = (SA) sessionAggregatesFactory.create(getExercise());
         sessionRepository.save(session);
         return session.getId();
     }

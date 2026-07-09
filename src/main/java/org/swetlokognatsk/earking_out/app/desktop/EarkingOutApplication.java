@@ -106,11 +106,10 @@ public final class EarkingOutApplication extends Application {
         return (CP) configPane;
     }
 
-    // TODO generics are awkward here
-    private <E extends Exercise> void tryOpenPuzzlePane(final ExerciseStartedEvent<E> event) {
-        SessionService<E, ?, ?> sessionService = getSessionService(event.exercise);
+    private void tryOpenPuzzlePane(final ExerciseStartedEvent<?> event) {
+        var sessionService = getSessionService(event.exercise);
         try {
-            var sessionId = sessionService.start(event.exercise);
+            var sessionId = sessionService.start();
             showPuzzlePane(sessionId);
         } catch (InvalidPuzzleConfigException e) {
             // TODO message
@@ -118,7 +117,6 @@ public final class EarkingOutApplication extends Application {
         }
     }
 
-    // TODO generics are awkward here
     protected <E extends Exercise> SessionService<E, ?, ?> getSessionService(final E exercise) {
         var sessionService = switch (exercise) {
         case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSessionService.class);
