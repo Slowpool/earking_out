@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
@@ -63,9 +64,9 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
 
     public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers) {
         super(id);
-        this.mode = getModeById(id);
 
-        pianoKeys = buildPianoKeys(selectedKeyNumbers);
+        mode = getModeById(id);
+        pianoKeys = buildPianoKeys(Objects.requireNonNull(selectedKeyNumbers););
     }
 
     protected static PianoKeyboardMode getModeById(final PianoKeyboardId id) {

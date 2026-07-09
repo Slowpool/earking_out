@@ -16,11 +16,8 @@ public abstract class Exercise extends ValueObject implements Serializable {
 
     public Exercise(final ExerciseNames name, final ExerciseTypes type) {
         // TODO apply these checks in everywhere (at least in puzzleConfig, PianoKeyboard)
-        Objects.nonNull(name);
-        Objects.nonNull(type);
-
-        this.name = name;
-        this.type = type;
+        this.name = Objects.requireNonNull(name);
+        this.type = Objects.requireNonNull(type);
     }
 
     public boolean equals(Object obj) {

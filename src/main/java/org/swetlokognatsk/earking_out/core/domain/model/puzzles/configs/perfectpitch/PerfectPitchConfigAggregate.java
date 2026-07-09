@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfect
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
@@ -35,9 +36,9 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
     public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
         super(exercise, targetNumberOfPuzzles, statsRecording, pianoKeyboardAggregates);
 
-        this.normalizedNotesForPuzzle = normalizedNotesForPuzzle;
+        this.normalizedNotesForPuzzle = Objects.requireNonNull(normalizedNotesForPuzzle);
         this.normalizedRootNote = normalizedRootNote;
-        this.inputMode = inputMode;
+        this.inputMode = Objects.requireNonNull(inputMode);
     }
 
     public List<String> getErrors() {

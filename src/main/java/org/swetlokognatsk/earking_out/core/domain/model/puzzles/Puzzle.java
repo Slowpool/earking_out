@@ -14,11 +14,8 @@ public abstract class Puzzle<E extends Exercise, S extends Solution> extends Val
 
     // TODO hashCode, equals
     public Puzzle(final E exercise, final S solution) {
-        Objects.requireNonNull(exercise, "exercise cannot be null");
-        Objects.requireNonNull(solution, "solution cannot be null");
-
-        this.exercise = exercise;
-        this.solution = solution;
+        this.exercise = Objects.requireNonNull(exercise, "exercise cannot be null");
+        this.solution = Objects.requireNonNull(solution, "solution cannot be null");
     }
 
     public boolean guess(final S guess) {

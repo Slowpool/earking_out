@@ -7,8 +7,6 @@ public abstract class DomainEvent {
     final LocalDateTime timestamp;
 
     public DomainEvent(final LocalDateTime timestamp) {
-        Objects.requireNonNull(timestamp, "Timestamp cannot be null");
-
-        this.timestamp = timestamp;
+        this.timestamp = Objects.requireNonNull(timestamp, "Timestamp cannot be null");
     }
 }

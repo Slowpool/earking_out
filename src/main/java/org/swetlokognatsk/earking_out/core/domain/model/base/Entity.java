@@ -10,9 +10,7 @@ public abstract class Entity<ID> implements Serializable {
     protected final ID id;
 
     public Entity(final ID id) {
-        Objects.nonNull(id);
-
-        this.id = id;
+        this.id = Objects.requireNonNull(id);
     }
 
     public ID getId() {

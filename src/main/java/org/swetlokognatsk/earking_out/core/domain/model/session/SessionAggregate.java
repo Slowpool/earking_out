@@ -93,10 +93,10 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
 
     public SessionAggregate(final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
         super(id);
-        Objects.nonNull(puzzleConfigDto);
-        Objects.nonNull(stats);
 
-        this.puzzleConfigDto = puzzleConfigDto;
+        Objects.requireNonNull(stats);
+
+        this.puzzleConfigDto = Objects.requireNonNull(puzzleConfigDto);
         setStats(stats);
 
         setState(SessionStates.IN_PROGRESS);

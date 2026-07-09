@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music.sounds;
 
 import java.io.Serializable;
+import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
@@ -17,9 +18,9 @@ public class Note extends ValueObject implements Serializable {
     public final Octaves octave;
 
     public Note(final NoteNames noteName, final Accidentals accidental, final Octaves octave) {
-        this.noteName = noteName;
-        this.accidental = accidental;
-        this.octave = octave;
+        this.noteName = Objects.requireNonNull(noteName);
+        this.accidental = Objects.requireNonNull(accidental);
+        this.octave = Objects.requireNonNull(octave);
     }
 
     public PianoKeyNumber normalize() {

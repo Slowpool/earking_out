@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
+import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
@@ -39,10 +40,13 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
     // injecting SoundPlayer is DDD pure-domain-entity violation. this approach is justified by redandant complexity the domain event would add here. also testability is simpler. also SoundPlayer is not supposed to do any write actions, only read-only ones. proper alternative to make sound on piano key press is via PianoKeyPressed domain event handler.
     public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final PianoKeySoundsPlayer pianoKeySoundsPlayer) {
         super(keyNumber);
-        this.keyNumber = keyNumber;
-        this.mode = mode;
+
+        Objects.requireNonNull(colorService);
+
+        this.keyNumber = Objects.requireNonNull(keyNumber);
+        this.mode = Objects.requireNonNull(mode);
         this.color = colorService.getColor(keyNumber);
-        this.pianoKeySoundsPlayer = pianoKeySoundsPlayer;
+        this.pianoKeySoundsPlayer = Objects.requireNonNull(pianoKeySoundsPlayer);
 
         setIsSelected(isSelected);
     }

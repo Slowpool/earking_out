@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 
+import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
@@ -28,11 +29,12 @@ public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSession
     public AudioPerfectPitchSessionAggregate(final SessionId id, final AudioPerfectPitchConfigDTO puzzleConfigDto, final SessionStats stats, final PianoKeyboardAggregate notesGuessingPianoKeyboard) {
         super(id, puzzleConfigDto, stats);
 
-        this.notesGuessingPianoKeyboard = notesGuessingPianoKeyboard;
         validateNotesGuessingPianoKeyboard(notesGuessingPianoKeyboard);
+        this.notesGuessingPianoKeyboard = notesGuessingPianoKeyboard;
     }
 
     protected void validateNotesGuessingPianoKeyboard(final PianoKeyboardAggregate notesGuessingPianoKeyboard) {
+        Objects.requireNonNull(notesGuessingPianoKeyboard);
         // TODO add current mode logic (i.e. if it's not keyboard as piano, then make sure notesGuessingPianoKeyboard is null)
         if (notesGuessingPianoKeyboard.getId() != PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING) {
             throw new IllegalArgumentException("wrong piano keyboard received. pianoKeyboardId: " + notesGuessingPianoKeyboard.getId());

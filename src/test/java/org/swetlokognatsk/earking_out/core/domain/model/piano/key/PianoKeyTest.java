@@ -38,7 +38,7 @@ public final class PianoKeyTest {
     }
 
     protected static PianoKeyColor getExpectedPianoKeyColor(final PianoKeyNumber keyNumber) {
-        Objects.nonNull(keyNumber);
+        Objects.requireNonNull(keyNumber);
 
         return switch (keyNumber.octaveScopedKeyNumber) {
         case 1, 3, 5, 6, 8, 10, 12 -> PianoKeyColor.WHITE;

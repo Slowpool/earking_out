@@ -1,8 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
+import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
+
 // TODO use DTOs wherever it's possible instead of aggregates
 /**
  * This specific enum is used for each PianoKeyboard id because: app has finite
@@ -19,7 +21,7 @@ public enum PianoKeyboardId {
     public final Exercise exercise;
 
     private PianoKeyboardId(final Exercise exercise) {
-        this.exercise = exercise;
+        this.exercise = Objects.requireNonNull(exercise);
     }
 
     public static PianoKeyboardId[] getPianoKeyboardIds(final Exercise exercise) {

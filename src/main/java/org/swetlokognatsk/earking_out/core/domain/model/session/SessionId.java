@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 
@@ -10,7 +11,7 @@ public final class SessionId extends ValueObject implements Serializable {
     public final UUID id;
 
     public SessionId(final UUID id) {
-        this.id = id;
+        this.id = Objects.requireNonNull(id);
     }
 
     public static SessionId random() {

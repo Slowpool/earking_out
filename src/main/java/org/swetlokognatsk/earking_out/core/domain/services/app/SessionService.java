@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
+import java.util.Objects;
+
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -15,9 +17,9 @@ public abstract class SessionService<E extends Exercise, SA extends SessionAggre
     protected abstract E getExercise();
 
     public SessionService(final PuzzleConfigRepository puzzleConfigRepository, final SP sessionRepository, final SessionAggregatesFactory sessionAggregatesFactory) {
-        this.puzzleConfigRepository = puzzleConfigRepository;
-        this.sessionRepository = sessionRepository;
-        this.sessionAggregatesFactory = sessionAggregatesFactory;
+        this.puzzleConfigRepository = Objects.requireNonNull(puzzleConfigRepository);
+        this.sessionRepository = Objects.requireNonNull(sessionRepository);
+        this.sessionAggregatesFactory = Objects.requireNonNull(sessionAggregatesFactory);
     }
 
     public final SessionId start() {
