@@ -22,7 +22,7 @@ import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.Audio
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
@@ -86,11 +86,11 @@ public final class DI {
 
         } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PianoKeyboardRepository.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PianoKeyboardStorageAdapter.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 
-        } else if (className.equals(PianoKeyboardRepository.class.getName())) {
+        } else if (className.equals(PianoKeyboardStorageAdapter.class.getName())) {
             return (T) get(InMemoryPianoKeyboardRepository.class);
 
         } else if (className.equals(InMemoryPianoKeyboardRepository.class.getName())) {
@@ -155,7 +155,7 @@ public final class DI {
 
         } else if (className.equals(InMemoryAudioPerfectPitchSessionRepository.class.getName())) {
             if (inMemoryAudioPerfectPitchSessionRepository == null) {
-                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(PianoKeyboardRepository.class));
+                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(PianoKeyboardStorageAdapter.class));
             }
             return (T) inMemoryAudioPerfectPitchSessionRepository;
 

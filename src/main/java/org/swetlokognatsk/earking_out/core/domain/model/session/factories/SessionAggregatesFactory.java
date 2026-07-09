@@ -16,16 +16,16 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
 public final class SessionAggregatesFactory extends Factory<SessionAggregate<?, ?, ?, ?>, DependentAggregatesDTO> {
     protected final PuzzleConfigRepository puzzleConfigRepository;
-    protected final PianoKeyboardRepository pianoKeyboardRepository;
+    protected final PianoKeyboardStorageAdapter pianoKeyboardRepository;
 
     public SessionAggregatesFactory() {
         // read-only access
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
-        pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
+        pianoKeyboardRepository = DI.get(PianoKeyboardStorageAdapter.class);
     }
 
     // TODO do something with this cringe

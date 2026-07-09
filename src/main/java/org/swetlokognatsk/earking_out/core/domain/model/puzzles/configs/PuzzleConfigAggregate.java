@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
@@ -12,7 +13,7 @@ import static org.swetlokognatsk.earking_out.core.domain.helpers.PianoKeyboardHe
 
 // TODO review all aggregates: do they follow transactional consistency (in-memory)?
 // TODO store it in database as json
-public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregate<E> {
+public abstract class PuzzleConfigAggregate<E extends Exercise> extends AggregateRoot<E> {
     private static final long serialVersionUID = 1L;
     public static final String TARGET_NUMBER_OF_PUZZLES_PROP = "targetNumberOfPuzzles";
     public static final String STATS_RECORDING_PROP = "statsRecording";

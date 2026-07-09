@@ -7,14 +7,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
 public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<AudioPerfectPitchConfigAggregate, PerfectPitchConfigDependentAggregatesDTO> {
-    protected final PianoKeyboardRepository pianoKeyboardRepository;
+    protected final PianoKeyboardStorageAdapter pianoKeyboardRepository;
     // composition
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
 
-    public AudioPerfectPitchConfigAggregatesFactory(final PianoKeyboardRepository pianoKeyboardRepository) {
+    public AudioPerfectPitchConfigAggregatesFactory(final PianoKeyboardStorageAdapter pianoKeyboardRepository) {
         this.pianoKeyboardRepository = pianoKeyboardRepository;
     }
 

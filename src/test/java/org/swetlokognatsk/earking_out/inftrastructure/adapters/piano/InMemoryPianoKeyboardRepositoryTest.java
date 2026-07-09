@@ -8,7 +8,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, InMemoryPianoKeyboardRepository> {

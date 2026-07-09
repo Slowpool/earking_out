@@ -1,14 +1,14 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
 @Deprecated
 public final class PianoKeyboardService {
 
-    protected final PianoKeyboardRepository repository;
+    protected final PianoKeyboardStorageAdapter repository;
 
-    public PianoKeyboardService(final PianoKeyboardRepository repository) {
+    public PianoKeyboardService(final PianoKeyboardStorageAdapter repository) {
         this.repository = repository;
     }
 

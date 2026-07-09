@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEv
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 import javafx.event.EventHandler;
 
 public final class PianoKeyboardHandlersRegister {
@@ -56,8 +56,8 @@ public final class PianoKeyboardHandlersRegister {
         return DI.get(PuzzleConfigService.class);
     }
 
-    protected static PianoKeyboardRepository getPianoKeyboardRepository() {
-        return DI.get(PianoKeyboardRepository.class);
+    protected static PianoKeyboardStorageAdapter getPianoKeyboardRepository() {
+        return DI.get(PianoKeyboardStorageAdapter.class);
     }
 
     protected static void doAndRefreshView(final Runnable action, final PianoKeyboard pianoKeyboard) {
