@@ -15,6 +15,7 @@ import static org.swetlokognatsk.earking_out.core.domain.helpers.PianoKeyboardHe
 // TODO store it in database as json
 public abstract class PuzzleConfigAggregate<E extends Exercise> extends AggregateRoot<E> {
     private static final long serialVersionUID = 1L;
+
     public static final String TARGET_NUMBER_OF_PUZZLES_PROP = "targetNumberOfPuzzles";
     public static final String STATS_RECORDING_PROP = "statsRecording";
 

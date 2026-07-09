@@ -2,12 +2,13 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 
-public abstract class Puzzle<E extends Exercise, S extends Solution> extends ValueObject {
+public abstract class Puzzle<E extends Exercise, S extends Solution> extends ValueObject implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public final E exercise;
     public final S solution;
 

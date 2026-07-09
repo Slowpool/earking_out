@@ -5,6 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 
 // TODO TDD, use OOP, leave it to be ValueObject
 public final class SessionStats extends ValueObject implements Serializable {
+    private static final long serialVersionUID = 1L;
     // TODO PositiveInt VO
     /**
      * If puzzle was successfully guessed on the first guess, it's considered to be

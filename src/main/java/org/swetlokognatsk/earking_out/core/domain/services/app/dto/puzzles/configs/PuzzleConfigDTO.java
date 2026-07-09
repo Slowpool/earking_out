@@ -1,10 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs;
 
 import java.io.Serializable;
-
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 
-public abstract class PuzzleConfigDTO<E extends Exercise> {
+public abstract class PuzzleConfigDTO<E extends Exercise> implements Serializable {
     public final E exercise;
     public final int targetNumberOfPuzzles;
     public final boolean statsRecording;

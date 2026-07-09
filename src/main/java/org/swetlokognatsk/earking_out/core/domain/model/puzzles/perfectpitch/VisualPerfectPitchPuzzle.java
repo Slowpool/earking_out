@@ -4,6 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.V
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 
 public final class VisualPerfectPitchPuzzle extends PerfectPitchPuzzle<VisualPerfectPitchExercise, Solution> {
+    private static final long serialVersionUID = 1L;
 
     public VisualPerfectPitchPuzzle(final VisualPerfectPitchExercise exercise, final Solution solution) {
         super(exercise, solution);

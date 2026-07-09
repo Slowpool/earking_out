@@ -12,6 +12,8 @@ import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
 public abstract class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends AggregateRoot<SessionId> {
+    private static final long serialVersionUID = 1L;
+
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
 

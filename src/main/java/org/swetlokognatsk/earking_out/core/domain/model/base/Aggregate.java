@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 
 public abstract class Aggregate<ID> extends Entity<ID> implements Model {
+    private static final long serialVersionUID = 1L;
 
     public Aggregate(final ID id) {
         super(id);

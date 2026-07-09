@@ -5,6 +5,8 @@ import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 
 public abstract class Exercise extends ValueObject implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public final ExerciseNames name;
     public final ExerciseTypes type;
 

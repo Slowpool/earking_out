@@ -2,11 +2,15 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
-
 import java.io.Serializable;
 
-/** `Note number` is synonym for `key number`. Both of them mean both the key on keyboard and according note. */
+/**
+ * `Note number` is synonym for `key number`. Both of them mean both the key on
+ * keyboard and according note.
+ */
 public final class PianoKeyNumber extends ValueObject implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public final byte value;
     public final byte octaveScopedKeyNumber;
 

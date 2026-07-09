@@ -15,7 +15,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 
-public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> implements Serializable {
+public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private static final long serialVersionUID = 1L;
 
     // TODO make all variables immutable for public read-only aggregate state

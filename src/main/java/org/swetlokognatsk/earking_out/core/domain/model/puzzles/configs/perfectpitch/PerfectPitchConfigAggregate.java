@@ -3,13 +3,14 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfect
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 
 public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise> extends PuzzleConfigAggregate<E> {
+    private static final long serialVersionUID = 1L;
+
     public static final String NORMALIZED_NOTES_FOR_PUZZLE_PROP = "normalizedNotesForPuzzle";
     public static final String NORMALIZED_ROOT_NOTE_PROP = "normalizedRootNote";
     public static final String INPUT_MODE_PROP = "inputMode";
