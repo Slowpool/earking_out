@@ -65,8 +65,10 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers) {
         super(id);
 
+        Objects.requireNonNull(selectedKeyNumbers);
+
         mode = getModeById(id);
-        pianoKeys = buildPianoKeys(Objects.requireNonNull(selectedKeyNumbers););
+        pianoKeys = buildPianoKeys(selectedKeyNumbers);
     }
 
     protected static PianoKeyboardMode getModeById(final PianoKeyboardId id) {

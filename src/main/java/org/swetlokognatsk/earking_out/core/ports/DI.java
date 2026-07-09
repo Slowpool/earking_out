@@ -13,7 +13,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorServiceImpl;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -76,7 +75,7 @@ public final class DI {
             return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(PianoKeyColorService.class.getName())) {
-            return (T) new PianoKeyColorServiceImpl();
+            return (T) new PianoKeyColorService();
 
         } else if (className.equals(PuzzleConfigService.class.getName())) {
             return (T) new PuzzleConfigService(get(PuzzleConfigRepository.class));

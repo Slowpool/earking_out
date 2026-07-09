@@ -19,7 +19,7 @@ public class Note extends ValueObject implements Serializable {
 
     public Note(final NoteNames noteName, final Accidentals accidental, final Octaves octave) {
         this.noteName = Objects.requireNonNull(noteName);
-        this.accidental = Objects.requireNonNull(accidental);
+        this.accidental = accidental;
         this.octave = Objects.requireNonNull(octave);
     }
 
