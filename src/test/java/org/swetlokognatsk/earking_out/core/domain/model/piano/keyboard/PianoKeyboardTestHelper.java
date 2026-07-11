@@ -1,7 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import static org.junit.Assert.*;
+import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
@@ -20,21 +22,26 @@ public final class PianoKeyboardTestHelper {
     }
 
     public static void assertOnlyTheseKeysAreSelected(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyboardAggregate pianoKeyboard) {
-        var selectedPianoKeys = pianoKeyboard.getSelectedKeyNumbers();
+        assertOnlyTheseKeysAreSelectedInPianoKeyboard(expectedPianoKeys, pianoKeyboard.getSelectedKeyNumbers());
+        assertOnlyTheseKeysAreSelectedForPianoKeys(expectedPianoKeys, pianoKeyboard.getPianoKeys());
+    }
 
+    private static void assertOnlyTheseKeysAreSelectedInPianoKeyboard(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyNumber[] selectedPianoKeys) {
         assertEquals(expectedPianoKeys.length, selectedPianoKeys.length);
-        // TODO make it less dirty
-        // check the state of PianoKeyboard
         for (var pianoKey : expectedPianoKeys) {
             assertTrue(ArrayUtils.contains(selectedPianoKeys, pianoKey));
         }
+    }
 
-        // check the states of PianoKeys of PianoKeyboard
-        PianoKey pianoKeyObj;
-        for (var pianoKey : expectedPianoKeys) {
-            pianoKeyObj = pianoKeyboard.getPianoKeys().get(pianoKey);
-            assertTrue(pianoKeyObj.getIsSelected());
-        }
+    private static void assertOnlyTheseKeysAreSelectedForPianoKeys(final PianoKeyNumber[] expectedPianoKeys, final Map<PianoKeyNumber, PianoKey> pianoKeys) {
+        PianoKeysHelper.forEachKey((PianoKeyNumber pianoKey) -> {
+            PianoKey pianoKeyObj = pianoKeys.get(pianoKey);
+            if (ArrayUtils.contains(expectedPianoKeys, pianoKey)) {
+                assertTrue(pianoKeyObj.getIsSelected());
+            } else {
+                assertFalse(pianoKeyObj.getIsSelected());
+            }
+        });
     }
 
     public static void assertOnlyThisKeyIsSelected(final PianoKeyNumber expectedKey, final PianoKeyboardAggregate pianoKeyboard) {
