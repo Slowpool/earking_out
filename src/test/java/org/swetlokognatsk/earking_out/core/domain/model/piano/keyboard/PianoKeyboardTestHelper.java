@@ -6,10 +6,11 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 
 public final class PianoKeyboardTestHelper {
-    // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up. // TODO will they? is it fine for factory to be instantiable at all? if yes, keep making them instantiable everywhere. if not, make all of them static
-    protected final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
+    // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up
+    protected final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = DI.get(PianoKeyboardAggregatesFactory.class);
 
     public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
         var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id);

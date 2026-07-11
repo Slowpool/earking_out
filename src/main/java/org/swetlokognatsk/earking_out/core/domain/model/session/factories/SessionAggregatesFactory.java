@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session.factories;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregatesDTO;
-import org.swetlokognatsk.earking_out.core.domain.model.base.Factory;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
@@ -17,7 +17,7 @@ import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
-public final class SessionAggregatesFactory extends Factory<SessionAggregate<?, ?, ?, ?>, DependentAggregatesDTO> {
+public final class SessionAggregatesFactory extends AggregatesFactory<SessionAggregate<?, ?, ?, ?>> {
     protected final PuzzleConfigRepository puzzleConfigRepository;
     protected final PianoKeyboardStorageAdapter pianoKeyboardRepository;
 
@@ -25,11 +25,6 @@ public final class SessionAggregatesFactory extends Factory<SessionAggregate<?, 
         // read-only access
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         pianoKeyboardRepository = DI.get(PianoKeyboardStorageAdapter.class);
-    }
-
-    // TODO do something with this cringe
-    public SessionAggregate<?, ?, ?, ?> createDefault(final DependentAggregatesDTO dependentAggregates) {
-        throw new RuntimeException("there are no default sessions. it must have some exercise");
     }
 
     public <E extends Exercise, SA extends SessionAggregate<E, ?, ?, ?>> SA create(final E exercise) {
