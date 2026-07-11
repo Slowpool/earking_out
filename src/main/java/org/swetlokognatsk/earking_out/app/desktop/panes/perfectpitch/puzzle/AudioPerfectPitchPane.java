@@ -73,8 +73,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         if (session.state == SessionStates.COMPLETED) {
             fireExerciseFinishedEvent();
         }
-        // TODO how to compare Boolean and true? keeping in mind it can be null
-        else if (session.prevGuessIsSuccessful.equals(true)) {
+        else if (session.prevGuessIsSuccessful.equals(Boolean.TRUE)) {
             updateCompletedPuzzlesNumber(session.stats.puzzlesCompleted);
         } else {
 

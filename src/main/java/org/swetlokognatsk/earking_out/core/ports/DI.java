@@ -13,7 +13,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorServiceImpl;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -22,7 +21,7 @@ import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.Audio
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
@@ -76,7 +75,7 @@ public final class DI {
             return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(PianoKeyColorService.class.getName())) {
-            return (T) new PianoKeyColorServiceImpl();
+            return (T) new PianoKeyColorService();
 
         } else if (className.equals(PuzzleConfigService.class.getName())) {
             return (T) new PuzzleConfigService(get(PuzzleConfigRepository.class));
@@ -86,11 +85,11 @@ public final class DI {
 
         } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PianoKeyboardRepository.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PianoKeyboardStorageAdapter.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 
-        } else if (className.equals(PianoKeyboardRepository.class.getName())) {
+        } else if (className.equals(PianoKeyboardStorageAdapter.class.getName())) {
             return (T) get(InMemoryPianoKeyboardRepository.class);
 
         } else if (className.equals(InMemoryPianoKeyboardRepository.class.getName())) {
@@ -155,7 +154,7 @@ public final class DI {
 
         } else if (className.equals(InMemoryAudioPerfectPitchSessionRepository.class.getName())) {
             if (inMemoryAudioPerfectPitchSessionRepository == null) {
-                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(PianoKeyboardRepository.class));
+                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(PianoKeyboardStorageAdapter.class));
             }
             return (T) inMemoryAudioPerfectPitchSessionRepository;
 

@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch;
 
+import java.io.Serializable;
+
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;

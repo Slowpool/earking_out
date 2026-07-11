@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.factories.Sessio
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 
 public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?, ?, ?>> implements SessionRepository<SA> {
-    protected final Map<SessionId, SessionAggregate<?, ?, ?, ?>> sessionAggregates = new HashMap<>();;
+    protected final Map<SessionId, SessionAggregate<?, ?, ?, ?>> sessionAggregates = new HashMap<>();
 
     protected final SessionAggregatesFactory sessionAggregatesFactory;
 

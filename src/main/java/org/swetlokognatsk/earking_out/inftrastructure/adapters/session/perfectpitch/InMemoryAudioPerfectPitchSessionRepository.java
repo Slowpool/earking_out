@@ -3,14 +3,14 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.InMemorySessionRepository;
 
 public final class InMemoryAudioPerfectPitchSessionRepository extends InMemorySessionRepository<AudioPerfectPitchSessionAggregate> implements AudioPerfectPitchSessionRepository {
-    protected final PianoKeyboardRepository pianoKeyboardRepository;
+    protected final PianoKeyboardStorageAdapter pianoKeyboardRepository;
 
-    public InMemoryAudioPerfectPitchSessionRepository(final SessionAggregatesFactory sessionAggregatesFactory, final PianoKeyboardRepository pianoKeyboardRepository) {
+    public InMemoryAudioPerfectPitchSessionRepository(final SessionAggregatesFactory sessionAggregatesFactory, final PianoKeyboardStorageAdapter pianoKeyboardRepository) {
         super(sessionAggregatesFactory);
 
         this.pianoKeyboardRepository = pianoKeyboardRepository;

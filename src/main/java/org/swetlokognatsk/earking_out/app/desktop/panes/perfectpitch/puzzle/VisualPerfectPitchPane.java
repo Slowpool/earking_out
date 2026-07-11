@@ -15,8 +15,4 @@ public final class VisualPerfectPitchPane extends PerfectPitchPane<VisualPerfect
         return new VBox();
     }
 
-    public void resetStateForNewPuzzle() {
-        // TODO
-    }
-
 }

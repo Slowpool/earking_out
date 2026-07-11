@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public final class AudioPerfectPitchSolution extends PerfectPitchSolution {
+    private static final long serialVersionUID = 1L;
 
     public AudioPerfectPitchSolution(final PianoKeyNumber keyNumber) {
         super(keyNumber);

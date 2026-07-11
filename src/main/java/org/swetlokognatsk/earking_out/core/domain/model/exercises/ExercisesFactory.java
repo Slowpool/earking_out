@@ -1,11 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.exercises;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.function.IntFunction;
-import java.util.function.Predicate;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 

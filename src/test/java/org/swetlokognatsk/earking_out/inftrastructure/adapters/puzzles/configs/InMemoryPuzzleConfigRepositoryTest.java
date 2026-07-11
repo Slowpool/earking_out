@@ -8,15 +8,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.base.AggregateRepository;
+import org.swetlokognatsk.earking_out.core.ports.base.AggregateRootRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 
-public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, AggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
+public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
     protected InMemoryPuzzleConfigRepository repository;
 
-    protected AggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>> getRepository() {
+    protected AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>> getRepository() {
         return repository;
     }
 

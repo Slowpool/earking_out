@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard;
 
 import static org.junit.Assert.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;

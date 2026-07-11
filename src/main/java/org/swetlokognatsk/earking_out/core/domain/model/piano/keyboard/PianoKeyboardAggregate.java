@@ -1,13 +1,15 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -62,8 +64,10 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
 
     public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers) {
         super(id);
-        this.mode = getModeById(id);
 
+        Objects.requireNonNull(selectedKeyNumbers);
+
+        mode = getModeById(id);
         pianoKeys = buildPianoKeys(selectedKeyNumbers);
     }
 
@@ -79,7 +83,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeyNumber[] selectedKeyNumbers) {
         validateKeyNumbersToSelect(selectedKeyNumbers);
 
-        final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(Invariants.PIANO_KEYS_NUMBER);
+        final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(Constants.PIANO_KEYS_NUMBER);
         final PianoKeyMode pianoKeyMode = getPianoKeyMode();
         // TODO it seems awkward to get factory from DI here
         var pianoKeysFactory = DI.get(PianoKeysFactory.class);

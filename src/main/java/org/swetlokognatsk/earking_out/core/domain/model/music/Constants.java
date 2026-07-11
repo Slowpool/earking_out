@@ -2,9 +2,9 @@ package org.swetlokognatsk.earking_out.core.domain.model.music;
 
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-public final class Invariants {
+public final class Constants {
 
-    private Invariants() {
+    private Constants() {
     }
 
     /**

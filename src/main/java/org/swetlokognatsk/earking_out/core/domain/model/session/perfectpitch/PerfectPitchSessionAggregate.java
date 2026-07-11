@@ -9,6 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.P
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 
 public abstract class PerfectPitchSessionAggregate<E extends PerfectPitchExercise, S extends PerfectPitchSolution, P extends PerfectPitchPuzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends SessionAggregate<E, S, P, PCDTO> {
+    private static final long serialVersionUID = 1L;
 
     public PerfectPitchSessionAggregate(final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
         super(id, puzzleConfigDto, stats);

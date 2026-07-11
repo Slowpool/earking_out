@@ -1,12 +1,28 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-/** `Note number` is synonym for `key number`. Both of them mean both the key on keyboard and according note. */
-public final class PianoKeyNumber extends ValueObject {
+/**
+ * `Note number` is synonym for `key number`. Both of them mean both the key on
+ * keyboard and according note.
+ */
+public final class PianoKeyNumber extends ValueObject implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private static Map<Byte, PianoKeyNumber> innerStorage = new HashMap<>();
+
     public final byte value;
     public final byte octaveScopedKeyNumber;
+
+    // singleton-like optimization
+    static {
+        for (byte i = BYTE_FIRST_NOTE_NUMBER; i <= BYTE_LAST_NOTE_NUMBER; i++) {
+            innerStorage.put(i, new PianoKeyNumber(i));
+        }
+    }
 
     protected byte calculateOctaveScopedKeyNumber() {
         return (byte) ((value - SHIFT - 1) % KEYS_IN_OCTAVE + 1);
@@ -22,13 +38,16 @@ public final class PianoKeyNumber extends ValueObject {
         octaveScopedKeyNumber = calculateOctaveScopedKeyNumber();
     }
 
-    // TODO try to use the same optimization as in any Object-version of primitive type (Integer, Byte)
-    public static PianoKeyNumber valueOf(final byte keyNumber) {
-        return new PianoKeyNumber((int) keyNumber);
+    public static PianoKeyNumber valueOf(final int keyNumber) {
+        validate(keyNumber);
+
+        var ByteKeyNumber = Byte.valueOf((byte) keyNumber);
+        var pianoKeyNumber = innerStorage.get(ByteKeyNumber);
+        return pianoKeyNumber;
     }
 
-    public static PianoKeyNumber valueOf(final int keyNumber) {
-        return new PianoKeyNumber(keyNumber);
+    public static PianoKeyNumber valueOf(final byte keyNumber) {
+        return valueOf((int) keyNumber);
     }
 
     public static void validate(final int keyNumber) {

@@ -62,8 +62,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
 
         PianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(pianoKeyboard);
 
-        // TODO this listener should be added to domain model???
-        // pianoKeyboard.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_NOTES_FOR_PUZZLE_PROP));
         return pianoKeyboard;
     }
 
@@ -79,8 +77,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
 
         PianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(rootNotePicker);
 
-        // TODO this listener should be added to domain model???
-        // rootNotePicker.selectedKeysProperty().addListener(createConfigPropertyUpadtingEvent(PerfectPitchConfig.NORMALIZED_ROOT_NOTE));
         return rootNotePicker;
     }
 

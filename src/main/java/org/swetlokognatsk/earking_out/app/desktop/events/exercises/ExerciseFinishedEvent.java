@@ -5,7 +5,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 
 import javafx.event.*;
 
-// TODO generics are awkward here
 public final class ExerciseFinishedEvent<E extends Exercise> extends Event {
     public static final EventType<ExerciseFinishedEvent<?>> EXERCISE_FINISHED = new EventType<>("EXERCISE_FINISHED");
 

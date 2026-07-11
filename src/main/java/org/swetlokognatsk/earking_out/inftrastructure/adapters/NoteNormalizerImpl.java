@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters;
 
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -13,14 +13,14 @@ public final class NoteNormalizerImpl implements NoteNormalizer {
     public PianoKeyNumber normalize(final Note note) {
         // TODO theoretically overflow is possible below. refactoring via FIRST_NOTE_NUMBER
         byte value = SHIFT;
-        value += getOctavesShift(note.octave());
+        value += getOctavesShift(note.octave);
         value += normalizeInOctave(note);
         return PianoKeyNumber.valueOf(value);
     }
 
     public byte normalizeInOctave(final Note note) {
-        byte octaveScopedNoteValue = note.noteName().octaveScopedKeyNumber;
-        byte accidentalShift = Accidentals.getShift(note.accidental());
+        byte octaveScopedNoteValue = note.noteName.octaveScopedKeyNumber;
+        byte accidentalShift = Accidentals.getShift(note.accidental);
         return (byte) (octaveScopedNoteValue + accidentalShift);
     }
 

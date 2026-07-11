@@ -2,7 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import static org.junit.Assert.*;
 import org.junit.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Invariants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 
 // TODO generalize this test for all value object tests
 public final class PianoKeyNumberTest {

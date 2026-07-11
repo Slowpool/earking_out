@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFac
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Invariants;
+import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
@@ -79,7 +79,7 @@ public final class EarkingOutApplication extends Application {
 
     private void configurePrimaryStage(Stage primaryStage) {
         primaryStage.setScene(mainScene);
-        primaryStage.setTitle(Invariants.APP_NAME);
+        primaryStage.setTitle(Constants.APP_NAME);
     }
 
     private void showAsContent(Pane pane) {
@@ -106,11 +106,10 @@ public final class EarkingOutApplication extends Application {
         return (CP) configPane;
     }
 
-    // TODO generics are awkward here
-    private <E extends Exercise> void tryOpenPuzzlePane(final ExerciseStartedEvent<E> event) {
-        SessionService<E, ?, ?> sessionService = getSessionService(event.exercise);
+    private void tryOpenPuzzlePane(final ExerciseStartedEvent<?> event) {
+        var sessionService = getSessionService(event.exercise);
         try {
-            var sessionId = sessionService.start(event.exercise);
+            var sessionId = sessionService.start();
             showPuzzlePane(sessionId);
         } catch (InvalidPuzzleConfigException e) {
             // TODO message
@@ -118,7 +117,6 @@ public final class EarkingOutApplication extends Application {
         }
     }
 
-    // TODO generics are awkward here
     protected <E extends Exercise> SessionService<E, ?, ?> getSessionService(final E exercise) {
         var sessionService = switch (exercise) {
         case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSessionService.class);

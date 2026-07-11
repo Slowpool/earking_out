@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
+import java.util.Objects;
+
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
@@ -11,7 +13,7 @@ public final class PuzzleConfigService {
     protected final PuzzleConfigRepository repository;
 
     public PuzzleConfigService(final PuzzleConfigRepository repository) {
-        this.repository = repository;
+        this.repository = Objects.requireNonNull(repository);
     }
 
     public void updateProperty(final Exercise exercise, final String property, final Object value) {
