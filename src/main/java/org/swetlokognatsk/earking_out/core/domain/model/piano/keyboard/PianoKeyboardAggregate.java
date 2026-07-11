@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,12 +8,12 @@ import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 
 public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private static final long serialVersionUID = 1L;
@@ -83,9 +82,9 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeyNumber[] selectedKeyNumbers) {
         validateKeyNumbersToSelect(selectedKeyNumbers);
 
-        final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(Constants.PIANO_KEYS_NUMBER);
+        final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(PIANO_KEYS_NUMBER);
         final PianoKeyMode pianoKeyMode = getPianoKeyMode();
-        // TODO it seems awkward to get factory from DI here
+
         var pianoKeysFactory = DI.get(PianoKeysFactory.class);
 
         PianoKeysHelper.forEachKey((PianoKeyNumber keyNumber) -> {
@@ -163,7 +162,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         if (mode == PianoKeyboardMode.ONE_KEY_SELECT) {
             if (moreThanOnePianoKeyIsSelected()) {
                 throw new IllegalStateException("several keys were selected in one key select mode");
-                // TODO what if the same key is pressed?
             } else if (onePianoKeyIsSelected()) {
                 unselectPressedKey();
             }
@@ -213,9 +211,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         validatePianoKeyToRelease();
 
         pressedKey.release();
-        if (isTouchMode()) {
-            selectedKeys.remove(pressedKey);
-        }
         applySelectingLogicAfterRelease(pressedKey);
 
         pressedKey = null;
