@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+// `record` is not suitable because of extra `octaveScopedKeyNumber` field
 /**
  * `Note number` is synonym for `key number`. Both of them mean both the key on
  * keyboard and according note.
@@ -41,35 +42,35 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
         return octaveScopedKeyNumber;
     }
 
-    private PianoKeyNumber(final int keyNumber) {
-        validate(keyNumber);
-        value = (byte) keyNumber;
+    // TODO add ref to valueOf()
+    /** Use valueOf() if you wanna some PianoKeyNumber. It optimizes the memory */
+    private PianoKeyNumber(final byte value) {
+        validate(value);
+        this.value = (byte) value;
         octaveScopedKeyNumber = calculateOctaveScopedKeyNumber();
     }
 
-    public static PianoKeyNumber valueOf(final int keyNumber) {
-        validate(keyNumber);
+    public static PianoKeyNumber valueOf(final int value) {
+        validate(value);
 
-        var ByteKeyNumber = Byte.valueOf((byte) keyNumber);
-        var pianoKeyNumber = innerStorage.get(ByteKeyNumber);
-        var innerStorage2 = innerStorage;
+        var ByteValue = Byte.valueOf((byte) value);
+        var pianoKeyNumber = innerStorage.get(ByteValue);
         if (pianoKeyNumber == null) {
-            // throw new IllegalArgumentException("pianoKeyNumber not found: " + keyNumber);
-            return new PianoKeyNumber(37);
+            throw new IllegalArgumentException("pianoKeyNumber not found: " + value);
         }
         return pianoKeyNumber;
     }
 
-    public static PianoKeyNumber valueOf(final byte keyNumber) {
-        return valueOf((int) keyNumber);
+    public static PianoKeyNumber valueOf(final byte value) {
+        return valueOf((int) value);
     }
 
-    public static void validate(final int keyNumber) {
-        if (keyNumber < BYTE_FIRST_NOTE_NUMBER) {
-            throw new IllegalArgumentException("keyNumber is too small: " + keyNumber);
+    public static void validate(final int value) {
+        if (value < BYTE_FIRST_NOTE_NUMBER) {
+            throw new IllegalArgumentException("keyNumber is too small: " + value);
         }
-        if (keyNumber > BYTE_LAST_NOTE_NUMBER) {
-            throw new IllegalArgumentException("keyNumber is too big: " + keyNumber);
+        if (value > BYTE_LAST_NOTE_NUMBER) {
+            throw new IllegalArgumentException("keyNumber is too big: " + value);
         }
     }
 
@@ -93,9 +94,9 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
     }
 
     public PianoKeyNumber add(final int number) {
-        var keyNumber = Math.addExact(value, number);
+        var newValue = Math.addExact(value, number);
         try {
-            var newKeyNumber = PianoKeyNumber.valueOf(keyNumber);
+            var newKeyNumber = PianoKeyNumber.valueOf(newValue);
             return newKeyNumber;
         } catch (IllegalArgumentException e) {
             throw new ArithmeticException("piano key number overflow: " + number);
@@ -111,9 +112,9 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
     }
 
     public PianoKeyNumber subtract(final int number) {
-        var keyNumber = Math.subtractExact(value, number);
+        var newValue = Math.subtractExact(value, number);
         try {
-            var newKeyNumber = PianoKeyNumber.valueOf(keyNumber);
+            var newKeyNumber = PianoKeyNumber.valueOf(newValue);
             return newKeyNumber;
         } catch (IllegalArgumentException e) {
             throw new ArithmeticException("piano key number overflow");
