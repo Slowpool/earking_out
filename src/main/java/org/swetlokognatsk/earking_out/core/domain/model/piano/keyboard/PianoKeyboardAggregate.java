@@ -14,6 +14,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
 public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private static final long serialVersionUID = 1L;

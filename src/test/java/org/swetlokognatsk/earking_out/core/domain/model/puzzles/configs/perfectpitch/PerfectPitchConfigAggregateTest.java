@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfect
 
 import static org.junit.Assert.assertEquals;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;

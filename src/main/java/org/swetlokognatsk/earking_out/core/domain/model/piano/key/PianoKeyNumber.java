@@ -12,16 +12,25 @@ import java.util.Map;
  */
 public final class PianoKeyNumber extends ValueObject implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static Map<Byte, PianoKeyNumber> innerStorage = new HashMap<>();
+    private static Map<Byte, PianoKeyNumber> innerStorage;
+
+    public static final PianoKeyNumber FIRST_NOTE_NUMBER;
+    public static final PianoKeyNumber LAST_NOTE_NUMBER;
 
     public final byte value;
     public final byte octaveScopedKeyNumber;
 
     // singleton-like optimization
     static {
+        var tempInnerStorage = new HashMap<Byte, PianoKeyNumber>();
         for (byte i = BYTE_FIRST_NOTE_NUMBER; i <= BYTE_LAST_NOTE_NUMBER; i++) {
-            innerStorage.put(i, new PianoKeyNumber(i));
+            tempInnerStorage.put(i, new PianoKeyNumber(i));
         }
+        // to avoid static initializers wrong order. the wrong order error will be more obvious, kinda `innerStorage uninitialized variable using`
+        innerStorage = tempInnerStorage;
+
+        FIRST_NOTE_NUMBER = PianoKeyNumber.valueOf(BYTE_FIRST_NOTE_NUMBER);
+        LAST_NOTE_NUMBER = PianoKeyNumber.valueOf(BYTE_LAST_NOTE_NUMBER);
     }
 
     protected byte calculateOctaveScopedKeyNumber() {
@@ -43,6 +52,11 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
 
         var ByteKeyNumber = Byte.valueOf((byte) keyNumber);
         var pianoKeyNumber = innerStorage.get(ByteKeyNumber);
+        var innerStorage2 = innerStorage;
+        if (pianoKeyNumber == null) {
+            // throw new IllegalArgumentException("pianoKeyNumber not found: " + keyNumber);
+            return new PianoKeyNumber(37);
+        }
         return pianoKeyNumber;
     }
 
