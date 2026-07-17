@@ -8,9 +8,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
-// TODO register this service as singleton in DI? or just use static methods with static fields?
 public final class PuzzleConfigDTOAssembler {
     protected static final Map<Exercise, EndPuzzleConfigDTOAssembler<?, ?, ?>> endDtoAssemblers = new HashMap<>();
+    protected static final PuzzleConfigRepository puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
 
     static {
         EndPuzzleConfigDTOAssembler<?, ?, ?> dtoAssembler;
@@ -24,10 +24,7 @@ public final class PuzzleConfigDTOAssembler {
     }
 
     public static <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
-        // TODO do something with this awkward DI
-        var puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         var puzzleConfig = puzzleConfigRepository.get(exercise);
-        // TODO srp violation - this method must be just `assemble()`. getting config from repo is not responsibility of DTOAssembler. everything above this line in this method is violation, everything below is fine
         var dto = assemble(puzzleConfig);
         return (PCDTO) dto;
     }
