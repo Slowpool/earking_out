@@ -18,16 +18,10 @@ public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfi
     }
 
     public VisualPerfectPitchConfigAggregate createDefault(final PerfectPitchConfigDependentAggregatesDTO dependentAggregates) {
-        return create(100, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, dependentAggregates.pianoKeyboardAggregates);
+        return create(100, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false, false, dependentAggregates.pianoKeyboardAggregates);
     }
 
-    public VisualPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
-        return new VisualPerfectPitchConfigAggregate(new VisualPerfectPitchExercise(), targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, pianoKeyboardAggregates);
-    }
-
-    public VisualPerfectPitchConfigAggregate createDeepCopy(VisualPerfectPitchConfigAggregate aggregate) {
-        var pianoKeyboardAggregates = aggregate.pianoKeyboardAggregates.values().toArray(PianoKeyboardAggregate[]::new);
-        var pianoKeyboardAggregatesCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregates);
-        return create(aggregate.getTargetNumberOfPuzzles(), aggregate.getStatsRecording(), aggregate.getNormalizedNotesForPuzzle(), aggregate.getNormalizedRootNote(), aggregate.getInputMode(), pianoKeyboardAggregatesCopy);
+    public VisualPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final boolean soundlessSuccessfulGuess, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
+        return new VisualPerfectPitchConfigAggregate(new VisualPerfectPitchExercise(), targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano, soundlessSuccessfulGuess, pianoKeyboardAggregates);
     }
 }

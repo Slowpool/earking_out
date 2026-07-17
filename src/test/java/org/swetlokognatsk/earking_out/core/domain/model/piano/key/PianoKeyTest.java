@@ -8,6 +8,7 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 
 public final class PianoKeyTest {
@@ -29,7 +30,7 @@ public final class PianoKeyTest {
 
     @Test
     public void pianoKeyColorTest() {
-        PianoKeysHelper.forEachKey((PianoKeyNumber keyNumber) -> {
+        PianoKeyNumber.forEachKey((PianoKeyNumber keyNumber) -> {
             var pianoKey = pianoKeysFactory.create(keyNumber, PianoKeyMode.TOUCH);
             var expectedColor = getExpectedPianoKeyColor(keyNumber);
             assertEquals(expectedColor, pianoKey.color);
@@ -82,7 +83,7 @@ public final class PianoKeyTest {
 
     @Test
     public void playSoundOnPress() {
-        var pianoKey = new PianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH, false, DI.get(PianoKeyColorService.class), mockSoundPlayer);
+        var pianoKey = new PianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH, false, PianoKeyboardSoundMode.USUAL, DI.get(PianoKeyColorService.class), mockSoundPlayer);
         pianoKey.press();
         assertTrue(mockSoundPlayer.stopAndPlayIsPressed);
     }

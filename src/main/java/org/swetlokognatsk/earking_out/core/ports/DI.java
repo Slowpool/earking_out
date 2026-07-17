@@ -52,6 +52,7 @@ public final class DI {
     protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
     protected static InMemoryPianoKeyboardRepository inMemoryPianoKeyboardRepository;
     protected static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
+    protected static MockPianoKeySoundsPlayer mockPianoKeySoundsPlayer;
     protected static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
 
     private DI() {
@@ -131,7 +132,10 @@ public final class DI {
             return (T) (env.equals(TEST_ENV) ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
 
         } else if (className.equals(MockPianoKeySoundsPlayer.class.getName())) {
-            return (T) new MockPianoKeySoundsPlayer();
+            if (mockPianoKeySoundsPlayer == null) {
+                mockPianoKeySoundsPlayer = new MockPianoKeySoundsPlayer();
+            }
+            return (T) mockPianoKeySoundsPlayer;
 
         } else if (className.equals(AudioClipPianoKeySoundsPlayer.class.getName())) {
             if (audioClipPianoKeySoundsPlayer == null) {
@@ -177,6 +181,7 @@ public final class DI {
         pianoKeyboardAggregatesFactory = null;
         inMemoryPianoKeyboardRepository = null;
         audioClipPianoKeySoundsPlayer = null;
+        mockPianoKeySoundsPlayer = null;
         inMemoryAudioPerfectPitchSessionRepository = null;
     }
 }

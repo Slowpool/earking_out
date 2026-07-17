@@ -11,7 +11,7 @@ public final class PianoKeySoundFilesBuilder {
 
     // TODO Java resources - i think it solves the problem of direct access to file system
     public PianoKeySoundFilesBuilder() {
-        PianoKeysHelper.forEachKey((PianoKeyNumber keyNumber) -> {
+        PianoKeyNumber.forEachKey((PianoKeyNumber keyNumber) -> {
             String key = String.valueOf(keyNumber.value);
             // TODO path should be taken from config?
             String filePath = String.format("/piano_keys/key%s.wav", key);

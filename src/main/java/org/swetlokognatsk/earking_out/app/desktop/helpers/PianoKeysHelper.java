@@ -45,11 +45,5 @@ public final class PianoKeysHelper {
         return dichotomizedKeys;
     }
 
-    public static void forEachKey(Consumer<PianoKeyNumber> action) {
-        PianoKeyNumber keyNumber;
-        for (var byteKeyNumber = FIRST_NOTE_NUMBER.value; byteKeyNumber < LAST_NOTE_NUMBER.value + 1; byteKeyNumber++) {
-            keyNumber = PianoKeyNumber.valueOf(byteKeyNumber);
-            action.accept(keyNumber);
-        }
-    }
+    
 }

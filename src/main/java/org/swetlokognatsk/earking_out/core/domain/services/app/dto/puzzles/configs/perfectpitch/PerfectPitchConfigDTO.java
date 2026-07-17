@@ -9,12 +9,16 @@ public abstract class PerfectPitchConfigDTO<E extends PerfectPitchExercise> exte
     public final PianoKeyNumber[] normalizedNotesForPuzzle;
     public final PianoKeyNumber normalizedRootNote;
     public final PerfectPitchInputMode inputMode;
+    public final boolean soundlessGuessingPiano;
+    public final boolean soundlessSuccessfulGuess;
 
-    public PerfectPitchConfigDTO(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode) {
+    public PerfectPitchConfigDTO(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final boolean soundlessSuccessfulGuess) {
         super(exercise, targetNumberOfPuzzles, statsRecording);
         this.normalizedNotesForPuzzle = normalizedNotesForPuzzle;
         this.normalizedRootNote = normalizedRootNote;
         this.inputMode = inputMode;
+        this.soundlessGuessingPiano = soundlessGuessingPiano;
+        this.soundlessSuccessfulGuess = soundlessSuccessfulGuess;
     }
 
 }

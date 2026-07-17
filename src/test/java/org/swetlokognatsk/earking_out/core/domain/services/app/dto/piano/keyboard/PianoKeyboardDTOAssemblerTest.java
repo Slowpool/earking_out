@@ -8,6 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 
 /**
  * idea: to test the dto assembling itself, we need only 2 pairs of aggregate
@@ -31,10 +32,10 @@ public final class PianoKeyboardDTOAssemblerTest {
         pianoKeyboardFactory = new PianoKeyboardAggregatesFactory();
 
         var selectedKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
-        pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, selectedKeys);
+        pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, selectedKeys, PianoKeyboardSoundMode.USUAL);
         dto1 = PianoKeyboardDtoAssembler.assemble(pianoKeyboard1);
 
-        pianoKeyboard2 = pianoKeyboardFactory.create(PianoKeyboardId.ROOT_NOTE_PICKER);
+        pianoKeyboard2 = pianoKeyboardFactory.create(PianoKeyboardId.ROOT_NOTE_PICKER, PianoKeyboardSoundMode.USUAL);
         pianoKeyboard2.pressKey(FIRST_NOTE_NUMBER.add(3));
         dto2 = PianoKeyboardDtoAssembler.assemble(pianoKeyboard2);
     }

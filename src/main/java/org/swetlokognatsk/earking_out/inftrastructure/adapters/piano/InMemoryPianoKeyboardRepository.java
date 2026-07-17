@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
@@ -24,7 +25,8 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdap
     protected void initPianoKeyboards() {
         PianoKeyboardAggregate pianoKeyboard;
         for (var pianoKeyboardId : PianoKeyboardId.values()) {
-            pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId);
+            // TODO pull soundMode from puzzleConfig
+            pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId, PianoKeyboardSoundMode.SOUNDLESS);
             pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
         }
     }

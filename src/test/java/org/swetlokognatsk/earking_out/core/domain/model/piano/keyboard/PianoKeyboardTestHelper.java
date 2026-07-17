@@ -15,13 +15,21 @@ public final class PianoKeyboardTestHelper {
     // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up
     protected final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = DI.get(PianoKeyboardAggregatesFactory.class);
 
-    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
-        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id);
+    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyboardSoundMode soundMode) {
+        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, soundMode);
         return pianoKeyboard;
     }
 
+    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
+        return createPianoKeyboard(id, PianoKeyboardSoundMode.USUAL);
+    }
+
     public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys) {
-        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, selectedKeys);
+        return createPianoKeyboard(id, selectedKeys, PianoKeyboardSoundMode.USUAL);
+    }
+
+    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys, final PianoKeyboardSoundMode soundMode) {
+        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, selectedKeys, soundMode);
         return pianoKeyboard;
     }
 
@@ -43,7 +51,7 @@ public final class PianoKeyboardTestHelper {
     }
 
     private static void assertOnlyTheseKeysAreSelectedForPianoKeys(final PianoKeyNumber[] expectedPianoKeys, final Map<PianoKeyNumber, PianoKeyDTO> pianoKeys) {
-        PianoKeysHelper.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
+        PianoKeyNumber.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
             PianoKeyDTO pianoKey = pianoKeys.get(pianoKeyNumber);
             if (ArrayUtils.contains(expectedPianoKeys, pianoKeyNumber)) {
                 assertTrue(pianoKey.isSelected());

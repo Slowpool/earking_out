@@ -5,6 +5,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 // `record` is not suitable because of extra `octaveScopedKeyNumber` field
 /**
@@ -123,6 +124,14 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
 
     public PianoKeyNumber decrement() {
         return subtract(1);
+    }
+
+    public static void forEachKey(Consumer<PianoKeyNumber> action) {
+        PianoKeyNumber keyNumber;
+        for (var byteKeyNumber = FIRST_NOTE_NUMBER.value; byteKeyNumber < LAST_NOTE_NUMBER.value + 1; byteKeyNumber++) {
+            keyNumber = PianoKeyNumber.valueOf(byteKeyNumber);
+            action.accept(keyNumber);
+        }
     }
 
 }
