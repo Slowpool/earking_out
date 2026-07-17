@@ -6,8 +6,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
 public record Note(NoteNames noteName, Accidentals accidental, Octaves octave) implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -18,7 +18,7 @@ public record Note(NoteNames noteName, Accidentals accidental, Octaves octave) i
     }
 
     public PianoKeyNumber normalize() {
-        var noteNormalizer = DI.get(NoteNormalizer.class);
+        var noteNormalizer = DI.get(NotesNormalizingService.class);
         return noteNormalizer.normalize(this);
     }
 
