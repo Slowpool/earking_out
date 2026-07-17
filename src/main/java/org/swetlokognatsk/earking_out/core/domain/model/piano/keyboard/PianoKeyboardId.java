@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
+import java.util.Arrays;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -25,12 +26,10 @@ public enum PianoKeyboardId {
     }
 
     public static PianoKeyboardId[] getPianoKeyboardIds(final Exercise exercise) {
-        // TODO stream/loop refactoring
-        var pianoKeyboardIds = switch (exercise) {
-        case AudioPerfectPitchExercise e -> new PianoKeyboardId[] { PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, PianoKeyboardId.ROOT_NOTE_PICKER };
-        case VisualPerfectPitchExercise e -> new PianoKeyboardId[] { PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, PianoKeyboardId.ROOT_NOTE_PICKER };
-        default -> throw new IllegalArgumentException("unknown exercise: " + exercise);
-        };
+        var allIds = values();
+        var stream = Arrays.stream(allIds);
+        var filteredIds = stream.filter((PianoKeyboardId pianoKeyboardId) -> exercise.equals(pianoKeyboardId.exercise));
+        var pianoKeyboardIds = filteredIds.toArray(PianoKeyboardId[]::new);
         return pianoKeyboardIds;
     }
 }
