@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 
 // TODO use DTOs wherever it's possible instead of aggregates
 /**

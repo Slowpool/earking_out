@@ -53,10 +53,10 @@ public final class PianoKeyboardDTOAssemblerTest {
     @Test
     public void pianoKeys() {
         assertNotNull(dto1.pianoKeys());
-        assertEquals(pianoKeyboard1.getPianoKeys().values().size(), dto1.pianoKeys().length);
+        assertEquals(pianoKeyboard1.getPianoKeys().size(), dto1.pianoKeys().size());
 
         assertNotNull(dto2.pianoKeys());
-        assertEquals(pianoKeyboard2.getPianoKeys().values().size(), dto2.pianoKeys().length);
+        assertEquals(pianoKeyboard2.getPianoKeys().size(), dto2.pianoKeys().size());
     }
 
     @Test

@@ -29,14 +29,15 @@ public final class PerfectPitchConfigAggregateTest {
     public void ensureRootNoteUpdatingAlsoCausesPianoKeyboardUpdate() {
         var pianoKeyboardId = PianoKeyboardId.ROOT_NOTE_PICKER;
         var configAggregate = getPerfectPitchAggregate();
-        var pianoKeyboard = configAggregate.getPianoKeyboardAggregate(pianoKeyboardId);
+        var pianoKeyboard = configAggregate.getPianoKeyboard(pianoKeyboardId);
         assertNoSelectedKeys(pianoKeyboard);
 
         PianoKeyNumber newRootNote = FIRST_NOTE_NUMBER;
         configAggregate.updateViaPianoKeyPressing(pianoKeyboardId, newRootNote);
+        pianoKeyboard = configAggregate.getPianoKeyboard(pianoKeyboardId);
 
         assertOnlyThisKeyIsSelected(newRootNote, pianoKeyboard);
-        assertEquals(1, pianoKeyboard.getSelectedKeyNumbers().length);
+        assertEquals(1, pianoKeyboard.selectedKeys().length);
     }
 
     protected PerfectPitchConfigAggregate<?> getPerfectPitchAggregate() {

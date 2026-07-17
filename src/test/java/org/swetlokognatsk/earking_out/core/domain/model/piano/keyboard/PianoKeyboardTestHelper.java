@@ -6,6 +6,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 
 public final class PianoKeyboardTestHelper {
@@ -22,9 +25,14 @@ public final class PianoKeyboardTestHelper {
         return pianoKeyboard;
     }
 
+    public static void assertOnlyTheseKeysAreSelected(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyboardDTO pianoKeyboard) {
+        assertOnlyTheseKeysAreSelectedInPianoKeyboard(expectedPianoKeys, pianoKeyboard.selectedKeys());
+        assertOnlyTheseKeysAreSelectedForPianoKeys(expectedPianoKeys, pianoKeyboard.pianoKeys());
+    }
+
     public static void assertOnlyTheseKeysAreSelected(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyboardAggregate pianoKeyboard) {
-        assertOnlyTheseKeysAreSelectedInPianoKeyboard(expectedPianoKeys, pianoKeyboard.getSelectedKeyNumbers());
-        assertOnlyTheseKeysAreSelectedForPianoKeys(expectedPianoKeys, pianoKeyboard.getPianoKeys());
+        var pianoKeyboardDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        assertOnlyTheseKeysAreSelected(expectedPianoKeys, pianoKeyboardDto);
     }
 
     private static void assertOnlyTheseKeysAreSelectedInPianoKeyboard(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyNumber[] selectedPianoKeys) {
@@ -34,22 +42,33 @@ public final class PianoKeyboardTestHelper {
         }
     }
 
-    private static void assertOnlyTheseKeysAreSelectedForPianoKeys(final PianoKeyNumber[] expectedPianoKeys, final Map<PianoKeyNumber, PianoKey> pianoKeys) {
-        PianoKeysHelper.forEachKey((PianoKeyNumber pianoKey) -> {
-            PianoKey pianoKeyObj = pianoKeys.get(pianoKey);
-            if (ArrayUtils.contains(expectedPianoKeys, pianoKey)) {
-                assertTrue(pianoKeyObj.getIsSelected());
+    private static void assertOnlyTheseKeysAreSelectedForPianoKeys(final PianoKeyNumber[] expectedPianoKeys, final Map<PianoKeyNumber, PianoKeyDTO> pianoKeys) {
+        PianoKeysHelper.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
+            PianoKeyDTO pianoKey = pianoKeys.get(pianoKeyNumber);
+            if (ArrayUtils.contains(expectedPianoKeys, pianoKeyNumber)) {
+                assertTrue(pianoKey.isSelected());
             } else {
-                assertFalse(pianoKeyObj.getIsSelected());
+                assertFalse(pianoKey.isSelected());
             }
         });
     }
 
-    public static void assertOnlyThisKeyIsSelected(final PianoKeyNumber expectedKey, final PianoKeyboardAggregate pianoKeyboard) {
+    public static void assertOnlyThisKeyIsSelected(final PianoKeyNumber expectedKey, final PianoKeyboardDTO pianoKeyboard) {
         assertOnlyTheseKeysAreSelected(new PianoKeyNumber[] { expectedKey }, pianoKeyboard);
     }
 
-    public static void assertNoSelectedKeys(final PianoKeyboardAggregate pianoKeyboard) {
+    public static void assertOnlyThisKeyIsSelected(final PianoKeyNumber expectedKey, final PianoKeyboardAggregate pianoKeyboard) {
+        var pianoKeyboardDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        assertOnlyThisKeyIsSelected(expectedKey, pianoKeyboardDto);
+    }
+
+    public static void assertNoSelectedKeys(final PianoKeyboardDTO pianoKeyboard) {
         assertOnlyTheseKeysAreSelected(new PianoKeyNumber[0], pianoKeyboard);
     }
+
+    public static void assertNoSelectedKeys(final PianoKeyboardAggregate pianoKeyboard) {
+        var pianoKeyboardDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        assertNoSelectedKeys(pianoKeyboardDto);
+    }
+
 }

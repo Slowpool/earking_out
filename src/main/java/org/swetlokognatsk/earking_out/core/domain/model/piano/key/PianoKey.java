@@ -10,7 +10,7 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
 
     public final PianoKeyNumber keyNumber;
     public final PianoKeyColor color;
-    private final PianoKeyMode mode;
+    public final PianoKeyMode mode;
     private boolean isSelected;
     private boolean isPressed;
 
@@ -20,20 +20,16 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         return isSelected;
     }
 
-    protected void setIsSelected(boolean value) {
-        isSelected = value;
-    }
-
-    protected void setIsPressed(final boolean value) {
-        isPressed = value;
+    protected void setIsSelected(final boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
     public boolean getIsPressed() {
         return isPressed;
     }
 
-    public PianoKeyMode getMode() {
-        return mode;
+    protected void setIsPressed(final boolean isPressed) {
+        this.isPressed = isPressed;
     }
 
     // TODO refactoring SoundPlayer via PianoKeyPressed domain event
