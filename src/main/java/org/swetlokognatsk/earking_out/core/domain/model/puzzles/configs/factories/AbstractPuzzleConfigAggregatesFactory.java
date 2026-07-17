@@ -22,16 +22,4 @@ public final class AbstractPuzzleConfigAggregatesFactory {
         };
         return (PCAF) factory;
     }
-
-    // // TODO it does not belong here
-    // public static <PCA extends PuzzleConfigAggregate<?>, PC extends PuzzleConfigAggregate<?>> PCA create(final Exercise exercise) {
-    //     var pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
-    //     var aggregate = switch (exercise) {
-    //     case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfigAggregate((VisualPerfectPitchConfigAggregate) puzzleConfig, pianoKeyboardRepository);
-    //     case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregate((AudioPerfectPitchConfigAggregate) puzzleConfig, pianoKeyboardRepository);
-    //     default -> throw new RuntimeException("unknown exercise of puzzleConfig: " + exercise);
-    //     };
-    //     return (PCA) aggregate;
-    // }
-
 }

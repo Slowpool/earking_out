@@ -80,7 +80,6 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
 
     protected void updateConfigSpecificProperty(final String propertyName, final Object propertyValue) {
         switch (propertyName) {
-        // TODO how 'bout reflection?
         case NORMALIZED_ROOT_NOTE_PROP: {
             var normalizedRootNote = (PianoKeyNumber) propertyValue;
             setNormalizedRootNote(normalizedRootNote);

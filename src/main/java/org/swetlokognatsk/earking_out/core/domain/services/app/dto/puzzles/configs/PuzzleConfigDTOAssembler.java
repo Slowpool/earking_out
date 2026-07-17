@@ -8,7 +8,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
-// TODO how this pattern is called?
 // TODO register this service as singleton in DI? or just use static methods with static fields?
 public final class PuzzleConfigDTOAssembler {
     protected static final Map<Exercise, EndPuzzleConfigDTOAssembler<?, ?, ?>> endDtoAssemblers = new HashMap<>();

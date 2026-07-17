@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.assertNoSelectedKeys;
+
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -47,7 +49,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
         var aggregate = createAggregate();
         var guessingPianoKeyboard = aggregate.getGuessingPianoKeyboard();
 
-        assertArrayEquals(new PianoKeyNumber[0], guessingPianoKeyboard.getSelectedKeyNumbers());
+        assertNoSelectedKeys(guessingPianoKeyboard);
     }
 
     @Test

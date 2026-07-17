@@ -79,7 +79,6 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         return pianoKeyboardAggregateDto;
     }
 
-    // TODO it must not be here
     protected String getPropertyName(final PianoKeyboardId pianoKeyboardId) {
         return switch (pianoKeyboardId) {
         case ROOT_NOTE_PICKER -> NORMALIZED_ROOT_NOTE_PROP;
