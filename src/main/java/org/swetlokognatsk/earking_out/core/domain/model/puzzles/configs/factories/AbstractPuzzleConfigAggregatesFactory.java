@@ -16,8 +16,8 @@ public final class AbstractPuzzleConfigAggregatesFactory {
 
     public static <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, ?>> PCAF createFactory(final E exercise) {
         PuzzleConfigAggregatesFactory<?, ?> factory = switch (exercise) {
-            case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregatesFactory(DI.get(PianoKeyboardStorageAdapter.class));
-            case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfigAggregatesFactory(DI.get(PianoKeyboardStorageAdapter.class));
+            case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregatesFactory();
+            case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfigAggregatesFactory();
             default -> throw new IllegalArgumentException("unknown exercise for PuzzleConfigAggregatesFactory: " + exercise);
         };
         return (PCAF) factory;

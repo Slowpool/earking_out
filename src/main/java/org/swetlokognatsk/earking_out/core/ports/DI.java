@@ -21,7 +21,8 @@ import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonst
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.AudioPerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
@@ -31,9 +32,11 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrato
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.AudioClipSoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.FakeSoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.AudioClipPianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPuzzleConfigPianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemorySessionPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.PianoKeySoundFilesBuilder;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.TestInMemoryAllPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
@@ -50,7 +53,9 @@ public final class DI {
     // singleton lifetime simulation
     protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
     protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
-    protected static InMemoryPianoKeyboardRepository inMemoryPianoKeyboardRepository;
+    protected static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
+    protected static InMemorySessionPianoKeyboardRepository inMemorySessionPianoKeyboardRepository;
+    protected static TestInMemoryAllPianoKeyboardRepository testInMemoryAllPianoKeyboardRepository;
     protected static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
     protected static MockPianoKeySoundsPlayer mockPianoKeySoundsPlayer;
     protected static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
@@ -85,18 +90,33 @@ public final class DI {
 
         } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PianoKeyboardStorageAdapter.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigPianoKeyboardStorageAdapter.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 
-        } else if (className.equals(PianoKeyboardStorageAdapter.class.getName())) {
-            return (T) get(InMemoryPianoKeyboardRepository.class);
+        } else if (className.equals(PuzzleConfigPianoKeyboardStorageAdapter.class.getName())) {
+            return (T) get(InMemoryPuzzleConfigPianoKeyboardRepository.class);
 
-        } else if (className.equals(InMemoryPianoKeyboardRepository.class.getName())) {
-            if (inMemoryPianoKeyboardRepository == null) {
-                inMemoryPianoKeyboardRepository = new InMemoryPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
+        } else if (className.equals(InMemoryPuzzleConfigPianoKeyboardRepository.class.getName())) {
+            if (inMemoryPuzzleConfigPianoKeyboardRepository == null) {
+                inMemoryPuzzleConfigPianoKeyboardRepository = new InMemoryPuzzleConfigPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
             }
-            return (T) inMemoryPianoKeyboardRepository;
+            return (T) inMemoryPuzzleConfigPianoKeyboardRepository;
+
+        } else if (className.equals(SessionPianoKeyboardStorageAdapter.class.getName())) {
+            return (T) get(InMemorySessionPianoKeyboardRepository.class);
+
+        } else if (className.equals(InMemorySessionPianoKeyboardRepository.class.getName())) {
+            if (inMemorySessionPianoKeyboardRepository == null) {
+                inMemorySessionPianoKeyboardRepository = new InMemorySessionPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
+            }
+            return (T) inMemorySessionPianoKeyboardRepository;
+
+        } else if (className.equals(TestInMemoryAllPianoKeyboardRepository.class.getName())) {
+            if (testInMemoryAllPianoKeyboardRepository == null) {
+                testInMemoryAllPianoKeyboardRepository = new TestInMemoryAllPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
+            }
+            return (T) testInMemoryAllPianoKeyboardRepository;
 
         } else if (className.equals(AudioPerfectPitchSessionService.class.getName())) {
             return (T) new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class));
@@ -157,7 +177,7 @@ public final class DI {
 
         } else if (className.equals(InMemoryAudioPerfectPitchSessionRepository.class.getName())) {
             if (inMemoryAudioPerfectPitchSessionRepository == null) {
-                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(PianoKeyboardStorageAdapter.class));
+                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(SessionPianoKeyboardStorageAdapter.class));
             }
             return (T) inMemoryAudioPerfectPitchSessionRepository;
 
@@ -179,7 +199,9 @@ public final class DI {
     public static void deleteSingletons() {
         inMemoryPuzzleConfigRepository = null;
         pianoKeyboardAggregatesFactory = null;
-        inMemoryPianoKeyboardRepository = null;
+        inMemoryPuzzleConfigPianoKeyboardRepository = null;
+        inMemorySessionPianoKeyboardRepository = null;
+        testInMemoryAllPianoKeyboardRepository = null;
         audioClipPianoKeySoundsPlayer = null;
         mockPianoKeySoundsPlayer = null;
         inMemoryAudioPerfectPitchSessionRepository = null;

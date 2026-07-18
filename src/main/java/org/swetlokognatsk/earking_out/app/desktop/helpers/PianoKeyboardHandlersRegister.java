@@ -20,12 +20,12 @@ public final class PianoKeyboardHandlersRegister {
 
     public static EventHandler<PianoKeyPressedEvent> createPressKeyHandler(final PianoKeyboard pianoKeyboard) {
         EventHandler<PianoKeyPressedEvent> handler = switch (pianoKeyboard.id) {
-        case ROOT_NOTE_PICKER -> e -> {
+        case AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER -> e -> {
             doAndRefreshView(() -> {
                 getConfigService().updatePropertyViaPianoKeyPressing(e.pianoKeyboardId, e.keyNumber);
             }, pianoKeyboard);
         };
-        case PERFECT_PITCH_NOTES_PICKER -> e -> {
+        case AUDIO_PERFECT_PITCH_NOTES_PICKER -> e -> {
             doAndRefreshView(() -> {
                 getConfigService().updatePropertyViaPianoKeyPressing(e.pianoKeyboardId, e.keyNumber);
             }, pianoKeyboard);
@@ -37,12 +37,12 @@ public final class PianoKeyboardHandlersRegister {
 
     public static EventHandler<PianoKeyReleasedEvent> createReleaseKeyHandler(final PianoKeyboard pianoKeyboard) {
         EventHandler<PianoKeyReleasedEvent> handler = switch (pianoKeyboard.id) {
-        case ROOT_NOTE_PICKER -> e -> {
+        case AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER -> e -> {
             doAndRefreshView(() -> {
                 getConfigService().releasePianoKey(e.pianoKeyboardId);
             }, pianoKeyboard);
         };
-        case PERFECT_PITCH_NOTES_PICKER -> e -> {
+        case AUDIO_PERFECT_PITCH_NOTES_PICKER -> e -> {
             doAndRefreshView(() -> {
                 getConfigService().releasePianoKey(e.pianoKeyboardId);
             }, pianoKeyboard);

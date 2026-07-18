@@ -15,16 +15,16 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
 
 public final class SessionAggregatesFactory extends AggregatesFactory<SessionAggregate<?, ?, ?, ?>> {
     protected final PuzzleConfigRepository puzzleConfigRepository;
-    protected final PianoKeyboardStorageAdapter pianoKeyboardRepository;
+    protected final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository;
 
     public SessionAggregatesFactory() {
         // read-only access
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
-        pianoKeyboardRepository = DI.get(PianoKeyboardStorageAdapter.class);
+        pianoKeyboardRepository = DI.get(SessionPianoKeyboardStorageAdapter.class);
     }
 
     public <E extends Exercise, SA extends SessionAggregate<E, ?, ?, ?>> SA create(final E exercise) {
@@ -34,7 +34,7 @@ public final class SessionAggregatesFactory extends AggregatesFactory<SessionAgg
 
         var sessionAggregate = switch (exercise) {
         case AudioPerfectPitchExercise _e ->  {
-            var notesGuessingPianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING);
+            var notesGuessingPianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING);
             var aggregate = new AudioPerfectPitchSessionAggregate(SessionId.random(), (AudioPerfectPitchConfigDTO) puzzleConfigDto, sessionStats, notesGuessingPianoKeyboard);
             yield aggregate;
         }

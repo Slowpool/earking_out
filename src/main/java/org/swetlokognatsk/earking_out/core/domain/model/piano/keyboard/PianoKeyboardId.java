@@ -16,7 +16,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
  * ids are just hardcoded here.
  */
 public enum PianoKeyboardId {
-    ROOT_NOTE_PICKER(new AudioPerfectPitchExercise()), PERFECT_PITCH_NOTES_PICKER(new AudioPerfectPitchExercise()), PERFECT_PITCH_NOTES_GUESSING(new AudioPerfectPitchExercise());
+    AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER(new AudioPerfectPitchExercise()), AUDIO_PERFECT_PITCH_NOTES_PICKER(new AudioPerfectPitchExercise()), AUDIO_PERFECT_PITCH_NOTES_GUESSING(new AudioPerfectPitchExercise());
 
     public final Exercise exercise;
 

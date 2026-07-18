@@ -11,16 +11,16 @@ public final class PianoKeyboardsFactory {
     }
 
     public static PianoKeyboard createPerfectPitchNotesPicker(final double width, final double height, final PianoKeyNumber[] selectedKeys) {
-        return create(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, width, height, selectedKeys);
+        return create(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER, width, height, selectedKeys);
     }
 
     public static PianoKeyboard createRootNotePicker(final double width, final double height, final PianoKeyNumber selectedKey) {
         var wrappedSelectedKey = selectedKey == null ? new PianoKeyNumber[0] : new PianoKeyNumber[] { selectedKey };
-        return create(PianoKeyboardId.ROOT_NOTE_PICKER, width, height, wrappedSelectedKey);
+        return create(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER, width, height, wrappedSelectedKey);
     }
 
     public static PianoKeyboard createPerfectPitchNotesGuessing(final double width, final double height) {
-        return create(PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING, width, height, new PianoKeyNumber[0]);
+        return create(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING, width, height, new PianoKeyNumber[0]);
     }
 
     private static PianoKeyboard create(final PianoKeyboardId id, final double width, final double height, final PianoKeyNumber[] selectedKeys) {

@@ -84,9 +84,9 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
 
     protected static PianoKeyboardMode getModeById(final PianoKeyboardId id) {
         return switch (id) {
-        case ROOT_NOTE_PICKER -> PianoKeyboardMode.ONE_KEY_SELECT;
-        case PERFECT_PITCH_NOTES_PICKER -> PianoKeyboardMode.SEVERAL_KEYS_SELECT;
-        case PERFECT_PITCH_NOTES_GUESSING -> PianoKeyboardMode.ONE_KEY_TOUCH;
+        case AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER -> PianoKeyboardMode.ONE_KEY_SELECT;
+        case AUDIO_PERFECT_PITCH_NOTES_PICKER -> PianoKeyboardMode.SEVERAL_KEYS_SELECT;
+        case AUDIO_PERFECT_PITCH_NOTES_GUESSING -> PianoKeyboardMode.ONE_KEY_TOUCH;
         default -> throw new RuntimeException("unknown piano keyboard id: " + id);
         };
     }

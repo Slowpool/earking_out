@@ -7,8 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboar
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRepository;
 
 // TODO actually it's not classic ddd repo. this is not-transactional adapter that just somehow utilize the pianoKeyboard. the actual transactional stuff happens in PuzzleConfigAggregate itself.
-// TODO separate it into SessionPianoKeyboardStorageAdapter and PuzzleConfigPianoKeyboardStorageAdapter
-public interface PianoKeyboardStorageAdapter extends AggregateRepository<PianoKeyboardId, PianoKeyboardAggregate> {
+public abstract interface PianoKeyboardStorageAdapter extends AggregateRepository<PianoKeyboardId, PianoKeyboardAggregate> {
     PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId);
 
     PianoKeyboardAggregate[] getByExercise(final Exercise exercise);

@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKe
 public final class PianoKeyboardSoundModeTest extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
-        return PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING;
+        return PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING;
     }
 
     @Test

@@ -11,14 +11,14 @@ import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, InMemoryPianoKeyboardRepository> {
-    protected InMemoryPianoKeyboardRepository repository;
+public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, TestInMemoryAllPianoKeyboardRepository> {
+    protected TestInMemoryAllPianoKeyboardRepository repository;
 
     protected PianoKeyboardAggregate getSomeAggregate() {
-        return repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
+        return repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
     }
 
-    protected InMemoryPianoKeyboardRepository getRepository() {
+    protected TestInMemoryAllPianoKeyboardRepository getRepository() {
         return repository;
     }
 
@@ -41,36 +41,36 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
     @Before
     public void setup() {
         DI.deleteSingletons();
-        repository = DI.get(InMemoryPianoKeyboardRepository.class);
+        repository = DI.get(TestInMemoryAllPianoKeyboardRepository.class);
     }
 
     @Test
     @Deprecated
     // actually it's a wrong approach to test it, because it does not cover the whole """immutability""". the correct approach here is to check references of objects from `get()` before and after save - they must be different so that modifying some aggregate's state it'd not be immediately saved in the memory even afore `save()` call due to having the same reference to the same object.
     public void changeAggregatePropertyWithoutSave() {
-        var rootNotePicker = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
+        var rootNotePicker = repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
 
         rootNotePicker.touchKey(FIRST_NOTE_NUMBER);
 
-        rootNotePicker = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
+        rootNotePicker = repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         assertArrayEquals(new PianoKeyNumber[0], rootNotePicker.getSelectedKeyNumbers());
     }
 
     /**
      * See
-     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
+     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryAllPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
      * regarding @Deprecated
      */
     @Test
     @Deprecated
     public void changeAggregatePropertyWithSave() {
-        var rootNotePicker = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
+        var rootNotePicker = repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         var someRootNote = FIRST_NOTE_NUMBER;
 
         rootNotePicker.touchKey(someRootNote);
         repository.save(rootNotePicker);
 
-        rootNotePicker = repository.get(PianoKeyboardId.ROOT_NOTE_PICKER);
+        rootNotePicker = repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         assertArrayEquals(new PianoKeyNumber[] { someRootNote }, rootNotePicker.getSelectedKeyNumbers());
     }
 

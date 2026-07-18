@@ -11,7 +11,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.Pi
 public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
-        return PianoKeyboardId.ROOT_NOTE_PICKER;
+        return PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
     }
 
     @Test

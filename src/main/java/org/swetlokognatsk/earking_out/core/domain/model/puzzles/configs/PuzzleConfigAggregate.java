@@ -81,8 +81,8 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
 
     protected String getPropertyName(final PianoKeyboardId pianoKeyboardId) {
         return switch (pianoKeyboardId) {
-        case ROOT_NOTE_PICKER -> NORMALIZED_ROOT_NOTE_PROP;
-        case PERFECT_PITCH_NOTES_PICKER -> NORMALIZED_NOTES_FOR_PUZZLE_PROP;
+        case AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER -> NORMALIZED_ROOT_NOTE_PROP;
+        case AUDIO_PERFECT_PITCH_NOTES_PICKER -> NORMALIZED_NOTES_FOR_PUZZLE_PROP;
         default -> throw new IllegalArgumentException("this piano keyboard is not for config: " + pianoKeyboardId);
         };
     }

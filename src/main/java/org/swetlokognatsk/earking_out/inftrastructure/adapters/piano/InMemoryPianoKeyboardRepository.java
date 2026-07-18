@@ -1,7 +1,9 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.piano;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
@@ -12,10 +14,12 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboar
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
-public class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdapter {
+public abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdapter {
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
+
+    protected abstract PianoKeyboardId[] getPianoKeyboardIds();
 
     public InMemoryPianoKeyboardRepository(final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory) {
         this.pianoKeyboardAggregatesFactory = pianoKeyboardAggregatesFactory;
@@ -24,7 +28,7 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdap
 
     protected void initPianoKeyboards() {
         PianoKeyboardAggregate pianoKeyboard;
-        for (var pianoKeyboardId : PianoKeyboardId.values()) {
+        for (var pianoKeyboardId : getPianoKeyboardIds()) {
             // TODO pull soundMode from puzzleConfig
             pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId, PianoKeyboardSoundMode.SOUNDLESS);
             pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
@@ -48,7 +52,7 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdap
 
     public void save(final PianoKeyboardAggregate pianoKeyboardAggregate) {
         var pianoKeyboardId = pianoKeyboardAggregate.getPianoKeyboardId();
-        // ensuring it exists
+        // ensuring it exists (keyboards are initialized in initKeyboards(). further no new keyboards can be created)
         getPianoKeyboardAggregate(pianoKeyboardId);
 
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregate);
@@ -62,12 +66,12 @@ public class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdap
     }
 
     public PianoKeyboardAggregate[] getByExercise(final Exercise exercise) {
-        // TODO stream refactoring
+        // TODO refactoring. add PianoKeyboardType (session/puzzleConfig)
         var pianoKeyboardIds = PianoKeyboardId.getPianoKeyboardIds(exercise);
-        var pianoKeyboards = new PianoKeyboardAggregate[pianoKeyboardIds.length];
-        for (int i = 0; i < pianoKeyboards.length; i++) {
-            pianoKeyboards[i] = get(pianoKeyboardIds[i]);
-        }
+        var stream = Arrays.stream(pianoKeyboardIds);
+        stream = stream.filter((PianoKeyboardId pianoKeyboardId) -> ArrayUtils.contains(getPianoKeyboardIds(), pianoKeyboardId));
+        var pianoKeyboardsStream = stream.map((PianoKeyboardId pianoKeyboardId) -> get(pianoKeyboardId));
+        var pianoKeyboards = pianoKeyboardsStream.toArray(PianoKeyboardAggregate[]::new);
         return pianoKeyboards;
     }
 

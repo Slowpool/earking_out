@@ -32,10 +32,10 @@ public final class PianoKeyboardDTOAssemblerTest {
         pianoKeyboardFactory = new PianoKeyboardAggregatesFactory();
 
         var selectedKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
-        pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, selectedKeys, PianoKeyboardSoundMode.USUAL);
+        pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER, selectedKeys, PianoKeyboardSoundMode.USUAL);
         dto1 = PianoKeyboardDtoAssembler.assemble(pianoKeyboard1);
 
-        pianoKeyboard2 = pianoKeyboardFactory.create(PianoKeyboardId.ROOT_NOTE_PICKER, PianoKeyboardSoundMode.USUAL);
+        pianoKeyboard2 = pianoKeyboardFactory.create(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER, PianoKeyboardSoundMode.USUAL);
         pianoKeyboard2.pressKey(FIRST_NOTE_NUMBER.add(3));
         dto2 = PianoKeyboardDtoAssembler.assemble(pianoKeyboard2);
     }

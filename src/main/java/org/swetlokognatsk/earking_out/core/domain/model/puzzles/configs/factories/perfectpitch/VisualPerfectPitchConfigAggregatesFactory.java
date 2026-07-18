@@ -10,11 +10,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
 public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<VisualPerfectPitchConfigAggregate, PerfectPitchConfigDependentAggregatesDTO> {
-    protected final PianoKeyboardStorageAdapter pianoKeyboardRepository;
-    protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
-
-    public VisualPerfectPitchConfigAggregatesFactory(final PianoKeyboardStorageAdapter pianoKeyboardRepository) {
-        this.pianoKeyboardRepository = pianoKeyboardRepository;
+    
+    public VisualPerfectPitchConfigAggregatesFactory() {
     }
 
     public VisualPerfectPitchConfigAggregate createDefault(final PerfectPitchConfigDependentAggregatesDTO dependentAggregates) {

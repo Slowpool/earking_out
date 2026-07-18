@@ -49,7 +49,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     /**
      * See
-     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
+     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryAllPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
      * regarding @Deprecated
      */
     @Test
@@ -67,7 +67,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     /**
      * See
-     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
+     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryAllPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
      * regarding @Deprecated
      */
     @Test

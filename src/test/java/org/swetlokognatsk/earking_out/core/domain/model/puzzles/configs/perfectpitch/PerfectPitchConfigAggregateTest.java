@@ -20,14 +20,14 @@ public final class PerfectPitchConfigAggregateTest {
         assertEquals(null, aggregate.getNormalizedRootNote());
 
         PianoKeyNumber newRootNote = FIRST_NOTE_NUMBER;
-        aggregate.updateViaPianoKeyPressing(PianoKeyboardId.ROOT_NOTE_PICKER, newRootNote);
+        aggregate.updateViaPianoKeyPressing(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER, newRootNote);
 
         assertEquals(newRootNote, aggregate.getNormalizedRootNote());
     }
 
     @Test
     public void ensureRootNoteUpdatingAlsoCausesPianoKeyboardUpdate() {
-        var pianoKeyboardId = PianoKeyboardId.ROOT_NOTE_PICKER;
+        var pianoKeyboardId = PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
         var configAggregate = getPerfectPitchAggregate();
         var pianoKeyboard = configAggregate.getPianoKeyboard(pianoKeyboardId);
         assertNoSelectedKeys(pianoKeyboard);

@@ -9,7 +9,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.Pi
 public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
-        return PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER;
+        return PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER;
     }
 
     @Test
