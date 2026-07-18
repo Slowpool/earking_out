@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 public final class AudioPerfectPitchConfigDTO extends PerfectPitchConfigDTO<AudioPerfectPitchExercise> {
 
     // TODO reconsider passing exercise. it's always `new AudioPerfectPitchExercise()`
-    public AudioPerfectPitchConfigDTO(final AudioPerfectPitchExercise exercise, final int targetNumberOfPuzzles, final boolean statsRecording, PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final boolean soundlessSuccessfulGuess) {
-        super(exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano, soundlessSuccessfulGuess);
+    public AudioPerfectPitchConfigDTO(final AudioPerfectPitchExercise exercise, final int targetNumberOfPuzzles, final boolean statsRecording, PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {
+        super(exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
     }
 }

@@ -4,11 +4,16 @@ import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
 import javafx.event.EventHandler;
 
 public final class PianoKeyboardHandlersRegister {
+
+    protected static final PianoKeyboardStorageAdapter[] pianoKeyboardRepositories = new PianoKeyboardStorageAdapter[] { DI.get(SessionPianoKeyboardStorageAdapter.class), DI.get(PuzzleConfigPianoKeyboardStorageAdapter.class) };
 
     private PianoKeyboardHandlersRegister() {
     }
@@ -56,18 +61,24 @@ public final class PianoKeyboardHandlersRegister {
         return DI.get(PuzzleConfigService.class);
     }
 
-    protected static PianoKeyboardStorageAdapter getPianoKeyboardRepository() {
-        return DI.get(PianoKeyboardStorageAdapter.class);
-    }
-
     protected static void doAndRefreshView(final Runnable action, final PianoKeyboard pianoKeyboard) {
         action.run();
         updatePianoKeyboardView(pianoKeyboard);
     }
 
+    // TODO what is correct approach? this approach is hand-made
     public static void updatePianoKeyboardView(final PianoKeyboard pianoKeyboard) {
-        // TODO what is correct approach? this approach is hand-made
-        var pianoKeyboardView = getPianoKeyboardRepository().getViewDto(pianoKeyboard.id);
+        PianoKeyboardDTO pianoKeyboardView = null;
+        for (var pianoKeyboardRepository : pianoKeyboardRepositories) {
+            try {
+                pianoKeyboardView = pianoKeyboardRepository.getViewDto(pianoKeyboard.id);
+                break;
+            } catch (IllegalArgumentException e) {
+            }
+        }
+        if (pianoKeyboardView == null) {
+            throw new RuntimeException("pianoKeyboard not found: " + pianoKeyboard);
+        }
         pianoKeyboard.hydrateState(pianoKeyboardView);
     }
 }

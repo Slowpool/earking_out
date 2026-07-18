@@ -60,10 +60,6 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
         assertEquals(0, freshman.getNumberOfGuessesOfCurrentPuzzle());
     }
 
-    protected PianoKeyboardStorageAdapter getPianoKeyboardRepository() {
-        return DI.get(PianoKeyboardStorageAdapter.class);
-    }
-
     @Test
     public void ensureGetMethodGivesCopyWithoutSaveProxy() {
         ensureGetMethodGivesCopyWithoutSave();

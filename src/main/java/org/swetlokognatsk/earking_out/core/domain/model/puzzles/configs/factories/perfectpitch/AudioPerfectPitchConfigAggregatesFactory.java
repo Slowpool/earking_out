@@ -23,10 +23,10 @@ public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfig
     // }
 
     public AudioPerfectPitchConfigAggregate createDefault(final PerfectPitchConfigDependentAggregatesDTO dependentAggregates) {
-        return create(10, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false, false, dependentAggregates.pianoKeyboardAggregates);
+        return create(10, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false, dependentAggregates.pianoKeyboardAggregates);
     }
 
-    public AudioPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final boolean soundlessSuccessfulGuess, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
-        return new AudioPerfectPitchConfigAggregate(new AudioPerfectPitchExercise(), targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano, soundlessSuccessfulGuess, pianoKeyboardAggregates);
+    public AudioPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
+        return new AudioPerfectPitchConfigAggregate(new AudioPerfectPitchExercise(), targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano, pianoKeyboardAggregates);
     }
 }

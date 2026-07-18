@@ -31,7 +31,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
     protected final VBox inputModeBox;
 
     protected final CheckBox soundlessGuessingPianoCheckBox;
-    protected final CheckBox soundlessSuccessfulGuessCheckBox;
 
     protected double getPianoKeyboardHeight() {
         return getHeight() / 4;
@@ -55,7 +54,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         inputModeBox = buildInputModeBox(inputModeRadioButtons);
 
         soundlessGuessingPianoCheckBox = buildSoundlessGuessingPianoCheckBox(puzzleConfigDto.soundlessGuessingPiano);
-        soundlessSuccessfulGuessCheckBox = buildSoundlessSuccessfulGuessCheckBox(puzzleConfigDto.soundlessSuccessfulGuess);
 
         addCustomFields();
         addStartButton();
@@ -123,15 +121,8 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         return checkBox;
     }
 
-    protected CheckBox buildSoundlessSuccessfulGuessCheckBox(final boolean soundlessSuccessfulGuess) {
-        var checkBox = new CheckBox("successful guess is soundless");
-        checkBox.setSelected(soundlessSuccessfulGuess);
-        checkBox.selectedProperty().addListener(createConfigPropertyUpadtingEvent(SOUNDLESS_SUCCESSFUL_GUESS_PROP));
-        return checkBox;
-    }
-
     protected void addCustomFields() {
-        getChildren().addAll(notesPickerKeyboardBox, rootNoteBox, inputModeBox, soundlessGuessingPianoCheckBox, soundlessSuccessfulGuessCheckBox);
+        getChildren().addAll(notesPickerKeyboardBox, rootNoteBox, inputModeBox, soundlessGuessingPianoCheckBox);
     }
 
     protected void handleRadioButtonSelected(ActionEvent e) {
@@ -172,10 +163,6 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         case SOUNDLESS_GUESSING_PIANO_PROP -> {
             var soundlessGuessingPiano = (Boolean)newValue;
             yield soundlessGuessingPiano.booleanValue();
-        }
-        case SOUNDLESS_SUCCESSFUL_GUESS_PROP -> {
-            var soundlessSuccessfulGuess = (Boolean)newValue;
-            yield soundlessSuccessfulGuess.booleanValue();
         }
         default -> throw new IllegalArgumentException("unknown custom property: " + configProperty);
         };

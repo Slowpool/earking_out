@@ -35,7 +35,7 @@ public class RandomAudioPerfectPitchSolutionGeneratorTest {
     }
 
     protected static AudioPerfectPitchConfigAggregate createAnyPuzzleConfig(final PianoKeyNumber[] normalizedNotesForPuzzle) {
-        return configFactory.create(0, false, normalizedNotesForPuzzle, null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false, false, new PianoKeyboardAggregate[0]);
+        return configFactory.create(0, false, normalizedNotesForPuzzle, null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false, new PianoKeyboardAggregate[0]);
     }
 
     @Test

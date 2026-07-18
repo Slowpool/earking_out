@@ -16,13 +16,11 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
     public static final String NORMALIZED_ROOT_NOTE_PROP = "normalizedRootNote";
     public static final String INPUT_MODE_PROP = "inputMode";
     public static final String SOUNDLESS_GUESSING_PIANO_PROP = "soundlessGuessingPiano";
-    public static final String SOUNDLESS_SUCCESSFUL_GUESS_PROP = "soundlessSuccessfulGuess";
 
     protected PianoKeyNumber[] normalizedNotesForPuzzle;
     protected PianoKeyNumber normalizedRootNote;
     protected PerfectPitchInputMode inputMode;
     protected boolean soundlessGuessingPiano;
-    protected boolean soundlessSuccessfulGuess;
 
     public PianoKeyNumber[] getNormalizedNotesForPuzzle() {
         return Arrays.copyOf(normalizedNotesForPuzzle, normalizedNotesForPuzzle.length);
@@ -56,22 +54,13 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         this.soundlessGuessingPiano = soundlessGuessingPiano;
     }
 
-    public boolean getSoundlessSuccessfulGuess() {
-        return soundlessSuccessfulGuess;
-    }
-
-    protected void setSoundlessSuccessfulGuess(final boolean soundlessSuccessfulGuess) {
-        this.soundlessSuccessfulGuess = soundlessSuccessfulGuess;
-    }
-
-    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final boolean soundlessSuccessfulGuess, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
+    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
         super(exercise, targetNumberOfPuzzles, statsRecording, pianoKeyboardAggregates);
 
         setNormalizedNotesForPuzzle(Objects.requireNonNull(normalizedNotesForPuzzle));
         setNormalizedRootNote(normalizedRootNote);
         setInputMode(Objects.requireNonNull(inputMode));
         setSoundlessGuessingPiano(soundlessGuessingPiano);
-        setSoundlessSuccessfulGuess(soundlessSuccessfulGuess);
     }
 
     public List<String> getErrors() {
@@ -117,9 +106,6 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
             break;
         case SOUNDLESS_GUESSING_PIANO_PROP:
             setSoundlessGuessingPiano((boolean) propertyValue);
-            break;
-        case SOUNDLESS_SUCCESSFUL_GUESS_PROP:
-            setSoundlessSuccessfulGuess((boolean) propertyValue);
             break;
         default:
             throw new IllegalArgumentException("unknown puzzle config property: " + propertyName);
