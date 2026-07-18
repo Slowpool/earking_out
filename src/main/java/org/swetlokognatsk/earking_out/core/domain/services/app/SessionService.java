@@ -28,7 +28,6 @@ public abstract class SessionService<E extends Exercise, SA extends SessionAggre
         return session.getId();
     }
 
-    // TODO test
     public final void abort(final SessionId sessionId) {
         var session = sessionRepository.get(sessionId);
         session.abort();
