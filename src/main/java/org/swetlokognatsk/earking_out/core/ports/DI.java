@@ -131,6 +131,9 @@ public final class DI {
             return (T) new PianoKeysFactory();
 
         } else if (className.equals(ObjectCloner.class.getName())) {
+            return (T) get(SerializationCloner.class);
+
+        } else if (className.equals(SerializationCloner.class.getName())) {
             return (T) new SerializationCloner();
 
         } else if (className.equals(PuzzlesFactory.class.getName())) {

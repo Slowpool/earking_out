@@ -6,12 +6,12 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.AudioClipSoundPlayer;
 
-// TODO test
 public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer, Serializable {
     protected transient Map<PianoKeyNumber, AudioClipSoundPlayer> soundPlayers;
 
@@ -21,13 +21,14 @@ public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer
 
     protected void buildSoundPlayers() {
         var files = getFiles();
-        var soundPlayers = new HashMap<PianoKeyNumber, AudioClipSoundPlayer>();
-        // TODO refactoring via stream
-        AudioClipSoundPlayer soundPlayer;
-        for (var pianoKeyNumber : files.keySet()) {
-            soundPlayer = new AudioClipSoundPlayer(files.get(pianoKeyNumber));
+        final var soundPlayers = new HashMap<PianoKeyNumber, AudioClipSoundPlayer>();
+        var filesStream = files.entrySet().stream();
+        filesStream.forEach((Map.Entry<PianoKeyNumber, File> fileEntry) -> {
+            var pianoKeyNumber = fileEntry.getKey();
+            var file = fileEntry.getValue();
+            var soundPlayer = new AudioClipSoundPlayer(file);
             soundPlayers.put(pianoKeyNumber, soundPlayer);
-        }
+        });
         this.soundPlayers = soundPlayers;
     }
 
