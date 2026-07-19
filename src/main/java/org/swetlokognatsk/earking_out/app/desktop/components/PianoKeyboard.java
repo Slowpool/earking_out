@@ -69,7 +69,7 @@ public final class PianoKeyboard extends Region {
 
     public void hydrateState(final PianoKeyboardDTO newState) {
         PianoKey pianoKeyComponent;
-        for (var pianoKey : newState.pianoKeys()) {
+        for (var pianoKey : newState.pianoKeys().values()) {
             pianoKeyComponent = pianoKeys.get(pianoKey.keyNumber());
             pianoKeyComponent.hydrateState(pianoKey);
         }

@@ -5,12 +5,13 @@ import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
 public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
-        return PianoKeyboardId.ROOT_NOTE_PICKER;
+        return PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
     }
 
     @Test

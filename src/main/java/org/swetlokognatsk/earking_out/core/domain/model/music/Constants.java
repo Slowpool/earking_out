@@ -1,7 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music;
 
-import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-
 public final class Constants {
 
     private Constants() {
@@ -36,8 +34,6 @@ public final class Constants {
     public static final byte SHIFT = 3;
     public static final byte BYTE_FIRST_NOTE_NUMBER = SHIFT + 1;
     public static final byte BYTE_LAST_NOTE_NUMBER = (byte) (BYTE_FIRST_NOTE_NUMBER + PIANO_KEYS_NUMBER - 1);
-    public static final PianoKeyNumber FIRST_NOTE_NUMBER = PianoKeyNumber.valueOf(BYTE_FIRST_NOTE_NUMBER);
-    public static final PianoKeyNumber LAST_NOTE_NUMBER = PianoKeyNumber.valueOf(BYTE_LAST_NOTE_NUMBER);
 
     // source: https://www.reddit.com/r/piano/comments/wkofm/what_are_the_dimension_of_the_piano_keys/
     private static final double WHITE_KEY_WIDTH_CM = 2.357142857;

@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfect
 
 import static org.junit.Assert.assertEquals;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -19,23 +20,24 @@ public final class PerfectPitchConfigAggregateTest {
         assertEquals(null, aggregate.getNormalizedRootNote());
 
         PianoKeyNumber newRootNote = FIRST_NOTE_NUMBER;
-        aggregate.updateViaPianoKeyPressing(PianoKeyboardId.ROOT_NOTE_PICKER, newRootNote);
+        aggregate.updateViaPianoKeyPressing(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER, newRootNote);
 
         assertEquals(newRootNote, aggregate.getNormalizedRootNote());
     }
 
     @Test
     public void ensureRootNoteUpdatingAlsoCausesPianoKeyboardUpdate() {
-        var pianoKeyboardId = PianoKeyboardId.ROOT_NOTE_PICKER;
+        var pianoKeyboardId = PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
         var configAggregate = getPerfectPitchAggregate();
-        var pianoKeyboard = configAggregate.getPianoKeyboardAggregate(pianoKeyboardId);
+        var pianoKeyboard = configAggregate.getPianoKeyboard(pianoKeyboardId);
         assertNoSelectedKeys(pianoKeyboard);
 
         PianoKeyNumber newRootNote = FIRST_NOTE_NUMBER;
         configAggregate.updateViaPianoKeyPressing(pianoKeyboardId, newRootNote);
+        pianoKeyboard = configAggregate.getPianoKeyboard(pianoKeyboardId);
 
         assertOnlyThisKeyIsSelected(newRootNote, pianoKeyboard);
-        assertEquals(1, pianoKeyboard.getSelectedKeyNumbers().length);
+        assertEquals(1, pianoKeyboard.selectedKeys().length);
     }
 
     protected PerfectPitchConfigAggregate<?> getPerfectPitchAggregate() {

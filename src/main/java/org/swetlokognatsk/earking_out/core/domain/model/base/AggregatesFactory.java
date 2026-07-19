@@ -7,9 +7,7 @@ import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 // TODO how 'bout using Command-like pattern for `repository/factory/aggreagate_constructor` chain? to avoid lengthy params duplications
 // TODO use this interface for all factories
 // TODO explore Factory/Factory method/Abstract factory
-// TODO actually now it's AggregatesFactory due to `DADTO extends DependentAggregatesDTO`. either rename Factory to AggregatesFactory or separate in two different classes
-public abstract class Factory<O, DADTO extends DependentAggregatesDTO> {
-    public abstract O createDefault(final DADTO dependentAggregates);
+public abstract class AggregatesFactory<O> {
 
     public O createDeepCopy(final O o) {
         var cloner = DI.get(ObjectCloner.class);

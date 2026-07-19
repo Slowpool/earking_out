@@ -9,7 +9,7 @@ public final class Chord extends ValueObject implements Serializable {
     public final Note[] notes;
 
     public Chord(final Note[] notes) {
-        // TODO validate that sounds contains 2+ elements
+        // TODO validate that notes contain 2+ elements
         this.notes = notes;
     }
 }

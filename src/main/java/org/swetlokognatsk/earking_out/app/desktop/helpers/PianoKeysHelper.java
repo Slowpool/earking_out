@@ -10,6 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
 public final class PianoKeysHelper {
     public static final int WHITE_KEYS = 0;
@@ -44,11 +45,5 @@ public final class PianoKeysHelper {
         return dichotomizedKeys;
     }
 
-    public static void forEachKey(Consumer<PianoKeyNumber> action) {
-        PianoKeyNumber keyNumber;
-        for (var byteKeyNumber = FIRST_NOTE_NUMBER.value; byteKeyNumber < LAST_NOTE_NUMBER.value + 1; byteKeyNumber++) {
-            keyNumber = PianoKeyNumber.valueOf(byteKeyNumber);
-            action.accept(keyNumber);
-        }
-    }
+    
 }

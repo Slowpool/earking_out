@@ -13,13 +13,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.PerfectPitchConfigDependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
+
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory.*;
 
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     protected final Map<Exercise, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
-    protected final PianoKeyboardStorageAdapter pianoKeyboardRepository;
+    protected final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository;
 
     protected <DADTO extends DependentAggregatesDTO, E extends Exercise, F extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, DADTO>> PuzzleConfigAggregate<E> createDefault(final F factory, final E exercise) {
         var defaultPuzzleConfig = switch (exercise) {
@@ -47,7 +48,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         return dependentAggregates;
     }
 
-    public InMemoryPuzzleConfigRepository(final PianoKeyboardStorageAdapter pianoKeyboardRepository) {
+    public InMemoryPuzzleConfigRepository(final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository) {
         this.pianoKeyboardRepository = pianoKeyboardRepository;
 
         seedConfigs();

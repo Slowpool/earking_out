@@ -6,11 +6,13 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
+
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
 import java.util.Map;
 import static org.swetlokognatsk.earking_out.core.domain.helpers.PianoKeyboardHelper.*;
 
-// TODO review all aggregates: do they follow transactional consistency (in-memory)?
 // TODO store it in database as json
 public abstract class PuzzleConfigAggregate<E extends Exercise> extends AggregateRoot<E> {
     private static final long serialVersionUID = 1L;
@@ -18,48 +20,43 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     public static final String TARGET_NUMBER_OF_PUZZLES_PROP = "targetNumberOfPuzzles";
     public static final String STATS_RECORDING_PROP = "statsRecording";
 
-    // TODO make getters read-only
     protected int targetNumberOfPuzzles;
     protected boolean statsRecording;
 
-    // TODO dirty workaround
     public final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates;
 
-    // TODO how this pattern is called?
     protected abstract void updateConfigSpecificProperty(final String propertyName, final Object propertyValue);
 
     public int getTargetNumberOfPuzzles() {
         return targetNumberOfPuzzles;
     }
 
+    protected void setTargetNumberOfPuzzles(final int targetNumberOfPuzzles) {
+        this.targetNumberOfPuzzles = targetNumberOfPuzzles;
+    }
+
     public boolean getStatsRecording() {
         return statsRecording;
+    }
+
+    protected void setStatsRecording(final boolean statsRecording) {
+        this.statsRecording = statsRecording;
     }
 
     public PuzzleConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
         super(exercise);
 
-        this.targetNumberOfPuzzles = targetNumberOfPuzzles;
-        this.statsRecording = statsRecording;
+        setTargetNumberOfPuzzles(targetNumberOfPuzzles);
+        setStatsRecording(statsRecording);
         // TODO ddd violation (is it???): aggregate root must never contain links to other aggregates
         this.pianoKeyboardAggregates = createPianoKeyboardsMap(pianoKeyboardAggregates);
     }
 
-    // TODO delete
-    // private final Map<PianoKeyboardId, PianoKeyboardAggregate> createPianoKeyboardsMap(final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
-    //     Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardsMap = new HashMap<>();
-    //     for (var pianoKeyboardAggregate : pianoKeyboardAggregates) {
-    //         pianoKeyboardsMap.put(pianoKeyboardAggregate.getId(), pianoKeyboardAggregate);
-    //     }
-    //     return pianoKeyboardsMap;
-    // }
-
     public final void updateViaPianoKeyPressing(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber keyNumber) {
         var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
         pianoKeyboard.pressKey(keyNumber);
-        // TODO if further code fails, the aggregate state would be inconsistent
         var propertyName = getPropertyName(pianoKeyboardId);
-        // TODO where is validation?
+        // TODO add validation for root note on-change (not on exercise starting, though add the whole config validation should be added before exercise starting)
         updatePropertyViaPianoKeyboard(propertyName, pianoKeyboard);
     }
 
@@ -68,7 +65,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         throw new IllegalStateException("updatePropertyViaPianoKeyboard is not implemented");
     }
 
-    public final PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
+    protected final PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = pianoKeyboardAggregates.get(pianoKeyboardId);
         if (pianoKeyboard == null) {
             throw new IllegalArgumentException("pianoKeyboard is not found. pianoKeyboardId: " + pianoKeyboardId);
@@ -76,16 +73,16 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         return pianoKeyboard;
     }
 
-    // TODO return read-only object
-    public final PianoKeyboardAggregate getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
-        return getPianoKeyboardAggregate(pianoKeyboardId);
+    public final PianoKeyboardDTO getPianoKeyboard(final PianoKeyboardId pianoKeyboardId) {
+        var pianoKeyboardAggregate = getPianoKeyboardAggregate(pianoKeyboardId);
+        var pianoKeyboardAggregateDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboardAggregate);
+        return pianoKeyboardAggregateDto;
     }
 
-    // TODO it must not be here
     protected String getPropertyName(final PianoKeyboardId pianoKeyboardId) {
         return switch (pianoKeyboardId) {
-        case ROOT_NOTE_PICKER -> NORMALIZED_ROOT_NOTE_PROP;
-        case PERFECT_PITCH_NOTES_PICKER -> NORMALIZED_NOTES_FOR_PUZZLE_PROP;
+        case AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER -> NORMALIZED_ROOT_NOTE_PROP;
+        case AUDIO_PERFECT_PITCH_NOTES_PICKER -> NORMALIZED_NOTES_FOR_PUZZLE_PROP;
         default -> throw new IllegalArgumentException("this piano keyboard is not for config: " + pianoKeyboardId);
         };
     }
@@ -93,10 +90,10 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     public final void updateProperty(final String propertyName, final Object propertyValue) {
         switch (propertyName) {
         case TARGET_NUMBER_OF_PUZZLES_PROP:
-            targetNumberOfPuzzles = (int) propertyValue;
+            setTargetNumberOfPuzzles((int) propertyValue);
             break;
         case STATS_RECORDING_PROP:
-            statsRecording = (boolean) propertyValue;
+            setStatsRecording((boolean) propertyValue);
             break;
         default:
             updateConfigSpecificProperty(propertyName, propertyValue);

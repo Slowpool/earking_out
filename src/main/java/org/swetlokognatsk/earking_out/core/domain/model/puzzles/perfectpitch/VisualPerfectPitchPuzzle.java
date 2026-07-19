@@ -9,4 +9,19 @@ public final class VisualPerfectPitchPuzzle extends PerfectPitchPuzzle<VisualPer
     public VisualPerfectPitchPuzzle(final VisualPerfectPitchExercise exercise, final Solution solution) {
         super(exercise, solution);
     }
+
+    public int hashCode() {
+        return exercise.hashCode() + solution.hashCode();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof VisualPerfectPitchPuzzle)) {
+            return false;
+        }
+        var other = (VisualPerfectPitchPuzzle) obj;
+        return exercise.equals(other.exercise) && solution.equals(other.solution);
+    }
 }

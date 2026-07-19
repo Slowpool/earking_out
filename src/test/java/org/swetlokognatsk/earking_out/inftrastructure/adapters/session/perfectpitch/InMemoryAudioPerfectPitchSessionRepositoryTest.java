@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectp
 
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -57,10 +58,6 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
     protected void assertAreDifferentByMinorChange(final AudioPerfectPitchSessionAggregate freshman, final AudioPerfectPitchSessionAggregate suspect) {
         assertEquals(1, suspect.getNumberOfGuessesOfCurrentPuzzle());
         assertEquals(0, freshman.getNumberOfGuessesOfCurrentPuzzle());
-    }
-
-    protected PianoKeyboardStorageAdapter getPianoKeyboardRepository() {
-        return DI.get(PianoKeyboardStorageAdapter.class);
     }
 
     @Test

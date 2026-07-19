@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key;
 
 import static org.junit.Assert.assertEquals;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
@@ -57,12 +58,12 @@ public final class PianoKeyDTOAssemblerTest {
 
     @Test
     public void mode1() {
-        assertEquals(pianoKey1.getMode(), dto1.mode());
+        assertEquals(pianoKey1.mode, dto1.mode());
     }
 
     @Test
     public void mode2() {
-        assertEquals(pianoKey2.getMode(), dto2.mode());
+        assertEquals(pianoKey2.mode, dto2.mode());
     }
 
     @Test

@@ -1,9 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
+import java.util.Arrays;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 
 // TODO use DTOs wherever it's possible instead of aggregates
 /**
@@ -16,7 +16,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.V
  * ids are just hardcoded here.
  */
 public enum PianoKeyboardId {
-    ROOT_NOTE_PICKER(new AudioPerfectPitchExercise()), PERFECT_PITCH_NOTES_PICKER(new AudioPerfectPitchExercise()), PERFECT_PITCH_NOTES_GUESSING(new AudioPerfectPitchExercise());
+    AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER(new AudioPerfectPitchExercise()), AUDIO_PERFECT_PITCH_NOTES_PICKER(new AudioPerfectPitchExercise()), AUDIO_PERFECT_PITCH_NOTES_GUESSING(new AudioPerfectPitchExercise());
 
     public final Exercise exercise;
 
@@ -25,12 +25,10 @@ public enum PianoKeyboardId {
     }
 
     public static PianoKeyboardId[] getPianoKeyboardIds(final Exercise exercise) {
-        // TODO stream/loop refactoring
-        var pianoKeyboardIds = switch (exercise) {
-        case AudioPerfectPitchExercise e -> new PianoKeyboardId[] { PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, PianoKeyboardId.ROOT_NOTE_PICKER };
-        case VisualPerfectPitchExercise e -> new PianoKeyboardId[] { PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER, PianoKeyboardId.ROOT_NOTE_PICKER };
-        default -> throw new IllegalArgumentException("unknown exercise: " + exercise);
-        };
+        var allIds = values();
+        var stream = Arrays.stream(allIds);
+        var filteredIds = stream.filter((PianoKeyboardId pianoKeyboardId) -> exercise.equals(pianoKeyboardId.exercise));
+        var pianoKeyboardIds = filteredIds.toArray(PianoKeyboardId[]::new);
         return pianoKeyboardIds;
     }
 }

@@ -16,8 +16,8 @@ public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSession
 
     protected PianoKeyboardAggregate notesGuessingPianoKeyboard;
 
+    // TODO make it read-only? HOW IT MUST BE?
     public PianoKeyboardAggregate getGuessingPianoKeyboard() {
-        // TODO make it read-only
         return notesGuessingPianoKeyboard;
     }
 
@@ -36,13 +36,12 @@ public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSession
     protected void validateNotesGuessingPianoKeyboard(final PianoKeyboardAggregate notesGuessingPianoKeyboard) {
         Objects.requireNonNull(notesGuessingPianoKeyboard);
         // TODO add current mode logic (i.e. if it's not keyboard as piano, then make sure notesGuessingPianoKeyboard is null)
-        if (notesGuessingPianoKeyboard.getId() != PianoKeyboardId.PERFECT_PITCH_NOTES_GUESSING) {
+        if (notesGuessingPianoKeyboard.getId() != PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING) {
             throw new IllegalArgumentException("wrong piano keyboard received. pianoKeyboardId: " + notesGuessingPianoKeyboard.getId());
         }
     }
 
     // pianoKeyboardId is not passed because it's constant for this aggregate class - `PERFECT_PITCH_NOTES_GUESSING`
-    // TODO is it fine to have such an aggregate command that calls another command (guess)?
     public void guessViaPianoKeyPressing(final PianoKeyNumber keyNumber) {
         notesGuessingPianoKeyboard.pressKey(keyNumber);
         var solution = new AudioPerfectPitchSolution(keyNumber);

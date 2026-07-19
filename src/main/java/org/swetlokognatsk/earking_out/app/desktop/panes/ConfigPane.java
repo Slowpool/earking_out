@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.app.desktop.EarkingOutApplication;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate.*;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 
 import javafx.beans.value.ChangeListener;
@@ -57,7 +57,7 @@ public abstract class ConfigPane<E extends Exercise, PCDTO extends PuzzleConfigD
         var numberOfPuzzlesField = new TextField(String.valueOf(numberOfPuzzles));
         var numberOfPuzzlesProperty = numberOfPuzzlesField.textProperty();
         numberOfPuzzlesProperty.addListener(this::restrictInputToNumbers);
-        numberOfPuzzlesProperty.addListener(createConfigPropertyUpadtingEvent(PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP));
+        numberOfPuzzlesProperty.addListener(createConfigPropertyUpadtingEvent(TARGET_NUMBER_OF_PUZZLES_PROP));
         return numberOfPuzzlesField;
     }
 
@@ -79,7 +79,7 @@ public abstract class ConfigPane<E extends Exercise, PCDTO extends PuzzleConfigD
     private CheckBox initStatisticsRecordingField(boolean isSelected) {
         var statisticsRecordingField = new CheckBox("statistics recording");
         statisticsRecordingField.setSelected(isSelected);
-        statisticsRecordingField.selectedProperty().addListener(createConfigPropertyUpadtingEvent(PuzzleConfigAggregate.STATS_RECORDING_PROP));
+        statisticsRecordingField.selectedProperty().addListener(createConfigPropertyUpadtingEvent(STATS_RECORDING_PROP));
         return statisticsRecordingField;
     }
 
@@ -94,7 +94,7 @@ public abstract class ConfigPane<E extends Exercise, PCDTO extends PuzzleConfigD
     private Object castConfigPropertyNewValue(String configProperty, Object newValue) {
         // here the casts are just for the sake of explicitness, actually they aren't necessary
         return switch (configProperty) {
-        case PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP -> {
+        case TARGET_NUMBER_OF_PUZZLES_PROP -> {
             int intNewValue;
             try {
                 intNewValue = Integer.valueOf((String) newValue);
@@ -103,7 +103,7 @@ public abstract class ConfigPane<E extends Exercise, PCDTO extends PuzzleConfigD
             }
             yield intNewValue;
         }
-        case PuzzleConfigAggregate.STATS_RECORDING_PROP -> (boolean) newValue;
+        case STATS_RECORDING_PROP -> (boolean) newValue;
         default -> castCustomConfigPropertyNewValue(configProperty, newValue);
         };
     }

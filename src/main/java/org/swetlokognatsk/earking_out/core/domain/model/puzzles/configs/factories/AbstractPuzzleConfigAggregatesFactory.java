@@ -16,22 +16,10 @@ public final class AbstractPuzzleConfigAggregatesFactory {
 
     public static <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, ?>> PCAF createFactory(final E exercise) {
         PuzzleConfigAggregatesFactory<?, ?> factory = switch (exercise) {
-            case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregatesFactory(DI.get(PianoKeyboardStorageAdapter.class));
-            case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfigAggregatesFactory(DI.get(PianoKeyboardStorageAdapter.class));
+            case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregatesFactory();
+            case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfigAggregatesFactory();
             default -> throw new IllegalArgumentException("unknown exercise for PuzzleConfigAggregatesFactory: " + exercise);
         };
         return (PCAF) factory;
     }
-
-    // // TODO it does not belong here
-    // public static <PCA extends PuzzleConfigAggregate<?>, PC extends PuzzleConfigAggregate<?>> PCA create(final Exercise exercise) {
-    //     var pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
-    //     var aggregate = switch (exercise) {
-    //     case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfigAggregate((VisualPerfectPitchConfigAggregate) puzzleConfig, pianoKeyboardRepository);
-    //     case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregate((AudioPerfectPitchConfigAggregate) puzzleConfig, pianoKeyboardRepository);
-    //     default -> throw new RuntimeException("unknown exercise of puzzleConfig: " + exercise);
-    //     };
-    //     return (PCA) aggregate;
-    // }
-
 }

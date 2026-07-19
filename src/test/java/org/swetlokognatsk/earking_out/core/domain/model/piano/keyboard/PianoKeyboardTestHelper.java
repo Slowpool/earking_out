@@ -1,47 +1,82 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import static org.junit.Assert.*;
+import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
+import org.swetlokognatsk.earking_out.core.ports.DI;
 
 public final class PianoKeyboardTestHelper {
-    // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up. // TODO will they? is it fine for factory to be instantiable at all? if yes, keep making them instantiable everywhere. if not, make all of them static
-    protected final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
+    // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up
+    protected final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = DI.get(PianoKeyboardAggregatesFactory.class);
+
+    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyboardSoundMode soundMode) {
+        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, soundMode);
+        return pianoKeyboard;
+    }
 
     public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
-        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id);
-        return pianoKeyboard;
+        return createPianoKeyboard(id, PianoKeyboardSoundMode.USUAL);
     }
 
     public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys) {
-        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, selectedKeys);
+        return createPianoKeyboard(id, selectedKeys, PianoKeyboardSoundMode.USUAL);
+    }
+
+    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys, final PianoKeyboardSoundMode soundMode) {
+        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, selectedKeys, soundMode);
         return pianoKeyboard;
     }
 
-    public static void assertOnlyTheseKeysAreSelected(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyboardAggregate pianoKeyboard) {
-        var selectedPianoKeys = pianoKeyboard.getSelectedKeyNumbers();
+    public static void assertOnlyTheseKeysAreSelected(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyboardDTO pianoKeyboard) {
+        assertOnlyTheseKeysAreSelectedInPianoKeyboard(expectedPianoKeys, pianoKeyboard.selectedKeys());
+        assertOnlyTheseKeysAreSelectedForPianoKeys(expectedPianoKeys, pianoKeyboard.pianoKeys());
+    }
 
+    public static void assertOnlyTheseKeysAreSelected(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyboardAggregate pianoKeyboard) {
+        var pianoKeyboardDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        assertOnlyTheseKeysAreSelected(expectedPianoKeys, pianoKeyboardDto);
+    }
+
+    private static void assertOnlyTheseKeysAreSelectedInPianoKeyboard(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyNumber[] selectedPianoKeys) {
         assertEquals(expectedPianoKeys.length, selectedPianoKeys.length);
-        // TODO make it less dirty
-        // check the state of PianoKeyboard
         for (var pianoKey : expectedPianoKeys) {
             assertTrue(ArrayUtils.contains(selectedPianoKeys, pianoKey));
         }
-
-        // check the states of PianoKeys of PianoKeyboard
-        PianoKey pianoKeyObj;
-        for (var pianoKey : expectedPianoKeys) {
-            pianoKeyObj = pianoKeyboard.getPianoKeys().get(pianoKey);
-            assertTrue(pianoKeyObj.getIsSelected());
-        }
     }
 
-    public static void assertOnlyThisKeyIsSelected(final PianoKeyNumber expectedKey, final PianoKeyboardAggregate pianoKeyboard) {
+    private static void assertOnlyTheseKeysAreSelectedForPianoKeys(final PianoKeyNumber[] expectedPianoKeys, final Map<PianoKeyNumber, PianoKeyDTO> pianoKeys) {
+        PianoKeyNumber.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
+            PianoKeyDTO pianoKey = pianoKeys.get(pianoKeyNumber);
+            if (ArrayUtils.contains(expectedPianoKeys, pianoKeyNumber)) {
+                assertTrue(pianoKey.isSelected());
+            } else {
+                assertFalse(pianoKey.isSelected());
+            }
+        });
+    }
+
+    public static void assertOnlyThisKeyIsSelected(final PianoKeyNumber expectedKey, final PianoKeyboardDTO pianoKeyboard) {
         assertOnlyTheseKeysAreSelected(new PianoKeyNumber[] { expectedKey }, pianoKeyboard);
     }
 
-    public static void assertNoSelectedKeys(final PianoKeyboardAggregate pianoKeyboard) {
+    public static void assertOnlyThisKeyIsSelected(final PianoKeyNumber expectedKey, final PianoKeyboardAggregate pianoKeyboard) {
+        var pianoKeyboardDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        assertOnlyThisKeyIsSelected(expectedKey, pianoKeyboardDto);
+    }
+
+    public static void assertNoSelectedKeys(final PianoKeyboardDTO pianoKeyboard) {
         assertOnlyTheseKeysAreSelected(new PianoKeyNumber[0], pianoKeyboard);
     }
+
+    public static void assertNoSelectedKeys(final PianoKeyboardAggregate pianoKeyboard) {
+        var pianoKeyboardDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        assertNoSelectedKeys(pianoKeyboardDto);
+    }
+
 }

@@ -9,26 +9,16 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
-// TODO review all factories
 public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<VisualPerfectPitchConfigAggregate, PerfectPitchConfigDependentAggregatesDTO> {
-    protected final PianoKeyboardStorageAdapter pianoKeyboardRepository;
-    protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
-
-    public VisualPerfectPitchConfigAggregatesFactory(final PianoKeyboardStorageAdapter pianoKeyboardRepository) {
-        this.pianoKeyboardRepository = pianoKeyboardRepository;
+    
+    public VisualPerfectPitchConfigAggregatesFactory() {
     }
 
     public VisualPerfectPitchConfigAggregate createDefault(final PerfectPitchConfigDependentAggregatesDTO dependentAggregates) {
-        return create(100, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, dependentAggregates.pianoKeyboardAggregates);
+        return create(100, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false, dependentAggregates.pianoKeyboardAggregates);
     }
 
-    public VisualPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
-        return new VisualPerfectPitchConfigAggregate(new VisualPerfectPitchExercise(), targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, pianoKeyboardAggregates);
-    }
-
-    public VisualPerfectPitchConfigAggregate createDeepCopy(VisualPerfectPitchConfigAggregate aggregate) {
-        var pianoKeyboardAggregates = aggregate.pianoKeyboardAggregates.values().toArray(PianoKeyboardAggregate[]::new);
-        var pianoKeyboardAggregatesCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregates);
-        return create(aggregate.getTargetNumberOfPuzzles(), aggregate.getStatsRecording(), aggregate.getNormalizedNotesForPuzzle(), aggregate.getNormalizedRootNote(), aggregate.getInputMode(), pianoKeyboardAggregatesCopy);
+    public VisualPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
+        return new VisualPerfectPitchConfigAggregate(new VisualPerfectPitchExercise(), targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano, pianoKeyboardAggregates);
     }
 }

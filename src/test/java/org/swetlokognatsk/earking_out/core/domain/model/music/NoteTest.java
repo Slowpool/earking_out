@@ -1,8 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music;
 
 import static org.junit.Assert.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.FIRST_NOTE_NUMBER;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.LAST_NOTE_NUMBER;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;

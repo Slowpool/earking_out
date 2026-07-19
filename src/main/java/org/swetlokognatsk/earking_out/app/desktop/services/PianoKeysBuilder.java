@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.services;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import java.util.Iterator;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.BlackPianoKey;

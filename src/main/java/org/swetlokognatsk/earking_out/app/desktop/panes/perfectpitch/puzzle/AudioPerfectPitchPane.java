@@ -3,17 +3,14 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
-import org.swetlokognatsk.earking_out.app.desktop.events.session.HearAgainEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
-import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
-import org.swetlokognatsk.earking_out.core.ports.DI;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -22,7 +19,6 @@ import javafx.scene.layout.VBox;
 public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionService> {
 
     protected final PianoKeyboard pianoKeyboardForGuessing;
-    protected final SessionAggregatesFactory sessionAggregatesFactory;
 
     // it is executed in super()
     protected Pane buildInnerPuzzlePane(final AudioPerfectPitchConfigDTO puzzleConfigDto) {
@@ -41,7 +37,6 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         super(sessionId, puzzleConfigDto, width, height, sessionService);
 
         pianoKeyboardForGuessing = (PianoKeyboard) innerPuzzlePane.getChildren().get(1);
-        sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 
     protected Button buildHintReplayButton() {

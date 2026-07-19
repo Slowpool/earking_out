@@ -3,33 +3,16 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 
-public final class SessionId extends ValueObject implements Serializable {
+/** Value object */
+public record SessionId(UUID id) implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public final UUID id;
-
-    public SessionId(final UUID id) {
-        this.id = Objects.requireNonNull(id);
+    public SessionId {
+        Objects.requireNonNull(id);
     }
 
     public static SessionId random() {
         return new SessionId(UUID.randomUUID());
-    }
-
-    public int hashCode() {
-        return id.hashCode();
-    }
-
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof SessionId)) {
-            return false;
-        }
-        var other = (SessionId) obj;
-        return id.equals(other.id);
     }
 }

@@ -15,30 +15,52 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
     public static final String NORMALIZED_NOTES_FOR_PUZZLE_PROP = "normalizedNotesForPuzzle";
     public static final String NORMALIZED_ROOT_NOTE_PROP = "normalizedRootNote";
     public static final String INPUT_MODE_PROP = "inputMode";
+    public static final String SOUNDLESS_GUESSING_PIANO_PROP = "soundlessGuessingPiano";
 
-    // TODO replace getters with read-only types
     protected PianoKeyNumber[] normalizedNotesForPuzzle;
     protected PianoKeyNumber normalizedRootNote;
     protected PerfectPitchInputMode inputMode;
+    protected boolean soundlessGuessingPiano;
 
     public PianoKeyNumber[] getNormalizedNotesForPuzzle() {
-        return normalizedNotesForPuzzle;
+        return Arrays.copyOf(normalizedNotesForPuzzle, normalizedNotesForPuzzle.length);
+    }
+
+    protected void setNormalizedNotesForPuzzle(final PianoKeyNumber[] normalizedNotesForPuzzle) {
+        this.normalizedNotesForPuzzle = normalizedNotesForPuzzle;
     }
 
     public PianoKeyNumber getNormalizedRootNote() {
         return normalizedRootNote;
     }
 
+    protected void setNormalizedRootNote(final PianoKeyNumber normalizedRootNote) {
+        this.normalizedRootNote = normalizedRootNote;
+    }
+
     public PerfectPitchInputMode getInputMode() {
         return inputMode;
     }
 
-    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
+    protected void setInputMode(final PerfectPitchInputMode inputMode) {
+        this.inputMode = inputMode;
+    }
+
+    public boolean getSoundlessGuessingPiano() {
+        return soundlessGuessingPiano;
+    }
+
+    protected void setSoundlessGuessingPiano(final boolean soundlessGuessingPiano) {
+        this.soundlessGuessingPiano = soundlessGuessingPiano;
+    }
+
+    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
         super(exercise, targetNumberOfPuzzles, statsRecording, pianoKeyboardAggregates);
 
-        this.normalizedNotesForPuzzle = Objects.requireNonNull(normalizedNotesForPuzzle);
-        this.normalizedRootNote = normalizedRootNote;
-        this.inputMode = Objects.requireNonNull(inputMode);
+        setNormalizedNotesForPuzzle(Objects.requireNonNull(normalizedNotesForPuzzle));
+        setNormalizedRootNote(normalizedRootNote);
+        setInputMode(Objects.requireNonNull(inputMode));
+        setSoundlessGuessingPiano(soundlessGuessingPiano);
     }
 
     public List<String> getErrors() {
@@ -54,13 +76,13 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
     @Override
     protected void updatePropertyViaPianoKeyboard(final String propertyName, final PianoKeyboardAggregate pianoKeyboard) {
         switch (propertyName) {
-        case PerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP:
-            normalizedRootNote = pianoKeyboard.getSelectedKeyNumbers()[0];
+        case NORMALIZED_ROOT_NOTE_PROP:
+            var normalizedRootNote = pianoKeyboard.getSelectedKeyNumbers()[0];
+            updateConfigSpecificProperty(NORMALIZED_ROOT_NOTE_PROP, normalizedRootNote);
             break;
-        case PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP:
+        case NORMALIZED_NOTES_FOR_PUZZLE_PROP:
             var selectedKeyNumbers = pianoKeyboard.getSelectedKeyNumbers();
-            var selectedKeyNumbersCopy = Arrays.copyOf(selectedKeyNumbers, selectedKeyNumbers.length);
-            normalizedNotesForPuzzle = selectedKeyNumbersCopy;
+            updateConfigSpecificProperty(NORMALIZED_NOTES_FOR_PUZZLE_PROP, selectedKeyNumbers);
             break;
         default:
             throw new RuntimeException();
@@ -69,15 +91,22 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
 
     protected void updateConfigSpecificProperty(final String propertyName, final Object propertyValue) {
         switch (propertyName) {
-        // TODO how 'bout reflection?
-        case NORMALIZED_ROOT_NOTE_PROP: {
-            normalizedRootNote = (PianoKeyNumber) propertyValue;
+        case NORMALIZED_ROOT_NOTE_PROP:
+            var normalizedRootNote = (PianoKeyNumber) propertyValue;
+            setNormalizedRootNote(normalizedRootNote);
             break;
-        }
-        case NORMALIZED_NOTES_FOR_PUZZLE_PROP: {
-            normalizedNotesForPuzzle = (PianoKeyNumber[]) propertyValue;
+        case NORMALIZED_NOTES_FOR_PUZZLE_PROP:
+            var normalizedNotesForPuzzle = (PianoKeyNumber[]) propertyValue;
+            var normalizedNotesForPuzzleCopy = Arrays.copyOf(normalizedNotesForPuzzle, normalizedNotesForPuzzle.length);
+            setNormalizedNotesForPuzzle(normalizedNotesForPuzzleCopy);
             break;
-        }
+        case INPUT_MODE_PROP:
+            var inputMode = (PerfectPitchInputMode) propertyValue;
+            setInputMode(inputMode);
+            break;
+        case SOUNDLESS_GUESSING_PIANO_PROP:
+            setSoundlessGuessingPiano((boolean) propertyValue);
+            break;
         default:
             throw new IllegalArgumentException("unknown puzzle config property: " + propertyName);
         }

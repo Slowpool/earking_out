@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Entity;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 
@@ -10,8 +11,9 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
 
     public final PianoKeyNumber keyNumber;
     public final PianoKeyColor color;
-    private final PianoKeyMode mode;
+    public final PianoKeyMode mode;
     private boolean isSelected;
+    private PianoKeyboardSoundMode soundMode;
     private boolean isPressed;
 
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
@@ -20,35 +22,41 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         return isSelected;
     }
 
-    protected void setIsSelected(boolean value) {
-        isSelected = value;
+    protected void setIsSelected(final boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
-    protected void setIsPressed(final boolean value) {
-        isPressed = value;
+    public void setSoundMode(final PianoKeyboardSoundMode soundMode) {
+        this.soundMode = soundMode;
+    }
+
+    protected PianoKeyboardSoundMode getSoundMode() {
+        return soundMode;
     }
 
     public boolean getIsPressed() {
         return isPressed;
     }
 
-    public PianoKeyMode getMode() {
-        return mode;
+    protected void setIsPressed(final boolean isPressed) {
+        this.isPressed = isPressed;
     }
 
     // TODO refactoring SoundPlayer via PianoKeyPressed domain event
     // injecting SoundPlayer is DDD pure-domain-entity violation. this approach is justified by redandant complexity the domain event would add here. also testability is simpler. also SoundPlayer is not supposed to do any write actions, only read-only ones. proper alternative to make sound on piano key press is via PianoKeyPressed domain event handler.
-    public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService, final PianoKeySoundsPlayer pianoKeySoundsPlayer) {
+    public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyboardSoundMode soundMode, final PianoKeyColorService colorService, final PianoKeySoundsPlayer pianoKeySoundsPlayer) {
         super(keyNumber);
 
         Objects.requireNonNull(colorService);
 
         this.keyNumber = Objects.requireNonNull(keyNumber);
         this.mode = Objects.requireNonNull(mode);
+        setIsSelected(isSelected);
+        setSoundMode(Objects.requireNonNull(soundMode));
+
         this.color = colorService.getColor(keyNumber);
         this.pianoKeySoundsPlayer = Objects.requireNonNull(pianoKeySoundsPlayer);
 
-        setIsSelected(isSelected);
     }
 
     public void press() {
@@ -89,11 +97,15 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
     }
 
     protected void playSound() {
-        pianoKeySoundsPlayer.stopAndPlay(keyNumber);
+        if (soundMode == PianoKeyboardSoundMode.USUAL) {
+            pianoKeySoundsPlayer.stopAndPlay(keyNumber);
+        }
     }
 
     protected void stopSound() {
-        pianoKeySoundsPlayer.stop(keyNumber);
+        if (soundMode == PianoKeyboardSoundMode.USUAL) {
+            pianoKeySoundsPlayer.stop(keyNumber);
+        }
     }
 
     public void select() {

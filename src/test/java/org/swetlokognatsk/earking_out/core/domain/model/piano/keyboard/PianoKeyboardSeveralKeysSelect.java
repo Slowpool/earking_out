@@ -3,12 +3,13 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
 public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
-        return PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER;
+        return PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER;
     }
 
     @Test

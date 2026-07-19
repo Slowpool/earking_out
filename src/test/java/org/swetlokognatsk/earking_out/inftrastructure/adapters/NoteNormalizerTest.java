@@ -8,11 +8,11 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.music.NoteNormalizer;
 
 public final class NoteNormalizerTest {
-    static NoteNormalizer noteNormalizer;
+    static NotesNormalizingService noteNormalizer;
     static Note[] notes = NoteTest.notes;
     static PianoKeyNumber[] normalizedValues = NoteTest.normalizedValues;
 
@@ -21,14 +21,14 @@ public final class NoteNormalizerTest {
         noteNormalizer = getNoteNormalizer();
     }
 
-    static NoteNormalizer getNoteNormalizer() {
-        return DI.get(NoteNormalizer.class);
+    static NotesNormalizingService getNoteNormalizer() {
+        return DI.get(NotesNormalizingService.class);
     }
 
     @Test
     public void gettingNoteNormalizer() {
         assertNotNull(getNoteNormalizer());
-        assertTrue(noteNormalizer instanceof NoteNormalizer);
+        assertTrue(noteNormalizer instanceof NotesNormalizingService);
     }
 
     @Test

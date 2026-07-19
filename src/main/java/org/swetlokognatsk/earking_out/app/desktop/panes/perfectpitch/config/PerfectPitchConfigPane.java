@@ -13,6 +13,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -28,6 +29,8 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
 
     protected final ToggleGroup inputModeToggleGroup;
     protected final VBox inputModeBox;
+
+    protected final CheckBox soundlessGuessingPianoCheckBox;
 
     protected double getPianoKeyboardHeight() {
         return getHeight() / 4;
@@ -49,6 +52,8 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         inputModeToggleGroup = new ToggleGroup();
         var inputModeRadioButtons = buildInputModeRadioButtons(inputModeToggleGroup, puzzleConfigDto.inputMode);
         inputModeBox = buildInputModeBox(inputModeRadioButtons);
+
+        soundlessGuessingPianoCheckBox = buildSoundlessGuessingPianoCheckBox(puzzleConfigDto.soundlessGuessingPiano);
 
         addCustomFields();
         addStartButton();
@@ -109,8 +114,15 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         return inputModeBox;
     }
 
+    protected CheckBox buildSoundlessGuessingPianoCheckBox(final boolean soundlessGuessingPiano) {
+        var checkBox = new CheckBox("guessing piano is soundless");
+        checkBox.setSelected(soundlessGuessingPiano);
+        checkBox.selectedProperty().addListener(createConfigPropertyUpadtingEvent(SOUNDLESS_GUESSING_PIANO_PROP));
+        return checkBox;
+    }
+
     protected void addCustomFields() {
-        getChildren().addAll(notesPickerKeyboardBox, rootNoteBox, inputModeBox);
+        getChildren().addAll(notesPickerKeyboardBox, rootNoteBox, inputModeBox, soundlessGuessingPianoCheckBox);
     }
 
     protected void handleRadioButtonSelected(ActionEvent e) {
@@ -147,6 +159,10 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
                 throw new IllegalStateException("several keys were selected, although only one key was supposed to be selected");
             }
             yield set.iterator().next();
+        }
+        case SOUNDLESS_GUESSING_PIANO_PROP -> {
+            var soundlessGuessingPiano = (Boolean)newValue;
+            yield soundlessGuessingPiano.booleanValue();
         }
         default -> throw new IllegalArgumentException("unknown custom property: " + configProperty);
         };

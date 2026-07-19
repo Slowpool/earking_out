@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generato
 
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import java.util.Arrays;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
@@ -34,7 +35,7 @@ public class RandomAudioPerfectPitchSolutionGeneratorTest {
     }
 
     protected static AudioPerfectPitchConfigAggregate createAnyPuzzleConfig(final PianoKeyNumber[] normalizedNotesForPuzzle) {
-        return configFactory.create(0, false, normalizedNotesForPuzzle, null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, new PianoKeyboardAggregate[0]);
+        return configFactory.create(0, false, normalizedNotesForPuzzle, null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false, new PianoKeyboardAggregate[0]);
     }
 
     @Test

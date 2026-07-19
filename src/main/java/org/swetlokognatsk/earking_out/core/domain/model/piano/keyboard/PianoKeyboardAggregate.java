@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,12 +8,13 @@ import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.ports.DI;
+import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
 public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private static final long serialVersionUID = 1L;
@@ -23,6 +23,8 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     protected final PianoKeyboardMode mode;
     protected final Map<PianoKeyNumber, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
+
+    protected PianoKeyboardSoundMode soundMode;
     protected PianoKey pressedKey;
 
     public final PianoKeyboardId getPianoKeyboardId() {
@@ -50,6 +52,14 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return selectedKeys;
     }
 
+    public PianoKeyboardSoundMode getSoundMode() {
+        return soundMode;
+    }
+
+    protected void setSoundMode(final PianoKeyboardSoundMode soundMode) {
+        this.soundMode = soundMode;
+    }
+
     public final PianoKeyNumber getPressedPianoKeyNumber() {
         return pressedKey == null ? null : pressedKey.keyNumber;
     }
@@ -62,36 +72,37 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return mode.isTouchMode();
     }
 
-    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers) {
+    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers, final PianoKeyboardSoundMode soundMode) {
         super(id);
 
         Objects.requireNonNull(selectedKeyNumbers);
 
         mode = getModeById(id);
-        pianoKeys = buildPianoKeys(selectedKeyNumbers);
+        setSoundMode(soundMode);
+        pianoKeys = buildPianoKeys(selectedKeyNumbers, soundMode);
     }
 
     protected static PianoKeyboardMode getModeById(final PianoKeyboardId id) {
         return switch (id) {
-        case ROOT_NOTE_PICKER -> PianoKeyboardMode.ONE_KEY_SELECT;
-        case PERFECT_PITCH_NOTES_PICKER -> PianoKeyboardMode.SEVERAL_KEYS_SELECT;
-        case PERFECT_PITCH_NOTES_GUESSING -> PianoKeyboardMode.ONE_KEY_TOUCH;
+        case AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER -> PianoKeyboardMode.ONE_KEY_SELECT;
+        case AUDIO_PERFECT_PITCH_NOTES_PICKER -> PianoKeyboardMode.SEVERAL_KEYS_SELECT;
+        case AUDIO_PERFECT_PITCH_NOTES_GUESSING -> PianoKeyboardMode.ONE_KEY_TOUCH;
         default -> throw new RuntimeException("unknown piano keyboard id: " + id);
         };
     }
 
-    private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeyNumber[] selectedKeyNumbers) {
+    private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeyNumber[] selectedKeyNumbers, final PianoKeyboardSoundMode soundMode) {
         validateKeyNumbersToSelect(selectedKeyNumbers);
 
-        final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(Constants.PIANO_KEYS_NUMBER);
+        final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(PIANO_KEYS_NUMBER);
         final PianoKeyMode pianoKeyMode = getPianoKeyMode();
-        // TODO it seems awkward to get factory from DI here
+
         var pianoKeysFactory = DI.get(PianoKeysFactory.class);
 
-        PianoKeysHelper.forEachKey((PianoKeyNumber keyNumber) -> {
+        PianoKeyNumber.forEachKey((PianoKeyNumber keyNumber) -> {
             final boolean isSelected = ArrayUtils.contains(selectedKeyNumbers, keyNumber);
 
-            final var pianoKey = pianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected);
+            final var pianoKey = pianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected, soundMode);
             pianoKeys.put(keyNumber, pianoKey);
 
             tryAddAsSelected(pianoKey);
@@ -163,7 +174,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         if (mode == PianoKeyboardMode.ONE_KEY_SELECT) {
             if (moreThanOnePianoKeyIsSelected()) {
                 throw new IllegalStateException("several keys were selected in one key select mode");
-                // TODO what if the same key is pressed?
             } else if (onePianoKeyIsSelected()) {
                 unselectPressedKey();
             }
@@ -213,9 +223,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         validatePianoKeyToRelease();
 
         pressedKey.release();
-        if (isTouchMode()) {
-            selectedKeys.remove(pressedKey);
-        }
         applySelectingLogicAfterRelease(pressedKey);
 
         pressedKey = null;

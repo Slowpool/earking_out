@@ -1,0 +1,56 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="wWhb3G6H8GOkBOZz7c-9">
+    <mxGraphModel dx="970" dy="487" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-5" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="380" width="470" x="250" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="380" width="400" x="50" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-7" edge="1" parent="1" source="05Nq-ApbXSexw3fCUFYJ-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="05Nq-ApbXSexw3fCUFYJ-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-11" edge="1" parent="1" source="05Nq-ApbXSexw3fCUFYJ-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="05Nq-ApbXSexw3fCUFYJ-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-2" parent="1" style="html=1;whiteSpace=wrap;" value="SessionAggregateRoot" vertex="1">
+          <mxGeometry height="40" width="140" x="170" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-8" edge="1" parent="1" source="05Nq-ApbXSexw3fCUFYJ-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="05Nq-ApbXSexw3fCUFYJ-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-12" edge="1" parent="1" source="05Nq-ApbXSexw3fCUFYJ-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="05Nq-ApbXSexw3fCUFYJ-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-3" parent="1" style="html=1;whiteSpace=wrap;" value="PuzzleConfigAggregateRoot" vertex="1">
+          <mxGeometry height="40" width="160" x="410" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-6" parent="1" style="html=1;whiteSpace=wrap;" value="PianoKeyboardAggregate" vertex="1">
+          <mxGeometry height="40" width="150" x="270" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="05Nq-ApbXSexw3fCUFYJ-10" parent="1" style="html=1;whiteSpace=wrap;" value="PianoKeyNumber" vertex="1">
+          <mxGeometry height="40" width="150" x="270" y="440" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
