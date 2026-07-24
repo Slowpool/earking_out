@@ -36,6 +36,7 @@ public final class PuzzleConfigService {
         }
         // TODO just Exception?
         catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 

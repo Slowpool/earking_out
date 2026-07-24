@@ -1,5 +1,8 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.support.GenericApplicationContext;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.DomainEventsFactory;
@@ -30,8 +33,8 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.SpringEventBus;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.SpringEventPublisher;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventBus;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventPublisher;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.AudioClipSoundHarmonicIntervalHintDemonstrator;
@@ -68,7 +71,23 @@ public final class DI {
     protected static EventPublisher eventPublisher;
     protected static EventBus eventBus;
 
+    public static ApplicationContext context;
+
     private DI() {
+    }
+
+    public static void setContext(ApplicationContext context) {
+        DI.context = context;
+        initBeans();
+    }
+
+    protected static void initBeans() {
+        // TODO this cast seems awkward
+        var genericContext = (GenericApplicationContext) context;
+
+        // TODO how to make it to be singleton?
+        genericContext.registerBean(AudioClipPianoKeySoundsPlayer.class, () -> new AudioClipPianoKeySoundsPlayer());
+        genericContext.registerBean(PianoKeySoundsPlayer.class, () -> genericContext.getBean(AudioClipPianoKeySoundsPlayer.class));
     }
 
     public static <T> T get(Class<T> someClass, Object... args) {
@@ -214,7 +233,7 @@ public final class DI {
             return (T) eventPublisher;
 
         } else if (className.equals(SpringEventPublisher.class.getName())) {
-            return (T) new SpringEventPublisher();
+            return (T) new SpringEventPublisher((ApplicationEventPublisher) context);
 
         } else if (className.equals(EventBus.class.getName())) {
             if (eventBus == null) {

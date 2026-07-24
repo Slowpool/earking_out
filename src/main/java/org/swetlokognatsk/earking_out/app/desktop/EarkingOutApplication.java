@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.app.desktop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
@@ -36,8 +38,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-// @SpringBootConfiguration
-public final class EarkingOutApplication extends Application {
+@SpringBootApplication(scanBasePackages = {"org.swetlokognatsk.earking_out.app.desktop", "org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring"})
+public class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
     private static final int WIDTH = 1920;
@@ -48,11 +50,21 @@ public final class EarkingOutApplication extends Application {
     private final Scene mainScene;
 
     public static void main(String[] args) {
-        // TODO wash away this hack after setting up the spring boot
-        DI.env = DI.PROD_ENV;
-        // SpringApplication.run(EarkingOutApplication.class, args);
+        // TODO bootstrap refactoring
+        var context = runSpringApp(args);
+        initDI(context);
         registerDomainEventHandlers();
         launch();
+    }
+
+    protected static void initDI(final ApplicationContext context) {
+        // TODO wash away this hack after setting up the spring boot
+        DI.env = DI.PROD_ENV;
+        DI.setContext(context);
+    }
+
+    protected static ApplicationContext runSpringApp(String[] args) {
+        return SpringApplication.run(EarkingOutApplication.class, args);
     }
 
     // TODO refactoring, put in utility class?
@@ -63,6 +75,7 @@ public final class EarkingOutApplication extends Application {
     }
 
     protected static void handlePianoKeyPressing(final PianoKeyPressedEvent e) {
+        // TODO wait, it should be moved to handler with `@Component` annotation
         var pianoKeySoundsPlayer = DI.get(PianoKeySoundsPlayer.class);
         pianoKeySoundsPlayer.play(e.pianoKeyNumber);
     }
