@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
@@ -72,6 +73,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return mode.isTouchMode();
     }
 
+    // TODO cut soundMode. instead it should work this way: on PianoKeyPressedEvent the PianoKeySoundsPlayer must query the corresponding config property and check whether soundless mode is set or not
     public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers, final PianoKeyboardSoundMode soundMode) {
         super(id);
 
@@ -152,6 +154,9 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         applySelectingLogicAfterPress(pianoKey);
 
         pressedKey = pianoKey;
+
+        var pianoKeyPressedEvent = getDomainEventsFactory().createPianoKeyPressedEvent(keyNumber);
+        addEvent(pianoKeyPressedEvent);
     }
 
     protected void validatePianoKeyToPress(final PianoKeyNumber keyNumber) {

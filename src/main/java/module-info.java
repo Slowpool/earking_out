@@ -5,6 +5,7 @@ module org.swetlokognatsk {
     requires javafx.controls;
     requires javafx.media;
     requires org.apache.commons.lang3;
+    requires spring.boot;
 
     exports org.swetlokognatsk.earking_out.app.desktop;
 }

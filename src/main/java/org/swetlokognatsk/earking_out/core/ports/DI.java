@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.ports;
 
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
@@ -17,6 +18,8 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKey
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
+import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.AudioPerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
@@ -27,6 +30,8 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.SpringEventBus;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.SpringEventPublisher;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.AudioClipSoundHarmonicIntervalHintDemonstrator;
@@ -59,6 +64,9 @@ public final class DI {
     protected static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
     protected static MockPianoKeySoundsPlayer mockPianoKeySoundsPlayer;
     protected static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
+    protected static DomainEventsFactory domainEventsFactory;
+    protected static EventPublisher eventPublisher;
+    protected static EventBus eventBus;
 
     private DI() {
     }
@@ -193,6 +201,30 @@ public final class DI {
         } else if (className.equals(StatsPanesFactory.class.getName())) {
             return (T) new StatsPanesFactory(get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class));
 
+        } else if (className.equals(DomainEventsFactory.class.getName())) {
+            if (domainEventsFactory == null) {
+                domainEventsFactory = new DomainEventsFactory();
+            }
+            return (T) domainEventsFactory;
+
+        } else if (className.equals(EventPublisher.class.getName())) {
+            if (eventPublisher == null) {
+                eventPublisher = get(SpringEventPublisher.class);
+            }
+            return (T) eventPublisher;
+
+        } else if (className.equals(SpringEventPublisher.class.getName())) {
+            return (T) new SpringEventPublisher();
+
+        } else if (className.equals(EventBus.class.getName())) {
+            if (eventBus == null) {
+                eventBus = get(SpringEventBus.class);
+            }
+            return (T) eventBus;
+
+        } else if (className.equals(SpringEventBus.class.getName())) {
+            return (T) new SpringEventBus();
+
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
         }
@@ -208,5 +240,8 @@ public final class DI {
         audioClipPianoKeySoundsPlayer = null;
         mockPianoKeySoundsPlayer = null;
         inMemoryAudioPerfectPitchSessionRepository = null;
+        domainEventsFactory = null;
+        eventPublisher = null;
+        eventBus = null;
     }
 }

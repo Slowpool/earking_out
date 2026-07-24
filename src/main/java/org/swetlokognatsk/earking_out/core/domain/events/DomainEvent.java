@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public abstract class DomainEvent {
-    final LocalDateTime timestamp;
+    public final LocalDateTime timestamp;
 
     public DomainEvent(final LocalDateTime timestamp) {
         this.timestamp = Objects.requireNonNull(timestamp, "Timestamp cannot be null");

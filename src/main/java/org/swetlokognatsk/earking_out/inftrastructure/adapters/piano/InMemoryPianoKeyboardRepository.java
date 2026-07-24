@@ -12,9 +12,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
+import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
-public abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdapter {
+
+abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdapter {
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
@@ -55,8 +58,13 @@ public abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardSt
         // ensuring it exists (keyboards are initialized in initKeyboards(). further no new keyboards can be created)
         getPianoKeyboardAggregate(pianoKeyboardId);
 
+        var events = pianoKeyboardAggregate.releaseEvents();
+
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregate);
         pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboardCopy);
+        // TODO publishEvents() method? abstract Repository class?
+        var eventPublisher = DI.get(EventPublisher.class);
+        eventPublisher.publish(events);
     }
 
     public PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId) {

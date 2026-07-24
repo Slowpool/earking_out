@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringBootConfiguration;
 import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
@@ -9,6 +11,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
@@ -20,6 +23,10 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
+import org.swetlokognatsk.earking_out.core.ports.events.EventType;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -29,6 +36,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+// @SpringBootConfiguration
 public final class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
@@ -42,7 +50,21 @@ public final class EarkingOutApplication extends Application {
     public static void main(String[] args) {
         // TODO wash away this hack after setting up the spring boot
         DI.env = DI.PROD_ENV;
+        // SpringApplication.run(EarkingOutApplication.class, args);
+        registerDomainEventHandlers();
         launch();
+    }
+
+    // TODO refactoring, put in utility class?
+    protected static void registerDomainEventHandlers() {
+        var eventBus = DI.get(EventBus.class);
+
+        eventBus.subscribe(new EventType<PianoKeyPressedEvent>(), EarkingOutApplication::handlePianoKeyPressing);
+    }
+
+    protected static void handlePianoKeyPressing(final PianoKeyPressedEvent e) {
+        var pianoKeySoundsPlayer = DI.get(PianoKeySoundsPlayer.class);
+        pianoKeySoundsPlayer.play(e.pianoKeyNumber);
     }
 
     public EarkingOutApplication() {

@@ -63,6 +63,7 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         validatePressing();
 
         setIsPressed(true);
+        // TODO refactoring via event
         playSound();
     }
 
