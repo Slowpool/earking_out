@@ -17,7 +17,7 @@ import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
 
-abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdapter {
+abstract class InMemoryPianoKeyboardRepository extends AggregateRepository implements PianoKeyboardStorageAdapter {
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
@@ -32,8 +32,7 @@ abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAd
     protected void initPianoKeyboards() {
         PianoKeyboardAggregate pianoKeyboard;
         for (var pianoKeyboardId : getPianoKeyboardIds()) {
-            // TODO pull soundMode from puzzleConfig
-            pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId, PianoKeyboardSoundMode.SOUNDLESS);
+            pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId);
             pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
         }
     }
@@ -53,18 +52,17 @@ abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAd
         return pianoKeyboardCopy;
     }
 
+    // TODO generalize the whole set/get logic into `InMemoryAggregateRepository` abstract class
     public void save(final PianoKeyboardAggregate pianoKeyboardAggregate) {
         var pianoKeyboardId = pianoKeyboardAggregate.getPianoKeyboardId();
         // ensuring it exists (keyboards are initialized in initKeyboards(). further no new keyboards can be created)
         getPianoKeyboardAggregate(pianoKeyboardId);
 
-        var events = pianoKeyboardAggregate.releaseEvents();
+        var events = pianoKeyboardAggregate.flushEvents();
 
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregate);
         pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboardCopy);
-        // TODO publishEvents() method? abstract Repository class?
-        var eventPublisher = DI.get(EventPublisher.class);
-        eventPublisher.publish(events);
+        
     }
 
     public PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId) {

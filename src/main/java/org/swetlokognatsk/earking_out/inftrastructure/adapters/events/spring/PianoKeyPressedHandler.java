@@ -20,7 +20,7 @@ public class PianoKeyPressedHandler {
     public void handlePianoKeyPressedEvent(final PianoKeyPressedEvent event) {
         var pianoKeyNumber = event.pianoKeyNumber;
         if (shouldPlaySound(pianoKeyNumber)) {
-            pianoKeySoundsPlayer.play(pianoKeyNumber);
+            pianoKeySoundsPlayer.stopAndPlay(pianoKeyNumber);
         }
     }
 

@@ -5,13 +5,21 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
+@SpringBootTest
 public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, TestInMemoryAllPianoKeyboardRepository> {
+    // TODO figure out how to get springContext
+    @Autowired
+    private ApplicationContext springContext;
+    
     protected TestInMemoryAllPianoKeyboardRepository repository;
 
     protected PianoKeyboardAggregate getSomeAggregate() {
@@ -40,6 +48,7 @@ public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryReposi
 
     @Before
     public void setup() {
+        DI.setContext(springContext);
         DI.deleteSingletons();
         repository = DI.get(TestInMemoryAllPianoKeyboardRepository.class);
     }

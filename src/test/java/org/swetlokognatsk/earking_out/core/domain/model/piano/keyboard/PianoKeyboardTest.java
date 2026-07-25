@@ -25,9 +25,4 @@ abstract class PianoKeyboardTest {
     protected PianoKeyboardAggregate createPianoKeyboard(final PianoKeyNumber[] selectedKeys) {
         return PianoKeyboardTestHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode, selectedKeys);
     }
-
-    protected PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardSoundMode soundMode) {
-        return PianoKeyboardTestHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode, soundMode);
-    }
-
 }

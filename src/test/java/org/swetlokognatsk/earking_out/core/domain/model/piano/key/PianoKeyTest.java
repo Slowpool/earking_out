@@ -8,7 +8,6 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 
 public final class PianoKeyTest {
@@ -83,7 +82,8 @@ public final class PianoKeyTest {
 
     @Test
     public void playSoundOnPress() {
-        var pianoKey = new PianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH, false, PianoKeyboardSoundMode.USUAL, DI.get(PianoKeyColorService.class), mockSoundPlayer);
+        // TODO remake according to new `PianoKeyPressedEvent` domain event
+        var pianoKey = new PianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH, false, DI.get(PianoKeyColorService.class));
         pianoKey.press();
         assertTrue(mockSoundPlayer.stopAndPlayIsPressed);
     }

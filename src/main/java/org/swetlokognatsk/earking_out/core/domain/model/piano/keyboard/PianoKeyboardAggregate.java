@@ -25,7 +25,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     protected final Map<PianoKeyNumber, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
 
-    protected PianoKeyboardSoundMode soundMode;
     protected PianoKey pressedKey;
 
     public final PianoKeyboardId getPianoKeyboardId() {
@@ -53,14 +52,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return selectedKeys;
     }
 
-    public PianoKeyboardSoundMode getSoundMode() {
-        return soundMode;
-    }
-
-    protected void setSoundMode(final PianoKeyboardSoundMode soundMode) {
-        this.soundMode = soundMode;
-    }
-
     public final PianoKeyNumber getPressedPianoKeyNumber() {
         return pressedKey == null ? null : pressedKey.keyNumber;
     }
@@ -73,15 +64,13 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return mode.isTouchMode();
     }
 
-    // TODO cut soundMode. instead it should work this way: on PianoKeyPressedEvent the PianoKeySoundsPlayer must query the corresponding config property and check whether soundless mode is set or not
-    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers, final PianoKeyboardSoundMode soundMode) {
+    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers) {
         super(id);
 
         Objects.requireNonNull(selectedKeyNumbers);
 
         mode = getModeById(id);
-        setSoundMode(soundMode);
-        pianoKeys = buildPianoKeys(selectedKeyNumbers, soundMode);
+        pianoKeys = buildPianoKeys(selectedKeyNumbers);
     }
 
     protected static PianoKeyboardMode getModeById(final PianoKeyboardId id) {
@@ -93,7 +82,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         };
     }
 
-    private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeyNumber[] selectedKeyNumbers, final PianoKeyboardSoundMode soundMode) {
+    private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeyNumber[] selectedKeyNumbers) {
         validateKeyNumbersToSelect(selectedKeyNumbers);
 
         final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(PIANO_KEYS_NUMBER);
@@ -104,7 +93,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         PianoKeyNumber.forEachKey((PianoKeyNumber keyNumber) -> {
             final boolean isSelected = ArrayUtils.contains(selectedKeyNumbers, keyNumber);
 
-            final var pianoKey = pianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected, soundMode);
+            final var pianoKey = pianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected);
             pianoKeys.put(keyNumber, pianoKey);
 
             tryAddAsSelected(pianoKey);

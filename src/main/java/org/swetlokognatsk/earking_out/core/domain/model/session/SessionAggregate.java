@@ -111,8 +111,11 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         P puzzle = getPuzzlesFactory().create(puzzleConfigDto.exercise);
         setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
-        // TODO refactoring via domain event NewPuzzleDisplayed
-        demonstrateHint();
+
+        var newPuzzleEvent = getDomainEventsFactory().createNewPuzzleDisplayedEvent(puzzle);
+        addEvent(newPuzzleEvent);
+        // TODO remove
+        // demonstrateHint();
     }
 
     public void guess(final S guess) {
@@ -163,7 +166,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setState(SessionStates.ABORTED);
     }
 
-    // TODO it should be in specific domain-event handler, not here.
+    // TODO remove
     protected void demonstrateHint() {
         var hintDemonstrator = DI.get(HintDemonstrator.class);
         // TODO what to do with warning

@@ -13,6 +13,7 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
     protected final SessionAggregatesFactory sessionAggregatesFactory;
 
     protected abstract void loadDependentAggregates(final SA sessionAggregate);
+
     protected abstract void saveDependentAggregates(final SA sessionAggregate);
 
     public InMemorySessionRepository(final SessionAggregatesFactory sessionAggregatesFactory) {
@@ -30,8 +31,12 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
     }
 
     public void save(SA sessionAggregate) {
+        var events = sessionAggregate.flushEvents();
+
         sessionAggregate = (SA) sessionAggregatesFactory.createDeepCopy(sessionAggregate);
         saveDependentAggregates(sessionAggregate);
         sessionAggregates.put(sessionAggregate.getId(), sessionAggregate);
+
+
     }
 }

@@ -16,7 +16,8 @@ public final class PianoKeyboardSoundModeTest extends PianoKeyboardTest {
 
     @Test
     public void allKeysAreSoundlessForSoundlessMode() {
-        var pianoKeyboard = createPianoKeyboard(PianoKeyboardSoundMode.SOUNDLESS);
+        // TODO remake according to new `PianoKeyPressedEvent` domain event
+        var pianoKeyboard = createPianoKeyboard();
         PianoKeyNumber.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
             pianoKeyboard.touchKey(pianoKeyNumber);
         });
@@ -29,6 +30,7 @@ public final class PianoKeyboardSoundModeTest extends PianoKeyboardTest {
 
     @Test
     public void allKeysMakeSoundForUsualMode() {
+        // TODO remake according to new `PianoKeyPressedEvent` domain event
         PianoKeyNumber.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
             var pianoKeyboard = createPianoKeyboard(PianoKeyboardSoundMode.USUAL);
 

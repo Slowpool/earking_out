@@ -25,7 +25,7 @@ public abstract class Aggregate<ID> extends Entity<ID> implements Model {
         events.add(event);
     }
 
-    public final List<DomainEvent> releaseEvents() {
+    public final List<DomainEvent> flushEvents() {
         var eventsCopy = List.copyOf(events);
         events.clear();
         return eventsCopy;
