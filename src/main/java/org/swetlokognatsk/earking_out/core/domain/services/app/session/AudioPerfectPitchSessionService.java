@@ -38,7 +38,7 @@ public final class AudioPerfectPitchSessionService extends SessionService<AudioP
 
     public void hearAgain(final SessionId sessionId) {
         var session = (AudioPerfectPitchSessionAggregate) sessionRepository.get(sessionId);
-        session.hearAgain();
+        session.demonstrateHintAgain();
         sessionRepository.save(session);
     }
 }

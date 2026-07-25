@@ -3,8 +3,8 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.assertNoSelectedKeys;
-
 import org.junit.*;
+import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
@@ -32,6 +32,12 @@ public final class AudioPerfectPitchSessionAggregateTest {
     protected AudioPerfectPitchSessionAggregate createAggregate() {
         setFakeSolution(SOLUTION);
         return sessionAggregatesFactory.create(getExercise());
+    }
+
+    protected AudioPerfectPitchSessionAggregate createAggregateAndFlushEvents() {
+        var aggregate = createAggregate();
+        aggregate.flushEvents();
+        return aggregate;
     }
 
     protected void setFakeSolution(final AudioPerfectPitchSolution fakeSolution) {
@@ -106,15 +112,39 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void demonstrateHintAfterAbort() {
-        // // TODO check that 1. hearAgain() generates event 2. event's puzzle corresponds to the aggregate's puzzle 3. hearAgain() gives error after abort()
-        // var aggregate = createAggregateAndAbort();
+    public void demonstrateHintGivesCorrectEvent() {
+        var aggregate = createAggregateAndFlushEvents();
 
-        // try {
-        //     aggregate.demonstrateHint();
-        //     fail();
-        // } catch (IllegalStateException e) {
-        // }
+        aggregate.demonstrateHintAgain();
+        var events = aggregate.flushEvents();
+        assertEquals(1, events.size());
+
+        var event = events.getFirst();
+        assertEquals(HintRepeatingRequestedEvent.class, event.getClass());
+    }
+
+    @Test
+    public void demonstrateHintGivesEventWithCorrespondingPuzzle() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        aggregate.demonstrateHintAgain();
+        var events = aggregate.flushEvents();
+        var event = (HintRepeatingRequestedEvent) events.getFirst();
+
+        var aggregatePuzzle = aggregate.getPuzzle();
+        var eventPuzzle = event.puzzle;
+        assertTrue(aggregatePuzzle.equals(eventPuzzle));
+    }
+
+    @Test
+    public void demonstrateHintAfterAbort() {
+        var aggregate = createAggregateAndAbort();
+
+        try {
+            aggregate.demonstrateHintAgain();
+            fail();
+        } catch (IllegalStateException e) {
+        }
     }
 
     @Test

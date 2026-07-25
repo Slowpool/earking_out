@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 
-public final class NewPuzzleCreatedEventxtends DomainEvent {
+public final class NewPuzzleCreatedEvent extends DomainEvent {
     public final Puzzle<?, ?> puzzle;
 
-    public NeNewPuzzleCreatedEvent LocalDateTime timestamp, final Puzzle<?, ?> puzzle) {
+    public NewPuzzleCreatedEvent(final LocalDateTime timestamp, final Puzzle<?, ?> puzzle) {
         super(timestamp);
 
         this.puzzle = puzzle;

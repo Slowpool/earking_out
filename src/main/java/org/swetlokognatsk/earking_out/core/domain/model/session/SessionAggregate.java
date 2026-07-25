@@ -164,7 +164,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setState(SessionStates.ABORTED);
     }
 
-    public void hearAgain() {
+    public void demonstrateHintAgain() {
         var puzzle = getPuzzle();
         var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(puzzle);
         addEvent(hearAgainEvent);
