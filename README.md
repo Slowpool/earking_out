@@ -26,3 +26,10 @@ domains/subdomain:
    b) statistics dashboard
 
 P.S. yep, the sole domain cuz i ain't gonna difficulty (the ending is pronounced like in simplify) things with separating it in two different domains (the training itself and statistics)
+
+
+technical details:
+in general, the whole app is supposed to be tightly coupled to spring.boot. because it's decoupling framework by itself (although it's still possible to decouple it and it'd be fine for high complexity software).
+domain events publishing and subscribing interface is decoupled via port, so that implementation can be replaced, current one is via spring.boot.
+// TODO di is decoupled or spring.boot's?
+// TODO two different builds: 1. web 2. desktop. - they implement the same app port (general ui code), though the core is the same.

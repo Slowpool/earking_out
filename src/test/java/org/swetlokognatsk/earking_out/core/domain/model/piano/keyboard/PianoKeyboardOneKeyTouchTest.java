@@ -37,7 +37,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void touchOneKey() {
+    public void selectedKeysAfterOneKeyTouching() {
         PianoKeyNumber pianoKey = FIRST_NOTE_NUMBER;
 
         pianoKeyboard.touchKey(pianoKey);
@@ -46,7 +46,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void pressOneKey() {
+    public void selectedKeysAfterPressingAndReleasing() {
         PianoKeyNumber pianoKey = FIRST_NOTE_NUMBER;
 
         pianoKeyboard.pressKey(pianoKey);

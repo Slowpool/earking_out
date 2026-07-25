@@ -79,13 +79,4 @@ public final class PianoKeyTest {
         } catch (IllegalStateException e) {
         }
     }
-
-    @Test
-    public void playSoundOnPress() {
-        // TODO remake according to new `PianoKeyPressedEvent` domain event
-        var pianoKey = new PianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH, false, DI.get(PianoKeyColorService.class));
-        pianoKey.press();
-        assertTrue(mockSoundPlayer.stopAndPlayIsPressed);
-    }
-
 }

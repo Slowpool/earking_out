@@ -71,6 +71,7 @@ public class EarkingOutApplication extends Application {
     protected static void registerDomainEventHandlers() {
         var eventBus = DI.get(EventBus.class);
 
+        // SpringEventBus doesn't contain implementation for this `subscribe()` method because spring handlers are separate classes with `@Component` annotation and `@EventListener` method. for spring this action is redudant.
         eventBus.subscribe(new EventType<PianoKeyPressedEvent>(), EarkingOutApplication::handlePianoKeyPressing);
     }
 
