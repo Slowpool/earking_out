@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard;
 
 import java.time.LocalDateTime;
-
+import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.NewPuzzleDisplayedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
@@ -20,6 +20,11 @@ public final class DomainEventsFactory {
     public NewPuzzleDisplayedEvent createNewPuzzleDisplayedEvent(final Puzzle<?, ?> puzzle) {
         var timestamp = createTimestamp();
         return new NewPuzzleDisplayedEvent(timestamp, puzzle);
+    }
+
+    public HintRepeatingRequestedEvent createHintRepeatingRequestedEvent(final Puzzle<?, ?> puzzle) {
+        var timestamp = createTimestamp();
+        return new HintRepeatingRequestedEvent(timestamp, puzzle);
     }
 
 }

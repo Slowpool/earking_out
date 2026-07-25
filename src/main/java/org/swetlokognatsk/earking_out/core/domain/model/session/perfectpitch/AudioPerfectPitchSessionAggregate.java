@@ -51,8 +51,4 @@ public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSession
     public void releasePianoKey() {
         notesGuessingPianoKeyboard.releaseKey();
     }
-
-    public void hearAgain() {
-        demonstrateHint();
-    }
 }

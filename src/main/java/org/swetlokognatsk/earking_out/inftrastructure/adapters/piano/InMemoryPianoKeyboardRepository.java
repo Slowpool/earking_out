@@ -12,9 +12,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
-import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.AggregateRepository;
 
 
 abstract class InMemoryPianoKeyboardRepository extends AggregateRepository implements PianoKeyboardStorageAdapter {
@@ -63,6 +62,7 @@ abstract class InMemoryPianoKeyboardRepository extends AggregateRepository imple
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregate);
         pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboardCopy);
         
+        publishEvents(events);
     }
 
     public PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId) {

@@ -114,8 +114,6 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
 
         var newPuzzleEvent = getDomainEventsFactory().createNewPuzzleDisplayedEvent(puzzle);
         addEvent(newPuzzleEvent);
-        // TODO remove
-        // demonstrateHint();
     }
 
     public void guess(final S guess) {
@@ -166,10 +164,9 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setState(SessionStates.ABORTED);
     }
 
-    // TODO remove
-    protected void demonstrateHint() {
-        var hintDemonstrator = DI.get(HintDemonstrator.class);
-        // TODO what to do with warning
-        hintDemonstrator.demonstrateHint(getPuzzle().solution);
+    public void hearAgain() {
+        var puzzle = getPuzzle();
+        var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(puzzle);
+        addEvent(hearAgainEvent);
     }
 }

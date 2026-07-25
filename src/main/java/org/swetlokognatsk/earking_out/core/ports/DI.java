@@ -86,8 +86,12 @@ public final class DI {
         var genericContext = (GenericApplicationContext) context;
 
         // TODO how to make it to be singleton?
+        // TODO is it necessary to pass callback here?
         genericContext.registerBean(AudioClipPianoKeySoundsPlayer.class, () -> new AudioClipPianoKeySoundsPlayer());
         genericContext.registerBean(PianoKeySoundsPlayer.class, () -> genericContext.getBean(AudioClipPianoKeySoundsPlayer.class));
+
+        genericContext.registerBean(HintDemonstratorDelegator.class, () -> new HintDemonstratorDelegator());
+        genericContext.registerBean(HintDemonstrator.class, () -> genericContext.getBean(HintDemonstratorDelegator.class));
     }
 
     public static <T> T get(Class<T> someClass, Object... args) {

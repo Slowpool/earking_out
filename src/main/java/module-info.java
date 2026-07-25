@@ -16,6 +16,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.app.desktop;
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring to spring.beans, spring.context;
     exports org.swetlokognatsk.earking_out.core.ports.piano to spring.context;
+    exports org.swetlokognatsk.earking_out.core.ports.hints.demonstrators;
     
     opens org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring to spring.core;
     opens org.swetlokognatsk.earking_out.core.ports.piano;

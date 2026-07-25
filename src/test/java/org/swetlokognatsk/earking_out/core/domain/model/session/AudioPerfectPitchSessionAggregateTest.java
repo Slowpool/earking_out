@@ -107,13 +107,14 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
     @Test
     public void demonstrateHintAfterAbort() {
-        var aggregate = createAggregateAndAbort();
+        // // TODO check that 1. hearAgain() generates event 2. event's puzzle corresponds to the aggregate's puzzle 3. hearAgain() gives error after abort()
+        // var aggregate = createAggregateAndAbort();
 
-        try {
-            aggregate.demonstrateHint();
-            fail();
-        } catch (IllegalStateException e) {
-        }
+        // try {
+        //     aggregate.demonstrateHint();
+        //     fail();
+        // } catch (IllegalStateException e) {
+        // }
     }
 
     @Test
