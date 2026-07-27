@@ -144,7 +144,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
 
         pressedKey = pianoKey;
 
-        var pianoKeyPressedEvent = getDomainEventsFactory().createPianoKeyPressedEvent(keyNumber);
+        var pianoKeyPressedEvent = getDomainEventsFactory().createPianoKeyPressedEvent(id, keyNumber);
         addEvent(pianoKeyPressedEvent);
     }
 

@@ -10,6 +10,7 @@ module org.swetlokognatsk {
     requires spring.context;
     requires spring.beans;
     requires spring.core;
+
     // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. i wanna learn and detect the debugging and type-is-not-exported/opened-errors
     exports org.swetlokognatsk.earking_out.app.desktop;
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
@@ -19,6 +20,10 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard;
     exports org.swetlokognatsk.earking_out.core.domain.events.puzzles;
     exports org.swetlokognatsk.earking_out.core.domain.model.solutions;
+    exports org.swetlokognatsk.earking_out.core.domain.model.piano.key;
+    exports org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
+    exports org.swetlokognatsk.earking_out.core.domain.model.exercises;
+    exports org.swetlokognatsk.earking_out.core.ports.config;
 
     opens org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
 }

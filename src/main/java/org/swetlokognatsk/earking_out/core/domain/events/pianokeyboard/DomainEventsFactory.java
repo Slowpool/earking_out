@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 
 public final class DomainEventsFactory {
@@ -12,9 +13,9 @@ public final class DomainEventsFactory {
         return LocalDateTime.now();
     }
 
-    public PianoKeyPressedEvent createPianoKeyPressedEvent(final PianoKeyNumber pianoKeyNumber) {
+    public PianoKeyPressedEvent createPianoKeyPressedEvent(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber pianoKeyNumber) {
         var timestamp = createTimestamp();
-        return new PianoKeyPressedEvent(timestamp, pianoKeyNumber);
+        return new PianoKeyPressedEvent(timestamp, pianoKeyboardId, pianoKeyNumber);
     }
 
     public NewPuzzleCreatedEvent createNewPuzzleDisplayedEvent(final Puzzle<?, ?> puzzle) {

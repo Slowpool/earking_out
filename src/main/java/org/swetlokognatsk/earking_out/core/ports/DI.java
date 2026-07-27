@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
+import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.support.GenericApplicationContext;
@@ -87,11 +88,20 @@ public final class DI {
 
         // TODO how to make it to be singleton?
         // TODO is it necessary to pass callback here?
-        genericContext.registerBean(AudioClipPianoKeySoundsPlayer.class, () -> new AudioClipPianoKeySoundsPlayer());
+        // TODO pretty sure some suppliers are redundant
+        genericContext.registerBean(AudioClipPianoKeySoundsPlayer.class);
         genericContext.registerBean(PianoKeySoundsPlayer.class, () -> genericContext.getBean(AudioClipPianoKeySoundsPlayer.class));
 
-        genericContext.registerBean(HintDemonstratorDelegator.class, () -> new HintDemonstratorDelegator());
+        genericContext.registerBean(HintDemonstratorDelegator.class);
         genericContext.registerBean(HintDemonstrator.class, () -> genericContext.getBean(HintDemonstratorDelegator.class));
+
+        genericContext.registerBean(PianoKeyboardAggregatesFactory.class);
+        genericContext.registerBean(InMemoryPuzzleConfigPianoKeyboardRepository.class);
+
+        genericContext.registerBean(PuzzleConfigPianoKeyboardStorageAdapter.class, () -> genericContext.getBean(InMemoryPuzzleConfigPianoKeyboardRepository.class));
+
+        genericContext.registerBean(InMemoryPuzzleConfigRepository.class);
+        genericContext.registerBean(PuzzleConfigRepository.class, () -> genericContext.getBean(InMemoryPuzzleConfigRepository.class));
     }
 
     public static <T> T get(Class<T> someClass, Object... args) {

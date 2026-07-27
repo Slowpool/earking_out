@@ -5,4 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRootRepository;
 
 public interface PuzzleConfigRepository extends AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>> {
+    <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise);
+
+    void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate);
 }

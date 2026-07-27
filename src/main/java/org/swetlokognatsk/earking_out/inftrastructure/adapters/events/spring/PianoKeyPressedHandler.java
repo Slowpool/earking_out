@@ -4,29 +4,60 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
+import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 
 @Component
 public final class PianoKeyPressedHandler {
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
+    private final PuzzleConfigPianoKeyboardStorageAdapter puzzleConfigPianoKeyboardRepository;
+    private final PuzzleConfigRepository puzzleConfigRepository;
 
     @Lazy
-    public PianoKeyPressedHandler(final PianoKeySoundsPlayer pianoKeySoundsPlayer) {
+    public PianoKeyPressedHandler(final PianoKeySoundsPlayer pianoKeySoundsPlayer, final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository, final PuzzleConfigRepository puzzleConfigRepository) {
         this.pianoKeySoundsPlayer = pianoKeySoundsPlayer;
+        this.puzzleConfigPianoKeyboardRepository = pianoKeyboardRepository;
+        this.puzzleConfigRepository = puzzleConfigRepository;
     }
 
     @EventListener
     public void handlePianoKeyPressedEvent(final PianoKeyPressedEvent event) {
-        var pianoKeyNumber = event.pianoKeyNumber;
-        if (shouldPlaySound(pianoKeyNumber)) {
-            pianoKeySoundsPlayer.stopAndPlay(pianoKeyNumber);
+        if (shouldPlaySound(event.pianoKeyboardId)) {
+            pianoKeySoundsPlayer.stopAndPlay(event.pianoKeyNumber);
         }
     }
 
-    protected boolean shouldPlaySound(final PianoKeyNumber pianoKeyNumber) {
-        // TODO pull from config
-        return false;
+    private boolean shouldPlaySound(final PianoKeyboardId pianoKeyboardId) {
+        // for now, if piano keyboard type is not puzzleConfig, sound should always be played
+        boolean shouldPlaySound = pianoKeyboardBelongsToPuzzleConfig(pianoKeyboardId) ? inspectConfigWhetherShouldPianoKeyMakeSound(pianoKeyboardId) : false;
+        return shouldPlaySound;
+    }
+
+    private boolean pianoKeyboardBelongsToPuzzleConfig(final PianoKeyboardId pianoKeyboardId) {
+        boolean pianoKeyboardExists;
+        try {
+            // check whether it exists or not
+            puzzleConfigPianoKeyboardRepository.get(pianoKeyboardId);
+            pianoKeyboardExists = true;
+        } catch (IllegalArgumentException exception) {
+            pianoKeyboardExists = false;
+        }
+        return pianoKeyboardExists;
+    }
+
+    private boolean inspectConfigWhetherShouldPianoKeyMakeSound(final PianoKeyboardId pianoKeyboardId) {
+        var exercise = pianoKeyboardId.exercise;
+        PuzzleConfigAggregate<?> puzzleConfig = puzzleConfigRepository.genericGet(exercise);
+
+        var shouldPlaySound = switch (puzzleConfig) {
+        case AudioPerfectPitchConfigAggregate audioPerfectPitchPuzzleConfig -> !audioPerfectPitchPuzzleConfig.getSoundlessGuessingPiano();
+        default -> throw new IllegalArgumentException("unknown puzzle config: " + puzzleConfig.getClass());
+        };
+        return shouldPlaySound;
     }
 
 }
