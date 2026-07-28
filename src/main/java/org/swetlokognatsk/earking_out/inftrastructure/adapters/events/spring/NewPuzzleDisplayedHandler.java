@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonst
 
 @Component
 public final class NewPuzzleDisplayedHandler {
-    protected final HintDemonstrator<Solution> hintDemonstrator;
+    private final HintDemonstrator<Solution> hintDemonstrator;
 
     @Lazy
     public NewPuzzleDisplayedHandler(final HintDemonstrator<Solution> hintDemonstrator) {

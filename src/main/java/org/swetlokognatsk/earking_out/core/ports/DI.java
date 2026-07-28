@@ -98,7 +98,7 @@ public final class DI {
         genericContext.registerBean(PianoKeyboardAggregatesFactory.class);
         genericContext.registerBean(InMemoryPuzzleConfigPianoKeyboardRepository.class);
 
-        genericContext.registerBean(PuzzleConfigPianoKeyboardStorageAdapter.class, () -> genericContext.getBean(InMemoryPuzzleConfigPianoKeyboardRepository.class));
+        // genericContext.registerBean(PuzzleConfigPianoKeyboardStorageAdapter.class, () -> genericContext.getBean(InMemoryPuzzleConfigPianoKeyboardRepository.class));
 
         genericContext.registerBean(InMemoryPuzzleConfigRepository.class);
         genericContext.registerBean(PuzzleConfigRepository.class, () -> genericContext.getBean(InMemoryPuzzleConfigRepository.class));

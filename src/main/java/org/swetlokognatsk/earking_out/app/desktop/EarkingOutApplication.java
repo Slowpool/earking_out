@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
@@ -28,7 +27,6 @@ import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
 import org.swetlokognatsk.earking_out.core.ports.events.EventType;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -38,7 +36,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-@SpringBootApplication(scanBasePackages = {"org.swetlokognatsk.earking_out.app.desktop", "org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring"})
+@SpringBootApplication(scanBasePackages = { "org.swetlokognatsk.earking_out.app.desktop", "org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring" })
 public class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
