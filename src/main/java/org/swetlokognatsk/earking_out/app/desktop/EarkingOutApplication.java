@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -62,7 +63,9 @@ public class EarkingOutApplication extends Application {
     }
 
     protected static ApplicationContext runSpringApp(String[] args) {
-        return SpringApplication.run(EarkingOutApplication.class, args);
+        var springApplication = new SpringApplication(EarkingOutApplication.class);
+        springApplication.setBannerMode(Banner.Mode.OFF);
+        return springApplication.run(args);
     }
 
     // TODO refactoring, put in utility class?
