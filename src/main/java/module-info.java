@@ -11,7 +11,7 @@ module org.swetlokognatsk {
     requires spring.beans;
     requires spring.core;
 
-    // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. i wanna learn and detect the debugging and type-is-not-exported/opened-errors
+    // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
     exports org.swetlokognatsk.earking_out.core.ports.piano;

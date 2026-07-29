@@ -33,7 +33,7 @@ public final class PianoKeyPressedHandler {
 
     private boolean shouldPlaySound(final PianoKeyboardId pianoKeyboardId) {
         // for now, if piano keyboard type is not puzzleConfig, sound should always be played
-        boolean shouldPlaySound = pianoKeyboardBelongsToPuzzleConfig(pianoKeyboardId) ? inspectConfigWhetherShouldPianoKeyMakeSound(pianoKeyboardId) : false;
+        boolean shouldPlaySound = pianoKeyboardBelongsToPuzzleConfig(pianoKeyboardId) ? true : inspectConfigWhetherShouldPianoKeyMakeSound(pianoKeyboardId);
         return shouldPlaySound;
     }
 

@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfe
 
 // TODO this class is actually awkward workaround of session repositories polymorphism
 public final class SessionRepositoryDelegator {
-
+    // TODO think about it
     protected SessionRepository<?>[] repositories = new SessionRepository[] { DI.get(AudioPerfectPitchSessionRepository.class) };
 
     public SessionAggregate<?, ?, ?, ?> get(final SessionId sessionId) {

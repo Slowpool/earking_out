@@ -12,8 +12,8 @@ import org.swetlokognatsk.earking_out.core.ports.DI;
 public final class PuzzlePanesFactory {
     protected final SessionRepositoryDelegator sessionRepository;
 
-    public PuzzlePanesFactory() {
-        sessionRepository = DI.get(SessionRepositoryDelegator.class);
+    public PuzzlePanesFactory(final SessionRepositoryDelegator sessionRepository) {
+        this.sessionRepository = sessionRepository;
     }
 
     public PuzzlePane<?, ?, ?> create(final SessionId sessionId, final double width, final double height) {

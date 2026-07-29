@@ -14,8 +14,8 @@ import org.swetlokognatsk.earking_out.core.ports.DI;
 public final class PuzzlesFactory {
     protected final SolutionGeneratorsFactory solutionGeneratorsFactory;
 
-    public PuzzlesFactory() {
-        solutionGeneratorsFactory = DI.get(SolutionGeneratorsFactory.class);
+    public PuzzlesFactory(final SolutionGeneratorsFactory solutionGeneratorsFactory) {
+        this.solutionGeneratorsFactory = solutionGeneratorsFactory;
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, r, P extends Puzzle<E, ?>> P create(final Exercise exercise) {

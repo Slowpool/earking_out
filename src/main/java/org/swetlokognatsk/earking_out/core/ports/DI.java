@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.core.ports;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.support.GenericApplicationContext;
@@ -62,7 +64,6 @@ public final class DI {
     // singleton lifetime simulation
     protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
     protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
-    protected static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
     protected static InMemorySessionPianoKeyboardRepository inMemorySessionPianoKeyboardRepository;
     protected static TestInMemoryAllPianoKeyboardRepository testInMemoryAllPianoKeyboardRepository;
     protected static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
@@ -86,28 +87,53 @@ public final class DI {
         // TODO this cast seems awkward
         var genericContext = (GenericApplicationContext) context;
 
-        // TODO how to make it to be singleton?
-        // TODO is it necessary to pass callback here?
-        // TODO pretty sure some suppliers are redundant
         genericContext.registerBean(AudioClipPianoKeySoundsPlayer.class);
 
         genericContext.registerBean(HintDemonstratorDelegator.class);
 
+        // TODO pretty sure some suppliers are redundant
         genericContext.registerBean(PianoKeyboardAggregatesFactory.class);
         genericContext.registerBean(InMemoryPuzzleConfigPianoKeyboardRepository.class, () -> new InMemoryPuzzleConfigPianoKeyboardRepository(genericContext.getBean(PianoKeyboardAggregatesFactory.class)));
 
         genericContext.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(genericContext.getBean(PuzzleConfigPianoKeyboardStorageAdapter.class)));
+
+        genericContext.registerBean(PianoKeyColorService.class);
+
+        genericContext.registerBean(InMemorySessionPianoKeyboardRepository.class, () -> new InMemorySessionPianoKeyboardRepository(genericContext.getBean(PianoKeyboardAggregatesFactory.class)));
+
+        genericContext.registerBean(PuzzleConfigService.class, () -> new PuzzleConfigService(genericContext.getBean(PuzzleConfigRepository.class)));
+
+        genericContext.registerBean(TestInMemoryAllPianoKeyboardRepository.class, () -> new TestInMemoryAllPianoKeyboardRepository(genericContext.getBean(PianoKeyboardAggregatesFactory.class)));
+
+        genericContext.registerBean(AudioPerfectPitchSessionService.class, () -> new AudioPerfectPitchSessionService(genericContext.getBean(PuzzleConfigRepository.class), genericContext.getBean(AudioPerfectPitchSessionRepository.class), genericContext.getBean(SessionAggregatesFactory.class)));
+        
+        genericContext.registerBean(PianoKeysFactory.class);
+        genericContext.registerBean(SerializationCloner.class);
+        genericContext.registerBean(SolutionGeneratorsFactory.class);
+        genericContext.registerBean(PuzzlesFactory.class, () -> new PuzzlesFactory(genericContext.getBean(SolutionGeneratorsFactory.class)));
+        genericContext.registerBean(SessionAggregatesFactory.class);
+        genericContext.registerBean(SessionRepositoryDelegator.class);
+        
+        // javafx beans
+        genericContext.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(genericContext.getBean(SessionRepositoryDelegator.class)));
+
+
     }
 
     public static <T> T get(Class<T> someClass, Object... args) {
+        // TODO refactoring
+        try {
+            var bean = context.getBean(someClass, args);
+            return bean;
+        } catch (BeansException e) {
+        }
+
         var className = someClass.getName();
         if (className.equals(NotesNormalizingService.class.getName())) {
             return (T) new NotesNormalizingService();
 
-        } else if (className.equals(HintDemonstrator.class.getName())) {
-            return (T) new HintDemonstratorDelegator();
-        } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
-            return (T) (env.equals(TEST_ENV) ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
+            // } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
+            //     return (T) (env.equals(TEST_ENV) ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
         } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
@@ -115,78 +141,7 @@ public final class DI {
         } else if (className.equals(VisualPerfectPitchSolutionGenerator.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
 
-        } else if (className.equals(PianoKeyColorService.class.getName())) {
-            return (T) new PianoKeyColorService();
-
-        } else if (className.equals(PuzzleConfigService.class.getName())) {
-            return (T) new PuzzleConfigService(get(PuzzleConfigRepository.class));
-
-        } else if (className.equals(PuzzleConfigRepository.class.getName())) {
-            return (T) get(InMemoryPuzzleConfigRepository.class);
-
-        } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
-            if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigPianoKeyboardStorageAdapter.class));
-            }
-            return (T) inMemoryPuzzleConfigRepository;
-
-        } else if (className.equals(PuzzleConfigPianoKeyboardStorageAdapter.class.getName())) {
-            return (T) get(InMemoryPuzzleConfigPianoKeyboardRepository.class);
-
-        } else if (className.equals(InMemoryPuzzleConfigPianoKeyboardRepository.class.getName())) {
-            if (inMemoryPuzzleConfigPianoKeyboardRepository == null) {
-                inMemoryPuzzleConfigPianoKeyboardRepository = new InMemoryPuzzleConfigPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
-            }
-            return (T) inMemoryPuzzleConfigPianoKeyboardRepository;
-
-        } else if (className.equals(SessionPianoKeyboardStorageAdapter.class.getName())) {
-            return (T) get(InMemorySessionPianoKeyboardRepository.class);
-
-        } else if (className.equals(InMemorySessionPianoKeyboardRepository.class.getName())) {
-            if (inMemorySessionPianoKeyboardRepository == null) {
-                inMemorySessionPianoKeyboardRepository = new InMemorySessionPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
-            }
-            return (T) inMemorySessionPianoKeyboardRepository;
-
-        } else if (className.equals(TestInMemoryAllPianoKeyboardRepository.class.getName())) {
-            if (testInMemoryAllPianoKeyboardRepository == null) {
-                testInMemoryAllPianoKeyboardRepository = new TestInMemoryAllPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
-            }
-            return (T) testInMemoryAllPianoKeyboardRepository;
-
-        } else if (className.equals(AudioPerfectPitchSessionService.class.getName())) {
-            return (T) new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class));
-
-        } else if (className.equals(PianoKeyboardAggregatesFactory.class.getName())) {
-            if (pianoKeyboardAggregatesFactory == null) {
-                pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
-            }
-            return (T) pianoKeyboardAggregatesFactory;
-
-        } else if (className.equals(PianoKeysFactory.class.getName())) {
-            return (T) new PianoKeysFactory();
-
-        } else if (className.equals(ObjectCloner.class.getName())) {
-            return (T) get(SerializationCloner.class);
-
-        } else if (className.equals(SerializationCloner.class.getName())) {
-            return (T) new SerializationCloner();
-
-        } else if (className.equals(PuzzlesFactory.class.getName())) {
-            return (T) new PuzzlesFactory();
-
-        } else if (className.equals(SolutionGeneratorsFactory.class.getName())) {
-            return (T) new SolutionGeneratorsFactory();
-
-        } else if (className.equals(SessionAggregatesFactory.class.getName())) {
-            return (T) new SessionAggregatesFactory();
-
-        } else if (className.equals(PuzzlePanesFactory.class.getName())) {
-            return (T) new PuzzlePanesFactory();
-
-        } else if (className.equals(HintDemonstrator.class.getName())) {
-            return (T) new HintDemonstratorDelegator();
-
+            // here is stopped
         } else if (className.equals(PianoKeySoundsPlayer.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
 
@@ -262,7 +217,6 @@ public final class DI {
     public static void deleteSingletons() {
         inMemoryPuzzleConfigRepository = null;
         pianoKeyboardAggregatesFactory = null;
-        inMemoryPuzzleConfigPianoKeyboardRepository = null;
         inMemorySessionPianoKeyboardRepository = null;
         testInMemoryAllPianoKeyboardRepository = null;
         audioClipPianoKeySoundsPlayer = null;
