@@ -90,18 +90,13 @@ public final class DI {
         // TODO is it necessary to pass callback here?
         // TODO pretty sure some suppliers are redundant
         genericContext.registerBean(AudioClipPianoKeySoundsPlayer.class);
-        genericContext.registerBean(PianoKeySoundsPlayer.class, () -> genericContext.getBean(AudioClipPianoKeySoundsPlayer.class));
 
         genericContext.registerBean(HintDemonstratorDelegator.class);
-        genericContext.registerBean(HintDemonstrator.class, () -> genericContext.getBean(HintDemonstratorDelegator.class));
 
         genericContext.registerBean(PianoKeyboardAggregatesFactory.class);
-        genericContext.registerBean(InMemoryPuzzleConfigPianoKeyboardRepository.class);
+        genericContext.registerBean(InMemoryPuzzleConfigPianoKeyboardRepository.class, () -> new InMemoryPuzzleConfigPianoKeyboardRepository(genericContext.getBean(PianoKeyboardAggregatesFactory.class)));
 
-        // genericContext.registerBean(PuzzleConfigPianoKeyboardStorageAdapter.class, () -> genericContext.getBean(InMemoryPuzzleConfigPianoKeyboardRepository.class));
-
-        genericContext.registerBean(InMemoryPuzzleConfigRepository.class);
-        genericContext.registerBean(PuzzleConfigRepository.class, () -> genericContext.getBean(InMemoryPuzzleConfigRepository.class));
+        genericContext.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(genericContext.getBean(PuzzleConfigPianoKeyboardStorageAdapter.class)));
     }
 
     public static <T> T get(Class<T> someClass, Object... args) {
