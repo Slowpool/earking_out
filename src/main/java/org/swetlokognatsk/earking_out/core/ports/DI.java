@@ -10,6 +10,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFac
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
@@ -83,11 +84,15 @@ public final class DI {
         initBeans();
     }
 
-    protected static void initBeans() {
+    private static void initBeans() {
         // TODO this cast seems awkward
         var genericContext = (GenericApplicationContext) context;
 
         genericContext.registerBean(AudioClipPianoKeySoundsPlayer.class);
+
+        genericContext.registerBean(NotesNormalizingService.class);
+
+        genericContext.registerBean(PianoKeyColorService.class);
 
         genericContext.registerBean(HintDemonstratorDelegator.class);
 
@@ -97,8 +102,6 @@ public final class DI {
 
         genericContext.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(genericContext.getBean(PuzzleConfigPianoKeyboardStorageAdapter.class)));
 
-        genericContext.registerBean(PianoKeyColorService.class);
-
         genericContext.registerBean(InMemorySessionPianoKeyboardRepository.class, () -> new InMemorySessionPianoKeyboardRepository(genericContext.getBean(PianoKeyboardAggregatesFactory.class)));
 
         genericContext.registerBean(PuzzleConfigService.class, () -> new PuzzleConfigService(genericContext.getBean(PuzzleConfigRepository.class)));
@@ -106,42 +109,59 @@ public final class DI {
         genericContext.registerBean(TestInMemoryAllPianoKeyboardRepository.class, () -> new TestInMemoryAllPianoKeyboardRepository(genericContext.getBean(PianoKeyboardAggregatesFactory.class)));
 
         genericContext.registerBean(AudioPerfectPitchSessionService.class, () -> new AudioPerfectPitchSessionService(genericContext.getBean(PuzzleConfigRepository.class), genericContext.getBean(AudioPerfectPitchSessionRepository.class), genericContext.getBean(SessionAggregatesFactory.class)));
-        
+
         genericContext.registerBean(PianoKeysFactory.class);
+
         genericContext.registerBean(SerializationCloner.class);
+
         genericContext.registerBean(SolutionGeneratorsFactory.class);
+
         genericContext.registerBean(PuzzlesFactory.class, () -> new PuzzlesFactory(genericContext.getBean(SolutionGeneratorsFactory.class)));
-        genericContext.registerBean(SessionAggregatesFactory.class);
+
+        genericContext.registerBean(SessionAggregatesFactory.class, () -> new SessionAggregatesFactory(genericContext.getBean(PuzzleConfigRepository.class), genericContext.getBean(SessionPianoKeyboardStorageAdapter.class)));
+
         genericContext.registerBean(SessionRepositoryDelegator.class);
-        
+
+        genericContext.registerBean(PianoKeySoundFilesBuilder.class);
+
+        genericContext.registerBean(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class, () -> new PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(genericContext.getBean(PianoKeySoundsPlayer.class)));
+
+        genericContext.registerBean(InMemoryAudioPerfectPitchSessionRepository.class, () -> new InMemoryAudioPerfectPitchSessionRepository(genericContext.getBean(SessionAggregatesFactory.class), genericContext.getBean(SessionPianoKeyboardStorageAdapter.class)));
+
+        genericContext.registerBean(EndSessionAggregateDTOAssemblersFactory.class);
+
+        genericContext.registerBean(DomainEventsFactory.class);
+
+        genericContext.registerBean(SpringEventPublisher.class, () -> new SpringEventPublisher((ApplicationEventPublisher) context));
+
+        genericContext.registerBean(SpringEventBus.class);
+
         // javafx beans
         genericContext.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(genericContext.getBean(SessionRepositoryDelegator.class)));
-
+        genericContext.registerBean(StatsPanesFactory.class, () -> new StatsPanesFactory(genericContext.getBean(PuzzleConfigRepository.class), genericContext.getBean(SessionRepositoryDelegator.class)));
 
     }
 
     public static <T> T get(Class<T> someClass, Object... args) {
         // TODO refactoring
         try {
-            var bean = context.getBean(someClass, args);
+            var bean = args.length > 0 ? context.getBean(someClass, args) : context.getBean(someClass);
             return bean;
         } catch (BeansException e) {
+            System.out.print("beans exception: " + e.getMessage());
         }
 
         var className = someClass.getName();
-        if (className.equals(NotesNormalizingService.class.getName())) {
-            return (T) new NotesNormalizingService();
+        // // TODO delete later
+        // } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
+        //     return (T) (env.equals(TEST_ENV) ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
-            // } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
-            //     return (T) (env.equals(TEST_ENV) ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
-
-        } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
+        if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(VisualPerfectPitchSolutionGenerator.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
 
-            // here is stopped
         } else if (className.equals(PianoKeySoundsPlayer.class.getName())) {
             return (T) (env.equals(TEST_ENV) ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
 
@@ -156,57 +176,6 @@ public final class DI {
                 audioClipPianoKeySoundsPlayer = new AudioClipPianoKeySoundsPlayer();
             }
             return (T) audioClipPianoKeySoundsPlayer;
-
-        } else if (className.equals(PianoKeySoundFilesBuilder.class.getName())) {
-            return (T) new PianoKeySoundFilesBuilder();
-
-        } else if (className.equals(AudioPerfectPitchHintDemonstrator.class.getName())) {
-            return (T) get(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class);
-
-        } else if (className.equals(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class.getName())) {
-            return (T) new PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(get(PianoKeySoundsPlayer.class));
-
-        } else if (className.equals(AudioPerfectPitchSessionRepository.class.getName())) {
-            return (T) get(InMemoryAudioPerfectPitchSessionRepository.class);
-
-        } else if (className.equals(InMemoryAudioPerfectPitchSessionRepository.class.getName())) {
-            if (inMemoryAudioPerfectPitchSessionRepository == null) {
-                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(SessionPianoKeyboardStorageAdapter.class));
-            }
-            return (T) inMemoryAudioPerfectPitchSessionRepository;
-
-        } else if (className.equals(SessionRepositoryDelegator.class.getName())) {
-            return (T) new SessionRepositoryDelegator();
-
-        } else if (className.equals(EndSessionAggregateDTOAssemblersFactory.class.getName())) {
-            return (T) new EndSessionAggregateDTOAssemblersFactory();
-
-        } else if (className.equals(StatsPanesFactory.class.getName())) {
-            return (T) new StatsPanesFactory(get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class));
-
-        } else if (className.equals(DomainEventsFactory.class.getName())) {
-            if (domainEventsFactory == null) {
-                domainEventsFactory = new DomainEventsFactory();
-            }
-            return (T) domainEventsFactory;
-
-        } else if (className.equals(EventPublisher.class.getName())) {
-            if (eventPublisher == null) {
-                eventPublisher = get(SpringEventPublisher.class);
-            }
-            return (T) eventPublisher;
-
-        } else if (className.equals(SpringEventPublisher.class.getName())) {
-            return (T) new SpringEventPublisher((ApplicationEventPublisher) context);
-
-        } else if (className.equals(EventBus.class.getName())) {
-            if (eventBus == null) {
-                eventBus = get(SpringEventBus.class);
-            }
-            return (T) eventBus;
-
-        } else if (className.equals(SpringEventBus.class.getName())) {
-            return (T) new SpringEventBus();
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());

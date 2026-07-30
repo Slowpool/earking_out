@@ -21,10 +21,10 @@ public final class SessionAggregatesFactory extends AggregatesFactory<SessionAgg
     protected final PuzzleConfigRepository puzzleConfigRepository;
     protected final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository;
 
-    public SessionAggregatesFactory() {
+    public SessionAggregatesFactory(final PuzzleConfigRepository puzzleConfigRepository, final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository) {
         // read-only access
-        puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
-        pianoKeyboardRepository = DI.get(SessionPianoKeyboardStorageAdapter.class);
+        this.puzzleConfigRepository = puzzleConfigRepository;
+        this.pianoKeyboardRepository = pianoKeyboardRepository;
     }
 
     public <E extends Exercise, SA extends SessionAggregate<E, ?, ?, ?>> SA create(final E exercise) {
