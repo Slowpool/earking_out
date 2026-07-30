@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
+import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
 
 public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<AudioPerfectPitchConfigAggregate, PerfectPitchConfigDependentAggregatesDTO> {
@@ -14,7 +15,8 @@ public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfig
     // // composition
     // protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
 
-    public AudioPerfectPitchConfigAggregatesFactory() {
+    public AudioPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner) {
+        super(cloner);
     }
 
     // // TODO why i specified pianoKeyboardRepository here?

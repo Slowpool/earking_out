@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.PerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -11,7 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 public abstract class PerfectPitchSessionAggregate<E extends PerfectPitchExercise, S extends PerfectPitchSolution, P extends PerfectPitchPuzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends SessionAggregate<E, S, P, PCDTO> {
     private static final long serialVersionUID = 1L;
 
-    public PerfectPitchSessionAggregate(final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
-        super(id, puzzleConfigDto, stats);
+    public PerfectPitchSessionAggregate(final PuzzlesFactory puzzlesFactory, final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
+        super(puzzlesFactory, id, puzzleConfigDto, stats);
     }
 }

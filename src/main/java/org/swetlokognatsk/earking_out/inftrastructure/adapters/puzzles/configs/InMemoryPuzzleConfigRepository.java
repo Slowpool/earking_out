@@ -10,17 +10,17 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.V
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.PerfectPitchConfigDependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 
-import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory.*;
-
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     protected final Map<Exercise, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
     protected final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository;
+    protected final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
 
     protected <DADTO extends DependentAggregatesDTO, E extends Exercise, F extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, DADTO>> PuzzleConfigAggregate<E> createDefault(final F factory, final E exercise) {
         var defaultPuzzleConfig = switch (exercise) {
@@ -48,8 +48,9 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         return dependentAggregates;
     }
 
-    public InMemoryPuzzleConfigRepository(final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository) {
+    public InMemoryPuzzleConfigRepository(final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository, final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory) {
         this.pianoKeyboardRepository = pianoKeyboardRepository;
+        this.abstractPuzzleConfigAggregatesFactory = abstractPuzzleConfigAggregatesFactory;
 
         seedConfigs();
     }
@@ -66,6 +67,10 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
             puzzleConfigAggregate = createDefault(factory, exercise);
             aggregates.put(exercise, puzzleConfigAggregate);
         }
+    }
+
+    private <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, ?>> PCAF createFactory(final E exercise) {
+        return abstractPuzzleConfigAggregatesFactory.createFactory(exercise);
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {

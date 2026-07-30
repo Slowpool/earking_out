@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
-import java.io.Serializable;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
@@ -8,11 +7,11 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
 public abstract class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends AggregateRoot<SessionId> {
     private static final long serialVersionUID = 1L;
+
+    private final PuzzlesFactory puzzlesFactory;
 
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
@@ -91,8 +90,10 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         this.prevGuessIsSuccessful = prevGuessIsSuccessful;
     }
 
-    public SessionAggregate(final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
+    public SessionAggregate(final PuzzlesFactory puzzlesFactory, final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
         super(id);
+
+        this.puzzlesFactory = Objects.requireNonNull(puzzlesFactory);
 
         Objects.requireNonNull(stats);
 
@@ -103,12 +104,8 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         nextPuzzle();
     }
 
-    protected PuzzlesFactory getPuzzlesFactory() {
-        return DI.get(PuzzlesFactory.class);
-    }
-
     protected void nextPuzzle() {
-        P puzzle = getPuzzlesFactory().create(puzzleConfigDto.exercise);
+        P puzzle = puzzlesFactory.create(puzzleConfigDto.exercise);
         setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
 

@@ -8,9 +8,13 @@ import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 // TODO use this interface for all factories
 // TODO explore Factory/Factory method/Abstract factory
 public abstract class AggregatesFactory<O> {
+    private final ObjectCloner cloner;
+
+    public AggregatesFactory(final ObjectCloner cloner) {
+        this.cloner = cloner;
+    }
 
     public O createDeepCopy(final O o) {
-        var cloner = DI.get(ObjectCloner.class);
         return cloner.clone(o);
     }
 

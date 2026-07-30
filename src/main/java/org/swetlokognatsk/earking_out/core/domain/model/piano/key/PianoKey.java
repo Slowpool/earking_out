@@ -29,17 +29,15 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         this.isPressed = isPressed;
     }
 
-    // injecting SoundPlayer is DDD pure-domain-entity violation. this approach is justified by redandant complexity the domain event would add here. also testability is simpler. also SoundPlayer is not supposed to do any write actions, only read-only ones. proper alternative to make sound on piano key press is via PianoKeyPressed domain event handler.
-    public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColorService colorService) {
+    // TODO @Deprecated comment: injecting SoundPlayer is DDD pure-domain-entity violation. this approach is justified by redandant complexity the domain event would add here. also testability is simpler. also SoundPlayer is not supposed to do any write actions, only read-only ones. proper alternative to make sound on piano key press is via PianoKeyPressed domain event handler.
+    public PianoKey(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected, final PianoKeyColor color) {
         super(keyNumber);
-
-        Objects.requireNonNull(colorService);
 
         this.keyNumber = Objects.requireNonNull(keyNumber);
         this.mode = Objects.requireNonNull(mode);
         setIsSelected(isSelected);
 
-        this.color = colorService.getColor(keyNumber);
+        this.color = Objects.requireNonNull(color);
 
     }
 

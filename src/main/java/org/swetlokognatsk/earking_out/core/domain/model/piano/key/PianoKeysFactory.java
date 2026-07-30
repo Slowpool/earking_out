@@ -5,16 +5,16 @@ import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 
 public final class PianoKeysFactory {
-    protected final PianoKeySoundsPlayer pianoKeySoundsPlayer;
-    protected final PianoKeyColorService keyColorService;
-
-    public PianoKeysFactory() {
-        pianoKeySoundsPlayer = DI.get(PianoKeySoundsPlayer.class);
-        keyColorService = DI.get(PianoKeyColorService.class);
+    protected final PianoKeyColorService pianoKeyColorService;
+    
+    // TODO update constructors
+    public PianoKeysFactory(final PianoKeyColorService pianoKeyColorService) {
+        this.pianoKeyColorService = pianoKeyColorService;
     }
 
     public PianoKey create(final PianoKeyNumber keyNumber, final PianoKeyMode mode, final boolean isSelected) {
-        var pianoKey = new PianoKey(keyNumber, mode, isSelected, keyColorService);
+        var color = pianoKeyColorService.getColor(keyNumber);
+        var pianoKey = new PianoKey(keyNumber, mode, isSelected, color);
         return pianoKey;
     }
 

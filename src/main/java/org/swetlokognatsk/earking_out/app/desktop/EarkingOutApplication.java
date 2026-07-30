@@ -135,7 +135,9 @@ public class EarkingOutApplication extends Application {
     }
 
     private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfigDTO<E>>> CP buildConfigPane(final E exercise) {
-        var puzzleConfigDto = PuzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
+        // TODO is it fine to pull it from DI here?
+        var puzzleConfigDTOAssembler = DI.get(PuzzleConfigDTOAssembler.class);
+        var puzzleConfigDto = puzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
 
         var configPane = ConfigPanesFactory.create(puzzleConfigDto, WIDTH, HEIGHT);
         configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);

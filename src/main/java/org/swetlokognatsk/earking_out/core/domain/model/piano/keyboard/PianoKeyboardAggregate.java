@@ -64,13 +64,14 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return mode.isTouchMode();
     }
 
-    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers) {
+
+    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers, final PianoKeysFactory pianoKeysFactory) {
         super(id);
 
         Objects.requireNonNull(selectedKeyNumbers);
 
         mode = getModeById(id);
-        pianoKeys = buildPianoKeys(selectedKeyNumbers);
+        pianoKeys = buildPianoKeys(pianoKeysFactory, selectedKeyNumbers);
     }
 
     protected static PianoKeyboardMode getModeById(final PianoKeyboardId id) {
@@ -82,13 +83,11 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         };
     }
 
-    private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeyNumber[] selectedKeyNumbers) {
+    private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeysFactory pianoKeysFactory, final PianoKeyNumber[] selectedKeyNumbers) {
         validateKeyNumbersToSelect(selectedKeyNumbers);
 
         final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(PIANO_KEYS_NUMBER);
         final PianoKeyMode pianoKeyMode = getPianoKeyMode();
-
-        var pianoKeysFactory = DI.get(PianoKeysFactory.class);
 
         PianoKeyNumber.forEachKey((PianoKeyNumber keyNumber) -> {
             final boolean isSelected = ArrayUtils.contains(selectedKeyNumbers, keyNumber);
