@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.di;
 
+import java.util.Map;
 import org.springframework.context.ApplicationEventPublisher;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
@@ -8,8 +9,10 @@ import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDeleg
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.VisualPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
@@ -54,6 +57,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpi
 
 public final class HandmadeDI implements CustomDI {
 
+    protected Map<Class<?>, ?> singletons;
     // singleton lifetime simulation
     protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
     protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
@@ -65,6 +69,19 @@ public final class HandmadeDI implements CustomDI {
     protected static DomainEventsFactory domainEventsFactory;
     protected static EventPublisher eventPublisher;
     protected static EventBus eventBus;
+    protected static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
+
+    // // TODO remove or finish
+    // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
+    //     var singleton = singletons.get(someClass);
+    //     if (singleton == null) {
+    //         singletons = createSingleton(someClass, args)
+    //     }
+    // }
+
+    // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
+
+    // }
 
     public <T> T get(Class<T> someClass, Object... args) {
 
@@ -92,9 +109,12 @@ public final class HandmadeDI implements CustomDI {
         } else if (className.equals(PuzzleConfigRepository.class.getName())) {
             return (T) get(InMemoryPuzzleConfigRepository.class);
 
+        } else if (className.equals(AbstractPuzzleConfigAggregatesFactory.class.getName())) {
+            return (T) new AbstractPuzzleConfigAggregatesFactory(get(ObjectCloner.class));
+
         } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigPianoKeyboardStorageAdapter.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigPianoKeyboardStorageAdapter.class), get(AbstractPuzzleConfigAggregatesFactory.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 
@@ -127,12 +147,12 @@ public final class HandmadeDI implements CustomDI {
 
         } else if (className.equals(PianoKeyboardAggregatesFactory.class.getName())) {
             if (pianoKeyboardAggregatesFactory == null) {
-                pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
+                pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory(get(ObjectCloner.class), get(PianoKeysFactory.class));
             }
             return (T) pianoKeyboardAggregatesFactory;
 
         } else if (className.equals(PianoKeysFactory.class.getName())) {
-            return (T) new PianoKeysFactory();
+            return (T) new PianoKeysFactory(get(PianoKeyColorService.class));
 
         } else if (className.equals(ObjectCloner.class.getName())) {
             return (T) get(SerializationCloner.class);
@@ -141,16 +161,19 @@ public final class HandmadeDI implements CustomDI {
             return (T) new SerializationCloner();
 
         } else if (className.equals(PuzzlesFactory.class.getName())) {
-            return (T) new PuzzlesFactory();
+            return (T) new PuzzlesFactory(get(SolutionGeneratorsFactory.class), get(PuzzleConfigDTOAssembler.class));
 
         } else if (className.equals(SolutionGeneratorsFactory.class.getName())) {
             return (T) new SolutionGeneratorsFactory();
 
+        } else if (className.equals(PuzzleConfigDTOAssembler.class.getName())) {
+            return (T) new PuzzleConfigDTOAssembler(get(PuzzleConfigRepository.class));
+
         } else if (className.equals(SessionAggregatesFactory.class.getName())) {
-            return (T) new SessionAggregatesFactory();
+            return (T) new SessionAggregatesFactory(get(ObjectCloner.class), get(PuzzleConfigRepository.class), get(SessionPianoKeyboardStorageAdapter.class), get(PuzzleConfigDTOAssembler.class), get(PuzzlesFactory.class));
 
         } else if (className.equals(PuzzlePanesFactory.class.getName())) {
-            return (T) new PuzzlePanesFactory();
+            return (T) new PuzzlePanesFactory(get(SessionRepositoryDelegator.class));
 
         } else if (className.equals(HintDemonstrator.class.getName())) {
             return (T) new HintDemonstratorDelegator();
@@ -209,8 +232,10 @@ public final class HandmadeDI implements CustomDI {
             }
             return (T) eventPublisher;
 
+            // TODO use lightweight event publisher
         } else if (className.equals(SpringEventPublisher.class.getName())) {
-            return (T) new SpringEventPublisher((ApplicationEventPublisher) context);
+            // return (T) new SpringEventPublisher((ApplicationEventPublisher) context);
+            return (T) null;
 
         } else if (className.equals(EventBus.class.getName())) {
             if (eventBus == null) {
