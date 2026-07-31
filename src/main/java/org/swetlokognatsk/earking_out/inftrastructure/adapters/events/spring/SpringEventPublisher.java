@@ -16,11 +16,4 @@ public final class SpringEventPublisher implements EventPublisher {
     public void publish(final DomainEvent event) {
         eventPublisher.publishEvent(event);
     }
-
-    public void publish(final List<DomainEvent> events) {
-        for(var event : events) {
-            publish(event);
-        }
-    }
-
 }

@@ -6,5 +6,9 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 public interface EventPublisher {
     void publish(final DomainEvent event);
 
-    void publish(final List<DomainEvent> event);
+    default void publish(final List<DomainEvent> events) {
+        for(var event : events) {
+            publish(event);
+        }
+    }
 }

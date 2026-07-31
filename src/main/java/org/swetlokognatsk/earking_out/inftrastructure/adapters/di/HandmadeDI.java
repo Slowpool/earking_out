@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.di;
 
 import java.util.Map;
-import org.springframework.context.ApplicationEventPublisher;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.DomainEventsFactory;
@@ -36,8 +35,7 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventBus;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventPublisher;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.greenrobot.GreenrobotEventBus;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.AudioClipSoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.FakeSoundHarmonicIntervalHintDemonstrator;
@@ -68,8 +66,8 @@ public final class HandmadeDI implements CustomDI {
     protected static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
     protected static DomainEventsFactory domainEventsFactory;
     protected static EventPublisher eventPublisher;
-    protected static EventBus eventBus;
     protected static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
+    protected static GreenrobotEventBus greenrobotEventBus;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -227,24 +225,16 @@ public final class HandmadeDI implements CustomDI {
             return (T) domainEventsFactory;
 
         } else if (className.equals(EventPublisher.class.getName())) {
-            if (eventPublisher == null) {
-                eventPublisher = get(SpringEventPublisher.class);
-            }
-            return (T) eventPublisher;
-
-            // TODO use lightweight event publisher
-        } else if (className.equals(SpringEventPublisher.class.getName())) {
-            // return (T) new SpringEventPublisher((ApplicationEventPublisher) context);
-            return (T) null;
+            return (T) get(GreenrobotEventBus.class);
 
         } else if (className.equals(EventBus.class.getName())) {
-            if (eventBus == null) {
-                eventBus = get(SpringEventBus.class);
-            }
-            return (T) eventBus;
+            return (T) get(GreenrobotEventBus.class);
 
-        } else if (className.equals(SpringEventBus.class.getName())) {
-            return (T) new SpringEventBus();
+        } else if (className.equals(GreenrobotEventBus.class.getName())) {
+            if (greenrobotEventBus == null) {
+                greenrobotEventBus = new GreenrobotEventBus(org.greenrobot.eventbus.EventBus.getDefault());
+            }
+            return (T) greenrobotEventBus;
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
@@ -262,7 +252,7 @@ public final class HandmadeDI implements CustomDI {
         inMemoryAudioPerfectPitchSessionRepository = null;
         domainEventsFactory = null;
         eventPublisher = null;
-        eventBus = null;
+        greenrobotEventBus = null;
     }
 
 }
