@@ -8,6 +8,7 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.SolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 
+// TODO actually it's not a factory. remake.
 public final class SolutionGeneratorsFactory {
 
     public SolutionGeneratorsFactory() {
