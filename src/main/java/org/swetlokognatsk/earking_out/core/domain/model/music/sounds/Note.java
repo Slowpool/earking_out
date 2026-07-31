@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public record Note(NoteNames noteName, Accidentals accidental, Octaves octave) implements Serializable {
     private static final long serialVersionUID = 1L;

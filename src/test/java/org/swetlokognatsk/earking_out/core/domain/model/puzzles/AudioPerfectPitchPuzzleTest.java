@@ -7,15 +7,15 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
-import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public class AudioPerfectPitchPuzzleTest {
     protected PuzzleTestHelper puzzleHelper;
 
     @Before
     public void setup() {
-        DI.deleteSingletons();
+        DI.refreshDependencies();
         puzzleHelper = new PuzzleTestHelper(DI.get(PuzzleConfigRepository.class));
     }
 

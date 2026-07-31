@@ -10,7 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 
 public final class AudioPerfectPitchSessionAggregateTest {
@@ -21,7 +21,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
     @Before
     public void setup() {
-        DI.deleteSingletons();
+        DI.refreshDependencies();
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 

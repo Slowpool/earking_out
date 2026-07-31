@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.NoteTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class NoteNormalizerTest {
     static NotesNormalizingService noteNormalizer;

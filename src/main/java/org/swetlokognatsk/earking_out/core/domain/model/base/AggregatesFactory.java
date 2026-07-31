@@ -1,8 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.model.base;
 
 import java.lang.reflect.Array;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 // TODO how 'bout using Command-like pattern for `repository/factory/aggreagate_constructor` chain? to avoid lengthy params duplications
 // TODO use this interface for all factories

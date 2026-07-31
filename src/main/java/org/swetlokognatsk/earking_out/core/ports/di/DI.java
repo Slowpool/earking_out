@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.ports;
+package org.swetlokognatsk.earking_out.core.ports.di;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
@@ -39,6 +39,7 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.di.HandmadeDI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventBus;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventPublisher;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
@@ -60,23 +61,22 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpi
 
 // TODO for now this class was made strictly in test purposes, to postpone DI in java
 public final class DI {
-    public static String TEST_ENV = "test_env";
-    public static String PROD_ENV = "prod_env";
-    public static String env = "test_env";
+    // TODO change env to mode. because from the point of DI there're just two modes: test mode and production mode, though production means that app is just launched, even if for dev purposes
+    public static final String TEST_ENV = "test_env";
+    public static final String PROD_ENV = "prod_env";
+    public static String env = TEST_ENV;
 
-    // singleton lifetime simulation
-    protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
-    protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
-    protected static InMemorySessionPianoKeyboardRepository inMemorySessionPianoKeyboardRepository;
-    protected static TestInMemoryAllPianoKeyboardRepository testInMemoryAllPianoKeyboardRepository;
-    protected static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
-    protected static MockPianoKeySoundsPlayer mockPianoKeySoundsPlayer;
-    protected static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
-    protected static DomainEventsFactory domainEventsFactory;
-    protected static EventPublisher eventPublisher;
-    protected static EventBus eventBus;
-
+    // TODO separate it via interface?
     public static ApplicationContext context;
+    public static CustomDI customDI = new HandmadeDI();
+
+    public static boolean isTestEnv() {
+        return env.equals(DI.TEST_ENV);
+    }
+
+    public static boolean isProdEnv() {
+        return env.equals(DI.TEST_ENV);
+    }
 
     private DI() {
     }
@@ -147,56 +147,45 @@ public final class DI {
     }
 
     public static <T> T get(Class<T> someClass, Object... args) {
-        // TODO refactoring
+        return switch (env) {
+        case PROD_ENV -> getBean(someClass, args);
+        case TEST_ENV -> getFromCustomDI(someClass, args);
+        default -> throw new RuntimeException("unknown environment: " + env);
+        };
+    }
+
+    public static <T> T getBean(Class<T> someClass, Object... args) {
         try {
             var bean = args.length > 0 ? context.getBean(someClass, args) : context.getBean(someClass);
             return bean;
         } catch (BeansException e) {
             System.out.print("beans exception: " + e.getMessage());
-        }
-
-        var className = someClass.getName();
-        // // TODO delete later
-        // } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
-        //     return (T) (env.equals(TEST_ENV) ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
-
-        if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
-            return (T) (env.equals(TEST_ENV) ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
-
-        } else if (className.equals(VisualPerfectPitchSolutionGenerator.class.getName())) {
-            return (T) (env.equals(TEST_ENV) ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
-
-        } else if (className.equals(PianoKeySoundsPlayer.class.getName())) {
-            return (T) (env.equals(TEST_ENV) ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
-
-        } else if (className.equals(MockPianoKeySoundsPlayer.class.getName())) {
-            if (mockPianoKeySoundsPlayer == null) {
-                mockPianoKeySoundsPlayer = new MockPianoKeySoundsPlayer();
-            }
-            return (T) mockPianoKeySoundsPlayer;
-
-        } else if (className.equals(AudioClipPianoKeySoundsPlayer.class.getName())) {
-            if (audioClipPianoKeySoundsPlayer == null) {
-                audioClipPianoKeySoundsPlayer = new AudioClipPianoKeySoundsPlayer();
-            }
-            return (T) audioClipPianoKeySoundsPlayer;
-
-        } else {
-            throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
+            throw new RuntimeException("bean not found", e);
         }
     }
 
+    /**
+     * custom DI is any lightweight DI for unit tests. it should be implemented
+     * either manually either via some lightweight IoC lib.
+     * 
+     * @param <T>
+     * @param someClass
+     * @param args
+     * @return
+     */
+    private static <T> T getFromCustomDI(Class<T> someClass, Object... args) {
+        return customDI.get(someClass, args);
+    }
+
     // TODO wanna believe there's such a feature in SpringBoot. it's required for pure junit tests, so that each starts in the same DI-container state
-    public static void deleteSingletons() {
-        inMemoryPuzzleConfigRepository = null;
-        pianoKeyboardAggregatesFactory = null;
-        inMemorySessionPianoKeyboardRepository = null;
-        testInMemoryAllPianoKeyboardRepository = null;
-        audioClipPianoKeySoundsPlayer = null;
-        mockPianoKeySoundsPlayer = null;
-        inMemoryAudioPerfectPitchSessionRepository = null;
-        domainEventsFactory = null;
-        eventPublisher = null;
-        eventBus = null;
+    public static void refreshDependencies() {
+        switch (env) {
+        case PROD_ENV:
+            throw new RuntimeException("refreshing dependencies on prod must never be called");
+        case TEST_ENV:
+            customDI.refreshDependencies();
+        default:
+            throw new RuntimeException("unknown environment: " + env);
+        }
     }
 }

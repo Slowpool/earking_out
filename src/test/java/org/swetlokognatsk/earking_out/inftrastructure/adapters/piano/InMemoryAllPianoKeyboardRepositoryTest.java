@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
@@ -49,7 +49,7 @@ public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryReposi
     @Before
     public void setup() {
         DI.setContext(springContext);
-        DI.deleteSingletons();
+        DI.refreshDependencies();
         repository = DI.get(TestInMemoryAllPianoKeyboardRepository.class);
     }
 
