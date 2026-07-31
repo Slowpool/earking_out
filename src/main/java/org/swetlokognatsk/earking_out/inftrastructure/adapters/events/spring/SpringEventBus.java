@@ -8,7 +8,9 @@ import org.swetlokognatsk.earking_out.core.ports.events.EventType;
 public final class SpringEventBus implements EventBus {
 
     public <DE extends DomainEvent> void subscribe(final EventType<DE> eventType, Consumer<DE> action) {
-        // no implementation. subscription happens via listeners' annotations
+        switch (eventType) {
+            case 
+        }
     }
 
 }

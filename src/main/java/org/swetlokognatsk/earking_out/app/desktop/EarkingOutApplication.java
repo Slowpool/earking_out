@@ -13,7 +13,10 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRequestedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.puzzles.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
@@ -25,9 +28,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
-import org.swetlokognatsk.earking_out.core.ports.events.EventType;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -52,7 +52,7 @@ public class EarkingOutApplication extends Application {
         // TODO bootstrap refactoring
         var context = runSpringApp(args);
         initDI(context);
-        registerDomainEventHandlers();
+        DomainEventHandlers.registerDomainEventHandlers();
         launch();
     }
 
@@ -66,20 +66,6 @@ public class EarkingOutApplication extends Application {
         var springApplication = new SpringApplication(EarkingOutApplication.class);
         springApplication.setBannerMode(Banner.Mode.OFF);
         return springApplication.run(args);
-    }
-
-    // TODO refactoring, put in utility class?
-    protected static void registerDomainEventHandlers() {
-        var eventBus = DI.get(EventBus.class);
-
-        // SpringEventBus doesn't contain implementation for this `subscribe()` method because spring handlers are separate classes with `@Component` annotation and `@EventListener` method. for spring this action is redudant.
-        eventBus.subscribe(new EventType<PianoKeyPressedEvent>(), EarkingOutApplication::handlePianoKeyPressing);
-    }
-
-    protected static void handlePianoKeyPressing(final PianoKeyPressedEvent e) {
-        // TODO wait, it should be moved to handler with `@Component` annotation
-        var pianoKeySoundsPlayer = DI.get(PianoKeySoundsPlayer.class);
-        pianoKeySoundsPlayer.play(e.pianoKeyNumber);
     }
 
     public EarkingOutApplication() {
