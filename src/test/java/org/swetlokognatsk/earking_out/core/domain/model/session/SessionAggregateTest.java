@@ -25,6 +25,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
@@ -48,7 +49,7 @@ public final class SessionAggregateTest {
         // TODO sort out this trash
         var pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory(new SerializationCloner(), new PianoKeysFactory(new PianoKeyColorService()));
         puzzleConfigRepository = new InMemoryPuzzleConfigRepository(new InMemoryPuzzleConfigPianoKeyboardRepository(pianoKeyboardAggregatesFactory), new AbstractPuzzleConfigAggregatesFactory(new SerializationCloner()));
-        sessionAggregatesFactory = new SessionAggregatesFactory(new SerializationCloner(), puzzleConfigRepository, new InMemorySessionPianoKeyboardRepository(pianoKeyboardAggregatesFactory), new PuzzleConfigDTOAssembler(puzzleConfigRepository), new PuzzlesFactory(new FakeSolutionGenera, null)));
+        sessionAggregatesFactory = new SessionAggregatesFactory(new SerializationCloner(), puzzleConfigRepository, new InMemorySessionPianoKeyboardRepository(pianoKeyboardAggregatesFactory), new PuzzleConfigDTOAssembler(puzzleConfigRepository), new PuzzlesFactory(new SolutionGeneratorsFactory(), new PuzzleConfigDTOAssembler(puzzleConfigRepository)));
     }
 
     public SessionAggregateTest() {

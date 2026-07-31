@@ -16,10 +16,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 
 @SpringBootTest
 public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, TestInMemoryAllPianoKeyboardRepository> {
-    // TODO figure out how to get springContext
-    @Autowired
-    private ApplicationContext springContext;
-    
     protected TestInMemoryAllPianoKeyboardRepository repository;
 
     protected PianoKeyboardAggregate getSomeAggregate() {
@@ -48,7 +44,6 @@ public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryReposi
 
     @Before
     public void setup() {
-        DI.setContext(springContext);
         DI.refreshDependencies();
         repository = DI.get(TestInMemoryAllPianoKeyboardRepository.class);
     }
