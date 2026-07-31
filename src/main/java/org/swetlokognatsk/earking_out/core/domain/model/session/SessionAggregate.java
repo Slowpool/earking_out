@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
@@ -7,11 +9,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public abstract class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends AggregateRoot<SessionId> {
     private static final long serialVersionUID = 1L;
 
-    private final PuzzlesFactory puzzlesFactory;
+    private transient PuzzlesFactory puzzlesFactory;
 
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
@@ -165,5 +168,10 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         var puzzle = getPuzzle();
         var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(puzzle);
         addEvent(hearAgainEvent);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+        inputStream.defaultReadObject();
+        puzzlesFactory = DI.get(PuzzlesFactory.class);
     }
 }
