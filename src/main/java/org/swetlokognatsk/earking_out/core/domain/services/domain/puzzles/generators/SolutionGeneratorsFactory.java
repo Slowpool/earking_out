@@ -14,7 +14,9 @@ public final class SolutionGeneratorsFactory {
     public SolutionGeneratorsFactory() {
     }
 
-    public <PG extends SolutionGenerator> PG create(final PuzzleConfigDTO<?> puzzleConfig) {
+    // TODO what does bazinga mean?
+    @SuppressWarnings("bazinga")
+    public <PG extends SolutionGenerator<?>> PG create(final PuzzleConfigDTO<?> puzzleConfig) {
         var exercise = puzzleConfig.exercise;
         var solutionGenerator = switch (exercise) {
         case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSolutionGenerator.class, puzzleConfig);

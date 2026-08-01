@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports.di;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.support.GenericApplicationContext;
@@ -17,7 +18,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.asdf;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
@@ -26,7 +26,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKey
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
@@ -103,13 +102,13 @@ public final class DI {
 
         genericContext.registerBean(TestInMemoryAllPianoKeyboardRepository.class, () -> new TestInMemoryAllPianoKeyboardRepository(genericContext.getBean(PianoKeyboardAggregatesFactory.class)));
 
-        genericContext.registerBean(AudioPerfectPitchSessionService.class, () -> new AudioPerfectPitchSessionService(genericContext.getBean(PuzzleConfigRepository.class), genericContext.getBean(AudioPerfectPitchSessionRepository.class), genericContext.getBean(SessionAggregatesFactory.class)));
-
         genericContext.registerBean(SolutionGeneratorsFactory.class);
 
         genericContext.registerBean(PuzzlesFactory.class, () -> new PuzzlesFactory(genericContext.getBean(SolutionGeneratorsFactory.class), genericContext.getBean(PuzzleConfigDTOAssembler.class)));
 
         genericContext.registerBean(SessionAggregatesFactory.class, () -> new SessionAggregatesFactory(genericContext.getBean(ObjectCloner.class), genericContext.getBean(PuzzleConfigRepository.class), genericContext.getBean(SessionPianoKeyboardStorageAdapter.class), genericContext.getBean(PuzzleConfigDTOAssembler.class), genericContext.getBean(PuzzlesFactory.class)));
+
+        genericContext.registerBean(AudioPerfectPitchSessionService.class, () -> new AudioPerfectPitchSessionService(genericContext.getBean(PuzzleConfigRepository.class), genericContext.getBean(AudioPerfectPitchSessionRepository.class), genericContext.getBean(SessionAggregatesFactory.class)));
 
         genericContext.registerBean(SessionRepositoryDelegator.class);
 
@@ -129,7 +128,7 @@ public final class DI {
 
         genericContext.registerBean(PuzzleConfigDTOAssembler.class, () -> new PuzzleConfigDTOAssembler(genericContext.getBean(PuzzleConfigRepository.class)));
 
-        genericContext.registerBean(RandomAudioPerfectPitchSolutionGenerator.class);
+        genericContext.registerBean(RandomAudioPerfectPitchSolutionGenerator.class, (BeanDefinition bd) -> bd.setScope(BeanDefinition.SCOPE_PROTOTYPE));
 
         genericContext.registerBean(PianoKeyPressedHandler.class, () -> new PianoKeyPressedHandler(genericContext.getBean(PianoKeySoundsPlayer.class), genericContext.getBean(PuzzleConfigPianoKeyboardStorageAdapter.class), genericContext.getBean(PuzzleConfigRepository.class)));
 
@@ -139,6 +138,7 @@ public final class DI {
 
         // javafx beans
         genericContext.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(genericContext.getBean(SessionRepositoryDelegator.class)));
+
         genericContext.registerBean(StatsPanesFactory.class, () -> new StatsPanesFactory(genericContext.getBean(PuzzleConfigRepository.class), genericContext.getBean(SessionRepositoryDelegator.class)));
 
     }
