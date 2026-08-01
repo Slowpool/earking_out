@@ -11,6 +11,7 @@ module org.swetlokognatsk {
     requires spring.beans;
     requires spring.core;
     // org.greenrobot.eventbus.java
+    // TODO learn the pom.xml <scope>compile</scope> tag again
     requires eventbus.java;
 
     // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors

@@ -37,6 +37,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+// TODO google examples when nested classes and static nested classes are indeed a good design solution
+
 @SpringBootApplication(scanBasePackages = { "org.swetlokognatsk.earking_out.app.desktop", "org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring" })
 public class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
