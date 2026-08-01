@@ -21,6 +21,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPuzzleConfigPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
@@ -36,7 +37,7 @@ public class RandomAudioPerfectPitchSolutionGeneratorTest {
         // firstly creating puzzleConfig for validation
         var puzzleConfig = createAnyPuzzleConfig(normalizedNotesForPuzzle);
         // TODO well, it's absolute mess
-        var puzzleConfigDTOAssembler = new PuzzleConfigDTOAssembler(new InMemoryPuzzleConfigRepository(new InMemoryPuzzleConfigPianoKeyboardRepository(new PianoKeyboardAggregatesFactory(new SerializationCloner(), new PianoKeysFactory(new PianoKeyColorService()))), new AbstractPuzzleConfigAggregatesFactory(new SerializationCloner())));
+        var puzzleConfigDTOAssembler = DI.get(PuzzleConfigDTOAssembler.class);
         AudioPerfectPitchConfigDTO puzzleConfigDto = puzzleConfigDTOAssembler.assemble(puzzleConfig);
         var generator = new RandomAudioPerfectPitchSolutionGenerator(puzzleConfigDto);
         return generator;

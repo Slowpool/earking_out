@@ -11,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
 
 /**
@@ -32,7 +33,7 @@ public final class PianoKeyboardDTOAssemblerTest {
     protected final PianoKeyboardDTO dto2;
 
     public PianoKeyboardDTOAssemblerTest() {
-        pianoKeyboardFactory = new PianoKeyboardAggregatesFactory(new SerializationCloner(), new PianoKeysFactory(new PianoKeyColorService()));
+        pianoKeyboardFactory = DI.get(PianoKeyboardAggregatesFactory.class);
 
         var selectedKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
         pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER, selectedKeys);

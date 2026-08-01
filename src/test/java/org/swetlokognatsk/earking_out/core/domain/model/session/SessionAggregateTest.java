@@ -1,37 +1,20 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import static org.junit.Assert.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.*;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.swetlokognatsk.earking_out.TestHelper;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPuzzleConfigPianoKeyboardRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemorySessionPianoKeyboardRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 
 @SpringBootApplication
@@ -46,10 +29,9 @@ public final class SessionAggregateTest {
 
     @Before
     public void setup() {
-        // TODO sort out this trash
-        var pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory(new SerializationCloner(), new PianoKeysFactory(new PianoKeyColorService()));
-        puzzleConfigRepository = new InMemoryPuzzleConfigRepository(new InMemoryPuzzleConfigPianoKeyboardRepository(pianoKeyboardAggregatesFactory), new AbstractPuzzleConfigAggregatesFactory(new SerializationCloner()));
-        sessionAggregatesFactory = new SessionAggregatesFactory(new SerializationCloner(), puzzleConfigRepository, new InMemorySessionPianoKeyboardRepository(pianoKeyboardAggregatesFactory), new PuzzleConfigDTOAssembler(puzzleConfigRepository), new PuzzlesFactory(new SolutionGeneratorsFactory(), new PuzzleConfigDTOAssembler(puzzleConfigRepository)));
+        DI.refreshDependencies();
+        puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
+        sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 
     public SessionAggregateTest() {
