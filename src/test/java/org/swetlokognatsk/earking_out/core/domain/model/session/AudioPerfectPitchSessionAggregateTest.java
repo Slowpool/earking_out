@@ -3,14 +3,14 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.assertNoSelectedKeys;
-
 import org.junit.*;
+import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 
 public final class AudioPerfectPitchSessionAggregateTest {
@@ -21,7 +21,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
     @Before
     public void setup() {
-        DI.deleteSingletons();
+        DI.refreshDependencies();
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 
@@ -32,6 +32,12 @@ public final class AudioPerfectPitchSessionAggregateTest {
     protected AudioPerfectPitchSessionAggregate createAggregate() {
         setFakeSolution(SOLUTION);
         return sessionAggregatesFactory.create(getExercise());
+    }
+
+    protected AudioPerfectPitchSessionAggregate createAggregateAndFlushEvents() {
+        var aggregate = createAggregate();
+        aggregate.flushEvents();
+        return aggregate;
     }
 
     protected void setFakeSolution(final AudioPerfectPitchSolution fakeSolution) {
@@ -106,11 +112,36 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
+    public void demonstrateHintGivesCorrectEvent() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        aggregate.demonstrateHintAgain();
+        var events = aggregate.flushEvents();
+        assertEquals(1, events.size());
+
+        var event = events.getFirst();
+        assertEquals(HintRepeatingRequestedEvent.class, event.getClass());
+    }
+
+    @Test
+    public void demonstrateHintGivesEventWithCorrespondingPuzzle() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        aggregate.demonstrateHintAgain();
+        var events = aggregate.flushEvents();
+        var event = (HintRepeatingRequestedEvent) events.getFirst();
+
+        var aggregatePuzzle = aggregate.getPuzzle();
+        var eventPuzzle = event.puzzle;
+        assertTrue(aggregatePuzzle.equals(eventPuzzle));
+    }
+
+    @Test
     public void demonstrateHintAfterAbort() {
         var aggregate = createAggregateAndAbort();
 
         try {
-            aggregate.demonstrateHint();
+            aggregate.demonstrateHintAgain();
             fail();
         } catch (IllegalStateException e) {
         }

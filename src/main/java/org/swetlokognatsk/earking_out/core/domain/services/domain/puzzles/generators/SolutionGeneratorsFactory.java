@@ -3,17 +3,20 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.gener
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.SolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 
+// TODO actually it's not a factory. remake.
 public final class SolutionGeneratorsFactory {
 
     public SolutionGeneratorsFactory() {
     }
 
-    public <PG extends SolutionGenerator> PG create(final PuzzleConfigDTO<?> puzzleConfig) {
+    // TODO what does bazinga mean?
+    @SuppressWarnings("bazinga")
+    public <PG extends SolutionGenerator<?>> PG create(final PuzzleConfigDTO<?> puzzleConfig) {
         var exercise = puzzleConfig.exercise;
         var solutionGenerator = switch (exercise) {
         case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSolutionGenerator.class, puzzleConfig);

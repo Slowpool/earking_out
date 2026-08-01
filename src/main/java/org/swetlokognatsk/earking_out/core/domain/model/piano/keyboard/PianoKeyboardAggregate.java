@@ -7,12 +7,14 @@ import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
+
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
@@ -24,7 +26,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     protected final Map<PianoKeyNumber, PianoKey> pianoKeys;
     protected final Set<PianoKey> selectedKeys = new HashSet<>();
 
-    protected PianoKeyboardSoundMode soundMode;
     protected PianoKey pressedKey;
 
     public final PianoKeyboardId getPianoKeyboardId() {
@@ -52,14 +53,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return selectedKeys;
     }
 
-    public PianoKeyboardSoundMode getSoundMode() {
-        return soundMode;
-    }
-
-    protected void setSoundMode(final PianoKeyboardSoundMode soundMode) {
-        this.soundMode = soundMode;
-    }
-
     public final PianoKeyNumber getPressedPianoKeyNumber() {
         return pressedKey == null ? null : pressedKey.keyNumber;
     }
@@ -72,14 +65,14 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return mode.isTouchMode();
     }
 
-    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers, final PianoKeyboardSoundMode soundMode) {
+
+    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers, final PianoKeysFactory pianoKeysFactory) {
         super(id);
 
         Objects.requireNonNull(selectedKeyNumbers);
 
         mode = getModeById(id);
-        setSoundMode(soundMode);
-        pianoKeys = buildPianoKeys(selectedKeyNumbers, soundMode);
+        pianoKeys = buildPianoKeys(pianoKeysFactory, selectedKeyNumbers);
     }
 
     protected static PianoKeyboardMode getModeById(final PianoKeyboardId id) {
@@ -91,18 +84,16 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         };
     }
 
-    private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeyNumber[] selectedKeyNumbers, final PianoKeyboardSoundMode soundMode) {
+    private Map<PianoKeyNumber, PianoKey> buildPianoKeys(final PianoKeysFactory pianoKeysFactory, final PianoKeyNumber[] selectedKeyNumbers) {
         validateKeyNumbersToSelect(selectedKeyNumbers);
 
         final var pianoKeys = new HashMap<PianoKeyNumber, PianoKey>(PIANO_KEYS_NUMBER);
         final PianoKeyMode pianoKeyMode = getPianoKeyMode();
 
-        var pianoKeysFactory = DI.get(PianoKeysFactory.class);
-
         PianoKeyNumber.forEachKey((PianoKeyNumber keyNumber) -> {
             final boolean isSelected = ArrayUtils.contains(selectedKeyNumbers, keyNumber);
 
-            final var pianoKey = pianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected, soundMode);
+            final var pianoKey = pianoKeysFactory.create(keyNumber, pianoKeyMode, isSelected);
             pianoKeys.put(keyNumber, pianoKey);
 
             tryAddAsSelected(pianoKey);
@@ -152,6 +143,9 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         applySelectingLogicAfterPress(pianoKey);
 
         pressedKey = pianoKey;
+
+        var pianoKeyPressedEvent = getDomainEventsFactory().createPianoKeyPressedEvent(id, keyNumber);
+        addEvent(pianoKeyPressedEvent);
     }
 
     protected void validatePianoKeyToPress(final PianoKeyNumber keyNumber) {

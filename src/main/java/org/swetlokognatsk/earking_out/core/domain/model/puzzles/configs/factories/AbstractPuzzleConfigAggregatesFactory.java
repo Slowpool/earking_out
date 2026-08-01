@@ -6,18 +6,19 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.V
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.VisualPerfectPitchConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 
 public final class AbstractPuzzleConfigAggregatesFactory {
+    private final ObjectCloner objectCloner;
 
-    private AbstractPuzzleConfigAggregatesFactory() {
+    public AbstractPuzzleConfigAggregatesFactory(final ObjectCloner objectCloner) {
+        this.objectCloner = objectCloner;
     }
 
-    public static <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, ?>> PCAF createFactory(final E exercise) {
+    public <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, ?>> PCAF createFactory(final E exercise) {
         PuzzleConfigAggregatesFactory<?, ?> factory = switch (exercise) {
-            case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregatesFactory();
-            case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfigAggregatesFactory();
+            case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregatesFactory(objectCloner);
+            case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfigAggregatesFactory(objectCloner);
             default -> throw new IllegalArgumentException("unknown exercise for PuzzleConfigAggregatesFactory: " + exercise);
         };
         return (PCAF) factory;

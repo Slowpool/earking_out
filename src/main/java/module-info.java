@@ -1,10 +1,98 @@
-// TODO either make a cooldown after successful guess, either add setting to disable the successful guess note sound.
+// TODO cooldown after successful guess? to avoid audio abuse of intervals in perfect pitch
 // TODO make picked notes to be highlighted durin the guessing somehow
 // TODO add mode for visual piano key notes picking using mouse
 module org.swetlokognatsk {
     requires javafx.controls;
     requires javafx.media;
     requires org.apache.commons.lang3;
+    requires spring.boot;
+    requires spring.boot.autoconfigure;
+    requires spring.context;
+    requires spring.beans;
+    requires spring.core;
+    // org.greenrobot.eventbus.java
+    // TODO learn the pom.xml <scope>compile</scope> tag again
+    requires eventbus.java;
 
+    // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
+    exports org.swetlokognatsk.earking_out.core.ports.piano;
+    exports org.swetlokognatsk.earking_out.core.ports.hints.demonstrators;
+    exports org.swetlokognatsk.earking_out.core.domain.events;
+    exports org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard;
+    exports org.swetlokognatsk.earking_out.core.domain.events.puzzles;
+    exports org.swetlokognatsk.earking_out.core.domain.model.solutions;
+    exports org.swetlokognatsk.earking_out.core.domain.model.piano.key;
+    exports org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
+    exports org.swetlokognatsk.earking_out.core.domain.model.exercises;
+    exports org.swetlokognatsk.earking_out.core.ports.config;
+    exports org.swetlokognatsk.earking_out.core.ports.base;
+    exports org.swetlokognatsk.earking_out;
+    exports org.swetlokognatsk.earking_out.app.desktop.components;
+    exports org.swetlokognatsk.earking_out.app.desktop.events.configs;
+    exports org.swetlokognatsk.earking_out.app.desktop.events.exercises;
+    exports org.swetlokognatsk.earking_out.app.desktop.events.piano;
+    exports org.swetlokognatsk.earking_out.app.desktop.events.session;
+    exports org.swetlokognatsk.earking_out.app.desktop.helpers;
+    exports org.swetlokognatsk.earking_out.app.desktop.panes;
+    exports org.swetlokognatsk.earking_out.app.desktop.panes.factories;
+    exports org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
+    exports org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
+    exports org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats;
+    exports org.swetlokognatsk.earking_out.app.desktop.services;
+    exports org.swetlokognatsk.earking_out.app.web;
+    exports org.swetlokognatsk.earking_out.core.domain.events.exercises;
+    exports org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs;
+    exports org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.helpers;
+    exports org.swetlokognatsk.earking_out.core.domain.model;
+    exports org.swetlokognatsk.earking_out.core.domain.model.base;
+    exports org.swetlokognatsk.earking_out.core.domain.model.exercises.intervals.melodic;
+    exports org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.model.music;
+    exports org.swetlokognatsk.earking_out.core.domain.model.music.sounds;
+    exports org.swetlokognatsk.earking_out.core.domain.model.puzzles;
+    exports org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs;
+    exports org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories;
+    exports org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.model.session;
+    exports org.swetlokognatsk.earking_out.core.domain.model.session.factories;
+    exports org.swetlokognatsk.earking_out.core.domain.model.session.factories.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.model.solutions.sound;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.session;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.assemblers;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.exceptions;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.session;
+    exports org.swetlokognatsk.earking_out.core.domain.services.domain.music;
+    exports org.swetlokognatsk.earking_out.core.domain.services.domain.piano;
+    exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators;
+    exports org.swetlokognatsk.earking_out.core.ports.events;
+    exports org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound;
+    exports org.swetlokognatsk.earking_out.core.ports.puzzles;
+    exports org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.ports.session;
+    exports org.swetlokognatsk.earking_out.core.ports.session.perfectpitch;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.base;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.piano;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.session;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpitch;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds;
+
+    opens org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
 }

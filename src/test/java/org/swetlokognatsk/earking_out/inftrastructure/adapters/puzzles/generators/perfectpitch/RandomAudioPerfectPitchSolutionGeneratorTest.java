@@ -9,7 +9,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
@@ -18,18 +20,25 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPuzzleConfigPianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 
 public class RandomAudioPerfectPitchSolutionGeneratorTest {
     protected static int ITERATIONS_NUMBER = 100;
 
-    protected static AudioPerfectPitchConfigAggregatesFactory configFactory = AbstractPuzzleConfigAggregatesFactory.createFactory(new AudioPerfectPitchExercise());
+    protected static AudioPerfectPitchConfigAggregatesFactory configFactory = new AbstractPuzzleConfigAggregatesFactory(new SerializationCloner()).createFactory(new AudioPerfectPitchExercise());
 
     protected static RandomAudioPerfectPitchSolutionGenerator createPuzzleGenerator(final PianoKeyNumber[] normalizedNotesForPuzzle) {
         // TODO how to validate aggregate?
         // TODO can it be in invalid state at all?
         // firstly creating puzzleConfig for validation
         var puzzleConfig = createAnyPuzzleConfig(normalizedNotesForPuzzle);
-        AudioPerfectPitchConfigDTO puzzleConfigDto = PuzzleConfigDTOAssembler.assemble(puzzleConfig);
+        // TODO well, it's absolute mess
+        var puzzleConfigDTOAssembler = DI.get(PuzzleConfigDTOAssembler.class);
+        AudioPerfectPitchConfigDTO puzzleConfigDto = puzzleConfigDTOAssembler.assemble(puzzleConfig);
         var generator = new RandomAudioPerfectPitchSolutionGenerator(puzzleConfigDto);
         return generator;
     }

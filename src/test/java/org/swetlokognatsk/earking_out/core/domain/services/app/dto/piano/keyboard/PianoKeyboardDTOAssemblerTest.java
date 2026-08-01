@@ -5,10 +5,14 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
 
 /**
  * idea: to test the dto assembling itself, we need only 2 pairs of aggregate
@@ -29,13 +33,13 @@ public final class PianoKeyboardDTOAssemblerTest {
     protected final PianoKeyboardDTO dto2;
 
     public PianoKeyboardDTOAssemblerTest() {
-        pianoKeyboardFactory = new PianoKeyboardAggregatesFactory();
+        pianoKeyboardFactory = DI.get(PianoKeyboardAggregatesFactory.class);
 
         var selectedKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
-        pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER, selectedKeys, PianoKeyboardSoundMode.USUAL);
+        pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER, selectedKeys);
         dto1 = PianoKeyboardDtoAssembler.assemble(pianoKeyboard1);
 
-        pianoKeyboard2 = pianoKeyboardFactory.create(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER, PianoKeyboardSoundMode.USUAL);
+        pianoKeyboard2 = pianoKeyboardFactory.create(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         pianoKeyboard2.pressKey(FIRST_NOTE_NUMBER.add(3));
         dto2 = PianoKeyboardDtoAssembler.assemble(pianoKeyboard2);
     }

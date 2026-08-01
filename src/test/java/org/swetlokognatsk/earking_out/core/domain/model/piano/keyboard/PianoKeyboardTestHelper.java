@@ -3,33 +3,23 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.junit.Assert.*;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
-import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class PianoKeyboardTestHelper {
     // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up
     protected final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = DI.get(PianoKeyboardAggregatesFactory.class);
 
-    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyboardSoundMode soundMode) {
-        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, soundMode);
+    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
+        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id);
         return pianoKeyboard;
     }
 
-    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
-        return createPianoKeyboard(id, PianoKeyboardSoundMode.USUAL);
-    }
-
     public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys) {
-        return createPianoKeyboard(id, selectedKeys, PianoKeyboardSoundMode.USUAL);
-    }
-
-    public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys, final PianoKeyboardSoundMode soundMode) {
-        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, selectedKeys, soundMode);
+        var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id, selectedKeys);
         return pianoKeyboard;
     }
 

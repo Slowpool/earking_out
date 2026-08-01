@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.piano;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
 
 /**

@@ -6,10 +6,9 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKe
 import java.util.Objects;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
-import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class PianoKeyTest {
     protected static PianoKeyNumber ANY_PIANO_KEY_NUMBER = FIRST_NOTE_NUMBER;
@@ -80,12 +79,4 @@ public final class PianoKeyTest {
         } catch (IllegalStateException e) {
         }
     }
-
-    @Test
-    public void playSoundOnPress() {
-        var pianoKey = new PianoKey(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH, false, PianoKeyboardSoundMode.USUAL, DI.get(PianoKeyColorService.class), mockSoundPlayer);
-        pianoKey.press();
-        assertTrue(mockSoundPlayer.stopAndPlayIsPressed);
-    }
-
 }

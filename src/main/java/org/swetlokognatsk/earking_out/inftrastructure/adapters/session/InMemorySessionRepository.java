@@ -6,13 +6,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.AggregateRepository;
 
-public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?, ?, ?>> implements SessionRepository<SA> {
+public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?, ?, ?>> extends AggregateRepository implements SessionRepository<SA> {
     protected final Map<SessionId, SessionAggregate<?, ?, ?, ?>> sessionAggregates = new HashMap<>();
 
     protected final SessionAggregatesFactory sessionAggregatesFactory;
 
     protected abstract void loadDependentAggregates(final SA sessionAggregate);
+
     protected abstract void saveDependentAggregates(final SA sessionAggregate);
 
     public InMemorySessionRepository(final SessionAggregatesFactory sessionAggregatesFactory) {
@@ -30,8 +32,12 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
     }
 
     public void save(SA sessionAggregate) {
+        var events = sessionAggregate.flushEvents();
+
         sessionAggregate = (SA) sessionAggregatesFactory.createDeepCopy(sessionAggregate);
         saveDependentAggregates(sessionAggregate);
         sessionAggregates.put(sessionAggregate.getId(), sessionAggregate);
+
+        publishEvents(events);
     }
 }

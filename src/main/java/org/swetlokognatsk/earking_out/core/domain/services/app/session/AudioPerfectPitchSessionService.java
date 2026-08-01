@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.session;
 
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
@@ -10,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.factories.Sessio
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 
 public final class AudioPerfectPitchSessionService extends SessionService<AudioPerfectPitchExercise, AudioPerfectPitchSessionAggregate, AudioPerfectPitchSessionRepository> {
@@ -36,6 +38,7 @@ public final class AudioPerfectPitchSessionService extends SessionService<AudioP
 
     public void hearAgain(final SessionId sessionId) {
         var session = (AudioPerfectPitchSessionAggregate) sessionRepository.get(sessionId);
-        session.hearAgain();
+        session.demonstrateHintAgain();
+        sessionRepository.save(session);
     }
 }

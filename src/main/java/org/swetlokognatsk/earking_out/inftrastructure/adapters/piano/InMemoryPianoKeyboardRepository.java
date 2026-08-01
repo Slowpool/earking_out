@@ -13,8 +13,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.AggregateRepository;
 
-public abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardStorageAdapter {
+
+abstract class InMemoryPianoKeyboardRepository extends AggregateRepository implements PianoKeyboardStorageAdapter {
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
@@ -29,8 +31,7 @@ public abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardSt
     protected void initPianoKeyboards() {
         PianoKeyboardAggregate pianoKeyboard;
         for (var pianoKeyboardId : getPianoKeyboardIds()) {
-            // TODO pull soundMode from puzzleConfig
-            pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId, PianoKeyboardSoundMode.SOUNDLESS);
+            pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId);
             pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
         }
     }
@@ -50,13 +51,18 @@ public abstract class InMemoryPianoKeyboardRepository implements PianoKeyboardSt
         return pianoKeyboardCopy;
     }
 
+    // TODO generalize the whole set/get logic into `InMemoryAggregateRepository` abstract class
     public void save(final PianoKeyboardAggregate pianoKeyboardAggregate) {
         var pianoKeyboardId = pianoKeyboardAggregate.getPianoKeyboardId();
         // ensuring it exists (keyboards are initialized in initKeyboards(). further no new keyboards can be created)
         getPianoKeyboardAggregate(pianoKeyboardId);
 
+        var events = pianoKeyboardAggregate.flushEvents();
+
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregate);
         pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboardCopy);
+        
+        publishEvents(events);
     }
 
     public PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId) {

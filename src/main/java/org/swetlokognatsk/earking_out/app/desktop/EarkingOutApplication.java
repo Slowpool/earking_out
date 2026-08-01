@@ -1,5 +1,9 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
+import org.springframework.boot.Banner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
@@ -9,6 +13,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
@@ -19,7 +24,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -29,7 +34,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public final class EarkingOutApplication extends Application {
+// TODO google examples when nested classes and static nested classes are indeed a good design solution
+
+@SpringBootApplication(scanBasePackages = { "org.swetlokognatsk.earking_out.app.desktop", "org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring" })
+public class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
     private static final int WIDTH = 1920;
@@ -40,9 +48,23 @@ public final class EarkingOutApplication extends Application {
     private final Scene mainScene;
 
     public static void main(String[] args) {
+        // TODO bootstrap refactoring
+        var context = runSpringApp(args);
+        initDI(context);
+        DomainEventHandlers.registerDomainEventHandlers();
+        launch();
+    }
+
+    protected static void initDI(final ApplicationContext context) {
         // TODO wash away this hack after setting up the spring boot
         DI.env = DI.PROD_ENV;
-        launch();
+        DI.setContext(context);
+    }
+
+    protected static ApplicationContext runSpringApp(String[] args) {
+        var springApplication = new SpringApplication(EarkingOutApplication.class);
+        springApplication.setBannerMode(Banner.Mode.OFF);
+        return springApplication.run(args);
     }
 
     public EarkingOutApplication() {
@@ -98,7 +120,9 @@ public final class EarkingOutApplication extends Application {
     }
 
     private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfigDTO<E>>> CP buildConfigPane(final E exercise) {
-        var puzzleConfigDto = PuzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
+        // TODO is it fine to pull it from DI here?
+        var puzzleConfigDTOAssembler = DI.get(PuzzleConfigDTOAssembler.class);
+        var puzzleConfigDto = puzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
 
         var configPane = ConfigPanesFactory.create(puzzleConfigDto, WIDTH, HEIGHT);
         configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);

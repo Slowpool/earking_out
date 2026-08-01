@@ -9,17 +9,18 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
-import org.swetlokognatsk.earking_out.core.ports.DI;
 
 public final class PuzzlesFactory {
     protected final SolutionGeneratorsFactory solutionGeneratorsFactory;
+    protected final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler;
 
-    public PuzzlesFactory() {
-        solutionGeneratorsFactory = DI.get(SolutionGeneratorsFactory.class);
+    public PuzzlesFactory(final SolutionGeneratorsFactory solutionGeneratorsFactory, final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler) {
+        this.solutionGeneratorsFactory = solutionGeneratorsFactory;
+        this.puzzleConfigDTOAssembler = puzzleConfigDTOAssembler;
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, r, P extends Puzzle<E, ?>> P create(final Exercise exercise) {
-        var puzzleConfigDto = PuzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
+        var puzzleConfigDto = puzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
         // TODO cache?
         var solutionGenerator = solutionGeneratorsFactory.create(puzzleConfigDto);
         var solution = solutionGenerator.generate();

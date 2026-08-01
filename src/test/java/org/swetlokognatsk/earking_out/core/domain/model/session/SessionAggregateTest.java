@@ -1,25 +1,23 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import static org.junit.Assert.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.*;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
-import org.swetlokognatsk.earking_out.core.ports.DI;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 
+@SpringBootApplication
 public final class SessionAggregateTest {
     protected static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
     protected static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(((AudioPerfectPitchSolution) SOLUTION).keyNumber.increment());
@@ -27,10 +25,12 @@ public final class SessionAggregateTest {
 
     // TODO create aggregateRoot, use it everywhere
     protected SessionAggregatesFactory sessionAggregatesFactory;
+    protected PuzzleConfigRepository puzzleConfigRepository;
 
     @Before
     public void setup() {
-        DI.deleteSingletons();
+        DI.refreshDependencies();
+        puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 
@@ -71,7 +71,6 @@ public final class SessionAggregateTest {
     }
 
     protected void updateTargetNumberOfPuzzlesOfSomeSession(int targetNumberOfPuzzles) {
-        var puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         var puzzleConfig = puzzleConfigRepository.get(new AudioPerfectPitchExercise());
         puzzleConfig.updateProperty(PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP, targetNumberOfPuzzles);
         puzzleConfigRepository.save(puzzleConfig);

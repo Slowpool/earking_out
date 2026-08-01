@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.ports.DI;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 abstract class PianoKeyboardTest {
     private final PianoKeyboardId pianoKeyboardIdWithTestedMode = getSomeSuitablePianoKeyboardId();
@@ -12,7 +12,7 @@ abstract class PianoKeyboardTest {
 
     @Before
     public void before() {
-        DI.deleteSingletons();
+        DI.refreshDependencies();
         pianoKeyboard = createPianoKeyboard();
     }
 
@@ -25,9 +25,4 @@ abstract class PianoKeyboardTest {
     protected PianoKeyboardAggregate createPianoKeyboard(final PianoKeyNumber[] selectedKeys) {
         return PianoKeyboardTestHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode, selectedKeys);
     }
-
-    protected PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardSoundMode soundMode) {
-        return PianoKeyboardTestHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode, soundMode);
-    }
-
 }

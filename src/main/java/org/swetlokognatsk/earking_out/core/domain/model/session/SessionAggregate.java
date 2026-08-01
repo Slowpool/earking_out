@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
-import java.io.Serializable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
@@ -8,11 +9,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.DI;
-import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public abstract class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends AggregateRoot<SessionId> {
     private static final long serialVersionUID = 1L;
+
+    private transient PuzzlesFactory puzzlesFactory;
 
     private final PCDTO puzzleConfigDto;
     private SessionStats stats;
@@ -91,8 +93,10 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         this.prevGuessIsSuccessful = prevGuessIsSuccessful;
     }
 
-    public SessionAggregate(final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
+    public SessionAggregate(final PuzzlesFactory puzzlesFactory, final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
         super(id);
+
+        this.puzzlesFactory = Objects.requireNonNull(puzzlesFactory);
 
         Objects.requireNonNull(stats);
 
@@ -103,16 +107,13 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         nextPuzzle();
     }
 
-    protected PuzzlesFactory getPuzzlesFactory() {
-        return DI.get(PuzzlesFactory.class);
-    }
-
     protected void nextPuzzle() {
-        P puzzle = getPuzzlesFactory().create(puzzleConfigDto.exercise);
+        P puzzle = puzzlesFactory.create(puzzleConfigDto.exercise);
         setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
-        // TODO refactoring via domain event NewPuzzleDisplayed
-        demonstrateHint();
+
+        var newPuzzleEvent = getDomainEventsFactory().createNewpuzzleCreatedEvent(puzzle);
+        addEvent(newPuzzleEvent);
     }
 
     public void guess(final S guess) {
@@ -163,10 +164,14 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setState(SessionStates.ABORTED);
     }
 
-    // TODO it should be in specific domain-event handler, not here.
-    protected void demonstrateHint() {
-        var hintDemonstrator = DI.get(HintDemonstrator.class);
-        // TODO what to do with warning
-        hintDemonstrator.demonstrateHint(getPuzzle().solution);
+    public void demonstrateHintAgain() {
+        var puzzle = getPuzzle();
+        var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(puzzle);
+        addEvent(hearAgainEvent);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+        inputStream.defaultReadObject();
+        puzzlesFactory = DI.get(PuzzlesFactory.class);
     }
 }
