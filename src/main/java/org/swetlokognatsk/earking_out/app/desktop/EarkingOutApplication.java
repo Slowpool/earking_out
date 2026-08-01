@@ -56,8 +56,6 @@ public class EarkingOutApplication extends Application {
     }
 
     protected static void initDI(final ApplicationContext context) {
-        // TODO wash away this hack after setting up the spring boot
-        DI.mode = DI.APP_MODE;
         DI.setContext(context);
     }
 
