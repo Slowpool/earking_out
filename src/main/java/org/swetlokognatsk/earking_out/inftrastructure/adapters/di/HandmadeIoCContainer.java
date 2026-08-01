@@ -24,7 +24,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKey
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.di.CustomDI;
+import org.swetlokognatsk.earking_out.core.ports.di.IoCContainer;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
@@ -56,7 +56,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generator
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 
-public final class HandmadeDI implements CustomDI {
+public final class HandmadeIoCContainer implements IoCContainer {
 
     protected Map<Class<?>, ?> singletons;
     // singleton lifetime simulation
@@ -87,6 +87,7 @@ public final class HandmadeDI implements CustomDI {
 
     // }
 
+    @SuppressWarnings("unchecked")
     public <T> T get(Class<T> someClass, Object... args) {
 
         var className = someClass.getName();
@@ -96,13 +97,13 @@ public final class HandmadeDI implements CustomDI {
         } else if (className.equals(HintDemonstrator.class.getName())) {
             return (T) new HintDemonstratorDelegator();
         } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
-            return (T) (DI.isTestEnv() ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
+            return (T) (DI.inTestMode() ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
         } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
-            return (T) (DI.isTestEnv() ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
+            return (T) (DI.inTestMode() ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(VisualPerfectPitchSolutionGenerator.class.getName())) {
-            return (T) (DI.isTestEnv() ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
+            return (T) (DI.inTestMode() ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(PianoKeyColorService.class.getName())) {
             return (T) new PianoKeyColorService();
@@ -183,7 +184,7 @@ public final class HandmadeDI implements CustomDI {
             return (T) new HintDemonstratorDelegator();
 
         } else if (className.equals(PianoKeySoundsPlayer.class.getName())) {
-            return (T) (DI.isTestEnv() ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
+            return (T) (DI.inTestMode() ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
 
         } else if (className.equals(MockPianoKeySoundsPlayer.class.getName())) {
             if (mockPianoKeySoundsPlayer == null) {
