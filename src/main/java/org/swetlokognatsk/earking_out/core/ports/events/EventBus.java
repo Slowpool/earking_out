@@ -4,5 +4,5 @@ import java.util.function.Consumer;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 
 public interface EventBus {
-    <DE extends DomainEvent> void subscribe(final EventType<DE> eventType, Consumer<DE> action);
+    <DE extends DomainEvent> void subscribe(Class<DE> clazz, Consumer<DE> action);
 }

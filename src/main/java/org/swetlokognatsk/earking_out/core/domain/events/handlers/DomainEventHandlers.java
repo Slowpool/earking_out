@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
 import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
-import org.swetlokognatsk.earking_out.core.ports.events.EventType;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.NewPuzzleCreatedEvent;
@@ -16,12 +15,12 @@ public final class DomainEventHandlers {
         // TODO sort it out
         // SpringEventBus doesn't contain implementation for this `subscribe()` method because spring handlers are separate classes with `@Component` annotation and `@EventListener` method. for spring this action is redudant.
         var pianoKeyPressedHandler = DI.get(PianoKeyPressedHandler.class);
-        eventBus.subscribe(new EventType<PianoKeyPressedEvent>(), pianoKeyPressedHandler::handlePianoKeyPressedEvent);
+        eventBus.subscribe(PianoKeyPressedEvent.class, pianoKeyPressedHandler::handlePianoKeyPressedEvent);
 
         var hintRepeatingRequestedHandler = DI.get(HintRepeatingRequestedHandler.class);
-        eventBus.subscribe(new EventType<HintRepeatingRequestedEvent>(), hintRepeatingRequestedHandler::handleHintRepeatingRequestedEvent);
+        eventBus.subscribe(HintRepeatingRequestedEvent.class, hintRepeatingRequestedHandler::handleHintRepeatingRequestedEvent);
         
-        var newPuzzleDisplayedHandler = DI.get(NewPuzzleDisplayedHandler.class);
-        eventBus.subscribe(new EventType<NewPuzzleCreatedEvent>(), newPuzzleDisplayedHandler::handleNewPuzzleCreatedEvent);
+        var newPuzzleCreatedHandler = DI.get(NewPuzzleCreatedHandler.class);
+        eventBus.subscribe(NewPuzzleCreatedEvent.class, newPuzzleCreatedHandler::handleNewPuzzleCreatedEvent);
     }
 }

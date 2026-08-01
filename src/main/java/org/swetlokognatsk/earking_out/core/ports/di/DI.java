@@ -6,6 +6,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.support.GenericApplicationContext;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintRepeatingRequestedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.NewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.PianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
@@ -14,6 +17,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.asdf;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
@@ -22,6 +26,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKey
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
@@ -121,10 +126,16 @@ public final class DI {
         genericContext.registerBean(SpringEventPublisher.class, () -> new SpringEventPublisher((ApplicationEventPublisher) context));
 
         genericContext.registerBean(SpringEventBus.class);
-        
+
         genericContext.registerBean(PuzzleConfigDTOAssembler.class, () -> new PuzzleConfigDTOAssembler(genericContext.getBean(PuzzleConfigRepository.class)));
 
         genericContext.registerBean(RandomAudioPerfectPitchSolutionGenerator.class);
+
+        genericContext.registerBean(PianoKeyPressedHandler.class, () -> new PianoKeyPressedHandler(genericContext.getBean(PianoKeySoundsPlayer.class), genericContext.getBean(PuzzleConfigPianoKeyboardStorageAdapter.class), genericContext.getBean(PuzzleConfigRepository.class)));
+
+        genericContext.registerBean(NewPuzzleCreatedHandler.class, () -> new NewPuzzleCreatedHandler(genericContext.getBean(HintDemonstratorDelegator.class)));
+
+        genericContext.registerBean(HintRepeatingRequestedHandler.class, () -> new HintRepeatingRequestedHandler(genericContext.getBean(HintDemonstratorDelegator.class)));
 
         // javafx beans
         genericContext.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(genericContext.getBean(SessionRepositoryDelegator.class)));

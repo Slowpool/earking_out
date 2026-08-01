@@ -14,9 +14,6 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFac
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
-import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
-import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRequestedEvent;
-import org.swetlokognatsk.earking_out.core.domain.events.puzzles.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;

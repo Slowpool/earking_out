@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
 
-import java.util.List;
 import org.springframework.context.ApplicationEventPublisher;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;

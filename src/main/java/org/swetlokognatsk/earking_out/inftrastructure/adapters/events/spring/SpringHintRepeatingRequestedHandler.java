@@ -6,11 +6,12 @@ import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRequestedEvent;
 
 @Component
-public final class HintRepeatingRequestedHandler {
-    public static Consumer<HintRepeatingRequestedEvent> handler;
+public final class SpringHintRepeatingRequestedHandler extends SpringEventHandler<HintRepeatingRequestedEvent> {
 
     @EventListener
     public void handleHintRepeatingRequestedEvent(final HintRepeatingRequestedEvent event) {
-        handler.accept(event);
+        if (callback != null) {
+            callback.accept(event);
+        }
     }
 }

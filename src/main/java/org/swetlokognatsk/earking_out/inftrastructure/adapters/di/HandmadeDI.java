@@ -3,6 +3,9 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.di;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintRepeatingRequestedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.NewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.PianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
@@ -68,6 +71,9 @@ public final class HandmadeDI implements CustomDI {
     protected static EventPublisher eventPublisher;
     protected static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
     protected static GreenrobotEventBus greenrobotEventBus;
+    protected static PianoKeyPressedHandler pianoKeyPressedHandler;
+    protected static NewPuzzleCreatedHandler newpuzzleCreatedHandler;
+    protected static HintRepeatingRequestedHandler hintRepeatingRequestedHandler;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -235,6 +241,24 @@ public final class HandmadeDI implements CustomDI {
                 greenrobotEventBus = new GreenrobotEventBus(org.greenrobot.eventbus.EventBus.getDefault());
             }
             return (T) greenrobotEventBus;
+
+        } else if (className.equals(PianoKeyPressedHandler.class.getName())) {
+            if (pianoKeyPressedHandler == null) {
+                pianoKeyPressedHandler = new PianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PuzzleConfigPianoKeyboardStorageAdapter.class), get(PuzzleConfigRepository.class));
+            }
+            return (T) pianoKeyPressedHandler;
+
+        } else if (className.equals(NewPuzzleCreatedHandler.class.getName())) {
+            if (newpuzzleCreatedHandler == null) {
+                newpuzzleCreatedHandler = new NewPuzzleCreatedHandler(get(HintDemonstratorDelegator.class));
+            }
+            return (T) newpuzzleCreatedHandler;
+
+        } else if (className.equals(HintRepeatingRequestedHandler.class.getName())) {
+            if (hintRepeatingRequestedHandler == null) {
+                hintRepeatingRequestedHandler = new HintRepeatingRequestedHandler(get(HintDemonstratorDelegator.class));
+            }
+            return (T) hintRepeatingRequestedHandler;
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());

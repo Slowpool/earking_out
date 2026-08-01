@@ -4,10 +4,10 @@ import org.swetlokognatsk.earking_out.core.domain.events.puzzles.NewPuzzleCreate
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
-public final class NewPuzzleDisplayedHandler {
+public final class NewPuzzleCreatedHandler {
     private final HintDemonstrator<Solution> hintDemonstrator;
 
-    public NewPuzzleDisplayedHandler(final HintDemonstrator<Solution> hintDemonstrator) {
+    public NewPuzzleCreatedHandler(final HintDemonstrator<Solution> hintDemonstrator) {
         this.hintDemonstrator = hintDemonstrator;
     }
 

@@ -5,8 +5,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
-import org.swetlokognatsk.earking_out.core.ports.events.EventType;
 
+// TODO learning tests
 public final class GreenrobotEventBus implements org.swetlokognatsk.earking_out.core.ports.events.EventBus, EventPublisher {
     private final EventBus innerEventBus;
 
@@ -15,7 +15,7 @@ public final class GreenrobotEventBus implements org.swetlokognatsk.earking_out.
         this.innerEventBus = eventBus;
     }
 
-    public <DE extends DomainEvent> void subscribe(final EventType<DE> et, Consumer<DE> action) {
+    public <DE extends DomainEvent> void subscribe(final Class<DE> clazz, final Consumer<DE> action) {
         innerEventBus.register(new Object() {
             @Subscribe
             public void handleEvent(final DE event) {
