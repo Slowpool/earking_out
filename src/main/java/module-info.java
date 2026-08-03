@@ -77,7 +77,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.services.app.session;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.music;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.piano;
-    exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators;
+    exports org.swetlokognatsk.earking_out.inftrastructure.factories.puzzles.generators;
     exports org.swetlokognatsk.earking_out.core.ports.events;
     exports org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound;
     exports org.swetlokognatsk.earking_out.core.ports.puzzles;

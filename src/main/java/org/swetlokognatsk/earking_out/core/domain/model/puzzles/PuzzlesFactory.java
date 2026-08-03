@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.Vis
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
+import org.swetlokognatsk.earking_out.inftrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 
 public final class PuzzlesFactory {
     protected final SolutionGeneratorsFactory solutionGeneratorsFactory;
