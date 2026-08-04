@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-public class AnyPianoKeyboardTest extends PianoKeyboardTest {
+public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
         return PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING;

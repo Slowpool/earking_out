@@ -8,8 +8,8 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
 public final class BlackPianoKey extends PianoKey {
-    protected static final Background selectedBackground = new Background(new BackgroundFill(Color.rgb(0x00, 0x14, 0xA9), CornerRadii.EMPTY, Insets.EMPTY));
-    protected static final Background notSelectedBackground = new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));
+    private static final Background selectedBackground = new Background(new BackgroundFill(Color.rgb(0x00, 0x14, 0xA9), CornerRadii.EMPTY, Insets.EMPTY));
+    private static final Background notSelectedBackground = new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));
 
     protected Background getSelectedBackground() {
         return selectedBackground;

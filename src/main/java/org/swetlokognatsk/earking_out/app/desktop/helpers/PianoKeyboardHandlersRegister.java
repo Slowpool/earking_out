@@ -13,7 +13,7 @@ import javafx.event.EventHandler;
 
 public final class PianoKeyboardHandlersRegister {
 
-    protected static final PianoKeyboardStorageAdapter[] pianoKeyboardRepositories = new PianoKeyboardStorageAdapter[] { DI.get(SessionPianoKeyboardStorageAdapter.class), DI.get(PuzzleConfigPianoKeyboardStorageAdapter.class) };
+    private static final PianoKeyboardStorageAdapter[] pianoKeyboardRepositories = new PianoKeyboardStorageAdapter[] { DI.get(SessionPianoKeyboardStorageAdapter.class), DI.get(PuzzleConfigPianoKeyboardStorageAdapter.class) };
 
     private PianoKeyboardHandlersRegister() {
     }
@@ -57,11 +57,11 @@ public final class PianoKeyboardHandlersRegister {
         return handler;
     }
 
-    protected static PuzzleConfigService getConfigService() {
+    private static PuzzleConfigService getConfigService() {
         return DI.get(PuzzleConfigService.class);
     }
 
-    protected static void doAndRefreshView(final Runnable action, final PianoKeyboard pianoKeyboard) {
+    private static void doAndRefreshView(final Runnable action, final PianoKeyboard pianoKeyboard) {
         action.run();
         updatePianoKeyboardView(pianoKeyboard);
     }

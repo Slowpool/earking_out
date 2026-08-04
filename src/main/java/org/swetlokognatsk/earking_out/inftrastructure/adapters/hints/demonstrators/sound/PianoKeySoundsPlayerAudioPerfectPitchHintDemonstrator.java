@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.Audio
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 
 public final class PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator implements AudioPerfectPitchHintDemonstrator {
-    protected final PianoKeySoundsPlayer pianoKeySoundsPlayer;
+    private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
 
     public PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(final PianoKeySoundsPlayer pianoKeySoundsPlayer) {
         this.pianoKeySoundsPlayer = pianoKeySoundsPlayer;

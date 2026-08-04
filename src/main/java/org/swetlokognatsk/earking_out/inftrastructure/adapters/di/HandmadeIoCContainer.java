@@ -3,10 +3,10 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.di;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintRepeatingRequestedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.NewPuzzleCreatedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.PianoKeyPressedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
@@ -21,10 +21,9 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSe
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.di.CustomDI;
+import org.swetlokognatsk.earking_out.core.ports.di.IoCContainer;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
@@ -55,25 +54,26 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generator
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 
-public final class HandmadeDI implements CustomDI {
+public final class HandmadeIoCContainer implements IoCContainer {
 
-    protected Map<Class<?>, ?> singletons;
+    private Map<Class<?>, ?> singletons;
     // singleton lifetime simulation
-    protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
-    protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
-    protected static InMemorySessionPianoKeyboardRepository inMemorySessionPianoKeyboardRepository;
-    protected static TestInMemoryAllPianoKeyboardRepository testInMemoryAllPianoKeyboardRepository;
-    protected static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
-    protected static MockPianoKeySoundsPlayer mockPianoKeySoundsPlayer;
-    protected static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
-    protected static DomainEventsFactory domainEventsFactory;
-    protected static EventPublisher eventPublisher;
-    protected static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
-    protected static GreenrobotEventBus greenrobotEventBus;
-    protected static PianoKeyPressedHandler pianoKeyPressedHandler;
-    protected static NewPuzzleCreatedHandler newpuzzleCreatedHandler;
-    protected static HintRepeatingRequestedHandler hintRepeatingRequestedHandler;
+    private static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
+    private static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
+    private static InMemorySessionPianoKeyboardRepository inMemorySessionPianoKeyboardRepository;
+    private static TestInMemoryAllPianoKeyboardRepository testInMemoryAllPianoKeyboardRepository;
+    private static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
+    private static MockPianoKeySoundsPlayer mockPianoKeySoundsPlayer;
+    private static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
+    private static DomainEventsFactory domainEventsFactory;
+    private static EventPublisher eventPublisher;
+    private static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
+    private static GreenrobotEventBus greenrobotEventBus;
+    private static PianoKeyPressedHandler pianoKeyPressedHandler;
+    private static NewPuzzleCreatedHandler newpuzzleCreatedHandler;
+    private static HintRepeatingRequestedHandler hintRepeatingRequestedHandler;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -87,6 +87,7 @@ public final class HandmadeDI implements CustomDI {
 
     // }
 
+    @SuppressWarnings("unchecked")
     public <T> T get(Class<T> someClass, Object... args) {
 
         var className = someClass.getName();
@@ -96,13 +97,13 @@ public final class HandmadeDI implements CustomDI {
         } else if (className.equals(HintDemonstrator.class.getName())) {
             return (T) new HintDemonstratorDelegator();
         } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
-            return (T) (DI.isTestEnv() ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
+            return (T) (DI.inTestMode() ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
         } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
-            return (T) (DI.isTestEnv() ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
+            return (T) (DI.inTestMode() ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(VisualPerfectPitchSolutionGenerator.class.getName())) {
-            return (T) (DI.isTestEnv() ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
+            return (T) (DI.inTestMode() ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
 
         } else if (className.equals(PianoKeyColorService.class.getName())) {
             return (T) new PianoKeyColorService();
@@ -183,7 +184,7 @@ public final class HandmadeDI implements CustomDI {
             return (T) new HintDemonstratorDelegator();
 
         } else if (className.equals(PianoKeySoundsPlayer.class.getName())) {
-            return (T) (DI.isTestEnv() ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
+            return (T) (DI.inTestMode() ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
 
         } else if (className.equals(MockPianoKeySoundsPlayer.class.getName())) {
             if (mockPianoKeySoundsPlayer == null) {

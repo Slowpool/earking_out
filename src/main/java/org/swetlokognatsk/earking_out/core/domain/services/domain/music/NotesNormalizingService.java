@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 /**
- * Note normalizing - mapping the note to key number. E.g. different notes C#1
+ * Note normalizing - mapping the note to key number. For example, notes C#1
  * and Db1 actually have the same key number (and the sound accordingly) - that's
  * 5th key number
  */

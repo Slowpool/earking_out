@@ -10,7 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerf
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class PuzzlePanesFactory {
-    protected final SessionRepositoryDelegator sessionRepository;
+    private final SessionRepositoryDelegator sessionRepository;
 
     public PuzzlePanesFactory(final SessionRepositoryDelegator sessionRepository) {
         this.sessionRepository = sessionRepository;

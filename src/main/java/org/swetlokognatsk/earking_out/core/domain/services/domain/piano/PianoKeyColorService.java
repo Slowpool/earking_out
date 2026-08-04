@@ -3,7 +3,6 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.piano;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-// btw interface is redundant here cuz i can't imagine different implementation
 public class PianoKeyColorService {
     public PianoKeyColor getColor(final PianoKeyNumber keyNumber) {
         var octaveScopedKeyNumber = keyNumber.getOctaveScopedKeyNumber();

@@ -34,8 +34,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-// TODO google examples when nested classes and static nested classes are indeed a good design solution
-
 @SpringBootApplication(scanBasePackages = { "org.swetlokognatsk.earking_out.app.desktop", "org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring" })
 public class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
@@ -48,20 +46,17 @@ public class EarkingOutApplication extends Application {
     private final Scene mainScene;
 
     public static void main(String[] args) {
-        // TODO bootstrap refactoring
         var context = runSpringApp(args);
         initDI(context);
         DomainEventHandlers.registerDomainEventHandlers();
         launch();
     }
 
-    protected static void initDI(final ApplicationContext context) {
-        // TODO wash away this hack after setting up the spring boot
-        DI.env = DI.PROD_ENV;
+    private static void initDI(final ApplicationContext context) {
         DI.setContext(context);
     }
 
-    protected static ApplicationContext runSpringApp(String[] args) {
+    private static ApplicationContext runSpringApp(String[] args) {
         var springApplication = new SpringApplication(EarkingOutApplication.class);
         springApplication.setBannerMode(Banner.Mode.OFF);
         return springApplication.run(args);
@@ -79,7 +74,7 @@ public class EarkingOutApplication extends Application {
         return contentPane;
     }
 
-    protected ExercisesMenu buildExercisesMenu() {
+    private ExercisesMenu buildExercisesMenu() {
         var exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
         return exercisesMenu;
     }
@@ -141,7 +136,7 @@ public class EarkingOutApplication extends Application {
         }
     }
 
-    protected <E extends Exercise> SessionService<E, ?, ?> getSessionService(final E exercise) {
+    private <E extends Exercise> SessionService<E, ?, ?> getSessionService(final E exercise) {
         var sessionService = switch (exercise) {
         case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSessionService.class);
         default -> throw new IllegalArgumentException("unknown exercise: " + exercise);

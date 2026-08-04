@@ -13,13 +13,13 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds.AudioClipSoundPlayer;
 
 public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer, Serializable {
-    protected transient Map<PianoKeyNumber, AudioClipSoundPlayer> soundPlayers;
+    private transient Map<PianoKeyNumber, AudioClipSoundPlayer> soundPlayers;
 
     public AudioClipPianoKeySoundsPlayer() {
         buildSoundPlayers();
     }
 
-    protected void buildSoundPlayers() {
+    private void buildSoundPlayers() {
         var files = getFiles();
         final var soundPlayers = new HashMap<PianoKeyNumber, AudioClipSoundPlayer>();
         var filesStream = files.entrySet().stream();
@@ -32,13 +32,13 @@ public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer
         this.soundPlayers = soundPlayers;
     }
 
-    protected Map<PianoKeyNumber, File> getFiles() {
+    private Map<PianoKeyNumber, File> getFiles() {
         var pianoKeySoundFilesBuilder = DI.get(PianoKeySoundFilesBuilder.class);
         var files = pianoKeySoundFilesBuilder.getFiles();
         return files;
     }
 
-    protected AudioClipSoundPlayer getSoundPlayer(final PianoKeyNumber keyNumber) {
+    private AudioClipSoundPlayer getSoundPlayer(final PianoKeyNumber keyNumber) {
         var soundPlayer = soundPlayers.get(keyNumber);
         if (soundPlayer == null) {
             throw new IllegalArgumentException();

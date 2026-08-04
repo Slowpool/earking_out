@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public final class PianoKeySoundFilesBuilder {
-    protected Map<PianoKeyNumber, File> files = new HashMap<>();
+    private Map<PianoKeyNumber, File> files = new HashMap<>();
 
     // TODO Java resources - i think it solves the problem of direct access to file system
     public PianoKeySoundFilesBuilder() {

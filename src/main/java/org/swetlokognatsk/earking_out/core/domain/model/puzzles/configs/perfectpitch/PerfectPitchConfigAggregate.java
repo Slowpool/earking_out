@@ -26,7 +26,7 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         return Arrays.copyOf(normalizedNotesForPuzzle, normalizedNotesForPuzzle.length);
     }
 
-    protected void setNormalizedNotesForPuzzle(final PianoKeyNumber[] normalizedNotesForPuzzle) {
+    protected final void setNormalizedNotesForPuzzle(final PianoKeyNumber[] normalizedNotesForPuzzle) {
         this.normalizedNotesForPuzzle = normalizedNotesForPuzzle;
     }
 
@@ -34,7 +34,7 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         return normalizedRootNote;
     }
 
-    protected void setNormalizedRootNote(final PianoKeyNumber normalizedRootNote) {
+    protected final void setNormalizedRootNote(final PianoKeyNumber normalizedRootNote) {
         this.normalizedRootNote = normalizedRootNote;
     }
 
@@ -42,7 +42,7 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         return inputMode;
     }
 
-    protected void setInputMode(final PerfectPitchInputMode inputMode) {
+    protected final void setInputMode(final PerfectPitchInputMode inputMode) {
         this.inputMode = inputMode;
     }
 
@@ -50,7 +50,7 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         return soundlessGuessingPiano;
     }
 
-    protected void setSoundlessGuessingPiano(final boolean soundlessGuessingPiano) {
+    protected final void setSoundlessGuessingPiano(final boolean soundlessGuessingPiano) {
         this.soundlessGuessingPiano = soundlessGuessingPiano;
     }
 
@@ -78,11 +78,11 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         switch (propertyName) {
         case NORMALIZED_ROOT_NOTE_PROP:
             var normalizedRootNote = pianoKeyboard.getSelectedKeyNumbers()[0];
-            updateConfigSpecificProperty(NORMALIZED_ROOT_NOTE_PROP, normalizedRootNote);
+            updateProperty(NORMALIZED_ROOT_NOTE_PROP, normalizedRootNote);
             break;
         case NORMALIZED_NOTES_FOR_PUZZLE_PROP:
             var selectedKeyNumbers = pianoKeyboard.getSelectedKeyNumbers();
-            updateConfigSpecificProperty(NORMALIZED_NOTES_FOR_PUZZLE_PROP, selectedKeyNumbers);
+            updateProperty(NORMALIZED_NOTES_FOR_PUZZLE_PROP, selectedKeyNumbers);
             break;
         default:
             throw new RuntimeException();

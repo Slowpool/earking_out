@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class PianoKeyboardTestHelper {
     // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up
-    protected final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = DI.get(PianoKeyboardAggregatesFactory.class);
+    private final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = DI.get(PianoKeyboardAggregatesFactory.class);
 
     public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
         var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id);

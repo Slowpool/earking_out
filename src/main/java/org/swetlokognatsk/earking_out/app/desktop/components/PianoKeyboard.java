@@ -16,7 +16,7 @@ import javafx.scene.layout.Region;
 
 public final class PianoKeyboard extends Region {
     public final PianoKeyboardId id;
-    protected final Map<PianoKeyNumber, PianoKey> pianoKeys = new HashMap<>(Constants.PIANO_KEYS_NUMBER);
+    private final Map<PianoKeyNumber, PianoKey> pianoKeys = new HashMap<>(Constants.PIANO_KEYS_NUMBER);
 
     public PianoKeyboard(final PianoKeyboardId id, final double width, final double height, final PianoKeyNumber[] selectedKeys) {
         this.id = id;
@@ -33,7 +33,7 @@ public final class PianoKeyboard extends Region {
         this(id, width, height, new PianoKeyNumber[0]);
     }
 
-    protected void buildPianoKeys(final PianoKeyNumber[] selectedKeys) {
+    private void buildPianoKeys(final PianoKeyNumber[] selectedKeys) {
         var pianoKeysBuilder = PianoKeysBuildersFactory.create(getWidth(), getHeight(), selectedKeys);
         PianoKey pianoKey;
         PianoKeyNumber keyNumber;
@@ -63,7 +63,7 @@ public final class PianoKeyboard extends Region {
         var whitePianoKeys = dichotomizedPianoKeys[PianoKeysHelper.WHITE_KEYS];
         var blackPianoKeys = dichotomizedPianoKeys[PianoKeysHelper.BLACK_KEYS];
 
-        // the intricacies of javafx view require white keys to be added first in order to display black keys in front of (above) the white keys. probably more reasonable way exists, but that's frontender's bread
+        // the intricacies of javafx view require white keys to be added first in order to display black keys in front of (above) the white keys visually. probably more reasonable way exists, but that's frontender's bread
         var children = getChildren();
         children.addAll(whitePianoKeys);
         children.addAll(blackPianoKeys);
@@ -76,15 +76,5 @@ public final class PianoKeyboard extends Region {
             pianoKeyComponent.hydrateState(pianoKey);
         }
     }
-
-    // protected void toggleSelection(PianoKey pianoKey) {
-    //     pianoKey.toggleSelection();
-
-    //     if (pianoKey.isSelected()) {
-    //         selectedKeys.add(pianoKey.keyNumber);
-    //     } else {
-    //         selectedKeys.remove(pianoKey.keyNumber);
-    //     }
-    // }
 
 }

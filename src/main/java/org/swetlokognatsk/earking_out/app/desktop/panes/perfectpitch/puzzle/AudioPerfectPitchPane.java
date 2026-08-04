@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 
 public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionService> {
 
-    protected final PianoKeyboard pianoKeyboardForGuessing;
+    private final PianoKeyboard pianoKeyboardForGuessing;
 
     // it is executed in super()
     protected Pane buildInnerPuzzlePane(final AudioPerfectPitchConfigDTO puzzleConfigDto) {

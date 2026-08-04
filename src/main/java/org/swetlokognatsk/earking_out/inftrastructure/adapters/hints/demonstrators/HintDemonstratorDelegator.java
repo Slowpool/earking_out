@@ -15,7 +15,7 @@ public final class HintDemonstratorDelegator implements HintDemonstrator<Solutio
     }
 
     // TODO grasp why generics here are useless
-    protected <S extends Solution> EndHintDemonstrator<S> createSpecificHintDemonstrator(final S solution) {
+    private <S extends Solution> EndHintDemonstrator<S> createSpecificHintDemonstrator(final S solution) {
         var specificHintDemonstrator = switch (solution) {
         case AudioPerfectPitchSolution _s -> AudioPerfectPitchHintDemonstrator.class;
         // case SoundHarmonicIntervalSolution _s -> AudioClipSoundHarmonicIntervalHintDemonstrator.class;

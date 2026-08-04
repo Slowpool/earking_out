@@ -104,7 +104,7 @@ public final class NoteTest {
     }
 
     /** Tests traverse all combinations of all notes/accidentals/octaves used in app, though there's edge cases like C1b - the combination of note/accidental/octave is permissible, though normalized value of this note is 3 - there's no PianoKeyNumber in app with such a note. btw from the point of view of domain, note 3 exists. */
-    protected boolean thisNoteExistsButIsNotUsedInApp(final PianoKeyNumber keyNumber, final byte accidentalShift) {
+    private boolean thisNoteExistsButIsNotUsedInApp(final PianoKeyNumber keyNumber, final byte accidentalShift) {
         if (keyNumber.equals(FIRST_NOTE_NUMBER) && accidentalShift == Accidentals.FLAT.shift) {
             return true;
         } else if (keyNumber.equals(LAST_NOTE_NUMBER) && accidentalShift == Accidentals.SHARP.shift) {

@@ -1,23 +1,20 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import static org.junit.Assert.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import java.util.Objects;
 import org.junit.*;
-import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class PianoKeyTest {
-    protected static PianoKeyNumber ANY_PIANO_KEY_NUMBER = FIRST_NOTE_NUMBER;
-    protected final PianoKeysFactory pianoKeysFactory;
+    private static PianoKeysFactory pianoKeysFactory;
+    private static PianoKeyNumber ANY_PIANO_KEY_NUMBER = FIRST_NOTE_NUMBER;
 
-    protected MockPianoKeySoundsPlayer mockSoundPlayer;
+    private MockPianoKeySoundsPlayer mockSoundPlayer;
 
-    // TODO @BeforeClass or constructor?
-    public PianoKeyTest() {
+    @BeforeClass
+    public static void initializeCdommonContext() {
         pianoKeysFactory = DI.get(PianoKeysFactory.class);
     }
 
@@ -36,7 +33,7 @@ public final class PianoKeyTest {
         });
     }
 
-    protected static PianoKeyColor getExpectedPianoKeyColor(final PianoKeyNumber keyNumber) {
+    private static PianoKeyColor getExpectedPianoKeyColor(final PianoKeyNumber keyNumber) {
         Objects.requireNonNull(keyNumber);
 
         return switch (keyNumber.octaveScopedKeyNumber) {

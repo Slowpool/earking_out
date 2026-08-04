@@ -31,7 +31,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         return targetNumberOfPuzzles;
     }
 
-    protected void setTargetNumberOfPuzzles(final int targetNumberOfPuzzles) {
+    protected final void setTargetNumberOfPuzzles(final int targetNumberOfPuzzles) {
         this.targetNumberOfPuzzles = targetNumberOfPuzzles;
     }
 
@@ -39,7 +39,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         return statsRecording;
     }
 
-    protected void setStatsRecording(final boolean statsRecording) {
+    protected final void setStatsRecording(final boolean statsRecording) {
         this.statsRecording = statsRecording;
     }
 
@@ -101,7 +101,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
         }
     }
 
-    public void releasePianoKey(final PianoKeyboardId pianoKeyboardId) {
+    public final void releasePianoKey(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
         pianoKeyboard.releaseKey();
     }

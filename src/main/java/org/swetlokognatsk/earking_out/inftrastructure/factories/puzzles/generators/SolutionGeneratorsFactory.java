@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators;
+package org.swetlokognatsk.earking_out.inftrastructure.factories.puzzles.generators;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
@@ -8,14 +8,12 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.SolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 
-// TODO actually it's not a factory. remake.
 public final class SolutionGeneratorsFactory {
 
     public SolutionGeneratorsFactory() {
     }
 
-    // TODO what does bazinga mean?
-    @SuppressWarnings("bazinga")
+    @SuppressWarnings("unchecked")
     public <PG extends SolutionGenerator<?>> PG create(final PuzzleConfigDTO<?> puzzleConfig) {
         var exercise = puzzleConfig.exercise;
         var solutionGenerator = switch (exercise) {

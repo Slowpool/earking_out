@@ -13,7 +13,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class SessionAggregateDTOAssembler {
-    protected final static Map<Exercise, EndSessionAggregateDTOAssembler<?, ?, ?, ?, ?, ?>> endDtoAssemblers = new HashMap<>();
+    private final static Map<Exercise, EndSessionAggregateDTOAssembler<?, ?, ?, ?, ?, ?>> endDtoAssemblers = new HashMap<>();
 
     static {
         var endSessionAggregateDTOAssemblersFactory = DI.get(EndSessionAggregateDTOAssemblersFactory.class);

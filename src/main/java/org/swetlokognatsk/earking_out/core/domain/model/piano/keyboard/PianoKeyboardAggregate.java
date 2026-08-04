@@ -6,15 +6,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
-import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeysHelper;
-import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
-import org.swetlokognatsk.earking_out.core.ports.di.DI;
-
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
@@ -22,11 +18,11 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private static final long serialVersionUID = 1L;
 
     // TODO make all variables immutable for public read-only aggregate state
-    protected final PianoKeyboardMode mode;
-    protected final Map<PianoKeyNumber, PianoKey> pianoKeys;
-    protected final Set<PianoKey> selectedKeys = new HashSet<>();
+    private final PianoKeyboardMode mode;
+    private final Map<PianoKeyNumber, PianoKey> pianoKeys;
+    private final Set<PianoKey> selectedKeys = new HashSet<>();
 
-    protected PianoKey pressedKey;
+    private PianoKey pressedKey;
 
     public final PianoKeyboardId getPianoKeyboardId() {
         return getId();
@@ -57,14 +53,13 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return pressedKey == null ? null : pressedKey.keyNumber;
     }
 
-    protected boolean isSelectMode() {
+    private boolean isSelectMode() {
         return mode.isSelectMode();
     }
 
-    protected boolean isTouchMode() {
+    private boolean isTouchMode() {
         return mode.isTouchMode();
     }
-
 
     public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers, final PianoKeysFactory pianoKeysFactory) {
         super(id);
@@ -75,7 +70,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         pianoKeys = buildPianoKeys(pianoKeysFactory, selectedKeyNumbers);
     }
 
-    protected static PianoKeyboardMode getModeById(final PianoKeyboardId id) {
+    private static PianoKeyboardMode getModeById(final PianoKeyboardId id) {
         return switch (id) {
         case AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER -> PianoKeyboardMode.ONE_KEY_SELECT;
         case AUDIO_PERFECT_PITCH_NOTES_PICKER -> PianoKeyboardMode.SEVERAL_KEYS_SELECT;
@@ -101,7 +96,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return pianoKeys;
     }
 
-    protected void validateKeyNumbersToSelect(final PianoKeyNumber[] keyNumbers) {
+    private void validateKeyNumbersToSelect(final PianoKeyNumber[] keyNumbers) {
         if (!isSelectMode() && ArrayUtils.isNotEmpty(keyNumbers)) {
             throw new IllegalArgumentException("PianoKeyboard keys cannot be selected in this mode");
         }
@@ -110,7 +105,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
     }
 
-    protected PianoKeyMode getPianoKeyMode() {
+    private PianoKeyMode getPianoKeyMode() {
         PianoKeyMode pianoKeyMode;
         if (isSelectMode()) {
             pianoKeyMode = PianoKeyMode.SELECT;
@@ -123,7 +118,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return pianoKeyMode;
     }
 
-    protected void tryAddAsSelected(final PianoKey pianoKey) {
+    private void tryAddAsSelected(final PianoKey pianoKey) {
         if (pianoKey.getIsSelected()) {
             selectedKeys.add(pianoKey);
         }
@@ -144,11 +139,11 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
 
         pressedKey = pianoKey;
 
-        var pianoKeyPressedEvent = getDomainEventsFactory().createPianoKeyPressedEvent(id, keyNumber);
+        var pianoKeyPressedEvent = getDomainEventsFactory().createPianoKeyPressedEvent(getId(), keyNumber);
         addEvent(pianoKeyPressedEvent);
     }
 
-    protected void validatePianoKeyToPress(final PianoKeyNumber keyNumber) {
+    private void validatePianoKeyToPress(final PianoKeyNumber keyNumber) {
         if (pressedKey != null) {
             throw new IllegalStateException("another key is already pressed");
         }
@@ -164,7 +159,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
      * e.g. if it's ONE_KEY_SELECT mode, the previously selected key will be
      * unselected.
      */
-    protected void updateOtherKeysState() {
+    private void updateOtherKeysState() {
         if (mode == PianoKeyboardMode.ONE_KEY_SELECT) {
             if (moreThanOnePianoKeyIsSelected()) {
                 throw new IllegalStateException("several keys were selected in one key select mode");
@@ -174,15 +169,15 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
     }
 
-    protected boolean moreThanOnePianoKeyIsSelected() {
+    private boolean moreThanOnePianoKeyIsSelected() {
         return selectedKeys.size() > 1;
     }
 
-    protected boolean onePianoKeyIsSelected() {
+    private boolean onePianoKeyIsSelected() {
         return selectedKeys.size() == 1;
     }
 
-    protected void applySelectingLogicAfterPress(final PianoKey pianoKey) {
+    private void applySelectingLogicAfterPress(final PianoKey pianoKey) {
         if (pianoKey.getIsSelected()) {
             switch (mode) {
             case ONE_KEY_SELECT:
@@ -208,7 +203,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
     }
 
-    protected void unselectPressedKey() {
+    private void unselectPressedKey() {
         var selectedPianoKey = selectedKeys.iterator().next();
         unselectKey(selectedPianoKey);
     }
@@ -222,14 +217,14 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         pressedKey = null;
     }
 
-    protected void validatePianoKeyToRelease() {
+    private void validatePianoKeyToRelease() {
         if (pressedKey == null) {
             throw new IllegalStateException("there is no pressed key on piano keyboard");
         }
     }
 
     // TODO test it (idk how it turned out to be not tested)
-    protected void applySelectingLogicAfterRelease(final PianoKey pianoKey) {
+    private void applySelectingLogicAfterRelease(final PianoKey pianoKey) {
         if (pianoKey.getIsSelected()) {
             switch (mode) {
             case ONE_KEY_SELECT:
@@ -255,12 +250,12 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
     }
 
-    protected void selectKey(final PianoKey pianoKey) {
+    private void selectKey(final PianoKey pianoKey) {
         selectedKeys.add(pianoKey);
         pianoKey.select();
     }
 
-    protected void unselectKey(final PianoKey pianoKey) {
+    private void unselectKey(final PianoKey pianoKey) {
         selectedKeys.remove(pianoKey);
         pianoKey.unselect();
     }

@@ -17,15 +17,14 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 
-@SpringBootApplication
 public final class SessionAggregateTest {
-    protected static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
-    protected static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(((AudioPerfectPitchSolution) SOLUTION).keyNumber.increment());
-    protected static final int SEVERAL_PUZZLES = 10;
+    private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
+    private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(((AudioPerfectPitchSolution) SOLUTION).keyNumber.increment());
+    private static final int SEVERAL_PUZZLES = 10;
 
     // TODO create aggregateRoot, use it everywhere
-    protected SessionAggregatesFactory sessionAggregatesFactory;
-    protected PuzzleConfigRepository puzzleConfigRepository;
+    private SessionAggregatesFactory sessionAggregatesFactory;
+    private PuzzleConfigRepository puzzleConfigRepository;
 
     @Before
     public void setup() {
@@ -37,40 +36,40 @@ public final class SessionAggregateTest {
     public SessionAggregateTest() {
     }
 
-    protected AudioPerfectPitchSessionAggregate createAudioPerfectPitchSession(final AudioPerfectPitchSolution fakeSolution) {
+    private AudioPerfectPitchSessionAggregate createAudioPerfectPitchSession(final AudioPerfectPitchSolution fakeSolution) {
         FakeAudioPerfectPitchSolutionGenerator.fakeSolution = fakeSolution;
 
         return (AudioPerfectPitchSessionAggregate) sessionAggregatesFactory.create(new AudioPerfectPitchExercise());
     }
 
-    protected AudioPerfectPitchSessionAggregate createAudioPerfectPitchSession() {
+    private AudioPerfectPitchSessionAggregate createAudioPerfectPitchSession() {
         return createAudioPerfectPitchSession(SOLUTION);
     }
 
-    protected SessionAggregate<?, ?, ?, ?> createSomeSession() {
+    private SessionAggregate<?, ?, ?, ?> createSomeSession() {
         return createAudioPerfectPitchSession();
     }
 
-    protected <S extends Solution> SessionAggregate<?, S, ?, ?> createSomeSessionAndGuessCorrectly() {
+    private <S extends Solution> SessionAggregate<?, S, ?, ?> createSomeSessionAndGuessCorrectly() {
         // TODO why aggregate is considered to have cqrs design?
         var sessionAggregate = createAudioPerfectPitchSession();
         sessionAggregate.guess(SOLUTION);
         return (SessionAggregate<?, S, ?, ?>) sessionAggregate;
     }
 
-    protected <S extends Solution> SessionAggregate<?, S, ?, ?> createSomeSessionAndGuessIncorrectly() {
+    private <S extends Solution> SessionAggregate<?, S, ?, ?> createSomeSessionAndGuessIncorrectly() {
         var sessionAggregate = createAudioPerfectPitchSession();
         sessionAggregate.guess(WRONG_SOLUTION);
         return (SessionAggregate<?, S, ?, ?>) sessionAggregate;
     }
 
-    protected SessionAggregate<?, ?, ?, ?> createSomeSessionAndAbort() {
+    private SessionAggregate<?, ?, ?, ?> createSomeSessionAndAbort() {
         var sessionAggregate = createSomeSession();
         sessionAggregate.abort();
         return sessionAggregate;
     }
 
-    protected void updateTargetNumberOfPuzzlesOfSomeSession(int targetNumberOfPuzzles) {
+    private void updateTargetNumberOfPuzzlesOfSomeSession(int targetNumberOfPuzzles) {
         var puzzleConfig = puzzleConfigRepository.get(new AudioPerfectPitchExercise());
         puzzleConfig.updateProperty(PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP, targetNumberOfPuzzles);
         puzzleConfigRepository.save(puzzleConfig);

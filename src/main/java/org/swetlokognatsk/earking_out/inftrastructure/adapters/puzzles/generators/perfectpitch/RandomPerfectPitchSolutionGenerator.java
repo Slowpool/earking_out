@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.PerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.generators.ConfigBasedSolutionGenerator;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.ConfigBasedSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.PerfectPitchSolutionGenerator;
 
 public abstract class RandomPerfectPitchSolutionGenerator<S extends PerfectPitchSolution, PCDTO extends PerfectPitchConfigDTO<?>> extends ConfigBasedSolutionGenerator<S, PCDTO> implements PerfectPitchSolutionGenerator<S, PCDTO> {
@@ -26,7 +26,7 @@ public abstract class RandomPerfectPitchSolutionGenerator<S extends PerfectPitch
         possibleSolutions = buildPossibleSolutions();
     }
 
-    protected S[] buildPossibleSolutions() {
+    private S[] buildPossibleSolutions() {
         var stream = Arrays.stream(puzzleConfigDto.normalizedNotesForPuzzle);
         Solution[] possibleSolutions = stream.map(possibleNote -> buildPossibleSolution(possibleNote)).toArray(getArrayConstructor());
         return (S[]) possibleSolutions;

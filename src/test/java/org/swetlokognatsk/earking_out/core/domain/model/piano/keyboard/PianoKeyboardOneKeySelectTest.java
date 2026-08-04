@@ -2,9 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
@@ -20,7 +18,6 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
     }
 
     @Test
-    // TODO use https://github.com/piotr-yuxuan/custom-ignore-annotation/
     public void initKeyboardWithKey() {
         var presetKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER };
         var pianoKeyboard = createPianoKeyboard(presetKeys);

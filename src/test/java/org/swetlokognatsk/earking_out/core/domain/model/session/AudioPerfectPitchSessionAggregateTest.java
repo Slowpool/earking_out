@@ -14,10 +14,10 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 
 public final class AudioPerfectPitchSessionAggregateTest {
-    protected SessionAggregatesFactory sessionAggregatesFactory;
+    private SessionAggregatesFactory sessionAggregatesFactory;
 
-    protected static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
-    protected static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
+    private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
+    private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
 
     @Before
     public void setup() {
@@ -25,26 +25,26 @@ public final class AudioPerfectPitchSessionAggregateTest {
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
     }
 
-    protected AudioPerfectPitchExercise getExercise() {
+    private AudioPerfectPitchExercise getExercise() {
         return new AudioPerfectPitchExercise();
     }
 
-    protected AudioPerfectPitchSessionAggregate createAggregate() {
+    private AudioPerfectPitchSessionAggregate createAggregate() {
         setFakeSolution(SOLUTION);
         return sessionAggregatesFactory.create(getExercise());
     }
 
-    protected AudioPerfectPitchSessionAggregate createAggregateAndFlushEvents() {
+    private AudioPerfectPitchSessionAggregate createAggregateAndFlushEvents() {
         var aggregate = createAggregate();
         aggregate.flushEvents();
         return aggregate;
     }
 
-    protected void setFakeSolution(final AudioPerfectPitchSolution fakeSolution) {
+    private void setFakeSolution(final AudioPerfectPitchSolution fakeSolution) {
         FakeAudioPerfectPitchSolutionGenerator.fakeSolution = fakeSolution;
     }
 
-    protected AudioPerfectPitchSessionAggregate createAggregateAndAbort() {
+    private AudioPerfectPitchSessionAggregate createAggregateAndAbort() {
         var aggregate = createAggregate();
         aggregate.abort();
         return aggregate;

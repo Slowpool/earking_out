@@ -27,11 +27,11 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPuz
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 
 public class RandomAudioPerfectPitchSolutionGeneratorTest {
-    protected static int ITERATIONS_NUMBER = 100;
+    private static int ITERATIONS_NUMBER = 100;
 
-    protected static AudioPerfectPitchConfigAggregatesFactory configFactory = new AbstractPuzzleConfigAggregatesFactory(new SerializationCloner()).createFactory(new AudioPerfectPitchExercise());
+    private static AudioPerfectPitchConfigAggregatesFactory configFactory = new AbstractPuzzleConfigAggregatesFactory(new SerializationCloner()).createFactory(new AudioPerfectPitchExercise());
 
-    protected static RandomAudioPerfectPitchSolutionGenerator createPuzzleGenerator(final PianoKeyNumber[] normalizedNotesForPuzzle) {
+    private static RandomAudioPerfectPitchSolutionGenerator createPuzzleGenerator(final PianoKeyNumber[] normalizedNotesForPuzzle) {
         // TODO how to validate aggregate?
         // TODO can it be in invalid state at all?
         // firstly creating puzzleConfig for validation
@@ -43,7 +43,7 @@ public class RandomAudioPerfectPitchSolutionGeneratorTest {
         return generator;
     }
 
-    protected static AudioPerfectPitchConfigAggregate createAnyPuzzleConfig(final PianoKeyNumber[] normalizedNotesForPuzzle) {
+    private static AudioPerfectPitchConfigAggregate createAnyPuzzleConfig(final PianoKeyNumber[] normalizedNotesForPuzzle) {
         return configFactory.create(0, false, normalizedNotesForPuzzle, null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false, new PianoKeyboardAggregate[0]);
     }
 

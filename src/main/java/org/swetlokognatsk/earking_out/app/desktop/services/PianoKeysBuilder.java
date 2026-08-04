@@ -13,23 +13,23 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 
 public final class PianoKeysBuilder implements Iterator<PianoKey> {
-    protected final PianoKeyNumber firstNoteNumber = FIRST_NOTE_NUMBER;
-    protected final double keyboardWidth;
-    protected final double keyboardHeight;
+    private final PianoKeyNumber firstNoteNumber = FIRST_NOTE_NUMBER;
+    private final double keyboardWidth;
+    private final double keyboardHeight;
 
-    protected final PianoKeyNumber[] selectedKeys;
-    protected final PianoKeyColorService colorService;
+    private final PianoKeyNumber[] selectedKeys;
+    private final PianoKeyColorService colorService;
 
-    protected final double whiteKeyWidth;
-    protected final double whiteKeyHeight;
+    private final double whiteKeyWidth;
+    private final double whiteKeyHeight;
 
-    protected final double blackKeyWidth;
-    protected final double blackKeyHeight;
+    private final double blackKeyWidth;
+    private final double blackKeyHeight;
 
     // -1 is acceptable value for Iterator<?>
-    protected byte currentKeyIndex = -1;
-    protected double currentWhiteX;
-    protected double currentBlackX;
+    private byte currentKeyIndex = -1;
+    private double currentWhiteX;
+    private double currentBlackX;
 
     private double calculateWhiteKeyWidth() {
         return keyboardWidth / Constants.WHITE_PIANO_KEYS_NUMBER;

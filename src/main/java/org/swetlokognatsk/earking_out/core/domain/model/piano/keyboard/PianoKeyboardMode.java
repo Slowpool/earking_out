@@ -8,8 +8,8 @@ public enum PianoKeyboardMode {
     SEVERAL_KEYS_SELECT, // the pressed key becomes highlighted until it's pressed again. any number of keys can be highlighted at the same time
     SEVERAL_KEYS_SELECT_3_OCTAVES; // taking the standard office keyboard constraint of having just 22 colums on it `zxcvbnm,./qwertyuiop[]` as business logic invariant
 
-    protected static final PianoKeyboardMode[] touchModes = new PianoKeyboardMode[] { ONE_KEY_TOUCH };
-    protected static final PianoKeyboardMode[] selectModes = new PianoKeyboardMode[] { ONE_KEY_SELECT, SEVERAL_KEYS_SELECT, SEVERAL_KEYS_SELECT_3_OCTAVES };
+    private static final PianoKeyboardMode[] touchModes = new PianoKeyboardMode[] { ONE_KEY_TOUCH };
+    private static final PianoKeyboardMode[] selectModes = new PianoKeyboardMode[] { ONE_KEY_SELECT, SEVERAL_KEYS_SELECT, SEVERAL_KEYS_SELECT_3_OCTAVES };
 
     public boolean isSelectMode() {
         return ArrayUtils.contains(selectModes, this);

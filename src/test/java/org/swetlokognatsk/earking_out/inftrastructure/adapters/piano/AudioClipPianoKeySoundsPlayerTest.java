@@ -12,14 +12,14 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.Serializatio
  */
 public final class AudioClipPianoKeySoundsPlayerTest {
 
-    protected AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
+    private AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
 
     @Before
     public void setup() {
         audioClipPianoKeySoundsPlayer = DI.get(AudioClipPianoKeySoundsPlayer.class);
     }
 
-    protected static void playEachKey(final AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer) {
+    private static void playEachKey(final AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer) {
         // if there's no exception, everything is fine enough
         PianoKeyNumber.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
             audioClipPianoKeySoundsPlayer.play(pianoKeyNumber);

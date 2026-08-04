@@ -40,7 +40,7 @@ public final class PerfectPitchConfigAggregateTest {
         assertEquals(1, pianoKeyboard.selectedKeys().length);
     }
 
-    protected PerfectPitchConfigAggregate<?> getPerfectPitchAggregate() {
+    private PerfectPitchConfigAggregate<?> getPerfectPitchAggregate() {
         var repository = DI.get(PuzzleConfigRepository.class);
         var aggregate = repository.get(new AudioPerfectPitchExercise());
         return (PerfectPitchConfigAggregate<?>) aggregate;
