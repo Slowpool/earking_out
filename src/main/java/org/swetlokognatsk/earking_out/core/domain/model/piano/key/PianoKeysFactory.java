@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 
 public final class PianoKeysFactory {
-    protected final PianoKeyColorService pianoKeyColorService;
+    private final PianoKeyColorService pianoKeyColorService;
     
     // TODO update constructors
     public PianoKeysFactory(final PianoKeyColorService pianoKeyColorService) {

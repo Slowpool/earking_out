@@ -17,7 +17,7 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         return isSelected;
     }
 
-    protected void setIsSelected(final boolean isSelected) {
+    private void setIsSelected(final boolean isSelected) {
         this.isSelected = isSelected;
     }
 
@@ -25,7 +25,7 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         return isPressed;
     }
 
-    protected void setIsPressed(final boolean isPressed) {
+    private void setIsPressed(final boolean isPressed) {
         this.isPressed = isPressed;
     }
 
@@ -47,7 +47,7 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         setIsPressed(true);
     }
 
-    protected void validatePressing() {
+    private void validatePressing() {
         switch (mode) {
         case TOUCH:
             validatePressingInTouchMode();
@@ -60,13 +60,13 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         }
     }
 
-    protected void validatePressingInTouchMode() {
+    private void validatePressingInTouchMode() {
         if (isPressed) {
             throw new IllegalStateException("this key is already pressed");
         }
     }
 
-    protected void validatePressingInSelectMode() {
+    private void validatePressingInSelectMode() {
     }
 
     public void release() {
@@ -87,13 +87,13 @@ public final class PianoKey extends Entity<PianoKeyNumber> {
         this.setIsSelected(false);
     }
 
-    protected void validateSelecting() {
+    private void validateSelecting() {
         if (isSelected) {
             throw new IllegalStateException("pianoKey is already selected");
         }
     }
 
-    protected void validateUnselecting() {
+    private void validateUnselecting() {
         if (!isSelected) {
             throw new IllegalStateException("pianoKey is already unselected");
         }

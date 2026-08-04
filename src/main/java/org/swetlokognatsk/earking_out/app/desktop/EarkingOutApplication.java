@@ -52,11 +52,11 @@ public class EarkingOutApplication extends Application {
         launch();
     }
 
-    protected static void initDI(final ApplicationContext context) {
+    private static void initDI(final ApplicationContext context) {
         DI.setContext(context);
     }
 
-    protected static ApplicationContext runSpringApp(String[] args) {
+    private static ApplicationContext runSpringApp(String[] args) {
         var springApplication = new SpringApplication(EarkingOutApplication.class);
         springApplication.setBannerMode(Banner.Mode.OFF);
         return springApplication.run(args);
@@ -74,7 +74,7 @@ public class EarkingOutApplication extends Application {
         return contentPane;
     }
 
-    protected ExercisesMenu buildExercisesMenu() {
+    private ExercisesMenu buildExercisesMenu() {
         var exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
         return exercisesMenu;
     }
@@ -136,7 +136,7 @@ public class EarkingOutApplication extends Application {
         }
     }
 
-    protected <E extends Exercise> SessionService<E, ?, ?> getSessionService(final E exercise) {
+    private <E extends Exercise> SessionService<E, ?, ?> getSessionService(final E exercise) {
         var sessionService = switch (exercise) {
         case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSessionService.class);
         default -> throw new IllegalArgumentException("unknown exercise: " + exercise);

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
-import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.DomainEventsFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public abstract class Aggregate<ID> extends Entity<ID> implements Model {
     private static final long serialVersionUID = 1L;
 
-    protected final List<DomainEvent> events = new ArrayList<>();
+    private final List<DomainEvent> events = new ArrayList<>();
 
     public Aggregate(final ID id) {
         super(id);

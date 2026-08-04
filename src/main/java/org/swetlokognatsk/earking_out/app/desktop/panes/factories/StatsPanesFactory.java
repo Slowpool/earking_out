@@ -9,8 +9,8 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.Sessi
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
 public final class StatsPanesFactory {
-    protected final PuzzleConfigRepository puzzleConfigRepository;
-    protected final SessionRepositoryDelegator sessionRepository;
+    private final PuzzleConfigRepository puzzleConfigRepository;
+    private final SessionRepositoryDelegator sessionRepository;
 
     public StatsPanesFactory(final PuzzleConfigRepository puzzleConfigRepository, final SessionRepositoryDelegator sessionRepository) {
         this.puzzleConfigRepository = puzzleConfigRepository;

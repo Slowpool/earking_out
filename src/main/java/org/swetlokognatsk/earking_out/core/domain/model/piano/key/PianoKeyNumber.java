@@ -35,7 +35,7 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
         LAST_NOTE_NUMBER = PianoKeyNumber.valueOf(BYTE_LAST_NOTE_NUMBER);
     }
 
-    protected byte calculateOctaveScopedKeyNumber() {
+    private byte calculateOctaveScopedKeyNumber() {
         return (byte) ((value - SHIFT - 1) % KEYS_IN_OCTAVE + 1);
     }
 

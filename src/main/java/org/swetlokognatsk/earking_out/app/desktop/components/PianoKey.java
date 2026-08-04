@@ -12,7 +12,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
 public sealed abstract class PianoKey extends Button permits WhitePianoKey, BlackPianoKey {
-    protected static final Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1)));
+    private static final Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1)));
 
     protected final PianoKeyNumber keyNumber;
     protected boolean isSelected;
@@ -27,7 +27,7 @@ public sealed abstract class PianoKey extends Button permits WhitePianoKey, Blac
         setBorder(border);
     }
 
-    protected Background workOutBackground() {
+    private Background workOutBackground() {
         return isSelected ? getSelectedBackground() : getNotSelectedBackground();
     }
 
@@ -35,33 +35,33 @@ public sealed abstract class PianoKey extends Button permits WhitePianoKey, Blac
 
     protected abstract Background getNotSelectedBackground();
 
-    protected void select() {
+    private void select() {
         validateSelecting();
         isSelected = true;
         updateBackground();
     }
 
-    protected void validateSelecting() {
+    private void validateSelecting() {
         if (isSelected) {
             var message = String.format("key %d is already selected", keyNumber.value);
             throw new IllegalStateException(message);
         }
     }
 
-    protected void unselect() {
+    private void unselect() {
         validateUnselecting();
         isSelected = false;
         updateBackground();
     }
 
-    protected void validateUnselecting() {
+    private void validateUnselecting() {
         if (!isSelected) {
             var message = String.format("key %d is already unselected", keyNumber.value);
             throw new IllegalStateException(message);
         }
     }
 
-    protected void updateBackground() {
+    private void updateBackground() {
         Background background = isSelected ? getSelectedBackground() : getNotSelectedBackground();
         setBackground(background);
     }
@@ -78,7 +78,7 @@ public sealed abstract class PianoKey extends Button permits WhitePianoKey, Blac
         }
     }
 
-    protected void validateStateToHydrate(final PianoKeyDTO newState) {
+    private void validateStateToHydrate(final PianoKeyDTO newState) {
         if (!keyNumber.equals(newState.keyNumber())) {
             var message = String.format("pianoKeyNumber does not correspond. component keyNumber: %d, dto keyNumber: %d", keyNumber.value, newState.keyNumber().value);
             throw new IllegalArgumentException(message);

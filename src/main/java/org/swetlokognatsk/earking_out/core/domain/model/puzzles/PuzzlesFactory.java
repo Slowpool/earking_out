@@ -12,8 +12,8 @@ import org.swetlokognatsk.earking_out.inftrastructure.factories.puzzles.generato
 
 // TODO encapsulate factory inside di, so that instead his could be used: `DI.createPuzzle(new AudioPerfectPitchExercise())` or kinda
 public final class PuzzlesFactory {
-    protected final SolutionGeneratorsFactory solutionGeneratorsFactory;
-    protected final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler;
+    private final SolutionGeneratorsFactory solutionGeneratorsFactory;
+    private final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler;
 
     public PuzzlesFactory(final SolutionGeneratorsFactory solutionGeneratorsFactory, final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler) {
         this.solutionGeneratorsFactory = solutionGeneratorsFactory;

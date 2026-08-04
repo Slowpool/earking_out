@@ -7,7 +7,7 @@ import java.util.Objects;
 public abstract class Entity<ID> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    protected final ID id;
+    private final ID id;
 
     public Entity(final ID id) {
         this.id = Objects.requireNonNull(id);
