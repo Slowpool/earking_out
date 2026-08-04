@@ -33,7 +33,7 @@ public final class PianoKeyTest {
         });
     }
 
-    protected static PianoKeyColor getExpectedPianoKeyColor(final PianoKeyNumber keyNumber) {
+    private static PianoKeyColor getExpectedPianoKeyColor(final PianoKeyNumber keyNumber) {
         Objects.requireNonNull(keyNumber);
 
         return switch (keyNumber.octaveScopedKeyNumber) {

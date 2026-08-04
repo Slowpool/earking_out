@@ -26,7 +26,7 @@ public abstract class RandomPerfectPitchSolutionGenerator<S extends PerfectPitch
         possibleSolutions = buildPossibleSolutions();
     }
 
-    protected S[] buildPossibleSolutions() {
+    private S[] buildPossibleSolutions() {
         var stream = Arrays.stream(puzzleConfigDto.normalizedNotesForPuzzle);
         Solution[] possibleSolutions = stream.map(possibleNote -> buildPossibleSolution(possibleNote)).toArray(getArrayConstructor());
         return (S[]) possibleSolutions;

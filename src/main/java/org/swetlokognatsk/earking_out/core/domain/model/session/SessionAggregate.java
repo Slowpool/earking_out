@@ -24,46 +24,46 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     private boolean prevGuessIsSuccessful;
     private int numberOfGuessesOfCurrentPuzzle;
 
-    public PCDTO getPuzzleConfig() {
+    public final PCDTO getPuzzleConfig() {
         return puzzleConfigDto;
     }
 
-    public SessionStats getStats() {
+    public final SessionStats getStats() {
         return stats;
     }
 
-    protected void setStats(final SessionStats stats) {
+    protected final void setStats(final SessionStats stats) {
         this.stats = stats;
     }
 
-    public SessionStates getState() {
+    public final SessionStates getState() {
         return state;
     }
 
-    protected void setState(final SessionStates state) {
+    protected final void setState(final SessionStates state) {
         this.state = state;
     }
 
-    public int getPuzzlesCompleted() {
+    public final int getPuzzlesCompleted() {
         return stats.puzzlesCompleted;
     }
 
-    public int getPuzzlesCompletedCorrectly() {
+    public final int getPuzzlesCompletedCorrectly() {
         return stats.puzzlesCompletedCorrectly;
     }
 
-    public P getPuzzle() {
+    public final P getPuzzle() {
         if (state != SessionStates.IN_PROGRESS) {
             throw new IllegalStateException("session cannot have a puzzle if it is not in progress");
         }
         return puzzle;
     }
 
-    protected void setPuzzle(final P puzzle) {
+    protected final void setPuzzle(final P puzzle) {
         this.puzzle = puzzle;
     }
 
-    public boolean getPrevGuessIsSuccessful() {
+    public final boolean getPrevGuessIsSuccessful() {
         // TODO return it back when PositiveNumber VO is used instead
         // if (stats.puzzlesCompleted.equals(Integer.valueOf(0))) {
         if (thereAreNoAnyGuessesInSession()) {
@@ -72,11 +72,15 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         return prevGuessIsSuccessful;
     }
 
-    protected boolean thereAreNoAnyGuessesInSession() {
+    protected final boolean thereAreNoAnyGuessesInSession() {
         return stats.puzzlesCompleted == 0 && numberOfGuessesOfCurrentPuzzle == 0;
     }
 
-    public int getNumberOfGuessesOfCurrentPuzzle() {
+    protected final void setPrevGuessIsSuccessful(final boolean prevGuessIsSuccessful) {
+        this.prevGuessIsSuccessful = prevGuessIsSuccessful;
+    }
+
+    public final int getNumberOfGuessesOfCurrentPuzzle() {
         try {
             getPuzzle();
         } catch (IllegalStateException e) {
@@ -85,12 +89,8 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         return numberOfGuessesOfCurrentPuzzle;
     }
 
-    protected void setNumberOfGuessesOfCurrentPuzzle(final int numberOfGuessesOfCurrentPuzzle) {
+    protected final void setNumberOfGuessesOfCurrentPuzzle(final int numberOfGuessesOfCurrentPuzzle) {
         this.numberOfGuessesOfCurrentPuzzle = numberOfGuessesOfCurrentPuzzle;
-    }
-
-    protected void setPrevGuessIsSuccessful(final boolean prevGuessIsSuccessful) {
-        this.prevGuessIsSuccessful = prevGuessIsSuccessful;
     }
 
     public SessionAggregate(final PuzzlesFactory puzzlesFactory, final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
@@ -107,7 +107,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         nextPuzzle();
     }
 
-    protected void nextPuzzle() {
+    protected final void nextPuzzle() {
         P puzzle = puzzlesFactory.create(puzzleConfigDto.exercise);
         setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
@@ -116,7 +116,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         addEvent(newPuzzleEvent);
     }
 
-    public void guess(final S guess) {
+    public final void guess(final S guess) {
         validateGuessing();
         var success = puzzle.guess(guess);
         if (success) {
@@ -148,11 +148,11 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         }
     }
 
-    protected boolean isLastPuzzle() {
+    protected final boolean isLastPuzzle() {
         return stats.puzzlesCompleted == puzzleConfigDto.targetNumberOfPuzzles;
     }
 
-    protected boolean isCorrectlyGuessedPuzzle() {
+    protected final boolean isCorrectlyGuessedPuzzle() {
         return numberOfGuessesOfCurrentPuzzle == 0;
     }
 
@@ -160,11 +160,11 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setNumberOfGuessesOfCurrentPuzzle(numberOfGuessesOfCurrentPuzzle + 1);
     }
 
-    public void abort() {
+    public final void abort() {
         setState(SessionStates.ABORTED);
     }
 
-    public void demonstrateHintAgain() {
+    public final void demonstrateHintAgain() {
         var puzzle = getPuzzle();
         var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(puzzle);
         addEvent(hearAgainEvent);

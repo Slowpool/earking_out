@@ -24,13 +24,13 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.Serializatio
  * itself is redundant.
  */
 public final class PianoKeyboardDTOAssemblerTest {
-    protected final PianoKeyboardAggregatesFactory pianoKeyboardFactory;
+    private final PianoKeyboardAggregatesFactory pianoKeyboardFactory;
 
-    protected final PianoKeyboardAggregate pianoKeyboard1;
-    protected final PianoKeyboardDTO dto1;
+    private final PianoKeyboardAggregate pianoKeyboard1;
+    private final PianoKeyboardDTO dto1;
 
-    protected final PianoKeyboardAggregate pianoKeyboard2;
-    protected final PianoKeyboardDTO dto2;
+    private final PianoKeyboardAggregate pianoKeyboard2;
+    private final PianoKeyboardDTO dto2;
 
     public PianoKeyboardDTOAssemblerTest() {
         pianoKeyboardFactory = DI.get(PianoKeyboardAggregatesFactory.class);

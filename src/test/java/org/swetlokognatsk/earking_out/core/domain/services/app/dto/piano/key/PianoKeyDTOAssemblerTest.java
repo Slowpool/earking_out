@@ -16,13 +16,13 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
  * class description for explanation.
  */
 public final class PianoKeyDTOAssemblerTest {
-    protected final PianoKeysFactory pianoKeysFactory;
+    private final PianoKeysFactory pianoKeysFactory;
 
-    protected final PianoKey pianoKey1;
-    protected final PianoKeyDTO dto1;
+    private final PianoKey pianoKey1;
+    private final PianoKeyDTO dto1;
 
-    protected final PianoKey pianoKey2;
-    protected final PianoKeyDTO dto2;
+    private final PianoKey pianoKey2;
+    private final PianoKeyDTO dto2;
 
     public PianoKeyDTOAssemblerTest() {
         pianoKeysFactory = DI.get(PianoKeysFactory.class);

@@ -10,7 +10,7 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
 public final class PuzzleConfigService {
 
-    protected final PuzzleConfigRepository repository;
+    private final PuzzleConfigRepository repository;
 
     public PuzzleConfigService(final PuzzleConfigRepository repository) {
         this.repository = Objects.requireNonNull(repository);
@@ -40,7 +40,7 @@ public final class PuzzleConfigService {
         }
     }
 
-    protected <E extends Exercise> PuzzleConfigAggregate<E> getPuzzleConfigAggregate(final E exercise) {
+    private <E extends Exercise> PuzzleConfigAggregate<E> getPuzzleConfigAggregate(final E exercise) {
         var puzzleConfigAggregate = repository.get(exercise);
         return (PuzzleConfigAggregate<E>) puzzleConfigAggregate;
     }

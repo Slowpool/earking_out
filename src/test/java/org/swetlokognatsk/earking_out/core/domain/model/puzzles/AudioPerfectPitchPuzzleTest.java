@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public class AudioPerfectPitchPuzzleTest {
-    protected PuzzleTestHelper puzzleHelper;
+    private PuzzleTestHelper puzzleHelper;
 
     @Before
     public void setup() {

@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 // TODO should it be here or in core?
 public abstract class AggregateRepository {
 
-    protected void publishEvents(final List<DomainEvent> events) {
+    protected final void publishEvents(final List<DomainEvent> events) {
         var eventPublisher = DI.get(EventPublisher.class);
         eventPublisher.publish(events);
     }

@@ -7,8 +7,8 @@ import java.io.Serializable;
 import javafx.scene.media.AudioClip;
 
 public final class AudioClipSoundPlayer implements SoundPlayer, Serializable {
-    protected final String audioClipSource;
-    protected transient AudioClip audioClip;
+    private String audioClipSource;
+    private transient AudioClip audioClip;
 
     public AudioClipSoundPlayer(final File file) {
         var absoluteFilePath = file.getAbsolutePath();
@@ -19,11 +19,11 @@ public final class AudioClipSoundPlayer implements SoundPlayer, Serializable {
         createAudioClip();
     }
 
-    protected String buildAudioClipSource(final String absoluteFilePath) {
+    private String buildAudioClipSource(final String absoluteFilePath) {
         return "file://" + absoluteFilePath;
     }
 
-    protected void createAudioClip() {
+    private void createAudioClip() {
         audioClip = new AudioClip(audioClipSource);
     }
 

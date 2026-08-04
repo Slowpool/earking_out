@@ -16,7 +16,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 
 @SpringBootTest
 public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, TestInMemoryAllPianoKeyboardRepository> {
-    protected TestInMemoryAllPianoKeyboardRepository repository;
+    private TestInMemoryAllPianoKeyboardRepository repository;
 
     protected PianoKeyboardAggregate getSomeAggregate() {
         return repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
@@ -30,7 +30,7 @@ public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryReposi
         aggregate.touchKey(someRootNote);
     }
 
-    protected static final PianoKeyNumber someRootNote = PianoKeyNumber.valueOf(50);
+    private static final PianoKeyNumber someRootNote = PianoKeyNumber.valueOf(50);
 
     /**
      * @param freshman - this aggregate is just got from repo.

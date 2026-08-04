@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfe
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.InMemorySessionRepository;
 
 public final class InMemoryAudioPerfectPitchSessionRepository extends InMemorySessionRepository<AudioPerfectPitchSessionAggregate> implements AudioPerfectPitchSessionRepository {
-    protected final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository;
+    private final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository;
 
     public InMemoryAudioPerfectPitchSessionRepository(final SessionAggregatesFactory sessionAggregatesFactory, final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository) {
         super(sessionAggregatesFactory);

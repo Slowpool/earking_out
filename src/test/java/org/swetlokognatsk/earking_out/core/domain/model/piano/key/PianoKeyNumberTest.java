@@ -119,7 +119,7 @@ public final class PianoKeyNumberTest {
         assertFalse(pianoKeyNumber.equals(new Dummy()));
     }
 
-    protected record Dummy() {
+    private record Dummy() {
     };
 
 }

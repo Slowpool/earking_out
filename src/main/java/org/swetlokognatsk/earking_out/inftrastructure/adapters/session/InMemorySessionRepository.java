@@ -9,9 +9,9 @@ import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.AggregateRepository;
 
 public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?, ?, ?>> extends AggregateRepository implements SessionRepository<SA> {
-    protected final Map<SessionId, SessionAggregate<?, ?, ?, ?>> sessionAggregates = new HashMap<>();
+    private final Map<SessionId, SessionAggregate<?, ?, ?, ?>> sessionAggregates = new HashMap<>();
 
-    protected final SessionAggregatesFactory sessionAggregatesFactory;
+    private final SessionAggregatesFactory sessionAggregatesFactory;
 
     protected abstract void loadDependentAggregates(final SA sessionAggregate);
 
@@ -21,7 +21,7 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
         this.sessionAggregatesFactory = sessionAggregatesFactory;
     }
 
-    public SA get(final SessionId id) {
+    public final SA get(final SessionId id) {
         var sessionAggregate = (SA) sessionAggregates.get(id);
         if (sessionAggregate == null) {
             throw new IllegalArgumentException("session not found. id: " + id);

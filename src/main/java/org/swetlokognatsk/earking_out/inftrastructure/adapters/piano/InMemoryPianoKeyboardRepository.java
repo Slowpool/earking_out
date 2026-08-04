@@ -28,7 +28,7 @@ abstract class InMemoryPianoKeyboardRepository extends AggregateRepository imple
         initPianoKeyboards();
     }
 
-    protected void initPianoKeyboards() {
+    private void initPianoKeyboards() {
         PianoKeyboardAggregate pianoKeyboard;
         for (var pianoKeyboardId : getPianoKeyboardIds()) {
             pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId);
@@ -36,7 +36,7 @@ abstract class InMemoryPianoKeyboardRepository extends AggregateRepository imple
         }
     }
 
-    protected PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
+    protected final PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = pianoKeyboardAggregates.get(pianoKeyboardId);
         if (pianoKeyboard == null) {
             throw new IllegalArgumentException("piano keyboard with such an id is not found: " + pianoKeyboardId);
@@ -44,7 +44,7 @@ abstract class InMemoryPianoKeyboardRepository extends AggregateRepository imple
         return pianoKeyboard;
     }
 
-    public PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId) {
+    public final PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
 
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboard);
@@ -52,7 +52,7 @@ abstract class InMemoryPianoKeyboardRepository extends AggregateRepository imple
     }
 
     // TODO generalize the whole set/get logic into `InMemoryAggregateRepository` abstract class
-    public void save(final PianoKeyboardAggregate pianoKeyboardAggregate) {
+    public final void save(final PianoKeyboardAggregate pianoKeyboardAggregate) {
         var pianoKeyboardId = pianoKeyboardAggregate.getPianoKeyboardId();
         // ensuring it exists (keyboards are initialized in initKeyboards(). further no new keyboards can be created)
         getPianoKeyboardAggregate(pianoKeyboardId);
@@ -65,13 +65,13 @@ abstract class InMemoryPianoKeyboardRepository extends AggregateRepository imple
         publishEvents(events);
     }
 
-    public PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId) {
+    public final PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = get(pianoKeyboardId);
         var dto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
         return dto;
     }
 
-    public PianoKeyboardAggregate[] getByExercise(final Exercise exercise) {
+    public final PianoKeyboardAggregate[] getByExercise(final Exercise exercise) {
         // TODO refactoring. add PianoKeyboardType (session/puzzleConfig)
         var pianoKeyboardIds = PianoKeyboardId.getPianoKeyboardIds(exercise);
         var stream = Arrays.stream(pianoKeyboardIds);

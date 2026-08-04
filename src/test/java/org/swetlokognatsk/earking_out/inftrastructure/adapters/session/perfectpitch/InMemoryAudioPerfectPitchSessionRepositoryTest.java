@@ -17,11 +17,11 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositor
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 
 public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepositoryTest<SessionId, AudioPerfectPitchSessionAggregate, InMemoryAudioPerfectPitchSessionRepository> {
-    protected static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
-    protected static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
+    private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
+    private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
 
-    protected InMemoryAudioPerfectPitchSessionRepository repository;
-    protected SessionId seededSessionId;
+    private InMemoryAudioPerfectPitchSessionRepository repository;
+    private SessionId seededSessionId;
 
     @Before
     public void setup() {
@@ -31,7 +31,7 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
         seedTestSession();
     }
 
-    protected void seedTestSession() {
+    private void seedTestSession() {
         var sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
         AudioPerfectPitchSessionAggregate someSession = sessionAggregatesFactory.create(new AudioPerfectPitchExercise());
         seededSessionId = someSession.getId();
@@ -42,7 +42,7 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
         return getAggregate();
     }
 
-    protected AudioPerfectPitchSessionAggregate getAggregate() {
+    private AudioPerfectPitchSessionAggregate getAggregate() {
         FakeAudioPerfectPitchSolutionGenerator.fakeSolution = SOLUTION;
         return repository.get(seededSessionId);
     }

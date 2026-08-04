@@ -12,8 +12,8 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generator
 
 // TODO review the domain layer to make sure it does not contain a concepts the domain expert wouldn't understand
 public final class PuzzleTestHelper {
-    protected final PuzzleConfigRepository puzzleConfigRepository;
-    protected final PuzzlesFactory puzzlesFactory;
+    private final PuzzleConfigRepository puzzleConfigRepository;
+    private final PuzzlesFactory puzzlesFactory;
 
     public PuzzleTestHelper(final PuzzleConfigRepository puzzleConfigRepository) {
         this.puzzleConfigRepository = puzzleConfigRepository;

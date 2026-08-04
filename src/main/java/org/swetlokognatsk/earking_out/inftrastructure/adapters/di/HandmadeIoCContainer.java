@@ -58,22 +58,22 @@ import org.swetlokognatsk.earking_out.inftrastructure.factories.puzzles.generato
 
 public final class HandmadeIoCContainer implements IoCContainer {
 
-    protected Map<Class<?>, ?> singletons;
+    private Map<Class<?>, ?> singletons;
     // singleton lifetime simulation
-    protected static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
-    protected static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
-    protected static InMemorySessionPianoKeyboardRepository inMemorySessionPianoKeyboardRepository;
-    protected static TestInMemoryAllPianoKeyboardRepository testInMemoryAllPianoKeyboardRepository;
-    protected static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
-    protected static MockPianoKeySoundsPlayer mockPianoKeySoundsPlayer;
-    protected static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
-    protected static DomainEventsFactory domainEventsFactory;
-    protected static EventPublisher eventPublisher;
-    protected static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
-    protected static GreenrobotEventBus greenrobotEventBus;
-    protected static PianoKeyPressedHandler pianoKeyPressedHandler;
-    protected static NewPuzzleCreatedHandler newpuzzleCreatedHandler;
-    protected static HintRepeatingRequestedHandler hintRepeatingRequestedHandler;
+    private static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
+    private static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
+    private static InMemorySessionPianoKeyboardRepository inMemorySessionPianoKeyboardRepository;
+    private static TestInMemoryAllPianoKeyboardRepository testInMemoryAllPianoKeyboardRepository;
+    private static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
+    private static MockPianoKeySoundsPlayer mockPianoKeySoundsPlayer;
+    private static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
+    private static DomainEventsFactory domainEventsFactory;
+    private static EventPublisher eventPublisher;
+    private static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
+    private static GreenrobotEventBus greenrobotEventBus;
+    private static PianoKeyPressedHandler pianoKeyPressedHandler;
+    private static NewPuzzleCreatedHandler newpuzzleCreatedHandler;
+    private static HintRepeatingRequestedHandler hintRepeatingRequestedHandler;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {

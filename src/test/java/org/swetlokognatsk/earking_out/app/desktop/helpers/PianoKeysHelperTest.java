@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 
 public final class PianoKeysHelperTest {
 
-    protected int numberOfKeysTraversed = 0;
+    private int numberOfKeysTraversed = 0;
 
     @Test
     public void forEachKeyTraverseAllNotes() {

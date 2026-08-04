@@ -14,7 +14,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.I
 
 public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
-    protected InMemoryPuzzleConfigRepository repository;
+    private InMemoryPuzzleConfigRepository repository;
 
     protected AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>> getRepository() {
         return repository;
@@ -84,7 +84,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
         assertEquals(newNormalizedRootNote, aggregate.getNormalizedRootNote());
     }
 
-    protected AudioPerfectPitchConfigAggregate getPerfectPitchConfigAggregate() {
+    private AudioPerfectPitchConfigAggregate getPerfectPitchConfigAggregate() {
         var exercise = new AudioPerfectPitchExercise();
         AudioPerfectPitchConfigAggregate aggregate = repository.genericGet(exercise);
         return aggregate;

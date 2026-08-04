@@ -17,12 +17,12 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
-    protected final Map<Exercise, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
+    private final Map<Exercise, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
-    protected final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository;
-    protected final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
+    private final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository;
+    private final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
 
-    protected <DADTO extends DependentAggregatesDTO, E extends Exercise, F extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, DADTO>> PuzzleConfigAggregate<E> createDefault(final F factory, final E exercise) {
+    private <DADTO extends DependentAggregatesDTO, E extends Exercise, F extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, DADTO>> PuzzleConfigAggregate<E> createDefault(final F factory, final E exercise) {
         var defaultPuzzleConfig = switch (exercise) {
         // TODO refactoring. probably via factory - earlier i thought it should not utilize repositories, but now it seems completely fine.
         case AudioPerfectPitchExercise e -> {
@@ -42,7 +42,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     }
 
     // TODO polymorphic stuff??
-    protected PerfectPitchConfigDependentAggregatesDTO getAudioPerfectPitchConfigDependentAggregates(final Exercise exercise) {
+    private PerfectPitchConfigDependentAggregatesDTO getAudioPerfectPitchConfigDependentAggregates(final Exercise exercise) {
         var pianoKeyboards = pianoKeyboardRepository.getByExercise(exercise);
         var dependentAggregates = new PerfectPitchConfigDependentAggregatesDTO(pianoKeyboards);
         return dependentAggregates;
@@ -55,7 +55,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         seedConfigs();
     }
 
-    protected void seedConfigs() {
+    private void seedConfigs() {
         var exercises = ExercisesFactory.getAll();
         PuzzleConfigAggregate<?> puzzleConfigAggregate;
         for (var exercise : exercises) {
@@ -80,7 +80,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         return (PCA) puzzleConfigAggregate;
     }
 
-    protected <PCA extends PuzzleConfigAggregate<?>> PCA createDeepCopy(final PCA puzzleConfigAggregate) {
+    private <PCA extends PuzzleConfigAggregate<?>> PCA createDeepCopy(final PCA puzzleConfigAggregate) {
         var puzzleConfigAggregateFactory = (PuzzleConfigAggregatesFactory<PCA, ?>) createFactory(puzzleConfigAggregate.getId());
         PCA puzzleConfigAggregateCopy = puzzleConfigAggregateFactory.createDeepCopy(puzzleConfigAggregate);
         return (PCA) puzzleConfigAggregateCopy;

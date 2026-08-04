@@ -18,10 +18,10 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
 
 public final class SessionAggregatesFactory extends AggregatesFactory<SessionAggregate<?, ?, ?, ?>> {
-    protected final PuzzleConfigRepository puzzleConfigRepository;
-    protected final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository;
-    protected final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler;
-    protected final PuzzlesFactory puzzlesFactory;
+    private final PuzzleConfigRepository puzzleConfigRepository;
+    private final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository;
+    private final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler;
+    private final PuzzlesFactory puzzlesFactory;
 
     public SessionAggregatesFactory(final ObjectCloner cloner, final PuzzleConfigRepository puzzleConfigRepository, final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository, final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler, final PuzzlesFactory puzzlesFactory) {
         super(cloner);
@@ -49,7 +49,7 @@ public final class SessionAggregatesFactory extends AggregatesFactory<SessionAgg
         return (SA) sessionAggregate;
     }
 
-    protected <E extends Exercise> PuzzleConfigDTO<E> validateConfigAndGet(final E exercise) {
+    private <E extends Exercise> PuzzleConfigDTO<E> validateConfigAndGet(final E exercise) {
         var puzzleConfigAggregate = puzzleConfigRepository.get(exercise);
         var puzzleConfigDto = puzzleConfigDTOAssembler.assemble(puzzleConfigAggregate);
         if (!puzzleConfigAggregate.isValid()) {
