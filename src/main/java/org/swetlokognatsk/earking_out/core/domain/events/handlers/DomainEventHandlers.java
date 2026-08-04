@@ -6,14 +6,12 @@ import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRe
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
-// TODO this approach is hand-made. how it should be done in clean-codish ddd architecture?
 public final class DomainEventHandlers {
 
     public static void registerDomainEventHandlers() {
         var eventBus = DI.get(EventBus.class);
 
         // TODO sort it out
-        // SpringEventBus doesn't contain implementation for this `subscribe()` method because spring handlers are separate classes with `@Component` annotation and `@EventListener` method. for spring this action is redudant.
         var pianoKeyPressedHandler = DI.get(PianoKeyPressedHandler.class);
         eventBus.subscribe(PianoKeyPressedEvent.class, pianoKeyPressedHandler::handlePianoKeyPressedEvent);
 

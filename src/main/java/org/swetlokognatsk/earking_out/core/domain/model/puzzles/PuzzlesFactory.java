@@ -10,6 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.inftrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 
+// TODO encapsulate factory inside di, so that instead his could be used: `DI.createPuzzle(new AudioPerfectPitchExercise())` or kinda
 public final class PuzzlesFactory {
     protected final SolutionGeneratorsFactory solutionGeneratorsFactory;
     protected final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler;

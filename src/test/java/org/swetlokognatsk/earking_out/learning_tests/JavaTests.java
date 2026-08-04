@@ -3,8 +3,12 @@ package org.swetlokognatsk.earking_out.learning_tests;
 import static org.junit.Assert.*;
 import java.util.concurrent.Executor;
 import org.junit.*;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
@@ -548,8 +552,9 @@ public class JavaTests {
 
     @Test
     public void asdf() {
-        
     }
+
+    
 }
 
 

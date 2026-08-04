@@ -46,7 +46,6 @@ public class EarkingOutApplication extends Application {
     private final Scene mainScene;
 
     public static void main(String[] args) {
-        // TODO bootstrap refactoring
         var context = runSpringApp(args);
         initDI(context);
         DomainEventHandlers.registerDomainEventHandlers();
