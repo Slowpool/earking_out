@@ -11,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
+// TODO use event sourcing for this aggregate?
 public abstract class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends AggregateRoot<SessionId> {
     private static final long serialVersionUID = 1L;
 
@@ -48,8 +49,8 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         return stats.puzzlesCompleted;
     }
 
-    public final int getPuzzlesCompletedCorrectly() {
-        return stats.puzzlesCompletedCorrectly;
+    public final int getPuzzlesCompletedPerfectly() {
+        return stats.puzzlesCompletedPerfectly;
     }
 
     public final P getPuzzle() {
@@ -146,7 +147,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected void handleSuccessfulGuess(final S guess) {
-        var newStats = isPerfectlyGuessedPuzzle() ? stats.incrementCorrectlyCompletedPuzzles() : stats.incrementCompletedPuzzles();
+        var newStats = isPerfectlyGuessedPuzzle() ? stats.incrementPerfectlyCompletedPuzzles() : stats.incrementCompletedPuzzles();
         setStats(newStats);
 
         addUserTriedToGuessPuzzleEvent(getPuzzlesCompleted(), guess, getNumberOfGuessesOfCurrentPuzzle(), true);
@@ -164,7 +165,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected final boolean isPerfectlyGuessedPuzzle() {
-        return getNumberOfGuessesOfCurrentPuzzle() == 0;
+        return getNumberOfGuessesOfCurrentPuzzle() == 1;
     }
 
     protected final void incrementNumberOfGuessesOfCurrentPuzzle() {

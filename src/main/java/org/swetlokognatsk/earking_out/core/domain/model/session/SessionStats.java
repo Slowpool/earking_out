@@ -9,24 +9,24 @@ public final class SessionStats extends ValueObject implements Serializable {
     // TODO PositiveInt VO
     /**
      * If puzzle was successfully guessed on the first guess, it's considered to be
-     * completed correctly. Otherwise, if several guesses were needed to guess
+     * completed perfectly. Otherwise, if several guesses were needed to guess
      * successfully, then puzzle is completed (puzzlesCompleted++), although not
-     * correctly (puzzlesCompletedCorrectly remains as-is).
+     * perfectly (puzzlesCompletedPerfectly remains as-is).
      */
-    public final int puzzlesCompletedCorrectly;
+    public final int puzzlesCompletedPerfectly;
     public final int puzzlesCompleted;
 
-    public SessionStats(final int puzzlesCompletedCorrectly, final int puzzlesCompleted) {
-        this.puzzlesCompletedCorrectly = puzzlesCompletedCorrectly;
+    public SessionStats(final int puzzlesCompletedPerfectly, final int puzzlesCompleted) {
+        this.puzzlesCompletedPerfectly = puzzlesCompletedPerfectly;
         this.puzzlesCompleted = puzzlesCompleted;
     }
 
-    public SessionStats incrementCorrectlyCompletedPuzzles() {
-        return new SessionStats(puzzlesCompletedCorrectly + 1, puzzlesCompleted + 1);
+    public SessionStats incrementPerfectlyCompletedPuzzles() {
+        return new SessionStats(puzzlesCompletedPerfectly + 1, puzzlesCompleted + 1);
     }
 
     public SessionStats incrementCompletedPuzzles() {
-        return new SessionStats(puzzlesCompletedCorrectly, puzzlesCompleted + 1);
+        return new SessionStats(puzzlesCompletedPerfectly, puzzlesCompleted + 1);
     }
 
 }

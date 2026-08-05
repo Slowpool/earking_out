@@ -11,14 +11,16 @@ public final class DomainEventHandlers {
     public static void registerDomainEventHandlers() {
         var eventBus = DI.get(EventBus.class);
 
-        // TODO sort it out
+        // TODO rename handlers to what they do, not what they handle
         var pianoKeyPressedHandler = DI.get(PianoKeyPressedHandler.class);
         eventBus.subscribe(PianoKeyPressedEvent.class, pianoKeyPressedHandler::handlePianoKeyPressedEvent);
 
         var hintRepeatingRequestedHandler = DI.get(HintRepeatingRequestedHandler.class);
         eventBus.subscribe(HintRepeatingRequestedEvent.class, hintRepeatingRequestedHandler::handleHintRepeatingRequestedEvent);
-        
+
         var newPuzzleCreatedHandler = DI.get(NewPuzzleCreatedHandler.class);
         eventBus.subscribe(NewPuzzleCreatedEvent.class, newPuzzleCreatedHandler::handleNewPuzzleCreatedEvent);
+
+
     }
 }

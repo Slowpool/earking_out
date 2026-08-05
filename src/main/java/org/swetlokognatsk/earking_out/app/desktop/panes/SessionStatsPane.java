@@ -23,7 +23,7 @@ public abstract class SessionStatsPane<SADTO extends SessionAggregateDTO<?, ?, ?
         titleLabelBox.setAlignment(Pos.CENTER);
 
         var stats = sessionDto.stats;
-        var briefResultsText = interpolateBriefResult(stats.puzzlesCompletedCorrectly, stats.puzzlesCompleted);
+        var briefResultsText = interpolateBriefResult(stats.puzzlesCompletedPerfectly, stats.puzzlesCompleted);
         var briefResultLabel = new Label(briefResultsText);
         var briefResultBox = new VBox(briefResultLabel);
         briefResultBox.setAlignment(Pos.CENTER);
