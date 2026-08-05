@@ -20,7 +20,6 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.ports.hints.demonstrators;
     exports org.swetlokognatsk.earking_out.core.domain.events;
     exports org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard;
-    exports org.swetlokognatsk.earking_out.core.domain.events.puzzles;
     exports org.swetlokognatsk.earking_out.core.domain.model.solutions;
     exports org.swetlokognatsk.earking_out.core.domain.model.piano.key;
     exports org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;

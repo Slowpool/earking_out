@@ -9,8 +9,6 @@ public final class SpringPianoKeyPressedHandler extends SpringEventHandler<Piano
 
     @EventListener
     public void handlePianoKeyPressedEvent(final PianoKeyPressedEvent event) {
-        if (callback != null) {
-            callback.accept(event);
-        }
+        traverseCallbacks(event);
     }
 }

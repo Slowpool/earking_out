@@ -4,9 +4,9 @@ import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintRepeatingRequestedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.NewPuzzleCreatedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.PianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
@@ -71,9 +71,9 @@ public final class HandmadeIoCContainer implements IoCContainer {
     private static EventPublisher eventPublisher;
     private static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
     private static GreenrobotEventBus greenrobotEventBus;
-    private static PianoKeyPressedHandler pianoKeyPressedHandler;
-    private static NewPuzzleCreatedHandler newpuzzleCreatedHandler;
-    private static HintRepeatingRequestedHandler hintRepeatingRequestedHandler;
+    private static SoundPlayerOnPianoKeyPressedHandler pianoKeyPressedHandler;
+    private static HintDemonstratingOnNewPuzzleCreatedHandler newpuzzleCreatedHandler;
+    private static HintDemonstratingOnHintRepeatingRequestedHandler hintRepeatingRequestedHandler;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -243,21 +243,21 @@ public final class HandmadeIoCContainer implements IoCContainer {
             }
             return (T) greenrobotEventBus;
 
-        } else if (className.equals(PianoKeyPressedHandler.class.getName())) {
+        } else if (className.equals(SoundPlayerOnPianoKeyPressedHandler.class.getName())) {
             if (pianoKeyPressedHandler == null) {
-                pianoKeyPressedHandler = new PianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PuzzleConfigPianoKeyboardStorageAdapter.class), get(PuzzleConfigRepository.class));
+                pianoKeyPressedHandler = new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PuzzleConfigPianoKeyboardStorageAdapter.class), get(PuzzleConfigRepository.class));
             }
             return (T) pianoKeyPressedHandler;
 
-        } else if (className.equals(NewPuzzleCreatedHandler.class.getName())) {
+        } else if (className.equals(HintDemonstratingOnNewPuzzleCreatedHandler.class.getName())) {
             if (newpuzzleCreatedHandler == null) {
-                newpuzzleCreatedHandler = new NewPuzzleCreatedHandler(get(HintDemonstratorDelegator.class));
+                newpuzzleCreatedHandler = new HintDemonstratingOnNewPuzzleCreatedHandler(get(HintDemonstratorDelegator.class));
             }
             return (T) newpuzzleCreatedHandler;
 
-        } else if (className.equals(HintRepeatingRequestedHandler.class.getName())) {
+        } else if (className.equals(HintDemonstratingOnHintRepeatingRequestedHandler.class.getName())) {
             if (hintRepeatingRequestedHandler == null) {
-                hintRepeatingRequestedHandler = new HintRepeatingRequestedHandler(get(HintDemonstratorDelegator.class));
+                hintRepeatingRequestedHandler = new HintDemonstratingOnHintRepeatingRequestedHandler(get(HintDemonstratorDelegator.class));
             }
             return (T) hintRepeatingRequestedHandler;
 

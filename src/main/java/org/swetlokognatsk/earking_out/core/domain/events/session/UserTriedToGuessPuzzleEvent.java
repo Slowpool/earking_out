@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.events.puzzles;
+package org.swetlokognatsk.earking_out.core.domain.events.session;
 
 import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;

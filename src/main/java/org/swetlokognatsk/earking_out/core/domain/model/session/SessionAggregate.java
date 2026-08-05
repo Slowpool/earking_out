@@ -113,7 +113,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
 
-        var newPuzzleEvent = getDomainEventsFactory().createNewpuzzleCreatedEvent(puzzle);
+        var newPuzzleEvent = getDomainEventsFactory().createNewpuzzleCreatedEvent(getId(), puzzle);
         addEvent(newPuzzleEvent);
     }
 

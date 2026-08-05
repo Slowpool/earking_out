@@ -8,12 +8,12 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 
-public final class PianoKeyPressedHandler {
+public final class SoundPlayerOnPianoKeyPressedHandler {
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
     private final PuzzleConfigPianoKeyboardStorageAdapter puzzleConfigPianoKeyboardRepository;
     private final PuzzleConfigRepository puzzleConfigRepository;
 
-    public PianoKeyPressedHandler(final PianoKeySoundsPlayer pianoKeySoundsPlayer, final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository, final PuzzleConfigRepository puzzleConfigRepository) {
+    public SoundPlayerOnPianoKeyPressedHandler(final PianoKeySoundsPlayer pianoKeySoundsPlayer, final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository, final PuzzleConfigRepository puzzleConfigRepository) {
         this.pianoKeySoundsPlayer = pianoKeySoundsPlayer;
         this.puzzleConfigPianoKeyboardRepository = pianoKeyboardRepository;
         this.puzzleConfigRepository = puzzleConfigRepository;
