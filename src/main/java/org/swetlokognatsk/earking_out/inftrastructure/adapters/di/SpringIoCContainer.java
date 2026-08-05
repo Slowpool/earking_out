@@ -10,6 +10,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFact
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionEventsLoggerHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
@@ -26,6 +27,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKey
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.IoCContainer;
+import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
@@ -118,6 +120,8 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(HintDemonstratingOnNewPuzzleCreatedHandler.class, () -> new HintDemonstratingOnNewPuzzleCreatedHandler(ctx.getBean(HintDemonstratorDelegator.class)));
 
         ctx.registerBean(HintDemonstratingOnHintRepeatingRequestedHandler.class, () -> new HintDemonstratingOnHintRepeatingRequestedHandler(ctx.getBean(HintDemonstratorDelegator.class)));
+
+        ctx.registerBean(SessionEventsLoggerHandler.class, () -> new SessionEventsLoggerHandler(ctx.getBean(EventStore.class)));
 
         // javafx beans
         ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(ctx.getBean(SessionRepositoryDelegator.class)));
