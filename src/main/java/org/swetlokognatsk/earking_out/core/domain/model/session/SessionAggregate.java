@@ -73,7 +73,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected final boolean thereAreNoAnyGuessesInSession() {
-        return stats.puzzlesCompleted == 0 && numberOfGuessesOfCurrentPuzzle == 0;
+        return stats.puzzlesCompleted == 0 && getNumberOfGuessesOfCurrentPuzzle() == 0;
     }
 
     protected final void setPrevGuessIsSuccessful(final boolean prevGuessIsSuccessful) {
@@ -118,19 +118,20 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
 
     public final void guess(final S guess) {
         validateGuessing();
+
         var success = puzzle.guess(guess);
+        incrementNumberOfGuessesOfCurrentPuzzle();
+
         if (success) {
             handleSuccessfulGuess(guess);
         } else {
             handleWrongGuess(guess);
         }
+
         setPrevGuessIsSuccessful(success);
     }
 
-    private void addUserTriedToGuessPuzzleEvent(final S guess, final boolean success) {
-        var puzzleNumber = getPuzzlesCompleted();
-        var attempt = getNumberOfGuessesOfCurrentPuzzle() + 1;
-        // TODO attempt
+    private void addUserTriedToGuessPuzzleEvent(final int puzzleNumber, final S guess, final int attempt, final boolean success) {
         var event = getDomainEventsFactory().createUserTriedToGuessPuzzleEvent(getId(), puzzleNumber, guess, attempt, success);
         addEvent(event);
     }
@@ -148,7 +149,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         var newStats = isPerfectlyGuessedPuzzle() ? stats.incrementCorrectlyCompletedPuzzles() : stats.incrementCompletedPuzzles();
         setStats(newStats);
 
-        addUserTriedToGuessPuzzleEvent(guess, true);
+        addUserTriedToGuessPuzzleEvent(getPuzzlesCompleted(), guess, getNumberOfGuessesOfCurrentPuzzle(), true);
 
         if (isLastPuzzle()) {
             setState(SessionStates.COMPLETED);
@@ -163,13 +164,15 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected final boolean isPerfectlyGuessedPuzzle() {
-        return numberOfGuessesOfCurrentPuzzle == 0;
+        return getNumberOfGuessesOfCurrentPuzzle() == 0;
+    }
+
+    protected final void incrementNumberOfGuessesOfCurrentPuzzle() {
+        setNumberOfGuessesOfCurrentPuzzle(getNumberOfGuessesOfCurrentPuzzle() + 1);
     }
 
     protected void handleWrongGuess(final S guess) {
-        setNumberOfGuessesOfCurrentPuzzle(numberOfGuessesOfCurrentPuzzle + 1);
-
-        addUserTriedToGuessPuzzleEvent(guess, false);
+        addUserTriedToGuessPuzzleEvent(getPuzzlesCompleted() + 1, guess, getNumberOfGuessesOfCurrentPuzzle(), false);
     }
 
     public final void abort() {

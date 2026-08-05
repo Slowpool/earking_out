@@ -279,6 +279,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
                 assertNumberOfPuzzleInUserTriedToGuessEventEquals(aggregate, puzzleNumber);
             }
             aggregate.guess(SOLUTION);
+            aggregate.flushEvents();
         }
     }
 
