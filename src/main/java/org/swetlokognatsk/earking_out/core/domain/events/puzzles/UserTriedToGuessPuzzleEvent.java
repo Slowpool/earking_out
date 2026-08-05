@@ -2,22 +2,24 @@ package org.swetlokognatsk.earking_out.core.domain.events.puzzles;
 
 import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.guesses.Guess;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 
-public final class UserTriedToGuessPuzzle extends DomainEvent {
+public final class UserTriedToGuessPuzzleEvent extends DomainEvent {
     public final SessionId sessionId;
-    public final Guess guess;
-    public final Solution solution;
+    public final int puzzleNumber;
+    // TODO generic?
+    public final Solution guess;
+    public final int attempt;
     public final boolean success;
 
-    public UserTriedToGuessPuzzle(final LocalDateTime timestamp, final SessionId sessionId, final Guess guess, final Solution solution, final boolean success) {
+    public UserTriedToGuessPuzzleEvent(final LocalDateTime timestamp, final SessionId sessionId, final int puzzleNumber, final Solution guess, final int attempt, final boolean success) {
         super(timestamp);
 
         this.sessionId = sessionId;
+        this.puzzleNumber = puzzleNumber;
         this.guess = guess;
-        this.solution = solution;
+        this.attempt = attempt;
         this.success = success;
     }
 }

@@ -120,11 +120,19 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         validateGuessing();
         var success = puzzle.guess(guess);
         if (success) {
-            handleSuccessfulGuess();
+            handleSuccessfulGuess(guess);
         } else {
-            handleWrongGuess();
+            handleWrongGuess(guess);
         }
         setPrevGuessIsSuccessful(success);
+    }
+
+    private void addUserTriedToGuessPuzzleEvent(final S guess, final boolean success) {
+        var puzzleNumber = getPuzzlesCompleted();
+        var attempt = getNumberOfGuessesOfCurrentPuzzle() + 1;
+        // TODO attempt
+        var event = getDomainEventsFactory().createUserTriedToGuessPuzzleEvent(getId(), puzzleNumber, guess, attempt, success);
+        addEvent(event);
     }
 
     protected void validateGuessing() {
@@ -136,9 +144,11 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         }
     }
 
-    protected void handleSuccessfulGuess() {
-        var newStats = isCorrectlyGuessedPuzzle() ? stats.incrementCorrectlyCompletedPuzzle() : stats.incrementCompletedPuzzle();
+    protected void handleSuccessfulGuess(final S guess) {
+        var newStats = isPerfectlyGuessedPuzzle() ? stats.incrementCorrectlyCompletedPuzzles() : stats.incrementCompletedPuzzles();
         setStats(newStats);
+
+        addUserTriedToGuessPuzzleEvent(guess, true);
 
         if (isLastPuzzle()) {
             setState(SessionStates.COMPLETED);
@@ -152,12 +162,14 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         return stats.puzzlesCompleted == puzzleConfigDto.targetNumberOfPuzzles;
     }
 
-    protected final boolean isCorrectlyGuessedPuzzle() {
+    protected final boolean isPerfectlyGuessedPuzzle() {
         return numberOfGuessesOfCurrentPuzzle == 0;
     }
 
-    protected void handleWrongGuess() {
+    protected void handleWrongGuess(final S guess) {
         setNumberOfGuessesOfCurrentPuzzle(numberOfGuessesOfCurrentPuzzle + 1);
+
+        addUserTriedToGuessPuzzleEvent(guess, false);
     }
 
     public final void abort() {

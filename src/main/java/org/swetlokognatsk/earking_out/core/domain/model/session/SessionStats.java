@@ -21,11 +21,11 @@ public final class SessionStats extends ValueObject implements Serializable {
         this.puzzlesCompleted = puzzlesCompleted;
     }
 
-    public SessionStats incrementCorrectlyCompletedPuzzle() {
+    public SessionStats incrementCorrectlyCompletedPuzzles() {
         return new SessionStats(puzzlesCompletedCorrectly + 1, puzzlesCompleted + 1);
     }
 
-    public SessionStats incrementCompletedPuzzle() {
+    public SessionStats incrementCompletedPuzzles() {
         return new SessionStats(puzzlesCompletedCorrectly, puzzlesCompleted + 1);
     }
 

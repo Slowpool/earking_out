@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.puzzles.NewPuzzleCreatedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.puzzles.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 
 public final class DomainEventsFactory {
 
@@ -27,6 +30,11 @@ public final class DomainEventsFactory {
     public HintRepeatingRequestedEvent createHintRepeatingRequestedEvent(final Puzzle<?, ?> puzzle) {
         var timestamp = createTimestamp();
         return new HintRepeatingRequestedEvent(timestamp, puzzle);
+    }
+
+    public UserTriedToGuessPuzzleEvent createUserTriedToGuessPuzzleEvent(final SessionId sessionId, final int puzzleNumber, final Solution guess, final int attempt, final boolean success) {
+        var timestamp = createTimestamp();
+        return new UserTriedToGuessPuzzleEvent(timestamp, sessionId, puzzleNumber, guess, attempt, success);
     }
 
 }
