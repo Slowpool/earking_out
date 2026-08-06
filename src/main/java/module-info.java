@@ -96,6 +96,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds;
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.eventsourcing;
     exports org.swetlokognatsk.earking_out.core.domain.events.session;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.events;
 
     opens org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
 }

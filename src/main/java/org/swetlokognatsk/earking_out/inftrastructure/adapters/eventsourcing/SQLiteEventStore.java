@@ -21,23 +21,24 @@ public final class SQLiteEventStore implements EventStore {
     // // TODO use it
     // public void append(final EventStream<?> eventStream) throws EventSavingException {
     public void append(final EventStream<?> eventStream) {
+        // TODO is there any security concerns with that? it can be any? sql-injection-like stuff?
         // TODO move it to config
-        var db = "sample.db";
-        var connectionString = String.format("jdbc:sqlite:%s", db);
-        var eventSourcingEventsTable = "event_sourcing_events";
+        var fullDbPath = "/Java/earking_out/earking_out.db";
+        var connectionString = String.format("jdbc:sqlite:%s", fullDbPath);
+        // createDatabase(connectionString);
+        // return;
 
         // TODO hint: all columns are TEXT
-        var createCommand = ("INSERT INTO `?` (`id`, `type`, `created_on`, `payload`) VALUES (?, ?, ?, ?)");
+        var createCommand = ("INSERT INTO `event_sourcing_events` (`id`, `type`, `created_on`, `payload`) VALUES (?, ?, ?, ?)");
         try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.prepareStatement(createCommand);) {
             // // TODO Iterable/Iterator is enough to use it?
             // for (var event : eventStream) {
             for (var event : eventStream.events()) {
-                statement.setString(1, eventSourcingEventsTable);
 
-                statement.setString(2, eventStream.id().toString());
-                statement.setString(3, event.getClass().toString());
-                statement.setString(4, getCreatedOn());
-                statement.setString(5, domainEventJsonSerializer.serializeDomainEvent(event));
+                statement.setString(1, eventStream.id().toString());
+                statement.setString(2, event.getClass().toString());
+                statement.setString(3, getCreatedOn());
+                statement.setString(4, domainEventJsonSerializer.serializeDomainEvent(event));
 
                 int countOfInsertedRows = statement.executeUpdate(createCommand);
                 if (countOfInsertedRows != 1) {
@@ -52,6 +53,21 @@ public final class SQLiteEventStore implements EventStore {
             throw new RuntimeException("failed to append event", e);
         }
 
+    }
+
+    // TODO move it to migration
+    private void createDatabase(String connectionString) {
+        try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.createStatement();) {
+            // statement.executeUpdate("CREATE TABLE `event_sourcing_events` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `created_on` TEXT NOT NULL, `payload` TEXT NOT NULL)");
+            // statement.executeUpdate("INSERT INTO `event_sourcing_events` VALUES (\"test\", \"\", \"\", \"\")");
+            // var result = statement.executeQuery("SELECT * FROM `event_sourcing_events` WHERE `id` = \"test\"");
+            // var nextResult = result.next();
+            // var deletedRows = statement.executeUpdate("DELETE FROM `event_sourcing_events` WHERE `id` = \"test\"");
+            int i = 1;
+        }
+        catch (Throwable e) {
+            int i = 1;
+        }
     }
 
     private String getCreatedOn() {
