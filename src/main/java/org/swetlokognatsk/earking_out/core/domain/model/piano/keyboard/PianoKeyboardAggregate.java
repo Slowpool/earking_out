@@ -3,9 +3,9 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
@@ -14,17 +14,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTOAssembler;
-import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
 public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private static final long serialVersionUID = 1L;
 
     private final PianoKeyboardMode mode;
     private final Map<PianoKeyNumber, PianoKey> pianoKeys;
-    // TODO make all variables immutable for public read-only aggregate state
-    private final Set<PianoKey> selectedKeys = new HashSet<>();
+    private final Set<PianoKeyNumber> selectedKeys = new HashSet<>();
 
     private PianoKey pressedKey;
 
@@ -55,8 +52,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     }
 
     public PianoKeyNumber[] getSelectedKeyNumbers() {
-        var selectedKeys = this.selectedKeys.stream().map(pianoKey -> pianoKey.keyNumber).toArray(PianoKeyNumber[]::new);
-        return selectedKeys;
+        return selectedKeys.toArray(PianoKeyNumber[]::new);
     }
 
     public final PianoKeyNumber getPressedPianoKeyNumber() {
@@ -130,7 +126,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
 
     private void tryAddAsSelected(final PianoKey pianoKey) {
         if (pianoKey.getIsSelected()) {
-            selectedKeys.add(pianoKey);
+            selectedKeys.add(pianoKey.keyNumber);
         }
     }
 
@@ -174,7 +170,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
             if (moreThanOnePianoKeyIsSelected()) {
                 throw new IllegalStateException("several keys were selected in one key select mode");
             } else if (onePianoKeyIsSelected()) {
-                unselectPressedKey();
+                unselectTheOnlySelectedKey();
             }
         }
     }
@@ -213,9 +209,19 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
     }
 
-    private void unselectPressedKey() {
-        var selectedPianoKey = selectedKeys.iterator().next();
+    private void unselectTheOnlySelectedKey() {
+        var selectedPianoKeyNumber = getTheOnlySelectedKey();
+        var selectedPianoKey = getPianoKeyEntity(selectedPianoKeyNumber);
         unselectKey(selectedPianoKey);
+    }
+
+    private PianoKeyNumber getTheOnlySelectedKey() {
+        try {
+            // iterator.next is aaaaaaawwwwwwwkkkkkkkwwwwwwwaaaaaaarrrrrrrddddddd. upd: there's no other ways
+            return selectedKeys.iterator().next();
+        } catch (NoSuchElementException e) {
+            throw new IllegalStateException("there're no elements in selectedKeys");
+        }
     }
 
     public void releaseKey() {
@@ -261,12 +267,12 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     }
 
     private void selectKey(final PianoKey pianoKey) {
-        selectedKeys.add(pianoKey);
+        selectedKeys.add(pianoKey.keyNumber);
         pianoKey.select();
     }
 
     private void unselectKey(final PianoKey pianoKey) {
-        selectedKeys.remove(pianoKey);
+        selectedKeys.remove(pianoKey.keyNumber);
         pianoKey.unselect();
     }
 }
