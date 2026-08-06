@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
+import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelper.*;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.assertNoSelectedKeys;
@@ -53,31 +54,24 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
     // TODO further methods should be in parent abstract `SessionAggregateTest` class
     private void assertNumberOfPuzzleInUserTriedToGuessEventEquals(final SessionAggregate<?, ?, ?, ?> aggregate, final int puzzleNumber) {
-        var userTriedToGuessEvent = getOnlyOneUserTriedToGuessEvent(aggregate);
+        var userTriedToGuessEvent = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
         assertEquals(puzzleNumber, userTriedToGuessEvent.puzzleNumber);
     }
 
-    private UserTriedToGuessPuzzleEvent getOnlyOneUserTriedToGuessEvent(SessionAggregate<?, ?, ?, ?> aggregate) {
-        var events = aggregate.flushEvents();
-        var stream = events.stream();
-        var filteredStream = stream.filter((someEvent) -> (someEvent instanceof UserTriedToGuessPuzzleEvent));
-        var userTriedToGuessPuzzleEvents = filteredStream.toArray(UserTriedToGuessPuzzleEvent[]::new);
-        assertEquals(1, userTriedToGuessPuzzleEvents.length);
-        return userTriedToGuessPuzzleEvents[0];
-    }
+    
 
     private void assertUserTriedToGuessEventHasAttempt(final SessionAggregate<?, ?, ?, ?> aggregate, final int attempt) {
-        var event = getOnlyOneUserTriedToGuessEvent(aggregate);
+        var event = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
         assertEquals(attempt, event.attempt);
     }
 
     private void assertUserTriedToGuessEventHasSuccess(final SessionAggregate<?, ?, ?, ?> aggregate) {
-        var event = getOnlyOneUserTriedToGuessEvent(aggregate);
+        var event = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
         assertEquals(true, event.success);
     }
 
     private void assertUserTriedToGuessEventDoesNotHaveSuccess(final SessionAggregate<?, ?, ?, ?> aggregate) {
-        var event = getOnlyOneUserTriedToGuessEvent(aggregate);
+        var event = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
         assertEquals(false, event.success);
     }
 
@@ -239,7 +233,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
         aggregate.guess(SOLUTION);
 
-        var event = getOnlyOneUserTriedToGuessEvent(aggregate);
+        var event = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
         assertTrue(event instanceof UserTriedToGuessPuzzleEvent);
     }
 
@@ -250,7 +244,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
         aggregate.guess(SOLUTION);
 
-        var event = getOnlyOneUserTriedToGuessEvent(aggregate);
+        var event = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
         var eventSessionId = event.sessionId;
         assertEquals(aggregateSessionId, eventSessionId);
     }
@@ -288,7 +282,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
         var aggregate = createAggregateAndFlushEvents();
 
         aggregate.guess(SOLUTION);
-        var event = getOnlyOneUserTriedToGuessEvent(aggregate);
+        var event = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
         assertEquals(SOLUTION, event.guess);
     }
 

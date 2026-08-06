@@ -105,7 +105,13 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setStats(stats);
 
         setState(SessionStates.IN_PROGRESS);
+        addSessionStartedEvent();
         nextPuzzle();
+    }
+
+    private void addSessionStartedEvent() {
+        var event = getDomainEventsFactory().createSessionStartedEvent(getId());
+        addEvent(event);
     }
 
     protected final void nextPuzzle() {
@@ -154,18 +160,24 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
 
         if (isLastPuzzle()) {
             setState(SessionStates.COMPLETED);
+            addSessionFinishedEvent();
             setPuzzle(null);
         } else {
             nextPuzzle();
         }
     }
 
+    protected final boolean isPerfectlyGuessedPuzzle() {
+        return getNumberOfGuessesOfCurrentPuzzle() == 1;
+    }
+
     protected final boolean isLastPuzzle() {
         return stats.puzzlesCompleted == puzzleConfigDto.targetNumberOfPuzzles;
     }
 
-    protected final boolean isPerfectlyGuessedPuzzle() {
-        return getNumberOfGuessesOfCurrentPuzzle() == 1;
+    private void addSessionFinishedEvent() {
+        var event = getDomainEventsFactory().createSessionFinishedEvent(getId());
+        addEvent(event);
     }
 
     protected final void incrementNumberOfGuessesOfCurrentPuzzle() {

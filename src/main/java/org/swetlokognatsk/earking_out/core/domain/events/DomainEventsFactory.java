@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
@@ -37,4 +39,13 @@ public final class DomainEventsFactory {
         return new UserTriedToGuessPuzzleEvent(timestamp, sessionId, puzzleNumber, guess, attempt, success);
     }
 
+    public SessionStartedEvent createSessionStartedEvent(final SessionId sessionId) {
+        var timestamp = createTimestamp();
+        return new SessionStartedEvent(timestamp, sessionId);
+    }
+
+    public SessionFinishedEvent createSessionFinishedEvent(final SessionId sessionId) {
+        var timestamp = createTimestamp();
+        return new SessionFinishedEvent(timestamp, sessionId);
+    }
 }

@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.learning_tests;
 
 import static org.junit.Assert.*;
+
+import java.util.UUID;
 import java.util.concurrent.Executor;
 import org.junit.*;
 import org.springframework.beans.factory.FactoryBean;
@@ -9,6 +11,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
@@ -18,11 +22,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.VisualPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.EndHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
+
+import tools.jackson.databind.ObjectMapper;
+
 import javafx.collections.ObservableSet;
 import scala.Int;
 
@@ -552,11 +560,40 @@ public class JavaTests {
 
     @Test
     public void asdf() {
+        var someClass = Finite.class;
+        Finite finite = new Finite();
+        assertEquals(someClass, finite.getClass());
     }
 
-    
-}
+    @Test
+    public void componentType() {
+        // var someClass = Finite.class;
+        // var componentType = someClass.getComponentType();
+        // // var fun = componentType.getComponentType(); // null pointer
 
+        Finite[] finites = new Finite[0];
+        var clazz = finites.getClass();
+        var componentType = clazz.getComponentType();
+
+        
+        int i = 1;
+    }
+
+    @Test
+    public void jacksonJsonTest1() {
+        var event = new DomainEventsFactory().createSessionStartedEvent(new SessionId(UUID.randomUUID()));
+        var objectMapper = new ObjectMapper();
+        try {
+            var jsonObject = objectMapper.writeValueAsString(event);
+            int i = 1;
+        }
+        catch (Throwable e) {
+            fail(e.getMessage());
+        }
+
+    }
+
+}
 
 class Generic<T> {
 }

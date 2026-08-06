@@ -1,9 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
+import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelper.*;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
@@ -300,5 +303,20 @@ public final class SessionAggregateTest {
             fail();
         } catch (IllegalStateException e) {
         }
+    }
+
+    @Test
+    public void aggregateCreatingThrowsSessionStartedEvent() {
+        var aggregate = createSomeSession();
+
+        getOnlyOneThrownEvent(aggregate, SessionStartedEvent.class);
+    }
+
+    @Test
+    public void lastSuccessfulPuzzleGuessingThrowsSessionFinishedEvent() {
+        updateTargetNumberOfPuzzlesOfSomeSession(1);
+        var aggregate = createSomeSessionAndGuessCorrectly();
+
+        getOnlyOneThrownEvent(aggregate, SessionFinishedEvent.class);
     }
 }

@@ -13,6 +13,8 @@ module org.swetlokognatsk {
     // org.greenrobot.eventbus.java
     requires eventbus.java;
     requires java.sql;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
 
     // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
@@ -93,6 +95,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpitch;
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds;
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.eventsourcing;
+    exports org.swetlokognatsk.earking_out.core.domain.events.session;
 
     opens org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
 }

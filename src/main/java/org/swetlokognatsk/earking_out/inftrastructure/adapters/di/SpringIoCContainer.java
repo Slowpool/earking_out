@@ -27,12 +27,14 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKey
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.IoCContainer;
+import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.JacksonDomainEventJsonSerializer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventBus;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventPublisher;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.eventsourcing.SQLiteEventStore;
@@ -123,13 +125,15 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SessionEventsLoggerHandler.class, () -> new SessionEventsLoggerHandler(ctx.getBean(EventStore.class)));
 
+        ctx.registerBean(JacksonDomainEventJsonSerializer.class);
+
         // javafx beans
         ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(ctx.getBean(SessionRepositoryDelegator.class)));
 
         ctx.registerBean(StatsPanesFactory.class, () -> new StatsPanesFactory(ctx.getBean(PuzzleConfigRepository.class), ctx.getBean(SessionRepositoryDelegator.class)));
 
         // event sourcing
-        ctx.registerBean(SQLiteEventStore.class);
+        ctx.registerBean(SQLiteEventStore.class, () -> new SQLiteEventStore(ctx.getBean(DomainEventJsonSerializer.class)));
     }
 
     public <T> T get(Class<T> someClass, Object... args) {
