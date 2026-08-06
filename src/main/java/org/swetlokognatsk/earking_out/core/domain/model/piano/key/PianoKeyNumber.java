@@ -1,7 +1,13 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
+
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +26,7 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
     public static final PianoKeyNumber LAST_NOTE_NUMBER;
 
     public final byte value;
-    public final byte octaveScopedKeyNumber;
+    public transient final byte octaveScopedKeyNumber;
 
     // singleton-like optimization
     static {

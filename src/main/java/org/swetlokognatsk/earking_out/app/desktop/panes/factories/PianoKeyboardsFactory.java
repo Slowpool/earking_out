@@ -4,7 +4,6 @@ import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 
-// TODO traverse each `protected` property and the most of all replace it with `private` (in all packages)
 public final class PianoKeyboardsFactory {
 
     private PianoKeyboardsFactory() {

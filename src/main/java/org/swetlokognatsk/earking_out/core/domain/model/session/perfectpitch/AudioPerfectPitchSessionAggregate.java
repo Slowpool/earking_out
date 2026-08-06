@@ -15,6 +15,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSessionAggregate<AudioPerfectPitchExercise, AudioPerfectPitchSolution, AudioPerfectPitchPuzzle, AudioPerfectPitchConfigDTO> {
     private static final long serialVersionUID = 1L;
 
+    // TODO decouple via PianoKeyboardPressed event. there must be two use cases triggered for piano key pressing. PianoKeyboardAggregate should throw an PianoKeyPressedEvent, there must be handler for that event that checks the id of pianoKeyboard and triggers the corresponding use case - puzzleConfig.updatePropertyViaPianoKeyPressing() or session.guessViaPianoKeyPressing(). THOUUUUUGH: this approach is also valid, though it's a bit awkward.
     protected PianoKeyboardAggregate notesGuessingPianoKeyboard;
 
     // TODO make it read-only? HOW IT MUST BE?

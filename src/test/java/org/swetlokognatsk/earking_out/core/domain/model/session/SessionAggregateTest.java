@@ -1,9 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
+import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelper.*;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
@@ -239,38 +242,38 @@ public final class SessionAggregateTest {
     }
 
     @Test
-    public void puzzlesCompletedCorrectlyAfterCreation() {
+    public void puzzlesCompletedPerfectlyAfterCreation() {
         var sessionAggregate = createSomeSession();
 
-        assertEquals(0, sessionAggregate.getPuzzlesCompletedCorrectly());
+        assertEquals(0, sessionAggregate.getPuzzlesCompletedPerfectly());
     }
 
     @Test
-    public void puzzlesCompletedCorrectlyAfterLastSuccessfulGuess() {
+    public void puzzlesCompletedPerfectlyAfterLastSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(1);
         var sessionAggregate = createSomeSessionAndGuessCorrectly();
 
-        assertEquals(1, sessionAggregate.getPuzzlesCompletedCorrectly());
+        assertEquals(1, sessionAggregate.getPuzzlesCompletedPerfectly());
     }
 
     @Test
-    public void puzzlesCompletedCorrectlyAfterSuccessfulGuess() {
+    public void puzzlesCompletedPerfectlyAfterSuccessfulGuess() {
         updateTargetNumberOfPuzzlesOfSomeSession(SEVERAL_PUZZLES);
 
         var sessionAggregate = createSomeSessionAndGuessCorrectly();
-        assertEquals(1, sessionAggregate.getPuzzlesCompletedCorrectly());
+        assertEquals(1, sessionAggregate.getPuzzlesCompletedPerfectly());
 
         sessionAggregate.guess(SOLUTION);
-        assertEquals(2, sessionAggregate.getPuzzlesCompletedCorrectly());
+        assertEquals(2, sessionAggregate.getPuzzlesCompletedPerfectly());
     }
 
     @Test
-    public void puzzlesCompletedCorrectlyAfterWrongGuess() {
+    public void puzzlesCompletedPerfectlyAfterWrongGuess() {
         var sessionAggregate = createSomeSessionAndGuessIncorrectly();
-        assertEquals(0, sessionAggregate.getPuzzlesCompletedCorrectly());
+        assertEquals(0, sessionAggregate.getPuzzlesCompletedPerfectly());
 
         sessionAggregate.guess(SOLUTION);
-        assertEquals(0, sessionAggregate.getPuzzlesCompletedCorrectly());
+        assertEquals(0, sessionAggregate.getPuzzlesCompletedPerfectly());
     }
 
     @Test
@@ -300,5 +303,20 @@ public final class SessionAggregateTest {
             fail();
         } catch (IllegalStateException e) {
         }
+    }
+
+    @Test
+    public void aggregateCreatingThrowsSessionStartedEvent() {
+        var aggregate = createSomeSession();
+
+        getOnlyOneThrownEvent(aggregate, SessionStartedEvent.class);
+    }
+
+    @Test
+    public void lastSuccessfulPuzzleGuessingThrowsSessionFinishedEvent() {
+        updateTargetNumberOfPuzzlesOfSomeSession(1);
+        var aggregate = createSomeSessionAndGuessCorrectly();
+
+        getOnlyOneThrownEvent(aggregate, SessionFinishedEvent.class);
     }
 }

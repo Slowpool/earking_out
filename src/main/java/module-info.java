@@ -1,6 +1,7 @@
 // TODO cooldown after successful guess? to avoid audio abuse of intervals in perfect pitch
 // TODO make picked notes to be highlighted durin the guessing somehow
 // TODO add mode for visual piano key notes picking using mouse
+// TODO if unfinished session is found, prompt the user to restore this session
 module org.swetlokognatsk {
     requires javafx.controls;
     requires javafx.media;
@@ -12,6 +13,9 @@ module org.swetlokognatsk {
     requires spring.core;
     // org.greenrobot.eventbus.java
     requires eventbus.java;
+    requires java.sql;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
 
     // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
@@ -20,7 +24,6 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.ports.hints.demonstrators;
     exports org.swetlokognatsk.earking_out.core.domain.events;
     exports org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard;
-    exports org.swetlokognatsk.earking_out.core.domain.events.puzzles;
     exports org.swetlokognatsk.earking_out.core.domain.model.solutions;
     exports org.swetlokognatsk.earking_out.core.domain.model.piano.key;
     exports org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
@@ -92,6 +95,9 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.session;
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpitch;
     exports org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.eventsourcing;
+    exports org.swetlokognatsk.earking_out.core.domain.events.session;
+    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.events;
 
     opens org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
 }

@@ -11,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
+// TODO use event sourcing for this aggregate?
 public abstract class SessionAggregate<E extends Exercise, S extends Solution, P extends Puzzle<E, S>, PCDTO extends PuzzleConfigDTO<E>> extends AggregateRoot<SessionId> {
     private static final long serialVersionUID = 1L;
 
@@ -48,8 +49,8 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         return stats.puzzlesCompleted;
     }
 
-    public final int getPuzzlesCompletedCorrectly() {
-        return stats.puzzlesCompletedCorrectly;
+    public final int getPuzzlesCompletedPerfectly() {
+        return stats.puzzlesCompletedPerfectly;
     }
 
     public final P getPuzzle() {
@@ -73,7 +74,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected final boolean thereAreNoAnyGuessesInSession() {
-        return stats.puzzlesCompleted == 0 && numberOfGuessesOfCurrentPuzzle == 0;
+        return stats.puzzlesCompleted == 0 && getNumberOfGuessesOfCurrentPuzzle() == 0;
     }
 
     protected final void setPrevGuessIsSuccessful(final boolean prevGuessIsSuccessful) {
@@ -104,7 +105,13 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setStats(stats);
 
         setState(SessionStates.IN_PROGRESS);
+        addSessionStartedEvent();
         nextPuzzle();
+    }
+
+    private void addSessionStartedEvent() {
+        var event = getDomainEventsFactory().createSessionStartedEvent(getId(), puzzleConfigDto);
+        addEvent(event);
     }
 
     protected final void nextPuzzle() {
@@ -112,19 +119,28 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
 
-        var newPuzzleEvent = getDomainEventsFactory().createNewpuzzleCreatedEvent(puzzle);
+        var newPuzzleEvent = getDomainEventsFactory().createNewpuzzleCreatedEvent(getId(), puzzle);
         addEvent(newPuzzleEvent);
     }
 
     public final void guess(final S guess) {
         validateGuessing();
+
         var success = puzzle.guess(guess);
+        incrementNumberOfGuessesOfCurrentPuzzle();
+
         if (success) {
-            handleSuccessfulGuess();
+            handleSuccessfulGuess(guess);
         } else {
-            handleWrongGuess();
+            handleWrongGuess(guess);
         }
+
         setPrevGuessIsSuccessful(success);
+    }
+
+    private void addUserTriedToGuessPuzzleEvent(final int puzzleNumber, final S guess, final int attempt, final boolean success) {
+        var event = getDomainEventsFactory().createUserTriedToGuessPuzzleEvent(getId(), puzzleNumber, guess, attempt, success);
+        addEvent(event);
     }
 
     protected void validateGuessing() {
@@ -136,28 +152,40 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         }
     }
 
-    protected void handleSuccessfulGuess() {
-        var newStats = isCorrectlyGuessedPuzzle() ? stats.incrementCorrectlyCompletedPuzzle() : stats.incrementCompletedPuzzle();
+    protected void handleSuccessfulGuess(final S guess) {
+        var newStats = isPerfectlyGuessedPuzzle() ? stats.incrementPerfectlyCompletedPuzzles() : stats.incrementCompletedPuzzles();
         setStats(newStats);
+
+        addUserTriedToGuessPuzzleEvent(getPuzzlesCompleted(), guess, getNumberOfGuessesOfCurrentPuzzle(), true);
 
         if (isLastPuzzle()) {
             setState(SessionStates.COMPLETED);
+            addSessionFinishedEvent();
             setPuzzle(null);
         } else {
             nextPuzzle();
         }
     }
 
+    protected final boolean isPerfectlyGuessedPuzzle() {
+        return getNumberOfGuessesOfCurrentPuzzle() == 1;
+    }
+
     protected final boolean isLastPuzzle() {
         return stats.puzzlesCompleted == puzzleConfigDto.targetNumberOfPuzzles;
     }
 
-    protected final boolean isCorrectlyGuessedPuzzle() {
-        return numberOfGuessesOfCurrentPuzzle == 0;
+    private void addSessionFinishedEvent() {
+        var event = getDomainEventsFactory().createSessionFinishedEvent(getId());
+        addEvent(event);
     }
 
-    protected void handleWrongGuess() {
-        setNumberOfGuessesOfCurrentPuzzle(numberOfGuessesOfCurrentPuzzle + 1);
+    protected final void incrementNumberOfGuessesOfCurrentPuzzle() {
+        setNumberOfGuessesOfCurrentPuzzle(getNumberOfGuessesOfCurrentPuzzle() + 1);
+    }
+
+    protected void handleWrongGuess(final S guess) {
+        addUserTriedToGuessPuzzleEvent(getPuzzlesCompleted() + 1, guess, getNumberOfGuessesOfCurrentPuzzle(), false);
     }
 
     public final void abort() {
@@ -166,7 +194,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
 
     public final void demonstrateHintAgain() {
         var puzzle = getPuzzle();
-        var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(puzzle);
+        var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(getId(), puzzle);
         addEvent(hearAgainEvent);
     }
 

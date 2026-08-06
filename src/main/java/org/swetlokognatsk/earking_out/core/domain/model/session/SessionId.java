@@ -15,4 +15,8 @@ public record SessionId(UUID id) implements Serializable {
     public static SessionId random() {
         return new SessionId(UUID.randomUUID());
     }
+
+    public String toString() {
+        return id.toString();
+    }
 }
