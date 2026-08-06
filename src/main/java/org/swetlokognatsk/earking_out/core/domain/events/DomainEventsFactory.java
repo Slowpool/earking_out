@@ -12,6 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 
 public final class DomainEventsFactory {
 
@@ -29,9 +30,9 @@ public final class DomainEventsFactory {
         return new NewPuzzleCreatedEvent(timestamp, sessionId, puzzle);
     }
 
-    public HintRepeatingRequestedEvent createHintRepeatingRequestedEvent(final Puzzle<?, ?> puzzle) {
+    public HintRepeatingRequestedEvent createHintRepeatingRequestedEvent(final SessionId sessionId, final Puzzle<?, ?> puzzle) {
         var timestamp = createTimestamp();
-        return new HintRepeatingRequestedEvent(timestamp, puzzle);
+        return new HintRepeatingRequestedEvent(timestamp, sessionId, puzzle);
     }
 
     public UserTriedToGuessPuzzleEvent createUserTriedToGuessPuzzleEvent(final SessionId sessionId, final int puzzleNumber, final Solution guess, final int attempt, final boolean success) {
@@ -39,9 +40,9 @@ public final class DomainEventsFactory {
         return new UserTriedToGuessPuzzleEvent(timestamp, sessionId, puzzleNumber, guess, attempt, success);
     }
 
-    public SessionStartedEvent createSessionStartedEvent(final SessionId sessionId) {
+    public SessionStartedEvent createSessionStartedEvent(final SessionId sessionId, final PuzzleConfigDTO<?> puzzleConfig) {
         var timestamp = createTimestamp();
-        return new SessionStartedEvent(timestamp, sessionId);
+        return new SessionStartedEvent(timestamp, sessionId, puzzleConfig);
     }
 
     public SessionFinishedEvent createSessionFinishedEvent(final SessionId sessionId) {

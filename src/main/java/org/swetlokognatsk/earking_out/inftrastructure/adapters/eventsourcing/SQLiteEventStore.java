@@ -36,11 +36,11 @@ public final class SQLiteEventStore implements EventStore {
             for (var event : eventStream.events()) {
 
                 statement.setString(1, eventStream.id().toString());
-                statement.setString(2, event.getClass().toString());
+                statement.setString(2, event.getClass().getName().toString());
                 statement.setString(3, getCreatedOn());
                 statement.setString(4, domainEventJsonSerializer.serializeDomainEvent(event));
 
-                int countOfInsertedRows = statement.executeUpdate(createCommand);
+                int countOfInsertedRows = statement.executeUpdate();
                 if (countOfInsertedRows != 1) {
                     // TODO use it
                     // throw new EventSavingException("failed to append event", e);
@@ -64,8 +64,7 @@ public final class SQLiteEventStore implements EventStore {
             // var nextResult = result.next();
             // var deletedRows = statement.executeUpdate("DELETE FROM `event_sourcing_events` WHERE `id` = \"test\"");
             int i = 1;
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             int i = 1;
         }
     }

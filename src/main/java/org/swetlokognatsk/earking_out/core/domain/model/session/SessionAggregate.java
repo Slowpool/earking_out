@@ -110,7 +110,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     private void addSessionStartedEvent() {
-        var event = getDomainEventsFactory().createSessionStartedEvent(getId());
+        var event = getDomainEventsFactory().createSessionStartedEvent(getId(), puzzleConfigDto);
         addEvent(event);
     }
 
@@ -194,7 +194,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
 
     public final void demonstrateHintAgain() {
         var puzzle = getPuzzle();
-        var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(puzzle);
+        var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(getId(), puzzle);
         addEvent(hearAgainEvent);
     }
 

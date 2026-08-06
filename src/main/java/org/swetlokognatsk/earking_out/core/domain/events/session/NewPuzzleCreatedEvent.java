@@ -6,6 +6,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 
 public final class NewPuzzleCreatedEvent extends DomainEvent {
+    private static final long serialVersionUID = 1L;
+
     public final SessionId sessionId;
     public final Puzzle<?, ?> puzzle;
 

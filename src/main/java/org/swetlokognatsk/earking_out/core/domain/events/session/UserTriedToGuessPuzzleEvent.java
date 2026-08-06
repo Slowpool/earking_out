@@ -6,6 +6,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 
 public final class UserTriedToGuessPuzzleEvent extends DomainEvent {
+    private static final long serialVersionUID = 1L;
+
     public final SessionId sessionId;
     public final int puzzleNumber;
     // TODO generic?

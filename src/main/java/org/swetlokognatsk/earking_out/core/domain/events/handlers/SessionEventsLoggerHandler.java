@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
@@ -30,6 +31,11 @@ public record SessionEventsLoggerHandler(EventStore eventStore) {
 
     // TODO add this event to aggregate
     public void handleSessionFinishedEvent(final SessionFinishedEvent event) {
+        var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
+        eventStore.append(eventStream);
+    }
+
+    public void handleHintRepeatingRequestedEvent(final HintRepeatingRequestedEvent event) {
         var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
         eventStore.append(eventStream);
     }

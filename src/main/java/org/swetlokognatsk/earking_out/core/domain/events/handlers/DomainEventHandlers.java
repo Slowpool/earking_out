@@ -27,8 +27,7 @@ public final class DomainEventHandlers {
         eventBus.subscribe(SessionStartedEvent.class, sessionEventsLoggerHandler::handleSessionStartedEvent);
         eventBus.subscribe(NewPuzzleCreatedEvent.class, sessionEventsLoggerHandler::handleNewPuzzleCreatedEvent);
         eventBus.subscribe(UserTriedToGuessPuzzleEvent.class, sessionEventsLoggerHandler::handleUserTriedToGuessPuzzleEvent);
-        // // TODO add later
-        // eventBus.subscribe(HintRepeatingRequestedEvent.class, sessionEventsLoggerHandler::handleHintRepeatingRequestedEvent);
+        eventBus.subscribe(HintRepeatingRequestedEvent.class, sessionEventsLoggerHandler::handleHintRepeatingRequestedEvent);
         eventBus.subscribe(SessionFinishedEvent.class, sessionEventsLoggerHandler::handleSessionFinishedEvent);
 
 

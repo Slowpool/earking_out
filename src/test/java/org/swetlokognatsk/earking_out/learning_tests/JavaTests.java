@@ -575,13 +575,12 @@ public class JavaTests {
         var clazz = finites.getClass();
         var componentType = clazz.getComponentType();
 
-        
         int i = 1;
     }
 
     @Test
     public void jacksonJsonTest1() {
-        var event = new DomainEventsFactory().createSessionStartedEvent(new SessionId(UUID.randomUUID()));
+        var event = new DomainEventsFactory().createSessionStartedEvent(new SessionId(UUID.randomUUID()), null);
         var objectMapper = new ObjectMapper();
         try {
             var jsonObject = objectMapper.writeValueAsString(event);
