@@ -1,6 +1,7 @@
 // TODO cooldown after successful guess? to avoid audio abuse of intervals in perfect pitch
 // TODO make picked notes to be highlighted durin the guessing somehow
 // TODO add mode for visual piano key notes picking using mouse
+// TODO if unfinished session is found, prompt the user to restore this session
 module org.swetlokognatsk {
     requires javafx.controls;
     requires javafx.media;

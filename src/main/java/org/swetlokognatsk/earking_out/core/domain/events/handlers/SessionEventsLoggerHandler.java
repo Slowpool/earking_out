@@ -11,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import org.swetlokognatsk.earking_out.inftrastructure.eventsourcing.EventStream;
 
 // TODO quite awkward
+// TODO check whether `recordStats` is true and if it isn't then do not log
 public record SessionEventsLoggerHandler(EventStore eventStore) {
 
     // TODO add this event to aggregate
