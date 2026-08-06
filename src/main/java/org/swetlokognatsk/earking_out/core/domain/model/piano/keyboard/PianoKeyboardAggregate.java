@@ -5,21 +5,25 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTOAssembler;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
 public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
     private static final long serialVersionUID = 1L;
 
-    // TODO make all variables immutable for public read-only aggregate state
     private final PianoKeyboardMode mode;
     private final Map<PianoKeyNumber, PianoKey> pianoKeys;
+    // TODO make all variables immutable for public read-only aggregate state
     private final Set<PianoKey> selectedKeys = new HashSet<>();
 
     private PianoKey pressedKey;
@@ -32,16 +36,22 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         return mode;
     }
 
-    public final Map<PianoKeyNumber, PianoKey> getPianoKeys() {
-        return pianoKeys;
+    public final Map<PianoKeyNumber, PianoKeyDTO> getPianoKeys() {
+        return PianoKeyDTOAssembler.assemble(pianoKeys);
     }
 
-    public final PianoKey getPianoKey(final PianoKeyNumber keyNumber) {
+    private final PianoKey getPianoKeyEntity(final PianoKeyNumber keyNumber) {
         var pianoKey = pianoKeys.get(keyNumber);
         if (pianoKey == null) {
             throw new IllegalArgumentException("such a pianoKey is not found: " + keyNumber);
         }
         return pianoKey;
+    }
+
+    public final PianoKeyDTO getPianoKey(final PianoKeyNumber keyNumber) {
+        var pianoKey = getPianoKeyEntity(keyNumber);
+        var pianoKeyDto = PianoKeyDTOAssembler.assemble(pianoKey);
+        return pianoKeyDto;
     }
 
     public PianoKeyNumber[] getSelectedKeyNumbers() {
@@ -133,7 +143,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         validatePianoKeyToPress(keyNumber);
 
         updateOtherKeysState();
-        var pianoKey = getPianoKey(keyNumber);
+        var pianoKey = getPianoKeyEntity(keyNumber);
         pianoKey.press();
         applySelectingLogicAfterPress(pianoKey);
 
@@ -149,7 +159,7 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
 
         try {
-            getPianoKey(keyNumber);
+            getPianoKeyEntity(keyNumber);
         } catch (IllegalArgumentException e) {
             throw new IndexOutOfBoundsException("there is no such a piano key");
         }

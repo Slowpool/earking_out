@@ -1,7 +1,8 @@
 package org.swetlokognatsk.earking_out.learning_tests;
 
 import static org.junit.Assert.*;
-
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import org.junit.*;
@@ -28,9 +29,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.EndHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
-
 import tools.jackson.databind.ObjectMapper;
-
 import javafx.collections.ObservableSet;
 import scala.Int;
 
@@ -585,13 +584,42 @@ public class JavaTests {
         try {
             var jsonObject = objectMapper.writeValueAsString(event);
             int i = 1;
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             fail(e.getMessage());
         }
 
     }
 
+    @Test
+    public void iteratorTest() {
+        var people = new People(new String[] { "John", "Tomorrow", "Stephen" });
+        var iteratedPeople = new LinkedList<String>();
+        for (var person : people) {
+            iteratedPeople.add(person);
+        }
+        assertArrayEquals(new String[] { "John", "Tomorrow", "Stephen" }, iteratedPeople.toArray(String[]::new));
+    }
+
+}
+
+record People(String[] innerPeople) implements Iterable<String> {
+
+    public Iterator<String> iterator() {
+        return this.new PeopleIterator();
+    }
+
+    class PeopleIterator implements Iterator<String> {
+        private int currentPerson = -1;
+        
+        public boolean hasNext() {
+            return currentPerson + 1 < innerPeople.length;
+        }
+        
+        public String next() {
+            currentPerson++;
+            return innerPeople[currentPerson];
+        }
+    }
 }
 
 class Generic<T> {

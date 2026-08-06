@@ -6,8 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.Pia
 public final class PianoKeyboardDtoAssembler {
 
     public static PianoKeyboardDTO assemble(final PianoKeyboardAggregate pianoKeyboard) {
-        var pianoKeys = pianoKeyboard.getPianoKeys();
-        var pianoKeysDtos = PianoKeyDTOAssembler.assemble(pianoKeys);
+        var pianoKeysDtos = pianoKeyboard.getPianoKeys();
         return new PianoKeyboardDTO(pianoKeyboard.getMode(), pianoKeysDtos, pianoKeyboard.getSelectedKeyNumbers(), pianoKeyboard.getPressedPianoKeyNumber());
     }
 }

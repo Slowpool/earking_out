@@ -28,12 +28,9 @@ public final class SQLiteEventStore implements EventStore {
         // createDatabase(connectionString);
         // return;
 
-        // TODO hint: all columns are TEXT
         var createCommand = ("INSERT INTO `event_sourcing_events` (`id`, `type`, `created_on`, `payload`) VALUES (?, ?, ?, ?)");
         try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.prepareStatement(createCommand);) {
-            // // TODO Iterable/Iterator is enough to use it?
-            // for (var event : eventStream) {
-            for (var event : eventStream.events()) {
+            for (var event : eventStream) {
 
                 statement.setString(1, eventStream.id().toString());
                 statement.setString(2, event.getClass().getName().toString());
