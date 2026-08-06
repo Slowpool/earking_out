@@ -17,7 +17,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 public final class EventStreamTest {
 
     @Test
-    public void test() {
+    public void iteratorTest() {
         var eventsFactory = DI.get(DomainEventsFactory.class);
         var domainEvents = new DomainEvent[] { eventsFactory.createSessionStartedEvent(null, null), eventsFactory.createUserTriedToGuessPuzzleEvent(null, 0, null, 0, false) };
         var eventStream = new EventStream<>(null, domainEvents);

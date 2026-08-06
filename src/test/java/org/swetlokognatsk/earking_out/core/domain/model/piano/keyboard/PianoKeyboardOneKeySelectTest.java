@@ -19,7 +19,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void initKeyboardWithKey() {
-        var presetKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER };
+        var presetKeys = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER };
         var pianoKeyboard = createPianoKeyboard(presetKeys);
 
         assertOnlyTheseKeysAreSelected(presetKeys, pianoKeyboard);
@@ -27,7 +27,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void initKeyboardWithKeys() {
-        var presetKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
+        var presetKeys = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, ANY_PIANO_KEY_NUMBER.increment() };
         try {
             createPianoKeyboard(presetKeys);
             fail();
@@ -37,7 +37,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void touchOneKey() {
-        PianoKeyNumber keyNumber = FIRST_NOTE_NUMBER;
+        PianoKeyNumber keyNumber = ANY_PIANO_KEY_NUMBER;
 
         pianoKeyboard.touchKey(keyNumber);
 
@@ -46,7 +46,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void touchTheSameNote() {
-        PianoKeyNumber keyNumber = FIRST_NOTE_NUMBER;
+        PianoKeyNumber keyNumber = ANY_PIANO_KEY_NUMBER;
 
         final int NUMBER_OF_TOUCHES = 2;
         for (int i = 0; i < NUMBER_OF_TOUCHES; i++) {
@@ -58,7 +58,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void touchSeveralKeys() {
-        var pianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
+        var pianoKeys = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, ANY_PIANO_KEY_NUMBER.increment() };
 
         for (var pianoKey : pianoKeys) {
             pianoKeyboard.touchKey(pianoKey);
@@ -69,12 +69,56 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void initWithDuplicateKeys() {
-        var presetKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER };
+        var presetKeys = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, ANY_PIANO_KEY_NUMBER };
         try {
             createPianoKeyboard(presetKeys);
             fail();
         } catch (IllegalArgumentException e) {
         }
+    }
+
+    @Test
+    public void pianoKeyRemainsSelectedAfterRelease() {
+        // arrange
+        var pianoKeyboard = createPianoKeyboard();
+        pianoKeyboard.pressKey(ANY_PIANO_KEY_NUMBER);
+        // action
+        pianoKeyboard.releaseKey();
+        // assert
+        assertOnlyThisKeyIsSelected(ANY_PIANO_KEY_NUMBER, pianoKeyboard);
+    }
+
+    /**
+     * see
+     * {@link org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardOneKeySelectTest.pianoKeyRemainsSelectedAfterTouchAndRelease}
+     * why there're such an indents between lines
+     */
+    @Test
+    public void pianoKeyRemainsSelectedAfterTouchAndRelease() {
+        var pianoKeyboard = createPianoKeyboard();
+        pianoKeyboard.touchKey(ANY_PIANO_KEY_NUMBER);
+        pianoKeyboard.pressKey(ANY_PIANO_KEY_NUMBER);
+
+        pianoKeyboard.releaseKey();
+
+        assertOnlyThisKeyIsSelected(ANY_PIANO_KEY_NUMBER, pianoKeyboard);
+    }
+
+    /**
+     * see
+     * {@link org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardOneKeySelectTest.pianoKeyRemainsSelectedAfterTouchAndRelease}
+     * why there're such an indents between lines
+     */
+    @Test
+    public void pianoKeyRemainsSelectedAfterTouchOneAndReleaseAnotherKey() {
+        var pianoKeyboard = createPianoKeyboard();
+        pianoKeyboard.touchKey(ANY_PIANO_KEY_NUMBER);
+        var nextPianoKeyNumber = ANY_PIANO_KEY_NUMBER.increment();
+        pianoKeyboard.pressKey(nextPianoKeyNumber);
+
+        pianoKeyboard.releaseKey();
+
+        assertOnlyThisKeyIsSelected(nextPianoKeyNumber, pianoKeyboard);
     }
 
 }

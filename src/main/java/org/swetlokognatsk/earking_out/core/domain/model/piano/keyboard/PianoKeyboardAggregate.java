@@ -239,7 +239,6 @@ public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
         }
     }
 
-    // TODO test it (idk how it turned out to be not tested)
     private void applySelectingLogicAfterRelease(final PianoKey pianoKey) {
         if (pianoKey.getIsSelected()) {
             switch (mode) {

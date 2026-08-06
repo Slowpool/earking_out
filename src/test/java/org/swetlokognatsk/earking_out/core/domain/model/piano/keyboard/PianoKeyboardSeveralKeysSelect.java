@@ -19,7 +19,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
     @Test
     public void initKeyboardWithOneKey() {
-        var pianoKey = FIRST_NOTE_NUMBER;
+        var pianoKey = ANY_PIANO_KEY_NUMBER;
         pianoKeyboard = createPianoKeyboard(new PianoKeyNumber[] { pianoKey });
 
         assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
@@ -27,15 +27,25 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
     @Test
     public void initKeyboardWithSeveralKeys() {
-        var selectedPianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
+        var selectedPianoKeys = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, ANY_PIANO_KEY_NUMBER.increment() };
         pianoKeyboard = createPianoKeyboard(selectedPianoKeys);
 
         assertOnlyTheseKeysAreSelected(selectedPianoKeys, pianoKeyboard);
     }
 
     @Test
+    public void selectedKeysAfterRelease() {
+        var pianoKey = ANY_PIANO_KEY_NUMBER;
+        pianoKeyboard.pressKey(pianoKey);
+
+        pianoKeyboard.releaseKey();
+
+        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
+    }
+
+    @Test
     public void touchingSeveralKeys() {
-        var pianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
+        var pianoKeys = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, ANY_PIANO_KEY_NUMBER.increment() };
 
         pianoKeyboard.touchKey(pianoKeys[0]);
         pianoKeyboard.touchKey(pianoKeys[1]);
@@ -45,7 +55,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
     @Test
     public void touchTheSameKeyTwice() {
-        var pianoKey = FIRST_NOTE_NUMBER;
+        var pianoKey = ANY_PIANO_KEY_NUMBER;
 
         pianoKeyboard.touchKey(pianoKey);
         pianoKeyboard.touchKey(pianoKey);
