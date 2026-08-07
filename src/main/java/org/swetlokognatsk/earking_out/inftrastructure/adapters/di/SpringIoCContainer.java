@@ -25,6 +25,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerf
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.IoCContainer;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
@@ -82,7 +83,8 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(AbstractPuzzleConfigAggregatesFactory.class, () -> new AbstractPuzzleConfigAggregatesFactory(ctx.getBean(ObjectCloner.class)));
 
-        ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(ctx.getBean(PuzzleConfigPianoKeyboardStorageAdapter.class), ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class)));
+        // // set primary via api either for SQLitePuzzleConfigRepository either for this one
+        // ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(ctx.getBean(PuzzleConfigPianoKeyboardStorageAdapter.class), ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class)));
 
         ctx.registerBean(InMemorySessionPianoKeyboardRepository.class, () -> new InMemorySessionPianoKeyboardRepository(ctx.getBean(PianoKeyboardAggregatesFactory.class)));
 
@@ -128,7 +130,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(JacksonJsonSerializer.class);
 
-        ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class)));
+        ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class), ctx.getBean(PuzzleConfigJsonSerializer.class)));
 
         // javafx beans
         ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(ctx.getBean(SessionRepositoryDelegator.class)));
