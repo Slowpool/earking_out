@@ -2,8 +2,10 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregatesDTO;
@@ -65,6 +67,12 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 */
 // TODO full rewriting. via hibernate?
 public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepository {
+
+    // TODO eliminate
+    public static final String fullDbPath = "/Java/earking_out/earking_out.db";
+    // TODO exterminate
+    public static final String connectionString = String.format("jdbc:sqlite:%s", fullDbPath);
+
     // wild cratch to avoid 10000000 configs creating due to recursion in method
     static List<Exercise> alreadyCreatedConfigs = new LinkedList<Exercise>();
 
@@ -84,13 +92,10 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
     }
 
     private String getPuzzleConfigJson(final Exercise exercise) {
-        var fullDbPath = "/Java/earking_out/earking_out.db";
-        var connectionString = String.format("jdbc:sqlite:%s", fullDbPath);
-
         var selectCommand = "SELECT `serialized_config` FROM `puzzle_configs` WHERE `exercise` = ?";
 
         try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.prepareStatement(selectCommand);) {
-            var exerciseDeterminant = buildExerciseDeteminant(exercise);
+            var exerciseDeterminant = buildExerciseDeterminant(exercise);
             statement.setString(1, exerciseDeterminant);
 
             var resultSet = statement.executeQuery();
@@ -125,7 +130,7 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
         return resultSet.next();
     }
 
-    private static String buildExerciseDeteminant(final Exercise exercise) {
+    private static String buildExerciseDeterminant(final Exercise exercise) {
         return String.format("%s_%s", exercise.type.toString(), exercise.name.toString());
     }
 
@@ -141,7 +146,39 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
     }
 
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
+        var exercise = puzzleConfigAggregate.getId();
+        var deleteCommand = "DELETE FROM `puzzle_configs` WHERE `exercise` = ?";
+        var selectCommand = "INSERT INTO `puzzle_configs` (`exercise`, `serialized_config`) VALUES (?, ?)";
 
+        try (Connection connection = DriverManager.getConnection(connectionString); var deleteStatement = connection.prepareStatement(deleteCommand); var insertStatement = connection.prepareStatement(selectCommand);) {
+            var exerciseDeterminant = buildExerciseDeterminant(exercise);
+
+            connection.setAutoCommit(false);
+
+            deletePrevConfigVersionIfExists(exerciseDeterminant, deleteStatement);
+
+            insertPuzzleConfig(exerciseDeterminant, puzzleConfigAggregate, insertStatement);
+
+            connection.commit();
+        } catch (SQLException e) {
+            // TODO use it
+            // throw new EventSavingException("failed to append event", e);
+            throw new RuntimeException("failed to append event", e);
+        }
+    }
+
+    private void deletePrevConfigVersionIfExists(final String exerciseDeterminant, final PreparedStatement deleteStatement) throws SQLException {
+        deleteStatement.setString(1, exerciseDeterminant);
+        deleteStatement.executeUpdate();
+    }
+
+    private void insertPuzzleConfig(final String exerciseDeterminant, final PuzzleConfigAggregate<?> puzzleConfigAggregate, final PreparedStatement insertStatement) throws SQLException {
+        insertStatement.setString(1, exerciseDeterminant);
+
+        var puzzleConfigJson = puzzleConfigJsonSerializer.serializePuzzleConfig(puzzleConfigAggregate);
+        insertStatement.setString(2, puzzleConfigJson);
+
+        insertStatement.executeUpdate();
     }
 
 }

@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.events;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import tools.jackson.databind.ObjectMapper;
@@ -23,8 +24,8 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
     }
 
     public <E extends Exercise> PuzzleConfigAggregate<?> deserializePuzzleConfig(final E exercise, final String serializedPuzzleConfig) {
-        // TODO
-        return objectMapper.readValue(serializedPuzzleConfig, exercise.getClass());
+        // TODO WILD CRATCH
+        return objectMapper.readValue(serializedPuzzleConfig, AudioPerfectPitchConfigAggregate.class);
     }
 
 }
