@@ -53,7 +53,7 @@ public class EarkingOutApplication extends Application {
     }
 
     private static void initDI(final ApplicationContext context) {
-        DI.setApplicationContext(context);
+        DI.setContext(context);
     }
 
     private static ApplicationContext runSpringApp(String[] args) {
