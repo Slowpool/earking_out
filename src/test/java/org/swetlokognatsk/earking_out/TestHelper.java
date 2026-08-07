@@ -11,6 +11,6 @@ public final class TestHelper {
     public static void buildNewSpringContext() {
         DI.refreshDependencies();
         var context = SpringApplication.run(SessionAggregateTest.class);
-        DI.setContext(context);
+        DI.setApplicationContext(context);
     }
 }
