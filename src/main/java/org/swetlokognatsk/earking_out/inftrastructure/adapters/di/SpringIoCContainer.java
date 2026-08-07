@@ -34,7 +34,7 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboard
 import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.JacksonDomainEventJsonSerializer;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventBus;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventPublisher;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.eventsourcing.SQLiteEventStore;
@@ -46,6 +46,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemorySes
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.PianoKeySoundFilesBuilder;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.TestInMemoryAllPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.SQLitePuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
@@ -125,7 +126,9 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SessionEventsLoggerHandler.class, () -> new SessionEventsLoggerHandler(ctx.getBean(EventStore.class)));
 
-        ctx.registerBean(JacksonDomainEventJsonSerializer.class);
+        ctx.registerBean(JacksonJsonSerializer.class);
+
+        ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class)));
 
         // javafx beans
         ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(ctx.getBean(SessionRepositoryDelegator.class)));

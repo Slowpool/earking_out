@@ -8,4 +8,12 @@ public interface PuzzleConfigRepository extends AggregateRootRepository<Exercise
     <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise);
 
     void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate);
+
+    default PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {
+        return genericGet(exercise);
+    }
+
+    default void save(final PuzzleConfigAggregate<Exercise> aggregate) {
+        genericSave(aggregate);
+    }
 }

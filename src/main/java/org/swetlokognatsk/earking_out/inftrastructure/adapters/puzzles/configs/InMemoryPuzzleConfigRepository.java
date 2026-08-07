@@ -99,12 +99,4 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
 
         aggregates.put(puzzleConfigAggregate.getId(), puzzleConfigAggregate);
     }
-
-    public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {
-        return genericGet(exercise);
-    }
-
-    public void save(final PuzzleConfigAggregate<Exercise> aggregate) {
-        genericSave(aggregate);
-    }
 }

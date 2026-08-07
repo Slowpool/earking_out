@@ -39,7 +39,7 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.JacksonDomainEventJsonSerializer;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.greenrobot.GreenrobotEventBus;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.eventsourcing.InMemoryEventStore;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.eventsourcing.SQLiteEventStore;
@@ -80,7 +80,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
     private static HintDemonstratingOnNewPuzzleCreatedHandler newpuzzleCreatedHandler;
     private static HintDemonstratingOnHintRepeatingRequestedHandler hintRepeatingRequestedHandler;
     private static InMemoryEventStore inMemoryEventStore;
-    private static JacksonDomainEventJsonSerializer jacksonDomainEventJsonSerializer;
+    private static JacksonJsonSerializer jacksonDomainEventJsonSerializer;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -245,11 +245,11 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) get(GreenrobotEventBus.class);
 
         } else if (className.equals(DomainEventJsonSerializer.class.getName())) {
-            return (T) get(JacksonDomainEventJsonSerializer.class);
+            return (T) get(JacksonJsonSerializer.class);
 
-        } else if (className.equals(JacksonDomainEventJsonSerializer.class.getName())) {
+        } else if (className.equals(JacksonJsonSerializer.class.getName())) {
             if (jacksonDomainEventJsonSerializer == null) {
-                jacksonDomainEventJsonSerializer = new JacksonDomainEventJsonSerializer();
+                jacksonDomainEventJsonSerializer = new JacksonJsonSerializer();
             }
             return (T) jacksonDomainEventJsonSerializer;
 
