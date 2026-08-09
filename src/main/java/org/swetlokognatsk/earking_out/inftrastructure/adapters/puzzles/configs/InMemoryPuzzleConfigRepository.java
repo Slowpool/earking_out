@@ -93,6 +93,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     public void genericSave(PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
         // TODO draft version. i'm not sure whether should repository be used here cuz PianoKeyboardAggregate is not a root aggregate. whilst in classic ddd only root aggregates should have repository. p.s.: should it be extracted to `saveDependentAggregates()`???
+        // TODO dry violation SQLitePuzzleConfigRepository
         var pianoKeyboardsToSave = puzzleConfigAggregate.pianoKeyboardAggregates;
         PianoKeyboardAggregate pianoKeyboard;
         for (var pianoKeyboardId : pianoKeyboardsToSave.keySet()) {

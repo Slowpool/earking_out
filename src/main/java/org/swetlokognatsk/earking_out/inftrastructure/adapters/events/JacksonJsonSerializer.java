@@ -13,7 +13,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import tools.jackson.core.JsonGenerator;
@@ -37,9 +36,12 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
     private final ObjectMapper objectMapper;
 
     public JacksonJsonSerializer() {
+        // TODO remove or use
         var audioPerfectPitchConfigSerializationModule = createAudioPerfectPitchConfigSerializationModule();
+        var moduleWithSerializers = new SimpleModule();
+        moduleWithSerializers.addSerializer(new PianoKeyNumberSerializer());
 
-        var jsonMapper = JsonMapper.builder().configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true).addModule(audioPerfectPitchConfigSerializationModule).build();
+        var jsonMapper = JsonMapper.builder().configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true).addModule(audioPerfectPitchConfigSerializationModule).addModule(moduleWithSerializers).build();
         this.objectMapper = jsonMapper;
     }
 
@@ -99,13 +101,25 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
         var inputMode = PerfectPitchInputMode.valueOf(inputModeValue);
 
         var soundlessGuessingPiano = jsonTree.get("soundlessGuessingPiano").asBoolean();
-        
+
         // TODO see comment inside this method
         var depenentAggregates = InMemoryPuzzleConfigRepository.getAudioPerfectPitchConfigDependentAggregates(exercise);
         var pianoKeyboardAggregates = depenentAggregates.pianoKeyboardAggregates;
-        
+
         var puzzleConfig = new AudioPerfectPitchConfigAggregate((AudioPerfectPitchExercise) exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano, pianoKeyboardAggregates);
         return puzzleConfig;
+    }
+
+    // TODO refactoring
+    private class PianoKeyNumberSerializer extends StdSerializer<PianoKeyNumber> {
+
+        public PianoKeyNumberSerializer() {
+            super(PianoKeyNumber.class);
+        }
+
+        public void serialize(final PianoKeyNumber pianoKeyNumber, final JsonGenerator generator, final SerializationContext ctx) {
+            generator.writeNumber(pianoKeyNumber.value);
+        }
     }
 
 }

@@ -11,12 +11,14 @@ import java.util.List;
 import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.PerfectPitchConfigDependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 
 /*
     !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
@@ -78,10 +80,12 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
 
     private final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
     private final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer;
+    private final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository;
 
-    public SQLitePuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer) {
+    public SQLitePuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository) {
         this.abstractPuzzleConfigAggregatesFactory = abstractPuzzleConfigAggregatesFactory;
         this.puzzleConfigJsonSerializer = puzzleConfigJsonSerializer;
+        this.pianoKeyboardRepository = pianoKeyboardRepository;
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
@@ -147,6 +151,15 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
 
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var exercise = puzzleConfigAggregate.getId();
+
+        // TODO dry violation InMemoryPuzzleConfigRepository
+        var pianoKeyboardsToSave = puzzleConfigAggregate.pianoKeyboardAggregates;
+        PianoKeyboardAggregate pianoKeyboard;
+        for (var pianoKeyboardId : pianoKeyboardsToSave.keySet()) {
+            pianoKeyboard = pianoKeyboardsToSave.get(pianoKeyboardId);
+            pianoKeyboardRepository.save(pianoKeyboard);
+        }
+        
         var deleteCommand = "DELETE FROM `puzzle_configs` WHERE `exercise` = ?";
         var selectCommand = "INSERT INTO `puzzle_configs` (`exercise`, `serialized_config`) VALUES (?, ?)";
 
