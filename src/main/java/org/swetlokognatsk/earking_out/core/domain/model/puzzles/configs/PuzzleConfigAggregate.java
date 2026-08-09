@@ -23,7 +23,7 @@ public abstract class PuzzleConfigAggregate<E extends Exercise> extends Aggregat
     protected int targetNumberOfPuzzles;
     protected boolean statsRecording;
 
-    public final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates;
+    public transient final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates;
 
     protected abstract void updateConfigSpecificProperty(final String propertyName, final Object propertyValue);
 

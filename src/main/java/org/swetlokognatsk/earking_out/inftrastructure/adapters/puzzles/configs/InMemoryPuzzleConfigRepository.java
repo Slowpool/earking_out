@@ -14,6 +14,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.PerfectPitchConfigDependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
@@ -42,7 +43,9 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     }
 
     // TODO polymorphic stuff??
-    private PerfectPitchConfigDependentAggregatesDTO getAudioPerfectPitchConfigDependentAggregates(final Exercise exercise) {
+    // TODO either use decoupled aggregates updating, either put this logic into `PuzzleConfigDependentAggregatesResolver`. yet it's a crutch
+    public static PerfectPitchConfigDependentAggregatesDTO getAudioPerfectPitchConfigDependentAggregates(final Exercise exercise) {
+        var pianoKeyboardRepository = DI.get(PuzzleConfigPianoKeyboardStorageAdapter.class);
         var pianoKeyboards = pianoKeyboardRepository.getByExercise(exercise);
         var dependentAggregates = new PerfectPitchConfigDependentAggregatesDTO(pianoKeyboards);
         return dependentAggregates;
