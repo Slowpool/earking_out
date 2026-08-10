@@ -119,7 +119,8 @@ public class EarkingOutApplication extends Application {
         var puzzleConfigDTOAssembler = DI.get(PuzzleConfigDTOAssembler.class);
         var puzzleConfigDto = puzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
 
-        var configPane = ConfigPanesFactory.create(puzzleConfigDto, WIDTH, HEIGHT);
+        var configPanesFactory = DI.get(ConfigPanesFactory.class);
+        var configPane = configPanesFactory.create(puzzleConfigDto, WIDTH, HEIGHT);
         configPane.addEventHandler(ExerciseStartedEvent.EXERCISE_STARTED, this::tryOpenPuzzlePane);
         configPane.addEventHandler(ConfigPropertyUpdatingEvent.CONFIG_PROPERTY_UPDATING, this::updateConfigProperty);
         return (CP) configPane;

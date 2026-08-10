@@ -23,7 +23,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPuzzleConfigPianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 
 public class RandomAudioPerfectPitchSolutionGeneratorTest {
@@ -44,7 +44,7 @@ public class RandomAudioPerfectPitchSolutionGeneratorTest {
     }
 
     private static AudioPerfectPitchConfigAggregate createAnyPuzzleConfig(final PianoKeyNumber[] normalizedNotesForPuzzle) {
-        return configFactory.create(0, false, normalizedNotesForPuzzle, null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false, new PianoKeyboardAggregate[0]);
+        return configFactory.create(0, false, normalizedNotesForPuzzle, null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false);
     }
 
     @Test

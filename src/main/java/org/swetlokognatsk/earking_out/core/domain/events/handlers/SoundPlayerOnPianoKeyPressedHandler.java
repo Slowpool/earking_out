@@ -6,16 +6,16 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
 public final class SoundPlayerOnPianoKeyPressedHandler {
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
-    private final PuzzleConfigPianoKeyboardStorageAdapter puzzleConfigPianoKeyboardRepository;
+    private final PianoKeyboardRepository pianoKeyboardRepository;
     private final PuzzleConfigRepository puzzleConfigRepository;
 
-    public SoundPlayerOnPianoKeyPressedHandler(final PianoKeySoundsPlayer pianoKeySoundsPlayer, final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository, final PuzzleConfigRepository puzzleConfigRepository) {
+    public SoundPlayerOnPianoKeyPressedHandler(final PianoKeySoundsPlayer pianoKeySoundsPlayer, final PianoKeyboardRepository pianoKeyboardRepository, final PuzzleConfigRepository puzzleConfigRepository) {
         this.pianoKeySoundsPlayer = pianoKeySoundsPlayer;
-        this.puzzleConfigPianoKeyboardRepository = pianoKeyboardRepository;
+        this.pianoKeyboardRepository = pianoKeyboardRepository;
         this.puzzleConfigRepository = puzzleConfigRepository;
     }
 
@@ -35,7 +35,7 @@ public final class SoundPlayerOnPianoKeyPressedHandler {
         boolean pianoKeyboardExists;
         try {
             // check whether it exists or not
-            puzzleConfigPianoKeyboardRepository.get(pianoKeyboardId);
+            pianoKeyboardRepository.get(pianoKeyboardId);
             pianoKeyboardExists = true;
         } catch (IllegalArgumentException exception) {
             pianoKeyboardExists = false;

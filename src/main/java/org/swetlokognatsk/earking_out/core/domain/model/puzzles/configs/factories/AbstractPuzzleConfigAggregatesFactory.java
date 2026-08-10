@@ -15,8 +15,8 @@ public final class AbstractPuzzleConfigAggregatesFactory {
         this.objectCloner = objectCloner;
     }
 
-    public <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>, ?>> PCAF createFactory(final E exercise) {
-        PuzzleConfigAggregatesFactory<?, ?> factory = switch (exercise) {
+    public <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>>> PCAF createFactory(final E exercise) {
+        PuzzleConfigAggregatesFactory<?> factory = switch (exercise) {
             case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregatesFactory(objectCloner);
             case VisualPerfectPitchExercise e -> new VisualPerfectPitchConfigAggregatesFactory(objectCloner);
             default -> throw new IllegalArgumentException("unknown exercise for PuzzleConfigAggregatesFactory: " + exercise);

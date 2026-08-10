@@ -33,12 +33,10 @@ import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonst
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.AudioPerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
-import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.PuzzleConfigDependentAggregatesResolver;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.greenrobot.GreenrobotEventBus;
@@ -49,11 +47,9 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrato
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.FakeSoundHarmonicIntervalHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound.PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.AudioClipPianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPuzzleConfigPianoKeyboardRepository;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemorySessionPianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.PianoKeySoundFilesBuilder;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.TestInMemoryAllPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
@@ -68,21 +64,18 @@ public final class HandmadeIoCContainer implements IoCContainer {
     // singleton lifetime simulation
     private static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
     private static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
-    private static InMemorySessionPianoKeyboardRepository inMemorySessionPianoKeyboardRepository;
-    private static TestInMemoryAllPianoKeyboardRepository testInMemoryAllPianoKeyboardRepository;
     private static AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
     private static MockPianoKeySoundsPlayer mockPianoKeySoundsPlayer;
     private static InMemoryAudioPerfectPitchSessionRepository inMemoryAudioPerfectPitchSessionRepository;
     private static DomainEventsFactory domainEventsFactory;
     private static EventPublisher eventPublisher;
-    private static InMemoryPuzzleConfigPianoKeyboardRepository inMemoryPuzzleConfigPianoKeyboardRepository;
+    private static InMemoryPianoKeyboardRepository inMemoryPianoKeyboardRepository;
     private static GreenrobotEventBus greenrobotEventBus;
     private static SoundPlayerOnPianoKeyPressedHandler pianoKeyPressedHandler;
     private static HintDemonstratingOnNewPuzzleCreatedHandler newpuzzleCreatedHandler;
     private static HintDemonstratingOnHintRepeatingRequestedHandler hintRepeatingRequestedHandler;
     private static InMemoryEventStore inMemoryEventStore;
     private static JacksonJsonSerializer jacksonDomainEventJsonSerializer;
-    private static PuzzleConfigDependentAggregatesResolver puzzleConfigDependentAggregatesResolver;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -128,33 +121,18 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigPianoKeyboardStorageAdapter.class), get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigDependentAggregatesResolver.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 
-        } else if (className.equals(PuzzleConfigPianoKeyboardStorageAdapter.class.getName())) {
-            return (T) get(InMemoryPuzzleConfigPianoKeyboardRepository.class);
+        } else if (className.equals(PianoKeyboardRepository.class.getName())) {
+            return (T) get(InMemoryPianoKeyboardRepository.class);
 
-        } else if (className.equals(InMemoryPuzzleConfigPianoKeyboardRepository.class.getName())) {
-            if (inMemoryPuzzleConfigPianoKeyboardRepository == null) {
-                inMemoryPuzzleConfigPianoKeyboardRepository = new InMemoryPuzzleConfigPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
+        } else if (className.equals(InMemoryPianoKeyboardRepository.class.getName())) {
+            if (inMemoryPianoKeyboardRepository == null) {
+                inMemoryPianoKeyboardRepository = new InMemoryPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
             }
-            return (T) inMemoryPuzzleConfigPianoKeyboardRepository;
-
-        } else if (className.equals(SessionPianoKeyboardStorageAdapter.class.getName())) {
-            return (T) get(InMemorySessionPianoKeyboardRepository.class);
-
-        } else if (className.equals(InMemorySessionPianoKeyboardRepository.class.getName())) {
-            if (inMemorySessionPianoKeyboardRepository == null) {
-                inMemorySessionPianoKeyboardRepository = new InMemorySessionPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
-            }
-            return (T) inMemorySessionPianoKeyboardRepository;
-
-        } else if (className.equals(TestInMemoryAllPianoKeyboardRepository.class.getName())) {
-            if (testInMemoryAllPianoKeyboardRepository == null) {
-                testInMemoryAllPianoKeyboardRepository = new TestInMemoryAllPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
-            }
-            return (T) testInMemoryAllPianoKeyboardRepository;
+            return (T) inMemoryPianoKeyboardRepository;
 
         } else if (className.equals(AudioPerfectPitchSessionService.class.getName())) {
             return (T) new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class));
@@ -184,7 +162,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) new PuzzleConfigDTOAssembler(get(PuzzleConfigRepository.class));
 
         } else if (className.equals(SessionAggregatesFactory.class.getName())) {
-            return (T) new SessionAggregatesFactory(get(ObjectCloner.class), get(PuzzleConfigRepository.class), get(SessionPianoKeyboardStorageAdapter.class), get(PuzzleConfigDTOAssembler.class), get(PuzzlesFactory.class));
+            return (T) new SessionAggregatesFactory(get(ObjectCloner.class), get(PuzzleConfigRepository.class), get(PianoKeyboardRepository.class), get(PuzzleConfigDTOAssembler.class), get(PuzzlesFactory.class));
 
         } else if (className.equals(PuzzlePanesFactory.class.getName())) {
             return (T) new PuzzlePanesFactory(get(SessionRepositoryDelegator.class));
@@ -221,7 +199,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(InMemoryAudioPerfectPitchSessionRepository.class.getName())) {
             if (inMemoryAudioPerfectPitchSessionRepository == null) {
-                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(SessionPianoKeyboardStorageAdapter.class));
+                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(PianoKeyboardRepository.class));
             }
             return (T) inMemoryAudioPerfectPitchSessionRepository;
 
@@ -251,7 +229,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(JacksonJsonSerializer.class.getName())) {
             if (jacksonDomainEventJsonSerializer == null) {
-                jacksonDomainEventJsonSerializer = new JacksonJsonSerializer(get(PuzzleConfigDependentAggregatesResolver.class));
+                jacksonDomainEventJsonSerializer = new JacksonJsonSerializer();
             }
             return (T) jacksonDomainEventJsonSerializer;
 
@@ -272,7 +250,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(SoundPlayerOnPianoKeyPressedHandler.class.getName())) {
             if (pianoKeyPressedHandler == null) {
-                pianoKeyPressedHandler = new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PuzzleConfigPianoKeyboardStorageAdapter.class), get(PuzzleConfigRepository.class));
+                pianoKeyPressedHandler = new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));
             }
             return (T) pianoKeyPressedHandler;
 
@@ -288,12 +266,6 @@ public final class HandmadeIoCContainer implements IoCContainer {
             }
             return (T) hintRepeatingRequestedHandler;
 
-        } else if (className.equals(PuzzleConfigDependentAggregatesResolver.class.getName())) {
-            if (puzzleConfigDependentAggregatesResolver == null) {
-                puzzleConfigDependentAggregatesResolver = new PuzzleConfigDependentAggregatesResolver(get(PuzzleConfigPianoKeyboardStorageAdapter.class));
-            }
-            return (T) puzzleConfigDependentAggregatesResolver;
-
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
         }
@@ -302,9 +274,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
     public void refreshDependencies() {
         inMemoryPuzzleConfigRepository = null;
         pianoKeyboardAggregatesFactory = null;
-        inMemoryPuzzleConfigPianoKeyboardRepository = null;
-        inMemorySessionPianoKeyboardRepository = null;
-        testInMemoryAllPianoKeyboardRepository = null;
+        inMemoryPianoKeyboardRepository = null;
         audioClipPianoKeySoundsPlayer = null;
         mockPianoKeySoundsPlayer = null;
         inMemoryAudioPerfectPitchSessionRepository = null;
@@ -313,7 +283,6 @@ public final class HandmadeIoCContainer implements IoCContainer {
         greenrobotEventBus = null;
         inMemoryEventStore = null;
         jacksonDomainEventJsonSerializer = null;
-        puzzleConfigDependentAggregatesResolver = null;
     }
 
 }

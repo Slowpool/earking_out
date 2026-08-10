@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.factories;
 
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.ConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config.AudioPerfectPitchConfigPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config.VisualPerfectPitchConfigPane;
@@ -12,14 +13,17 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 
 public final class ConfigPanesFactory {
 
-    private ConfigPanesFactory() {
+    private final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister;
+
+    public ConfigPanesFactory(final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister) {
+        this.pianoKeyboardHandlersRegister = pianoKeyboardHandlersRegister;
     }
 
-    public static <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, CP extends ConfigPane<E, PCDTO>> CP create(final PCDTO puzzleConfigDto, final double width, final double height) {
+    public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, CP extends ConfigPane<E, PCDTO>> CP create(final PCDTO puzzleConfigDto, final double width, final double height) {
         var exercise = puzzleConfigDto.exercise;
         return switch (exercise) {
-        case VisualPerfectPitchExercise e -> (CP) new VisualPerfectPitchConfigPane((VisualPerfectPitchConfigDTO) puzzleConfigDto, width, height);
-        case AudioPerfectPitchExercise e -> (CP) new AudioPerfectPitchConfigPane((AudioPerfectPitchConfigDTO) puzzleConfigDto, width, height);
+        case VisualPerfectPitchExercise e -> (CP) new VisualPerfectPitchConfigPane((VisualPerfectPitchConfigDTO) puzzleConfigDto, width, height, pianoKeyboardHandlersRegister);
+        case AudioPerfectPitchExercise e -> (CP) new AudioPerfectPitchConfigPane((AudioPerfectPitchConfigDTO) puzzleConfigDto, width, height, pianoKeyboardHandlersRegister);
         default -> throw new RuntimeException("unknown exercise: " + exercise);
         };
         // case MELODIC_INTERVALS -> switch (exercise.type) {

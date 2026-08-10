@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.config;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.RadioButtonHelper;
@@ -40,13 +39,13 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         return getWidth();
     }
 
-    public PerfectPitchConfigPane(final PCDTO puzzleConfigDto, final double width, final double height) {
+    public PerfectPitchConfigPane(final PCDTO puzzleConfigDto, final double width, final double height, final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister) {
         super(puzzleConfigDto, width, height);
 
-        notesPickerKeyboard = buildNotesPickerKeyboard(puzzleConfigDto.normalizedNotesForPuzzle);
+        notesPickerKeyboard = buildNotesPickerKeyboard(puzzleConfigDto.normalizedNotesForPuzzle, pianoKeyboardHandlersRegister);
         notesPickerKeyboardBox = buildPianoKeyboardBox(notesPickerKeyboard);
 
-        rootNotePicker = buildRootNotePicker(puzzleConfigDto.normalizedRootNote);
+        rootNotePicker = buildRootNotePicker(puzzleConfigDto.normalizedRootNote, pianoKeyboardHandlersRegister);
         rootNoteBox = buildRootNotePickerBox(rootNotePicker, puzzleConfigDto.inputMode);
 
         inputModeToggleGroup = new ToggleGroup();
@@ -62,10 +61,10 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         setAlignment(Pos.CENTER);
     }
 
-    protected PianoKeyboard buildNotesPickerKeyboard(final PianoKeyNumber[] selectedKeys) {
+    protected PianoKeyboard buildNotesPickerKeyboard(final PianoKeyNumber[] selectedKeys, final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister) {
         var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesPicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedKeys);
 
-        PianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(pianoKeyboard);
+        pianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(pianoKeyboard);
 
         return pianoKeyboard;
     }
@@ -77,10 +76,10 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         return pianoKeyboardBox;
     }
 
-    protected PianoKeyboard buildRootNotePicker(final PianoKeyNumber selectedRootNote) {
+    protected PianoKeyboard buildRootNotePicker(final PianoKeyNumber selectedRootNote, final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister) {
         var rootNotePicker = PianoKeyboardsFactory.createRootNotePicker(getPianoKeyboardWidth(), getPianoKeyboardHeight(), selectedRootNote);
 
-        PianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(rootNotePicker);
+        pianoKeyboardHandlersRegister.addPianoKeyEventsHandlers(rootNotePicker);
 
         return rootNotePicker;
     }
@@ -161,7 +160,7 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
             yield set.iterator().next();
         }
         case SOUNDLESS_GUESSING_PIANO_PROP -> {
-            var soundlessGuessingPiano = (Boolean)newValue;
+            var soundlessGuessingPiano = (Boolean) newValue;
             yield soundlessGuessingPiano.booleanValue();
         }
         default -> throw new IllegalArgumentException("unknown custom property: " + configProperty);

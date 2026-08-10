@@ -12,16 +12,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.AggregateRepository;
 
 
-abstract class InMemoryPianoKeyboardRepository extends AggregateRepository implements PianoKeyboardStorageAdapter {
+public final class InMemoryPianoKeyboardRepository extends AggregateRepository implements PianoKeyboardRepository {
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
-
-    protected abstract PianoKeyboardId[] getPianoKeyboardIds();
 
     public InMemoryPianoKeyboardRepository(final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory) {
         this.pianoKeyboardAggregatesFactory = pianoKeyboardAggregatesFactory;
@@ -30,7 +28,7 @@ abstract class InMemoryPianoKeyboardRepository extends AggregateRepository imple
 
     private void initPianoKeyboards() {
         PianoKeyboardAggregate pianoKeyboard;
-        for (var pianoKeyboardId : getPianoKeyboardIds()) {
+        for (var pianoKeyboardId : PianoKeyboardId.values()) {
             pianoKeyboard = pianoKeyboardAggregatesFactory.create(pianoKeyboardId);
             pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboard);
         }
@@ -71,14 +69,15 @@ abstract class InMemoryPianoKeyboardRepository extends AggregateRepository imple
         return dto;
     }
 
-    public final PianoKeyboardAggregate[] getByExercise(final Exercise exercise) {
-        // TODO refactoring. add PianoKeyboardType (session/puzzleConfig)
-        var pianoKeyboardIds = PianoKeyboardId.getPianoKeyboardIds(exercise);
-        var stream = Arrays.stream(pianoKeyboardIds);
-        stream = stream.filter((PianoKeyboardId pianoKeyboardId) -> ArrayUtils.contains(getPianoKeyboardIds(), pianoKeyboardId));
-        var pianoKeyboardsStream = stream.map((PianoKeyboardId pianoKeyboardId) -> get(pianoKeyboardId));
-        var pianoKeyboards = pianoKeyboardsStream.toArray(PianoKeyboardAggregate[]::new);
-        return pianoKeyboards;
-    }
+    // // TODO is it used anywhere?
+    // public final PianoKeyboardAggregate[] getByExercise(final Exercise exercise) {
+    //     // TODO refactoring. add PianoKeyboardType (session/puzzleConfig)
+    //     var pianoKeyboardIds = PianoKeyboardId.getPianoKeyboardIds(exercise);
+    //     var stream = Arrays.stream(pianoKeyboardIds);
+    //     stream = stream.filter((PianoKeyboardId pianoKeyboardId) -> ArrayUtils.contains(PianoKeyboardIds(), pianoKeyboardId));
+    //     var pianoKeyboardsStream = stream.map((PianoKeyboardId pianoKeyboardId) -> get(pianoKeyboardId));
+    //     var pianoKeyboards = pianoKeyboardsStream.toArray(PianoKeyboardAggregate[]::new);
+    //     return pianoKeyboards;
+    // }
 
 }

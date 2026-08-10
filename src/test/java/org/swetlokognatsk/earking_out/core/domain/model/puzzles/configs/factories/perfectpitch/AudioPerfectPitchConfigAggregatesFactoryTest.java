@@ -14,7 +14,7 @@ public class AudioPerfectPitchConfigAggregatesFactoryTest {
         var abstractPuzzleConfigAggregatesFactory = new AbstractPuzzleConfigAggregatesFactory(new SerializationCloner());
         AudioPerfectPitchConfigAggregatesFactory factory = abstractPuzzleConfigAggregatesFactory.createFactory(new AudioPerfectPitchExercise());
 
-        var puzzleConfig = factory.createDefault(PerfectPitchConfigDependentAggregatesDTO.EMPTY);
+        var puzzleConfig = factory.createDefault();
 
         assertEquals(AudioPerfectPitchConfigAggregate.class.getName(), puzzleConfig.getClass().getName());
     }

@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -16,7 +17,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.Pia
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTOAssembler;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 
-public final class PianoKeyboardAggregate extends Aggregate<PianoKeyboardId> {
+public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId> {
     private static final long serialVersionUID = 1L;
 
     private final PianoKeyboardMode mode;

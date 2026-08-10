@@ -8,13 +8,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFacto
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.PerfectPitchConfigDependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
-import org.swetlokognatsk.earking_out.inftrastructure.PuzzleConfigDependentAggregatesResolver;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import tools.jackson.core.JsonGenerator;
@@ -36,10 +33,8 @@ import tools.jackson.databind.ser.std.StdSerializer;
 public final class JacksonJsonSerializer implements DomainEventJsonSerializer, PuzzleConfigJsonSerializer {
 
     private final ObjectMapper objectMapper;
-    private final PuzzleConfigDependentAggregatesResolver puzzleConfigDependentAggregatesResolver;
 
-    public JacksonJsonSerializer(final PuzzleConfigDependentAggregatesResolver puzzleConfigDependentAggregatesResolver) {
-        this.puzzleConfigDependentAggregatesResolver = puzzleConfigDependentAggregatesResolver;
+    public JacksonJsonSerializer() {
         // TODO remove or use
         var audioPerfectPitchConfigSerializationModule = createAudioPerfectPitchConfigSerializationModule();
         var moduleWithSerializers = new SimpleModule();
@@ -106,10 +101,7 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
 
         var soundlessGuessingPiano = jsonTree.get("soundlessGuessingPiano").asBoolean();
 
-        var depenentAggregates = (PerfectPitchConfigDependentAggregatesDTO)puzzleConfigDependentAggregatesResolver.getDependentAggregates(exercise);
-        var pianoKeyboardAggregates = depenentAggregates.pianoKeyboardAggregates;
-
-        var puzzleConfig = new AudioPerfectPitchConfigAggregate((AudioPerfectPitchExercise) exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano, pianoKeyboardAggregates);
+        var puzzleConfig = new AudioPerfectPitchConfigAggregate((AudioPerfectPitchExercise) exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
         return puzzleConfig;
     }
 

@@ -11,18 +11,19 @@ import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 @SpringBootTest
-public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, TestInMemoryAllPianoKeyboardRepository> {
-    private TestInMemoryAllPianoKeyboardRepository repository;
+public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, InMemoryPianoKeyboardRepository> {
+    private InMemoryPianoKeyboardRepository repository;
 
     protected PianoKeyboardAggregate getSomeAggregate() {
         return repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
     }
 
-    protected TestInMemoryAllPianoKeyboardRepository getRepository() {
+    protected InMemoryPianoKeyboardRepository getRepository() {
         return repository;
     }
 
@@ -45,7 +46,7 @@ public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryReposi
     @Before
     public void setup() {
         DI.refreshDependencies();
-        repository = DI.get(TestInMemoryAllPianoKeyboardRepository.class);
+        repository = DI.get(InMemoryPianoKeyboardRepository.class);
     }
 
     @Test
@@ -62,7 +63,7 @@ public final class InMemoryAllPianoKeyboardRepositoryTest extends InMemoryReposi
 
     /**
      * See
-     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryAllPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
+     * {@link org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.InMemoryPianoKeyboardRepositoryTest#changeAggregatePropertyWithoutSave}
      * regarding @Deprecated
      */
     @Test
