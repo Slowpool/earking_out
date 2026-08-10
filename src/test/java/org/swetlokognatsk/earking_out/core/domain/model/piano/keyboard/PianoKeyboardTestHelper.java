@@ -12,6 +12,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 public final class PianoKeyboardTestHelper {
     // NOTE factory should be instantiable right away to avoid (static -> instance) refactoring when some dependencies show up
     private final static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = DI.get(PianoKeyboardAggregatesFactory.class);
+    private static final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler = DI.get(PianoKeyboardDtoAssembler.class);
 
     public static PianoKeyboardAggregate createPianoKeyboard(final PianoKeyboardId id) {
         var pianoKeyboard = pianoKeyboardAggregatesFactory.create(id);
@@ -29,7 +30,7 @@ public final class PianoKeyboardTestHelper {
     }
 
     public static void assertOnlyTheseKeysAreSelected(final PianoKeyNumber[] expectedPianoKeys, final PianoKeyboardAggregate pianoKeyboard) {
-        var pianoKeyboardDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        var pianoKeyboardDto = pianoKeyboardDtoAssembler.assemble(pianoKeyboard);
         assertOnlyTheseKeysAreSelected(expectedPianoKeys, pianoKeyboardDto);
     }
 
@@ -56,7 +57,7 @@ public final class PianoKeyboardTestHelper {
     }
 
     public static void assertOnlyThisKeyIsSelected(final PianoKeyNumber expectedKey, final PianoKeyboardAggregate pianoKeyboard) {
-        var pianoKeyboardDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        var pianoKeyboardDto = pianoKeyboardDtoAssembler.assemble(pianoKeyboard);
         assertOnlyThisKeyIsSelected(expectedKey, pianoKeyboardDto);
     }
 
@@ -65,7 +66,7 @@ public final class PianoKeyboardTestHelper {
     }
 
     public static void assertNoSelectedKeys(final PianoKeyboardAggregate pianoKeyboard) {
-        var pianoKeyboardDto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        var pianoKeyboardDto = pianoKeyboardDtoAssembler.assemble(pianoKeyboard);
         assertNoSelectedKeys(pianoKeyboardDto);
     }
 

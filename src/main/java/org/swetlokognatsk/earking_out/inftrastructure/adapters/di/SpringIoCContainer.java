@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.adapters.di;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.support.GenericApplicationContext;
@@ -82,11 +83,11 @@ public final class SpringIoCContainer implements IoCContainer {
 
         // TODO pretty sure some suppliers are redundant
         ctx.registerBean(PianoKeyboardAggregatesFactory.class, () -> new PianoKeyboardAggregatesFactory(ctx.getBean(ObjectCloner.class), ctx.getBean(PianoKeysFactory.class)));
-        ctx.registerBean(InMemoryPianoKeyboardRepository.class, () -> new InMemoryPianoKeyboardRepository(ctx.getBean(PianoKeyboardAggregatesFactory.class)));
+        ctx.registerBean(InMemoryPianoKeyboardRepository.class, () -> new InMemoryPianoKeyboardRepository(ctx.getBean(PianoKeyboardAggregatesFactory.class), ctx.getBean(PianoKeyboardDtoAssembler.class)));
 
         ctx.registerBean(AbstractPuzzleConfigAggregatesFactory.class, () -> new AbstractPuzzleConfigAggregatesFactory(ctx.getBean(ObjectCloner.class)));
 
-        ctx.registerBean(PuzzleConfigService.class, () -> new PuzzleConfigService(ctx.getBean(PuzzleConfigRepository.class), ctx.getBean(PianoKeyboardDtoAssembler.class)));
+        ctx.registerBean(PuzzleConfigService.class, () -> new PuzzleConfigService(ctx.getBean(PuzzleConfigRepository.class), ctx.getBean(PianoKeyboardRepository.class)));
 
         ctx.registerBean(PianoKeyboardService.class, () -> new PianoKeyboardService(ctx.getBean(PianoKeyboardRepository.class)));
 
@@ -104,11 +105,11 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class, () -> new PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(ctx.getBean(PianoKeySoundsPlayer.class)));
 
-        ctx.registerBean(InMemoryAudioPerfectPitchSessionRepository.class, () -> new InMemoryAudioPerfectPitchSessionRepository(ctx.getBean(SessionAggregatesFactory.class), ctx.getBean(PianoKeyboardRepository.class)));
+        ctx.registerBean(InMemoryAudioPerfectPitchSessionRepository.class, () -> new InMemoryAudioPerfectPitchSessionRepository(ctx.getBean(SessionAggregatesFactory.class)));
 
         ctx.registerBean(EndSessionAggregateDTOAssemblersFactory.class);
 
-        ctx.registerBean(PianoKeyboardDtoAssembler.class, () -> new PianoKeyboardDtoAssembler(ctx.getBean(PianoKeyboardRepository.class)));
+        ctx.registerBean(PianoKeyboardDtoAssembler.class, () -> new PianoKeyboardDtoAssembler());
 
         ctx.registerBean(DomainEventsFactory.class);
 
@@ -133,15 +134,14 @@ public final class SpringIoCContainer implements IoCContainer {
         // TODO pass service or what?
         ctx.registerBean(SessionGuessingOnPianoKeyPressedHandler.class, () -> new SessionGuessingOnPianoKeyPressedHandler(null));
 
-        // TODO primary
-        ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class)));
+        ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class)), (BeanDefinition bd) -> bd.setPrimary(true));
 
         ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class), ctx.getBean(PuzzleConfigJsonSerializer.class)));
 
         ctx.registerBean(JacksonJsonSerializer.class, () -> new JacksonJsonSerializer());
 
         // javafx beans
-        ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(ctx.getBean(SessionRepositoryDelegator.class)));
+        ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(ctx.getBean(SessionRepositoryDelegator.class), ctx.getBean(PianoKeyboardHandlersRegister.class), ctx.getBean(PianoKeyboardService.class)));
 
         ctx.registerBean(StatsPanesFactory.class, () -> new StatsPanesFactory(ctx.getBean(PuzzleConfigRepository.class), ctx.getBean(SessionRepositoryDelegator.class)));
 

@@ -13,10 +13,6 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
 
     private final SessionAggregatesFactory sessionAggregatesFactory;
 
-    protected abstract void loadDependentAggregates(final SA sessionAggregate);
-
-    protected abstract void saveDependentAggregates(final SA sessionAggregate);
-
     public InMemorySessionRepository(final SessionAggregatesFactory sessionAggregatesFactory) {
         this.sessionAggregatesFactory = sessionAggregatesFactory;
     }
@@ -26,7 +22,6 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
         if (sessionAggregate == null) {
             throw new IllegalArgumentException("session not found. id: " + id);
         }
-        loadDependentAggregates(sessionAggregate);
         var sessionAggregateCopy = sessionAggregatesFactory.createDeepCopy(sessionAggregate);
         return (SA) sessionAggregateCopy;
     }
@@ -35,7 +30,6 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
         var events = sessionAggregate.flushEvents();
 
         sessionAggregate = (SA) sessionAggregatesFactory.createDeepCopy(sessionAggregate);
-        saveDependentAggregates(sessionAggregate);
         sessionAggregates.put(sessionAggregate.getId(), sessionAggregate);
 
         publishEvents(events);

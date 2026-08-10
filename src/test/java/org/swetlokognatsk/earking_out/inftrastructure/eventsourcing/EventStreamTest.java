@@ -2,9 +2,7 @@ package org.swetlokognatsk.earking_out.inftrastructure.eventsourcing;
 
 import org.junit.*;
 import org.swetlokognatsk.earking_out.inftrastructure.eventsourcing.EventStream;
-
 import static org.junit.Assert.assertArrayEquals;
-
 import java.util.LinkedList;
 import java.util.List;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;

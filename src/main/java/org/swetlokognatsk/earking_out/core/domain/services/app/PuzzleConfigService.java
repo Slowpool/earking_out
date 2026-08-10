@@ -10,15 +10,16 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
 public final class PuzzleConfigService {
 
     private final PuzzleConfigRepository repository;
-    private final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
+    private final PianoKeyboardRepository pianoKeyboardRepository;
 
-    public PuzzleConfigService(final PuzzleConfigRepository repository, final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler) {
+    public PuzzleConfigService(final PuzzleConfigRepository repository, final PianoKeyboardRepository pianoKeyboardRepository) {
         this.repository = Objects.requireNonNull(repository);
-        this.pianoKeyboardDtoAssembler = pianoKeyboardDtoAssembler;
+        this.pianoKeyboardRepository = pianoKeyboardRepository;
     }
 
     public void updateProperty(final Exercise exercise, final String property, final Object value) {
@@ -37,7 +38,7 @@ public final class PuzzleConfigService {
         var puzzleConfigAggregate = getPuzzleConfigAggregate(pianoKeyboardId.exercise);
 
         var propertyName = getPianoKeyboardPropertyName(pianoKeyboardId);
-        var pianoKeyboardDto = pianoKeyboardDtoAssembler.getPianoKeyboardDTO(pianoKeyboardId);
+        var pianoKeyboardDto = pianoKeyboardRepository.getPianoKeyboardDTO(pianoKeyboardId);
         var propertyValue = getPianoKeyboardPropetyValue(propertyName, pianoKeyboardDto);
         try {
             puzzleConfigAggregate.updateProperty(propertyName, propertyValue);

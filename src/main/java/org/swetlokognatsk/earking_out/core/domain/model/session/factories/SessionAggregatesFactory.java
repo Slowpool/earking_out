@@ -40,8 +40,7 @@ public final class SessionAggregatesFactory extends AggregatesFactory<SessionAgg
 
         var sessionAggregate = switch (exercise) {
         case AudioPerfectPitchExercise _e -> {
-            var notesGuessingPianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING);
-            var aggregate = new AudioPerfectPitchSessionAggregate(puzzlesFactory, SessionId.random(), (AudioPerfectPitchConfigDTO) puzzleConfigDto, sessionStats, notesGuessingPianoKeyboard);
+            var aggregate = new AudioPerfectPitchSessionAggregate(puzzlesFactory, SessionId.random(), (AudioPerfectPitchConfigDTO) puzzleConfigDto, sessionStats);
             yield aggregate;
         }
         default -> throw new IllegalArgumentException("unknown exercise: " + exercise);

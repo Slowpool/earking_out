@@ -11,6 +11,8 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 public final class PuzzleConfigDTOAssembler {
     private static final Map<Exercise, EndPuzzleConfigDTOAssembler<?, ?, ?>> endDtoAssemblers = new HashMap<>();
 
+    // TODO reverse this dependency, so that `puzzleConfigRepository.getDto(exercise)`
+    // TODO make all dto assemblers to be final utility classes
     private final PuzzleConfigRepository puzzleConfigRepository;
 
     static {

@@ -15,14 +15,15 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboar
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.AggregateRepository;
 
-
 public final class InMemoryPianoKeyboardRepository extends AggregateRepository implements PianoKeyboardRepository {
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
+    protected final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
 
-    public InMemoryPianoKeyboardRepository(final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory) {
+    public InMemoryPianoKeyboardRepository(final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory, final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler) {
         this.pianoKeyboardAggregatesFactory = pianoKeyboardAggregatesFactory;
+        this.pianoKeyboardDtoAssembler = pianoKeyboardDtoAssembler;
         initPianoKeyboards();
     }
 
@@ -59,13 +60,13 @@ public final class InMemoryPianoKeyboardRepository extends AggregateRepository i
 
         var pianoKeyboardCopy = pianoKeyboardAggregatesFactory.createDeepCopy(pianoKeyboardAggregate);
         pianoKeyboardAggregates.put(pianoKeyboardId, pianoKeyboardCopy);
-        
+
         publishEvents(events);
     }
 
-    public final PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId) {
+    public final PianoKeyboardDTO getPianoKeyboardDTO(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = get(pianoKeyboardId);
-        var dto = PianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        var dto = pianoKeyboardDtoAssembler.assemble(pianoKeyboard);
         return dto;
     }
 

@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardContext;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
@@ -32,15 +33,7 @@ public final class SoundPlayerOnPianoKeyPressedHandler {
     }
 
     private boolean pianoKeyboardBelongsToPuzzleConfig(final PianoKeyboardId pianoKeyboardId) {
-        boolean pianoKeyboardExists;
-        try {
-            // check whether it exists or not
-            pianoKeyboardRepository.get(pianoKeyboardId);
-            pianoKeyboardExists = true;
-        } catch (IllegalArgumentException exception) {
-            pianoKeyboardExists = false;
-        }
-        return pianoKeyboardExists;
+        return pianoKeyboardId.context == PianoKeyboardContext.PUZZLE_CONFIG;
     }
 
     private boolean inspectConfigWhetherShouldPianoKeyMakeSound(final PianoKeyboardId pianoKeyboardId) {

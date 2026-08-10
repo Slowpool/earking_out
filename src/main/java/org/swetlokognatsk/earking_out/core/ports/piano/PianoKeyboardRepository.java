@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboar
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRepository;
 
 public interface PianoKeyboardRepository extends AggregateRepository<PianoKeyboardId, PianoKeyboardAggregate> {
-    PianoKeyboardDTO getViewDto(final PianoKeyboardId pianoKeyboardId);
+    PianoKeyboardDTO getPianoKeyboardDTO(final PianoKeyboardId pianoKeyboardId);
 
     // // TODO is it used anywhere?
     // PianoKeyboardAggregate[] getByExercise(final Exercise exercise);

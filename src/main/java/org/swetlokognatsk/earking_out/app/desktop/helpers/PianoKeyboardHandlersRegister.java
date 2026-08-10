@@ -72,7 +72,7 @@ public final class PianoKeyboardHandlersRegister {
     public void updatePianoKeyboardView(final PianoKeyboard pianoKeyboard) {
         PianoKeyboardDTO pianoKeyboardView;
         try {
-            pianoKeyboardView = pianoKeyboardRepository.getViewDto(pianoKeyboard.id);
+            pianoKeyboardView = pianoKeyboardRepository.getPianoKeyboardDTO(pianoKeyboard.id);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("pianoKeyboard not found: " + pianoKeyboard);
         }

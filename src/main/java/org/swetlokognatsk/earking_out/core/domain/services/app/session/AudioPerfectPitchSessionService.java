@@ -25,12 +25,6 @@ public final class AudioPerfectPitchSessionService extends SessionService<AudioP
         sessionRepository.save(session);
     }
 
-    public void releasePianoKey(final SessionId sessionId) {
-        var session = (AudioPerfectPitchSessionAggregate) sessionRepository.get(sessionId);
-        session.releasePianoKey();
-        sessionRepository.save(session);
-    }
-
     public void hearAgain(final SessionId sessionId) {
         var session = (AudioPerfectPitchSessionAggregate) sessionRepository.get(sessionId);
         session.demonstrateHintAgain();

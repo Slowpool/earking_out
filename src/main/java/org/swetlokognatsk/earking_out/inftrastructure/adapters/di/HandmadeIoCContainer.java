@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.di;
 
 import java.util.Map;
+
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
@@ -13,7 +15,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.VisualPerfectPitchConfigDTO;
@@ -76,6 +80,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
     private static HintDemonstratingOnHintRepeatingRequestedHandler hintRepeatingRequestedHandler;
     private static InMemoryEventStore inMemoryEventStore;
     private static JacksonJsonSerializer jacksonDomainEventJsonSerializer;
+    private static PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -111,7 +116,13 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) new PianoKeyColorService();
 
         } else if (className.equals(PuzzleConfigService.class.getName())) {
-            return (T) new PuzzleConfigService(get(PuzzleConfigRepository.class));
+            return (T) new PuzzleConfigService(get(PuzzleConfigRepository.class), get(PianoKeyboardRepository.class));
+
+        } else if (className.equals(PianoKeyboardDtoAssembler.class.getName())) {
+            if (pianoKeyboardDtoAssembler == null) {
+                pianoKeyboardDtoAssembler = new PianoKeyboardDtoAssembler();
+            }
+            return (T) pianoKeyboardDtoAssembler;
 
         } else if (className.equals(PuzzleConfigRepository.class.getName())) {
             return (T) get(InMemoryPuzzleConfigRepository.class);
@@ -130,7 +141,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(InMemoryPianoKeyboardRepository.class.getName())) {
             if (inMemoryPianoKeyboardRepository == null) {
-                inMemoryPianoKeyboardRepository = new InMemoryPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class));
+                inMemoryPianoKeyboardRepository = new InMemoryPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class), get(PianoKeyboardDtoAssembler.class));
             }
             return (T) inMemoryPianoKeyboardRepository;
 
@@ -165,7 +176,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) new SessionAggregatesFactory(get(ObjectCloner.class), get(PuzzleConfigRepository.class), get(PianoKeyboardRepository.class), get(PuzzleConfigDTOAssembler.class), get(PuzzlesFactory.class));
 
         } else if (className.equals(PuzzlePanesFactory.class.getName())) {
-            return (T) new PuzzlePanesFactory(get(SessionRepositoryDelegator.class));
+            return (T) new PuzzlePanesFactory(get(SessionRepositoryDelegator.class), get(PianoKeyboardHandlersRegister.class), get(PianoKeyboardService.class));
 
         } else if (className.equals(HintDemonstrator.class.getName())) {
             return (T) new HintDemonstratorDelegator();
@@ -199,7 +210,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(InMemoryAudioPerfectPitchSessionRepository.class.getName())) {
             if (inMemoryAudioPerfectPitchSessionRepository == null) {
-                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class), get(PianoKeyboardRepository.class));
+                inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class));
             }
             return (T) inMemoryAudioPerfectPitchSessionRepository;
 
