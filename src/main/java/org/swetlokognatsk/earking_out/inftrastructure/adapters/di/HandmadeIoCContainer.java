@@ -38,6 +38,7 @@ import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStora
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.PuzzleConfigDependentAggregatesResolver;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.greenrobot.GreenrobotEventBus;
@@ -81,6 +82,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
     private static HintDemonstratingOnHintRepeatingRequestedHandler hintRepeatingRequestedHandler;
     private static InMemoryEventStore inMemoryEventStore;
     private static JacksonJsonSerializer jacksonDomainEventJsonSerializer;
+    private static PuzzleConfigDependentAggregatesResolver puzzleConfigDependentAggregatesResolver;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -126,7 +128,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigPianoKeyboardStorageAdapter.class), get(AbstractPuzzleConfigAggregatesFactory.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigPianoKeyboardStorageAdapter.class), get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigDependentAggregatesResolver.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 
@@ -249,7 +251,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(JacksonJsonSerializer.class.getName())) {
             if (jacksonDomainEventJsonSerializer == null) {
-                jacksonDomainEventJsonSerializer = new JacksonJsonSerializer();
+                jacksonDomainEventJsonSerializer = new JacksonJsonSerializer(get(PuzzleConfigDependentAggregatesResolver.class));
             }
             return (T) jacksonDomainEventJsonSerializer;
 
@@ -286,6 +288,12 @@ public final class HandmadeIoCContainer implements IoCContainer {
             }
             return (T) hintRepeatingRequestedHandler;
 
+        } else if (className.equals(PuzzleConfigDependentAggregatesResolver.class.getName())) {
+            if (puzzleConfigDependentAggregatesResolver == null) {
+                puzzleConfigDependentAggregatesResolver = new PuzzleConfigDependentAggregatesResolver(get(PuzzleConfigPianoKeyboardStorageAdapter.class));
+            }
+            return (T) puzzleConfigDependentAggregatesResolver;
+
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
         }
@@ -305,6 +313,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
         greenrobotEventBus = null;
         inMemoryEventStore = null;
         jacksonDomainEventJsonSerializer = null;
+        puzzleConfigDependentAggregatesResolver = null;
     }
 
 }

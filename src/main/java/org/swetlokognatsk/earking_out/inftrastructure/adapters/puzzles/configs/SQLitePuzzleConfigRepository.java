@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-import org.swetlokognatsk.earking_out.core.domain.model.base.DependentAggregatesDTO;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
@@ -140,6 +139,7 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
 
     private void createAndSaveDefaultConfig(final Exercise exercise) {
         AudioPerfectPitchConfigAggregatesFactory factory = abstractPuzzleConfigAggregatesFactory.createFactory(new AudioPerfectPitchExercise());
+        // TODO crutch
         var newPuzzleConfig = factory.createDefault(PerfectPitchConfigDependentAggregatesDTO.EMPTY);
         genericSave(newPuzzleConfig);
     }
@@ -159,7 +159,7 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
             pianoKeyboard = pianoKeyboardsToSave.get(pianoKeyboardId);
             pianoKeyboardRepository.save(pianoKeyboard);
         }
-        
+
         var deleteCommand = "DELETE FROM `puzzle_configs` WHERE `exercise` = ?";
         var selectCommand = "INSERT INTO `puzzle_configs` (`exercise`, `serialized_config`) VALUES (?, ?)";
 

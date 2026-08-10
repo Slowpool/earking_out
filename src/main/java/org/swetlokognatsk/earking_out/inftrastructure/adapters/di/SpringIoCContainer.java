@@ -34,6 +34,7 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
+import org.swetlokognatsk.earking_out.inftrastructure.PuzzleConfigDependentAggregatesResolver;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring.SpringEventBus;
@@ -127,10 +128,12 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(HintDemonstratingOnHintRepeatingRequestedHandler.class, () -> new HintDemonstratingOnHintRepeatingRequestedHandler(ctx.getBean(HintDemonstratorDelegator.class)));
 
         ctx.registerBean(SessionEventsLoggerHandler.class, () -> new SessionEventsLoggerHandler(ctx.getBean(EventStore.class)));
-
-        ctx.registerBean(JacksonJsonSerializer.class);
-
+        
         ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class), ctx.getBean(PuzzleConfigJsonSerializer.class), ctx.getBean(PuzzleConfigPianoKeyboardStorageAdapter.class)));
+        
+        ctx.registerBean(PuzzleConfigDependentAggregatesResolver.class, () -> new PuzzleConfigDependentAggregatesResolver(ctx.getBean(PuzzleConfigPianoKeyboardStorageAdapter.class)));
+
+        ctx.registerBean(JacksonJsonSerializer.class, () -> new JacksonJsonSerializer(ctx.getBean(PuzzleConfigDependentAggregatesResolver.class)));
 
         // javafx beans
         ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(ctx.getBean(SessionRepositoryDelegator.class)));
