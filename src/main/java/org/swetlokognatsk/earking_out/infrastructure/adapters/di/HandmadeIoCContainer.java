@@ -157,7 +157,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class));
 
         } else if (className.equals(PianoKeyboardService.class.getName())) {
-            return (T) new PianoKeyboardService(get(PianoKeyboardRepository.class));
+            return (T) new PianoKeyboardService(get(PianoKeyboardRepository.class), get(AudioPerfectPitchSessionRepository.class));
 
         } else if (className.equals(PianoKeyboardAggregatesFactory.class.getName())) {
             if (pianoKeyboardAggregatesFactory == null) {

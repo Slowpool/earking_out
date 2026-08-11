@@ -34,12 +34,12 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
         sessionAggregate = (SA) sessionAggregatesFactory.createDeepCopy(sessionAggregate);
         sessionAggregates.put(sessionAggregate.getId(), sessionAggregate);
 
-        updateActiveSession(sessionAggregate);
+        rememberAsActiveSession(sessionAggregate);
 
         publishEvents(events);
     }
 
-    private void updateActiveSession(final SA sessionAggregate) {
+    private void rememberAsActiveSession(final SA sessionAggregate) {
         // last saved session is active
         activeSessionId = sessionAggregate.getState().equals(SessionStates.IN_PROGRESS) ? sessionAggregate.getId() : null;
     }

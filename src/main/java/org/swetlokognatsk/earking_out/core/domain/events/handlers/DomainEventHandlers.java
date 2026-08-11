@@ -14,29 +14,33 @@ public final class DomainEventHandlers {
     public static void registerDomainEventHandlers() {
         var eventBus = DI.get(EventBus.class);
 
-        var soundPlayerOnPianoKeyPressedHandler = DI.get(SoundPlayerOnPianoKeyPressedHandler.class);
-        eventBus.subscribe(PianoKeyPressedEvent.class, soundPlayerOnPianoKeyPressedHandler::handlePianoKeyPressedEvent);
+        // var soundPlayerOnPianoKeyPressedHandler = DI.get(SoundPlayerOnPianoKeyPressedHandler.class);
+        // eventBus.subscribe(PianoKeyPressedEvent.class, soundPlayerOnPianoKeyPressedHandler);
 
         var hintDemonstratingOnHintRepeatingRequestedHandler = DI.get(HintDemonstratingOnHintRepeatingRequestedHandler.class);
-        eventBus.subscribe(HintRepeatingRequestedEvent.class, hintDemonstratingOnHintRepeatingRequestedHandler::handleHintRepeatingRequestedEvent);
+        eventBus.subscribe(HintRepeatingRequestedEvent.class, hintDemonstratingOnHintRepeatingRequestedHandler);
 
         var hintDemonstratingOnNewPuzzleCreatedHandler = DI.get(HintDemonstratingOnNewPuzzleCreatedHandler.class);
-        eventBus.subscribe(NewPuzzleCreatedEvent.class, hintDemonstratingOnNewPuzzleCreatedHandler::handleNewPuzzleCreatedEvent);
+        eventBus.subscribe(NewPuzzleCreatedEvent.class, hintDemonstratingOnNewPuzzleCreatedHandler);
 
-        var sessionEventsLoggerHandler = DI.get(SessionEventsLoggerHandler.class);
-        eventBus.subscribe(SessionStartedEvent.class, sessionEventsLoggerHandler::handleSessionStartedEvent);
-        eventBus.subscribe(NewPuzzleCreatedEvent.class, sessionEventsLoggerHandler::handleNewPuzzleCreatedEvent);
-        eventBus.subscribe(UserTriedToGuessPuzzleEvent.class, sessionEventsLoggerHandler::handleUserTriedToGuessPuzzleEvent);
-        eventBus.subscribe(HintRepeatingRequestedEvent.class, sessionEventsLoggerHandler::handleHintRepeatingRequestedEvent);
-        eventBus.subscribe(SessionFinishedEvent.class, sessionEventsLoggerHandler::handleSessionFinishedEvent);
+        // // TODO finish them
+        // var sessionEventsLoggerHandler = DI.get(SessionEventsLoggerHandler.class);
+        // eventBus.subscribe(SessionStartedEvent.class, sessionEventsLoggerHandler::handleSessionStartedEvent);
+        // eventBus.subscribe(NewPuzzleCreatedEvent.class, sessionEventsLoggerHandler::handleNewPuzzleCreatedEvent);
+        // eventBus.subscribe(UserTriedToGuessPuzzleEvent.class, sessionEventsLoggerHandler::handleUserTriedToGuessPuzzleEvent);
+        // eventBus.subscribe(HintRepeatingRequestedEvent.class, sessionEventsLoggerHandler::handleHintRepeatingRequestedEvent);
+        // eventBus.subscribe(SessionFinishedEvent.class, sessionEventsLoggerHandler::handleSessionFinishedEvent);
 
-        var puzzleConfigUpdatingOnPianoKeyPressedHandler = DI.get(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class);
-        eventBus.subscribe(PianoKeyPressedEvent.class, puzzleConfigUpdatingOnPianoKeyPressedHandler::handlePianoKeyPressedEvent);
+        // var puzzleConfigUpdatingOnPianoKeyPressedHandler = DI.get(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class);
+        // eventBus.subscribe(PianoKeyPressedEvent.class, puzzleConfigUpdatingOnPianoKeyPressedHandler::handlePianoKeyPressedEvent);
 
-        var sessionGuessingOnPianoKeyPressedHandler = DI.get(SessionGuessingOnPianoKeyPressedHandler.class);
-        eventBus.subscribe(PianoKeyPressedEvent.class, sessionGuessingOnPianoKeyPressedHandler::handlePianoKeyPressedEvent);
+        // var sessionGuessingOnPianoKeyPressedHandler = DI.get(SessionGuessingOnPianoKeyPressedHandler.class);
+        // eventBus.subscribe(PianoKeyPressedEvent.class, sessionGuessingOnPianoKeyPressedHandler::handlePianoKeyPressedEvent);
 
         var sessionPianoKeyboardUpdatingOnSessionStartedHandler = DI.get(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class);
-        eventBus.subscribe(SessionStartedEvent.class, sessionPianoKeyboardUpdatingOnSessionStartedHandler::handleSessionStartedEvent);
+        eventBus.subscribe(SessionStartedEvent.class, sessionPianoKeyboardUpdatingOnSessionStartedHandler);
+
+        var sessionGuessingOnPianoKeyPressedHandler = DI.get(SessionGuessingOnPianoKeyPressedHandler.class);
+        eventBus.subscribe(PianoKeyPressedEvent.class, sessionGuessingOnPianoKeyPressedHandler);
     }
 }

@@ -146,7 +146,9 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         try {
             pressPianoKey(ANY_PIANO_KEY);
             fail();
+            // TODO NoActiveSessionException
         } catch (IllegalStateException e) {
+            int i = 0;
         }
     }
 

@@ -4,14 +4,15 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreate
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
-public final class HintDemonstratingOnNewPuzzleCreatedHandler {
+public final class HintDemonstratingOnNewPuzzleCreatedHandler implements DomainEventHandler<NewPuzzleCreatedEvent> {
+
     private final HintDemonstrator<Solution> hintDemonstrator;
 
     public HintDemonstratingOnNewPuzzleCreatedHandler(final HintDemonstrator<Solution> hintDemonstrator) {
         this.hintDemonstrator = hintDemonstrator;
     }
 
-    public void handleNewPuzzleCreatedEvent(final NewPuzzleCreatedEvent event) {
+    public void handle(final NewPuzzleCreatedEvent event) {
         hintDemonstrator.demonstrateHint(event.puzzle.solution);
     }
 

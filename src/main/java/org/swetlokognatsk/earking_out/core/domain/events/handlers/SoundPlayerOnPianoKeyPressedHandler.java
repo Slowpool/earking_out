@@ -9,7 +9,8 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
-public final class SoundPlayerOnPianoKeyPressedHandler {
+public final class SoundPlayerOnPianoKeyPressedHandler implements DomainEventHandler<PianoKeyPressedEvent> {
+
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
     private final PianoKeyboardRepository pianoKeyboardRepository;
     private final PuzzleConfigRepository puzzleConfigRepository;
@@ -20,7 +21,7 @@ public final class SoundPlayerOnPianoKeyPressedHandler {
         this.puzzleConfigRepository = puzzleConfigRepository;
     }
 
-    public void handlePianoKeyPressedEvent(final PianoKeyPressedEvent event) {
+    public void handle(final PianoKeyPressedEvent event) {
         if (shouldPlaySound(event.pianoKeyboardId)) {
             pianoKeySoundsPlayer.stopAndPlay(event.pianoKeyNumber);
         }

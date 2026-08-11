@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 
-public final class SessionGuessingOnPianoKeyPressedHandler {
+public final class SessionGuessingOnPianoKeyPressedHandler implements DomainEventHandler<PianoKeyPressedEvent> {
 
     private final Map<Exercise, SessionService<?, ?, ?>> sessionServices;
 
@@ -19,7 +19,7 @@ public final class SessionGuessingOnPianoKeyPressedHandler {
         this.sessionServices = sessionServices;
     }
 
-    public void handlePianoKeyPressedEvent(final PianoKeyPressedEvent event) {
+    public void handle(final PianoKeyPressedEvent event) {
         var exercise = event.pianoKeyboardId.exercise;
         switch (exercise) {
         case AudioPerfectPitchExercise appe:
