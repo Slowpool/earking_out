@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.di;
 
 import java.util.Map;
-
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
@@ -147,6 +146,9 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(AudioPerfectPitchSessionService.class.getName())) {
             return (T) new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class));
+
+        } else if (className.equals(PianoKeyboardService.class.getName())) {
+            return (T) new PianoKeyboardService(get(PianoKeyboardRepository.class));
 
         } else if (className.equals(PianoKeyboardAggregatesFactory.class.getName())) {
             if (pianoKeyboardAggregatesFactory == null) {

@@ -75,66 +75,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
         assertEquals(false, event.success);
     }
 
-    @Test
-    public void pianoKeyboardDoesNotHaveSelectedNotesAfterCreate() {
-        var aggregate = createAggregate();
-        var guessingPianoKeyboard = aggregate.getGuessingPianoKeyboard();
-
-        assertNoSelectedKeys(guessingPianoKeyboard);
-    }
-
-    @Test
-    public void pianoKeyboardSelectedKeysAfterCorrectPianoKeyPressing() {
-        var aggregate = createAggregate();
-
-        aggregate.guessViaPianoKeyPressing(SOLUTION.keyNumber);
-
-        var guessingPianoKeyboard = aggregate.getGuessingPianoKeyboard();
-        assertArrayEquals(new PianoKeyNumber[] { SOLUTION.keyNumber }, guessingPianoKeyboard.getSelectedKeyNumbers());
-    }
-
-    @Test
-    public void pianoKeyboardSelectedKeysAfterWrongPianoKeyPressing() {
-        var aggregate = createAggregate();
-
-        aggregate.guessViaPianoKeyPressing(WRONG_SOLUTION.keyNumber);
-
-        var guessingPianoKeyboard = aggregate.getGuessingPianoKeyboard();
-        assertArrayEquals(new PianoKeyNumber[] { WRONG_SOLUTION.keyNumber }, guessingPianoKeyboard.getSelectedKeyNumbers());
-    }
-
-    @Test
-    public void pianoKeyboardSelectedKeysAfterCorrectPianoKeyTouching() {
-        var aggregate = createAggregate();
-
-        aggregate.guessViaPianoKeyPressing(SOLUTION.keyNumber);
-        aggregate.releasePianoKey();
-
-        var guessingPianoKeyboard = aggregate.getGuessingPianoKeyboard();
-        assertArrayEquals(new PianoKeyNumber[0], guessingPianoKeyboard.getSelectedKeyNumbers());
-    }
-
-    @Test
-    public void pianoKeyboardSelectedKeysAfterWrongPianoKeyTouching() {
-        var aggregate = createAggregate();
-
-        aggregate.guessViaPianoKeyPressing(WRONG_SOLUTION.keyNumber);
-        aggregate.releasePianoKey();
-
-        var guessingPianoKeyboard = aggregate.getGuessingPianoKeyboard();
-        assertArrayEquals(new PianoKeyNumber[0], guessingPianoKeyboard.getSelectedKeyNumbers());
-    }
-
-    @Test
-    public void releasePianoKeyWhenItIsNotYetPressed() {
-        var aggregate = createAggregate();
-
-        try {
-            aggregate.releasePianoKey();
-            fail();
-        } catch (IllegalStateException e) {
-        }
-    }
+    
 
     @Test
     public void demonstrateHintGivesCorrectEvent() {
@@ -200,17 +141,6 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
         try {
             aggregate.guess(WRONG_SOLUTION);
-            fail();
-        } catch (IllegalStateException e) {
-        }
-    }
-
-    @Test
-    public void releasePianoKeyAfterAbort() {
-        var aggregate = createAggregateAndAbort();
-
-        try {
-            aggregate.releasePianoKey();
             fail();
         } catch (IllegalStateException e) {
         }

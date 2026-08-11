@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.AggregateRep
 
 public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?, ?, ?>> extends AggregateRepository implements SessionRepository<SA> {
     private final Map<SessionId, SessionAggregate<?, ?, ?, ?>> sessionAggregates = new HashMap<>();
-    private SA activeSession;
+    private SessionId activeSessionId;
 
     private final SessionAggregatesFactory sessionAggregatesFactory;
 
@@ -35,20 +35,20 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
         sessionAggregates.put(sessionAggregate.getId(), sessionAggregate);
 
         updateActiveSession(sessionAggregate);
-        
+
         publishEvents(events);
     }
-    
+
     private void updateActiveSession(final SA sessionAggregate) {
         // last saved session is active
-        activeSession = sessionAggregate.getState().equals(SessionStates.IN_PROGRESS) ? sessionAggregate : null;
+        activeSessionId = sessionAggregate.getState().equals(SessionStates.IN_PROGRESS) ? sessionAggregate.getId() : null;
     }
 
     public final SA getActiveSession() {
-        if (activeSession == null) {
+        if (activeSessionId == null) {
             throw new IllegalStateException("there's no active session");
         }
-        var activeSessionCopy = (SA) sessionAggregatesFactory.createDeepCopy(activeSession);
+        var activeSessionCopy = (SA) get(activeSessionId);
         return activeSessionCopy;
     }
 
