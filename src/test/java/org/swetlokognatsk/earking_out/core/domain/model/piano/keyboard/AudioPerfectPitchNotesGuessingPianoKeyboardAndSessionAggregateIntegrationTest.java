@@ -8,6 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
@@ -22,7 +23,6 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
 
     private static final PianoKeyNumber ANY_PIANO_KEY = FIRST_NOTE_NUMBER;
     private static final PianoKeyNumber SOLUTION = ANY_PIANO_KEY;
-    // TODO rename WRONG_SOLUTION to WRONG_GUESS everywhere
     private static final PianoKeyNumber WRONG_SOLUTION = SOLUTION.increment();
 
     private PianoKeyboardService pianoKeyboardService;
@@ -51,8 +51,12 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         pianoKeyboardService.pressPianoKey(pianoKeyboardId, pianoKeyNumber);
     }
 
+    private void releasePianoKey() {
+        pianoKeyboardService.releasePianoKey(pianoKeyboardId);
+    }
+
     private void assertActiveSessionHasCompletedPuzzles(final int expectedCompletedPuzzles) {
-        var session = sessionRepository.getActiveSession();
+        var session = getActiveSession();
         assertEquals(expectedCompletedPuzzles, session.getPuzzlesCompleted());
     }
 
@@ -66,8 +70,20 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         puzzleConfigRepository.save(puzzleConfig);
     }
 
+    private AudioPerfectPitchSessionAggregate getActiveSession() {
+        return sessionRepository.getActiveSession();
+    }
+
+    private AudioPerfectPitchSessionAggregate startAndAbortSession() {
+        sessionService.start();
+        var activeSession = getActiveSession();
+        sessionService.abort(activeSession.getId());
+        return activeSession;
+    }
+
     @Before
     public void setup() {
+        DI.refreshDependencies();
         pianoKeyboardService = DI.get(PianoKeyboardService.class);
         pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
         sessionService = DI.get(AudioPerfectPitchSessionService.class);
@@ -88,7 +104,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void pianoKeyboardSelectedKeysAfterCorrectGuess() {
+    public void sessionCountsThePuzzleAsCompletedAfterCorrectGuess() {
         updateNormalizedNotesForPuzzle(SOLUTION);
         sessionService.start();
         assertActiveSessionHasCompletedPuzzles(0);
@@ -99,7 +115,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void pianoKeyboardSelectedKeysAfterWrongPianoKeyPressing() {
+    public void sessionDoesNotCountThePuzzleAsCompletedAfterWrongGuess() {
         updateNormalizedNotesForPuzzle(SOLUTION);
         sessionService.start();
         assertActiveSessionHasCompletedPuzzles(0);
@@ -110,33 +126,11 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void pianoKeyboardSelectedKeysAfterCorrectPianoKeyTouching() {
-        var aggregate = createAggregate();
-
-        aggregate.guessViaPianoKeyPressing(SOLUTION.keyNumber);
-        aggregate.releasePianoKey();
-
-        var guessingPianoKeyboard = aggregate.getGuessingPianoKeyboard();
-        assertArrayEquals(new PianoKeyNumber[0], guessingPianoKeyboard.getSelectedKeyNumbers());
-    }
-
-    @Test
-    public void pianoKeyboardSelectedKeysAfterWrongPianoKeyTouching() {
-        var aggregate = createAggregate();
-
-        aggregate.guessViaPianoKeyPressing(WRONG_SOLUTION.keyNumber);
-        aggregate.releasePianoKey();
-
-        var guessingPianoKeyboard = aggregate.getGuessingPianoKeyboard();
-        assertArrayEquals(new PianoKeyNumber[0], guessingPianoKeyboard.getSelectedKeyNumbers());
-    }
-
-    @Test
-    public void releasePianoKeyWhenItIsNotYetPressed() {
-        var aggregate = createAggregate();
+    public void pressPianoKeyAfterSessionAbort() {
+        startAndAbortSession();
 
         try {
-            aggregate.releasePianoKey();
+            pressPianoKey(ANY_PIANO_KEY);
             fail();
         } catch (IllegalStateException e) {
         }
@@ -144,10 +138,28 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
 
     @Test
     public void releasePianoKeyAfterAbort() {
-        var aggregate = createAggregateAndAbort();
+        startAndAbortSession();
 
         try {
-            aggregate.releasePianoKey();
+            releasePianoKey();
+            fail();
+        } catch (IllegalStateException e) {
+        }
+    }
+
+    @Test
+    public void pressPianoKeyWhenThereIsNoActiveSession() {
+        try {
+            pressPianoKey(ANY_PIANO_KEY);
+            fail();
+        } catch (IllegalStateException e) {
+        }
+    }
+
+    @Test
+    public void releasePianoKeyWhenThereIsNoActiveSession() {
+        try {
+            releasePianoKey();
             fail();
         } catch (IllegalStateException e) {
         }
