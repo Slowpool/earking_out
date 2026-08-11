@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
-import org.swetlokognatsk.earking_out.inftrastructure.eventsourcing.EventStream;
+import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 
 public final class SessionPianoKeyboardUpdatingOnSessionStartedHandler {
 

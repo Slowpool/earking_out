@@ -3,8 +3,8 @@ package org.swetlokognatsk.earking_out.core.ports.di;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.di.HandmadeIoCContainer;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.di.SpringIoCContainer;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.di.HandmadeIoCContainer;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.di.SpringIoCContainer;
 
 public final class DI implements ApplicationContextAware {
     private static final String TEST_MODE = "test_mode";

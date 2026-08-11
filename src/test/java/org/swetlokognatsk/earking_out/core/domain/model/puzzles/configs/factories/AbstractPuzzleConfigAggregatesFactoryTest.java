@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.base.SerializationCloner;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.base.SerializationCloner;
 
 public final class AbstractPuzzleConfigAggregatesFactoryTest {
 

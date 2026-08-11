@@ -34,7 +34,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-@SpringBootApplication(scanBasePackages = { "org.swetlokognatsk.earking_out.app.desktop", "org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring" })
+@SpringBootApplication(scanBasePackages = { "org.swetlokognatsk.earking_out.app.desktop", "org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring" })
 public class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
