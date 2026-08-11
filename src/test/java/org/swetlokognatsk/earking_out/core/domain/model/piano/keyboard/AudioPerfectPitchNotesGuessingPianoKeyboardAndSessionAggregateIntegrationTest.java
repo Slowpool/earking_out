@@ -1,9 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import org.junit.*;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -34,12 +33,17 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     private PianoKeyboardId pianoKeyboardId;
     private AudioPerfectPitchExercise exercise;
 
-    /**
-     * make it dirty - means changing it's state by pressing some key, not releasing
-     * it
-     */
-    private void selectSomePianoKeyboardKey() {
+    private void pressSomePianoKeyboardKey() {
         pressPianoKey(ANY_PIANO_KEY);
+    }
+
+    private void selectSomePianoKeyboardKey() {
+        pressSomePianoKeyboardKey();
+    }
+
+    private void assertPianoKeyboardDoesNotHavePressedKeys() {
+        var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
+        assertNoSelectedKeys(guessingPianoKeyboard);
     }
 
     private void assertPianoKeyboardDoesNotHaveSelectedKeys() {
@@ -84,6 +88,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     @Before
     public void setup() {
         DI.refreshDependencies();
+        DomainEventHandlers.registerDomainEventHandlers();
         pianoKeyboardService = DI.get(PianoKeyboardService.class);
         pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
         sessionService = DI.get(AudioPerfectPitchSessionService.class);
@@ -101,6 +106,15 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         sessionService.start();
 
         assertPianoKeyboardDoesNotHaveSelectedKeys();
+    }
+
+    @Test
+    public void pianoKeyboardDoesNotHavePressedKeysAfterSessionStarting() {
+        pressSomePianoKeyboardKey();
+
+        sessionService.start();
+
+        assertPianoKeyboardDoesNotHavePressedKeys();
     }
 
     @Test

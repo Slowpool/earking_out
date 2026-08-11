@@ -70,4 +70,17 @@ public final class PianoKeyboardTestHelper {
         assertNoSelectedKeys(pianoKeyboardDto);
     }
 
+    public static void assertNoPressedKeys(final PianoKeyboardAggregate pianoKeyboard) {
+        var pianoKeyboardDto = pianoKeyboardDtoAssembler.assemble(pianoKeyboard);
+        assertNoPressedKeys(pianoKeyboardDto);
+    }
+
+    public static void assertNoPressedKeys(final PianoKeyboardDTO pianoKeyboard) {
+        assertNull(pianoKeyboard.pressedKey());
+    }
+
+    public static void assertDoesNotHaveEvents(final PianoKeyboardAggregate pianoKeyboard) {
+        var events = pianoKeyboard.flushEvents();
+        assertEquals(0, events.size());
+    }
 }

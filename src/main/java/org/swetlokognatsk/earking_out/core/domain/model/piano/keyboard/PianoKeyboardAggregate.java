@@ -275,4 +275,18 @@ public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId>
         selectedKeys.remove(pianoKey.keyNumber);
         pianoKey.unselect();
     }
+
+    public void refreshState() {
+        if (pressedKey != null) {
+            releaseKey();
+        }
+
+        for (var selectedKeyNumber : selectedKeys) {
+            var pianoKey = getPianoKeyEntity(selectedKeyNumber);
+            pianoKey.unselect();
+        }
+        selectedKeys.clear();
+
+        flushEvents();
+    }
 }

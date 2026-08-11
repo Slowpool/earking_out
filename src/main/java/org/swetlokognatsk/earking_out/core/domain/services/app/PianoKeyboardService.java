@@ -36,4 +36,16 @@ public final class PianoKeyboardService {
         }
     }
 
+    public void refreshPianoKeyboardState(final PianoKeyboardId pianoKeyboardId) {
+        var pianoKeyboardAggregate = repository.get(pianoKeyboardId);
+        try {
+            pianoKeyboardAggregate.refreshState();
+            repository.save(pianoKeyboardAggregate);
+        }
+        // TODO just Exception?
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

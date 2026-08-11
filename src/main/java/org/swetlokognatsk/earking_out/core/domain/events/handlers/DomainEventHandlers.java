@@ -35,5 +35,8 @@ public final class DomainEventHandlers {
 
         var sessionGuessingOnPianoKeyPressedHandler = DI.get(SessionGuessingOnPianoKeyPressedHandler.class);
         eventBus.subscribe(PianoKeyPressedEvent.class, sessionGuessingOnPianoKeyPressedHandler::handlePianoKeyPressedEvent);
+
+        var sessionPianoKeyboardUpdatingOnSessionStartedHandler = DI.get(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class);
+        eventBus.subscribe(SessionStartedEvent.class, sessionPianoKeyboardUpdatingOnSessionStartedHandler::handleSessionStartedEvent);
     }
 }

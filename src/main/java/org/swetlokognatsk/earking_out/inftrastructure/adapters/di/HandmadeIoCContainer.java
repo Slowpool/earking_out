@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.inftrastructure.adapters.di;
 
+import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
@@ -7,8 +8,14 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFact
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.PuzzleConfigUpdatingOnPianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionEventsLoggerHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
@@ -16,6 +23,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
@@ -74,9 +82,6 @@ public final class HandmadeIoCContainer implements IoCContainer {
     private static EventPublisher eventPublisher;
     private static InMemoryPianoKeyboardRepository inMemoryPianoKeyboardRepository;
     private static GreenrobotEventBus greenrobotEventBus;
-    private static SoundPlayerOnPianoKeyPressedHandler pianoKeyPressedHandler;
-    private static HintDemonstratingOnNewPuzzleCreatedHandler newpuzzleCreatedHandler;
-    private static HintDemonstratingOnHintRepeatingRequestedHandler hintRepeatingRequestedHandler;
     private static InMemoryEventStore inMemoryEventStore;
     private static JacksonJsonSerializer jacksonDomainEventJsonSerializer;
     private static PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
@@ -101,7 +106,11 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) new NotesNormalizingService();
 
         } else if (className.equals(HintDemonstrator.class.getName())) {
+            return (T) get(HintDemonstratorDelegator.class);
+
+        } else if (className.equals(HintDemonstratorDelegator.class.getName())) {
             return (T) new HintDemonstratorDelegator();
+
         } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
             return (T) (DI.inTestMode() ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
@@ -262,22 +271,28 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) greenrobotEventBus;
 
         } else if (className.equals(SoundPlayerOnPianoKeyPressedHandler.class.getName())) {
-            if (pianoKeyPressedHandler == null) {
-                pianoKeyPressedHandler = new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));
-            }
-            return (T) pianoKeyPressedHandler;
+            return (T) new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));
 
         } else if (className.equals(HintDemonstratingOnNewPuzzleCreatedHandler.class.getName())) {
-            if (newpuzzleCreatedHandler == null) {
-                newpuzzleCreatedHandler = new HintDemonstratingOnNewPuzzleCreatedHandler(get(HintDemonstratorDelegator.class));
-            }
-            return (T) newpuzzleCreatedHandler;
+            return (T) new HintDemonstratingOnNewPuzzleCreatedHandler(get(HintDemonstratorDelegator.class));
 
         } else if (className.equals(HintDemonstratingOnHintRepeatingRequestedHandler.class.getName())) {
-            if (hintRepeatingRequestedHandler == null) {
-                hintRepeatingRequestedHandler = new HintDemonstratingOnHintRepeatingRequestedHandler(get(HintDemonstratorDelegator.class));
-            }
-            return (T) hintRepeatingRequestedHandler;
+            return (T) new HintDemonstratingOnHintRepeatingRequestedHandler(get(HintDemonstratorDelegator.class));
+
+        } else if (className.equals(SessionEventsLoggerHandler.class.getName())) {
+            return (T) new SessionEventsLoggerHandler(get(EventStore.class));
+
+        } else if (className.equals(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class.getName())) {
+            return (T) new PuzzleConfigUpdatingOnPianoKeyPressedHandler(get(PuzzleConfigService.class));
+
+        } else if (className.equals(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class.getName())) {
+            return (T) new SessionPianoKeyboardUpdatingOnSessionStartedHandler(get(PianoKeyboardService.class));
+
+        } else if (className.equals(SessionGuessingOnPianoKeyPressedHandler.class.getName())) {
+            // TODO this logic must be in factory
+            var sessionServices = new HashMap<Exercise, SessionService<?, ?, ?>>();
+            sessionServices.put(new AudioPerfectPitchExercise(), get(AudioPerfectPitchSessionService.class));
+            return (T) new SessionGuessingOnPianoKeyPressedHandler(sessionServices);
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
@@ -287,15 +302,16 @@ public final class HandmadeIoCContainer implements IoCContainer {
     public void refreshDependencies() {
         inMemoryPuzzleConfigRepository = null;
         pianoKeyboardAggregatesFactory = null;
-        inMemoryPianoKeyboardRepository = null;
         audioClipPianoKeySoundsPlayer = null;
         mockPianoKeySoundsPlayer = null;
         inMemoryAudioPerfectPitchSessionRepository = null;
         domainEventsFactory = null;
         eventPublisher = null;
+        inMemoryPianoKeyboardRepository = null;
         greenrobotEventBus = null;
         inMemoryEventStore = null;
         jacksonDomainEventJsonSerializer = null;
+        pianoKeyboardDtoAssembler = null;
     }
 
 }
