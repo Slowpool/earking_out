@@ -19,8 +19,8 @@ public final class AudioPerfectPitchSessionService extends SessionService<AudioP
         super(puzzleConfigRepository, sessionRepository, sessionAggregatesFactory);
     }
 
-    public void guessViaPianoKeyPressing(final SessionId sessionId, final PianoKeyNumber keyNumber) {
-        var session = (AudioPerfectPitchSessionAggregate) sessionRepository.get(sessionId);
+    public void guessViaPianoKeyPressing(final PianoKeyNumber keyNumber) {
+        var session = (AudioPerfectPitchSessionAggregate) sessionRepository.getActiveSession();
         session.guessViaPianoKeyPressing(keyNumber);
         sessionRepository.save(session);
     }

@@ -15,6 +15,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.InMemoryRepositoryTest;
 import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.inftrastructure.adapters.session.TestSessionRepositoryHelper;
 
 public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepositoryTest<SessionId, AudioPerfectPitchSessionAggregate, InMemoryAudioPerfectPitchSessionRepository> {
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
@@ -28,14 +29,7 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
         DI.refreshDependencies();
         repository = DI.get(InMemoryAudioPerfectPitchSessionRepository.class);
 
-        seedTestSession();
-    }
-
-    private void seedTestSession() {
-        var sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
-        AudioPerfectPitchSessionAggregate someSession = sessionAggregatesFactory.create(new AudioPerfectPitchExercise());
-        seededSessionId = someSession.getId();
-        repository.save(someSession);
+        seededSessionId = TestSessionRepositoryHelper.seedTestSession(repository);
     }
 
     protected AudioPerfectPitchSessionAggregate getSomeAggregate() {

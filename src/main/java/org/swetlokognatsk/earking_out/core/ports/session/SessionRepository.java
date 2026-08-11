@@ -6,4 +6,5 @@ import org.swetlokognatsk.earking_out.core.ports.base.AggregateRootRepository;
 
 // TODO create event-sourcing implementation
 public interface SessionRepository<SA extends SessionAggregate<?, ?, ?, ?>> extends AggregateRootRepository<SessionId, SA> {
+    SA getActiveSession();
 }

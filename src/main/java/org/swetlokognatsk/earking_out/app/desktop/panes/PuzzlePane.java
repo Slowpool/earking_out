@@ -63,6 +63,7 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
     protected VBox buildPuzzlesProgress(final Label puzzleProgressLabel, final ProgressBar puzzlesProgressBar) {
         var puzzlesProgress = new VBox(puzzleProgressLabel, puzzlesProgressBar);
         puzzlesProgress.setAlignment(Pos.CENTER);
+        puzzlesProgress.setMaxWidth(500);
         return puzzlesProgress;
     }
 
