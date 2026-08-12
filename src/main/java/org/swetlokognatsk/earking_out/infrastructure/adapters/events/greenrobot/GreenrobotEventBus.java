@@ -4,6 +4,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
@@ -20,18 +21,13 @@ public final class GreenrobotEventBus implements org.swetlokognatsk.earking_out.
     }
 
     public <DE extends DomainEvent> void subscribe(final Class<DE> eventClass, final DomainEventHandler<DE> domainEventHandler) {
-        // TODO remove try/catch. it's for test purposes
-        try {
-            var handler = wrapDomainEventHandler(domainEventHandler);
-            innerEventBus.register(handler);
-        }
-        catch (Throwable e) {
-            int i = 5;
-        }
+        var handler = wrapDomainEventHandler(domainEventHandler);
+        innerEventBus.register(handler);
     }
 
     private Object wrapDomainEventHandler(final DomainEventHandler<?> domainEventHandler) {
         return switch (domainEventHandler) {
+        case HintDemonstratingOnNewPuzzleCreatedHandler dh -> new GreenrobotHintDemonstratingOnNewPuzzleCreatedHandler(dh);
         case HintDemonstratingOnHintRepeatingRequestedHandler dh -> new GreenrobotHintDemonstratingOnHintRepeatingRequestedHandler(dh);
         case SessionPianoKeyboardUpdatingOnSessionStartedHandler dh -> new GreenrobotSessionPianoKeyboardUpdatingOnSessionStartedHandler(dh);
         case SessionGuessingOnPianoKeyPressedHandler dh -> new GreenrobotSessionGuessingOnPianoKeyPressedHandler(dh);

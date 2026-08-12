@@ -8,20 +8,5 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedE
 
 public final class GreenrobotSessionStartedHandler {
 
-    protected final List<Consumer<SessionStartedEvent>> callbacks = new LinkedList<>();
-
-    public void appendCallback(final Consumer<SessionStartedEvent> callback) {
-        this.callbacks.add(callback);
-    }
-
-    protected final void traverseCallbacks(final SessionStartedEvent event) {
-        for (var callback : callbacks) {
-            callback.accept(event);
-        }
-    }
-
-    @Subscribe
-    public void onEvent(final SessionStartedEvent e) {
-        traverseCallbacks();
-    }
+    
 }

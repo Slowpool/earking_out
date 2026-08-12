@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
@@ -78,11 +79,21 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         return sessionRepository.getActiveSession();
     }
 
-    private AudioPerfectPitchSessionAggregate startAndAbortSession() {
+    private AudioPerfectPitchSessionAggregate startSession() {
         sessionService.start();
-        var activeSession = getActiveSession();
-        sessionService.abort(activeSession.getId());
-        return activeSession;
+        return sessionRepository.getActiveSession();
+    }
+
+    private AudioPerfectPitchSessionAggregate startAndAbortSession() {
+        var activeSession = startSession();
+        var activeSessionId = activeSession.getId();
+        sessionService.abort(activeSessionId);
+        var session = sessionRepository.get(activeSessionId);
+        return session;
+    }
+
+    private void abortSession(final SessionId sessionId) {
+        sessionService.abort(sessionId);
     }
 
     @Before
@@ -101,18 +112,22 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
 
     @Test
     public void pianoKeyboardDoesNotHaveSelectedKeysAfterSessionStarting() {
+        var session = startSession();
         selectSomePianoKeyboardKey();
+        abortSession(session.getId());
 
-        sessionService.start();
+        startSession();
 
         assertPianoKeyboardDoesNotHaveSelectedKeys();
     }
 
     @Test
     public void pianoKeyboardDoesNotHavePressedKeysAfterSessionStarting() {
+        var session = startSession();
         pressSomePianoKeyboardKey();
+        abortSession(session.getId());
 
-        sessionService.start();
+        startSession();
 
         assertPianoKeyboardDoesNotHavePressedKeys();
     }

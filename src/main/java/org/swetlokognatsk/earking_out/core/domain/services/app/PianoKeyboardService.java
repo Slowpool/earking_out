@@ -48,6 +48,10 @@ public final class PianoKeyboardService {
     }
 
     public void releasePianoKey(final PianoKeyboardId pianoKeyboardId) {
+        if (pianoKeyboardId.context == PianoKeyboardContext.SESSION) {
+            ensureThereIsActiveSession(pianoKeyboardId.exercise);
+        }
+
         var pianoKeyboardAggregate = repository.get(pianoKeyboardId);
         try {
             pianoKeyboardAggregate.releaseKey();

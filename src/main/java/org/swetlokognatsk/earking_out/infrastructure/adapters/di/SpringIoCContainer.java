@@ -16,6 +16,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstrat
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.PuzzleConfigUpdatingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionEventsLoggerHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
@@ -89,7 +90,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(PuzzleConfigService.class, () -> new PuzzleConfigService(ctx.getBean(PuzzleConfigRepository.class), ctx.getBean(PianoKeyboardRepository.class)));
 
-        ctx.registerBean(PianoKeyboardService.class, () -> new PianoKeyboardService(ctx.getBean(PianoKeyboardRepository.class)));
+        ctx.registerBean(PianoKeyboardService.class, () -> new PianoKeyboardService(ctx.getBean(PianoKeyboardRepository.class), ctx.getBean(AudioPerfectPitchSessionRepository.class)));
 
         ctx.registerBean(SolutionGeneratorsFactory.class);
 
@@ -133,6 +134,8 @@ public final class SpringIoCContainer implements IoCContainer {
 
         // TODO pass service or what?
         ctx.registerBean(SessionGuessingOnPianoKeyPressedHandler.class, () -> new SessionGuessingOnPianoKeyPressedHandler(null));
+
+        ctx.registerBean(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class, () -> new SessionPianoKeyboardUpdatingOnSessionStartedHandler(ctx.getBean(PianoKeyboardService.class)));
 
         ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class)), (BeanDefinition bd) -> bd.setPrimary(true));
 
