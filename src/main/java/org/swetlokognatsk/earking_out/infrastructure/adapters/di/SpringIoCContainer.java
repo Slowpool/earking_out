@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.di;
 
+import java.util.HashMap;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
@@ -13,12 +14,18 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFact
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnHintRepeatingRequestedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnNewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionFinishedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionStartedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnUserTriedToGuessPuzzleHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.PuzzleConfigUpdatingOnPianoKeyPressedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionEventsLoggerHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
@@ -30,6 +37,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboar
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
@@ -128,12 +136,24 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(HintDemonstratingOnHintRepeatingRequestedHandler.class, () -> new HintDemonstratingOnHintRepeatingRequestedHandler(ctx.getBean(HintDemonstratorDelegator.class)));
 
-        ctx.registerBean(SessionEventsLoggerHandler.class, () -> new SessionEventsLoggerHandler(ctx.getBean(EventStore.class)));
+        ctx.registerBean(LogEventOnSessionStartedHandler.class, () -> new LogEventOnSessionStartedHandler(ctx.getBean(EventStore.class)));
+
+        ctx.registerBean(LogEventOnNewPuzzleCreatedHandler.class, () -> new LogEventOnNewPuzzleCreatedHandler(ctx.getBean(EventStore.class)));
+
+        ctx.registerBean(LogEventOnUserTriedToGuessPuzzleHandler.class, () -> new LogEventOnUserTriedToGuessPuzzleHandler(ctx.getBean(EventStore.class)));
+
+        ctx.registerBean(LogEventOnHintRepeatingRequestedHandler.class, () -> new LogEventOnHintRepeatingRequestedHandler(ctx.getBean(EventStore.class)));
+
+        ctx.registerBean(LogEventOnSessionFinishedHandler.class, () -> new LogEventOnSessionFinishedHandler(ctx.getBean(EventStore.class)));
 
         ctx.registerBean(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class, () -> new PuzzleConfigUpdatingOnPianoKeyPressedHandler(ctx.getBean(PuzzleConfigService.class)));
 
         // TODO pass service or what?
-        ctx.registerBean(SessionGuessingOnPianoKeyPressedHandler.class, () -> new SessionGuessingOnPianoKeyPressedHandler(null));
+        ctx.registerBean(SessionGuessingOnPianoKeyPressedHandler.class, () -> {
+            var services = new HashMap<Exercise, SessionService<?, ?, ?>>();
+            services.put(new AudioPerfectPitchExercise(), ctx.getBean(AudioPerfectPitchSessionService.class));
+            return new SessionGuessingOnPianoKeyPressedHandler(services);
+        });
 
         ctx.registerBean(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class, () -> new SessionPianoKeyboardUpdatingOnSessionStartedHandler(ctx.getBean(PianoKeyboardService.class)));
 

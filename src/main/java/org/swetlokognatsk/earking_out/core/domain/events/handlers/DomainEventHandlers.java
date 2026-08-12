@@ -14,26 +14,33 @@ public final class DomainEventHandlers {
     public static void registerDomainEventHandlers() {
         var eventBus = DI.get(EventBus.class);
 
-        // TODO commented events aren't tested, so there're none of them in test env
-        // var soundPlayerOnPianoKeyPressedHandler = DI.get(SoundPlayerOnPianoKeyPressedHandler.class);
-        // eventBus.subscribe(PianoKeyPressedEvent.class, soundPlayerOnPianoKeyPressedHandler);
+        // TODO refactoring (map<Class,Class> + foreach?)
+        var soundPlayerOnPianoKeyPressedHandler = DI.get(SoundPlayerOnPianoKeyPressedHandler.class);
+        eventBus.subscribe(PianoKeyPressedEvent.class, soundPlayerOnPianoKeyPressedHandler);
 
-        // var hintDemonstratingOnHintRepeatingRequestedHandler = DI.get(HintDemonstratingOnHintRepeatingRequestedHandler.class);
-        // eventBus.subscribe(HintRepeatingRequestedEvent.class, hintDemonstratingOnHintRepeatingRequestedHandler);
+        var hintDemonstratingOnHintRepeatingRequestedHandler = DI.get(HintDemonstratingOnHintRepeatingRequestedHandler.class);
+        eventBus.subscribe(HintRepeatingRequestedEvent.class, hintDemonstratingOnHintRepeatingRequestedHandler);
 
         var hintDemonstratingOnNewPuzzleCreatedHandler = DI.get(HintDemonstratingOnNewPuzzleCreatedHandler.class);
         eventBus.subscribe(NewPuzzleCreatedEvent.class, hintDemonstratingOnNewPuzzleCreatedHandler);
 
-        // // TODO finish them
-        // var sessionEventsLoggerHandler = DI.get(SessionEventsLoggerHandler.class);
-        // eventBus.subscribe(SessionStartedEvent.class, sessionEventsLoggerHandler::handleSessionStartedEvent);
-        // eventBus.subscribe(NewPuzzleCreatedEvent.class, sessionEventsLoggerHandler::handleNewPuzzleCreatedEvent);
-        // eventBus.subscribe(UserTriedToGuessPuzzleEvent.class, sessionEventsLoggerHandler::handleUserTriedToGuessPuzzleEvent);
-        // eventBus.subscribe(HintRepeatingRequestedEvent.class, sessionEventsLoggerHandler::handleHintRepeatingRequestedEvent);
-        // eventBus.subscribe(SessionFinishedEvent.class, sessionEventsLoggerHandler::handleSessionFinishedEvent);
+        var logEventOnSessionStartedHandler = DI.get(LogEventOnSessionStartedHandler.class);
+        eventBus.subscribe(SessionStartedEvent.class, logEventOnSessionStartedHandler);
 
-        // var puzzleConfigUpdatingOnPianoKeyPressedHandler = DI.get(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class);
-        // eventBus.subscribe(PianoKeyPressedEvent.class, puzzleConfigUpdatingOnPianoKeyPressedHandler::handlePianoKeyPressedEvent);
+        var logEventOnNewPuzzleCreatedHandler = DI.get(LogEventOnNewPuzzleCreatedHandler.class);
+        eventBus.subscribe(NewPuzzleCreatedEvent.class, logEventOnNewPuzzleCreatedHandler);
+
+        var logEventOnUserTriedToGuessPuzzleHandler = DI.get(LogEventOnUserTriedToGuessPuzzleHandler.class);
+        eventBus.subscribe(UserTriedToGuessPuzzleEvent.class, logEventOnUserTriedToGuessPuzzleHandler);
+
+        var logEventOnHintRepeatingRequestedHandler = DI.get(LogEventOnHintRepeatingRequestedHandler.class);
+        eventBus.subscribe(HintRepeatingRequestedEvent.class, logEventOnHintRepeatingRequestedHandler);
+
+        var logEventOnSessionFinishedHandler = DI.get(LogEventOnSessionFinishedHandler.class);
+        eventBus.subscribe(SessionFinishedEvent.class, logEventOnSessionFinishedHandler);
+
+        var puzzleConfigUpdatingOnPianoKeyPressedHandler = DI.get(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class);
+        eventBus.subscribe(PianoKeyPressedEvent.class, puzzleConfigUpdatingOnPianoKeyPressedHandler);
 
         // var sessionGuessingOnPianoKeyPressedHandler = DI.get(SessionGuessingOnPianoKeyPressedHandler.class);
         // eventBus.subscribe(PianoKeyPressedEvent.class, sessionGuessingOnPianoKeyPressedHandler::handlePianoKeyPressedEvent);

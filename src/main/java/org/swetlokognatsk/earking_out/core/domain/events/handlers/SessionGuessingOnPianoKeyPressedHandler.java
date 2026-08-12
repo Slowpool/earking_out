@@ -4,6 +4,7 @@ import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 
@@ -20,6 +21,10 @@ public final class SessionGuessingOnPianoKeyPressedHandler implements DomainEven
     }
 
     public void handle(final PianoKeyPressedEvent event) {
+        if (event.pianoKeyboardId != PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING) {
+            return;
+        }
+
         var exercise = event.pianoKeyboardId.exercise;
         switch (exercise) {
         case AudioPerfectPitchExercise appe:

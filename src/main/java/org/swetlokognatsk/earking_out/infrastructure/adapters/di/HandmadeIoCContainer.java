@@ -9,7 +9,6 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.PuzzleConfigUpdatingOnPianoKeyPressedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionEventsLoggerHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
@@ -278,9 +277,6 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (className.equals(HintDemonstratingOnHintRepeatingRequestedHandler.class.getName())) {
             return (T) new HintDemonstratingOnHintRepeatingRequestedHandler(get(HintDemonstratorDelegator.class));
-
-        } else if (className.equals(SessionEventsLoggerHandler.class.getName())) {
-            return (T) new SessionEventsLoggerHandler(get(EventStore.class));
 
         } else if (className.equals(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class.getName())) {
             return (T) new PuzzleConfigUpdatingOnPianoKeyPressedHandler(get(PuzzleConfigService.class));

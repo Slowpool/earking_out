@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyP
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardContext;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 
-public final class PuzzleConfigUpdatingOnPianoKeyPressedHandler {
+public final class PuzzleConfigUpdatingOnPianoKeyPressedHandler implements DomainEventHandler<PianoKeyPressedEvent> {
 
     private final PuzzleConfigService puzzleConfigService;
 
@@ -12,7 +12,7 @@ public final class PuzzleConfigUpdatingOnPianoKeyPressedHandler {
         this.puzzleConfigService = puzzleConfigService;
     }
 
-    public void handlePianoKeyPressedEvent(final PianoKeyPressedEvent event) {
+    public void handle(final PianoKeyPressedEvent event) {
         if (event.pianoKeyboardId.context == PianoKeyboardContext.PUZZLE_CONFIG) {
             puzzleConfigService.updatePropertyViaPianoKeyPressing(event.pianoKeyboardId, event.pianoKeyNumber);
         }

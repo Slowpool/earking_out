@@ -41,6 +41,10 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         return state;
     }
 
+    public final boolean isInProgress() {
+        return state == SessionStates.IN_PROGRESS;
+    }
+
     protected final void setState(final SessionStates state) {
         this.state = state;
     }
