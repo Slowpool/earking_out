@@ -5,8 +5,8 @@ import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyP
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 
 public final class SessionGuessingOnPianoKeyPressedHandler extends DomainEventHandler<PianoKeyPressedEvent> {
 

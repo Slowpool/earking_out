@@ -97,4 +97,28 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
         } catch (IllegalStateException e) {
         }
     }
+
+    @Test
+    public void restoreSeveralSelectedKeys() {
+        try {
+            pianoKeyboard.restoreSelectedKeys(SOME_PIANO_KEYS);
+            fail();
+        }
+        // one key touch cannot have selected keys. if any key is selected, it also must be pressed, whereas restoreSelectedKeys mustn't do anything with pressed key
+        catch (IllegalStateException e) {
+        }
+    }
+
+    @Test
+    public void restoreSelectedKeysWhenSomeOtherKeysAreSelected() {
+        pianoKeyboard.pressKey(ANY_PIANO_KEY_NUMBER);
+
+        try {
+            pianoKeyboard.restoreSelectedKey(ANY_ANOTHER_PIANO_KEY_NUMBER);
+            fail();
+        }
+        // one key touch cannot have selected keys. if any key is selected, it also must be pressed, whereas restoreSelectedKeys mustn't do anything with pressed key
+        catch (IllegalStateException e) {
+        }
+    }
 }

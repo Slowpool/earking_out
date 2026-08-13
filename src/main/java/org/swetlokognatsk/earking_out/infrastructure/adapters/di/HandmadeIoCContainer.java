@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersR
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnHintRepeatingRequestedHandler;
@@ -27,13 +28,13 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.VisualPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
@@ -105,210 +106,212 @@ public final class HandmadeIoCContainer implements IoCContainer {
     @SuppressWarnings("unchecked")
     public <T> T get(Class<T> someClass, Object... args) {
 
-        var className = someClass.getName();
-        if (className.equals(NotesNormalizingService.class.getName())) {
+        if (someClass.equals(NotesNormalizingService.class)) {
             return (T) new NotesNormalizingService();
 
-        } else if (className.equals(HintDemonstrator.class.getName())) {
+        } else if (someClass.equals(HintDemonstrator.class)) {
             return (T) get(HintDemonstratorDelegator.class);
 
-        } else if (className.equals(HintDemonstratorDelegator.class.getName())) {
+        } else if (someClass.equals(HintDemonstratorDelegator.class)) {
             return (T) new HintDemonstratorDelegator();
 
-        } else if (className == SoundHarmonicIntervalHintDemonstrator.class.getName()) {
+        } else if (someClass == SoundHarmonicIntervalHintDemonstrator.class) {
             return (T) (DI.inTestMode() ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
-        } else if (className.equals(AudioPerfectPitchSolutionGenerator.class.getName())) {
+        } else if (someClass.equals(AudioPerfectPitchSolutionGenerator.class)) {
             return (T) (DI.inTestMode() ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
 
-        } else if (className.equals(VisualPerfectPitchSolutionGenerator.class.getName())) {
+        } else if (someClass.equals(VisualPerfectPitchSolutionGenerator.class)) {
             return (T) (DI.inTestMode() ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
 
-        } else if (className.equals(PianoKeyColorService.class.getName())) {
+        } else if (someClass.equals(PianoKeyColorService.class)) {
             return (T) new PianoKeyColorService();
 
-        } else if (className.equals(PuzzleConfigService.class.getName())) {
+        } else if (someClass.equals(PuzzleConfigService.class)) {
             return (T) new PuzzleConfigService(get(PuzzleConfigRepository.class), get(PianoKeyboardRepository.class));
 
-        } else if (className.equals(PianoKeyboardDtoAssembler.class.getName())) {
+        } else if (someClass.equals(PianoKeyboardDtoAssembler.class)) {
             if (pianoKeyboardDtoAssembler == null) {
                 pianoKeyboardDtoAssembler = new PianoKeyboardDtoAssembler();
             }
             return (T) pianoKeyboardDtoAssembler;
 
-        } else if (className.equals(PuzzleConfigRepository.class.getName())) {
+        } else if (someClass.equals(PuzzleConfigRepository.class)) {
             return (T) get(InMemoryPuzzleConfigRepository.class);
 
-        } else if (className.equals(AbstractPuzzleConfigAggregatesFactory.class.getName())) {
+        } else if (someClass.equals(AbstractPuzzleConfigAggregatesFactory.class)) {
             return (T) new AbstractPuzzleConfigAggregatesFactory(get(ObjectCloner.class));
 
-        } else if (className.equals(InMemoryPuzzleConfigRepository.class.getName())) {
+        } else if (someClass.equals(InMemoryPuzzleConfigRepository.class)) {
             if (inMemoryPuzzleConfigRepository == null) {
                 inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 
-        } else if (className.equals(PianoKeyboardRepository.class.getName())) {
+        } else if (someClass.equals(PianoKeyboardRepository.class)) {
             return (T) get(InMemoryPianoKeyboardRepository.class);
 
-        } else if (className.equals(InMemoryPianoKeyboardRepository.class.getName())) {
+        } else if (someClass.equals(InMemoryPianoKeyboardRepository.class)) {
             if (inMemoryPianoKeyboardRepository == null) {
                 inMemoryPianoKeyboardRepository = new InMemoryPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class), get(PianoKeyboardDtoAssembler.class));
             }
             return (T) inMemoryPianoKeyboardRepository;
 
-        } else if (className.equals(AudioPerfectPitchSessionService.class.getName())) {
+        } else if (someClass.equals(AudioPerfectPitchSessionService.class)) {
             return (T) new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class));
 
-        } else if (className.equals(PianoKeyboardService.class.getName())) {
+        } else if (someClass.equals(PianoKeyboardService.class)) {
             return (T) new PianoKeyboardService(get(PianoKeyboardRepository.class), get(AudioPerfectPitchSessionRepository.class));
 
-        } else if (className.equals(PianoKeyboardAggregatesFactory.class.getName())) {
+        } else if (someClass.equals(PianoKeyboardAggregatesFactory.class)) {
             if (pianoKeyboardAggregatesFactory == null) {
                 pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory(get(ObjectCloner.class), get(PianoKeysFactory.class));
             }
             return (T) pianoKeyboardAggregatesFactory;
 
-        } else if (className.equals(PianoKeysFactory.class.getName())) {
+        } else if (someClass.equals(PianoKeysFactory.class)) {
             return (T) new PianoKeysFactory(get(PianoKeyColorService.class));
 
-        } else if (className.equals(ObjectCloner.class.getName())) {
+        } else if (someClass.equals(ObjectCloner.class)) {
             return (T) get(SerializationCloner.class);
 
-        } else if (className.equals(SerializationCloner.class.getName())) {
+        } else if (someClass.equals(SerializationCloner.class)) {
             return (T) new SerializationCloner();
 
-        } else if (className.equals(PuzzlesFactory.class.getName())) {
+        } else if (someClass.equals(PuzzlesFactory.class)) {
             return (T) new PuzzlesFactory(get(SolutionGeneratorsFactory.class), get(PuzzleConfigDTOAssembler.class));
 
-        } else if (className.equals(SolutionGeneratorsFactory.class.getName())) {
+        } else if (someClass.equals(SolutionGeneratorsFactory.class)) {
             return (T) new SolutionGeneratorsFactory();
 
-        } else if (className.equals(PuzzleConfigDTOAssembler.class.getName())) {
+        } else if (someClass.equals(PuzzleConfigDTOAssembler.class)) {
             return (T) new PuzzleConfigDTOAssembler(get(PuzzleConfigRepository.class));
 
-        } else if (className.equals(SessionAggregatesFactory.class.getName())) {
+        } else if (someClass.equals(SessionAggregatesFactory.class)) {
             return (T) new SessionAggregatesFactory(get(ObjectCloner.class), get(PuzzleConfigRepository.class), get(PianoKeyboardRepository.class), get(PuzzleConfigDTOAssembler.class), get(PuzzlesFactory.class));
 
-        } else if (className.equals(PuzzlePanesFactory.class.getName())) {
+        } else if (someClass.equals(PuzzlePanesFactory.class)) {
             return (T) new PuzzlePanesFactory(get(SessionRepositoryDelegator.class), get(PianoKeyboardHandlersRegister.class), get(PianoKeyboardService.class));
 
-        } else if (className.equals(HintDemonstrator.class.getName())) {
+        } else if (someClass.equals(HintDemonstrator.class)) {
             return (T) new HintDemonstratorDelegator();
 
-        } else if (className.equals(PianoKeySoundsPlayer.class.getName())) {
+        } else if (someClass.equals(PianoKeySoundsPlayer.class)) {
             return (T) (DI.inTestMode() ? get(MockPianoKeySoundsPlayer.class) : get(AudioClipPianoKeySoundsPlayer.class));
 
-        } else if (className.equals(MockPianoKeySoundsPlayer.class.getName())) {
+        } else if (someClass.equals(MockPianoKeySoundsPlayer.class)) {
             if (mockPianoKeySoundsPlayer == null) {
                 mockPianoKeySoundsPlayer = new MockPianoKeySoundsPlayer();
             }
             return (T) mockPianoKeySoundsPlayer;
 
-        } else if (className.equals(AudioClipPianoKeySoundsPlayer.class.getName())) {
+        } else if (someClass.equals(AudioClipPianoKeySoundsPlayer.class)) {
             if (audioClipPianoKeySoundsPlayer == null) {
                 audioClipPianoKeySoundsPlayer = new AudioClipPianoKeySoundsPlayer();
             }
             return (T) audioClipPianoKeySoundsPlayer;
 
-        } else if (className.equals(PianoKeySoundFilesBuilder.class.getName())) {
+        } else if (someClass.equals(PianoKeySoundFilesBuilder.class)) {
             return (T) new PianoKeySoundFilesBuilder();
 
-        } else if (className.equals(AudioPerfectPitchHintDemonstrator.class.getName())) {
+        } else if (someClass.equals(AudioPerfectPitchHintDemonstrator.class)) {
             return (T) get(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class);
 
-        } else if (className.equals(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class.getName())) {
+        } else if (someClass.equals(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class)) {
             return (T) new PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(get(PianoKeySoundsPlayer.class));
 
-        } else if (className.equals(AudioPerfectPitchSessionRepository.class.getName())) {
+        } else if (someClass.equals(AudioPerfectPitchSessionRepository.class)) {
             return (T) get(InMemoryAudioPerfectPitchSessionRepository.class);
 
-        } else if (className.equals(InMemoryAudioPerfectPitchSessionRepository.class.getName())) {
+        } else if (someClass.equals(InMemoryAudioPerfectPitchSessionRepository.class)) {
             if (inMemoryAudioPerfectPitchSessionRepository == null) {
                 inMemoryAudioPerfectPitchSessionRepository = new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class));
             }
             return (T) inMemoryAudioPerfectPitchSessionRepository;
 
-        } else if (className.equals(SessionRepositoryDelegator.class.getName())) {
+        } else if (someClass.equals(SessionRepositoryDelegator.class)) {
             return (T) new SessionRepositoryDelegator();
 
-        } else if (className.equals(EndSessionAggregateDTOAssemblersFactory.class.getName())) {
+        } else if (someClass.equals(EndSessionAggregateDTOAssemblersFactory.class)) {
             return (T) new EndSessionAggregateDTOAssemblersFactory();
 
-        } else if (className.equals(StatsPanesFactory.class.getName())) {
+        } else if (someClass.equals(StatsPanesFactory.class)) {
             return (T) new StatsPanesFactory(get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class));
 
-        } else if (className.equals(DomainEventsFactory.class.getName())) {
+        } else if (someClass.equals(DomainEventsFactory.class)) {
             if (domainEventsFactory == null) {
                 domainEventsFactory = new DomainEventsFactory();
             }
             return (T) domainEventsFactory;
 
-        } else if (className.equals(EventPublisher.class.getName())) {
+        } else if (someClass.equals(EventPublisher.class)) {
             return (T) get(GreenrobotEventBus.class);
 
-        } else if (className.equals(EventBus.class.getName())) {
+        } else if (someClass.equals(EventBus.class)) {
             return (T) get(GreenrobotEventBus.class);
 
-        } else if (className.equals(DomainEventJsonSerializer.class.getName())) {
+        } else if (someClass.equals(DomainEventJsonSerializer.class)) {
             return (T) get(JacksonJsonSerializer.class);
 
-        } else if (className.equals(JacksonJsonSerializer.class.getName())) {
+        } else if (someClass.equals(JacksonJsonSerializer.class)) {
             if (jacksonDomainEventJsonSerializer == null) {
                 jacksonDomainEventJsonSerializer = new JacksonJsonSerializer();
             }
             return (T) jacksonDomainEventJsonSerializer;
 
-        } else if (className.equals(EventStore.class.getName())) {
+        } else if (someClass.equals(EventStore.class)) {
             return (T) get(InMemoryEventStore.class);
 
-        } else if (className.equals(InMemoryEventStore.class.getName())) {
+        } else if (someClass.equals(InMemoryEventStore.class)) {
             if (inMemoryEventStore == null) {
                 inMemoryEventStore = new InMemoryEventStore(get(DomainEventJsonSerializer.class));
             }
             return (T) inMemoryEventStore;
 
-        } else if (className.equals(GreenrobotEventBus.class.getName())) {
+        } else if (someClass.equals(GreenrobotEventBus.class)) {
             if (greenrobotEventBus == null) {
                 greenrobotEventBus = new GreenrobotEventBus(org.greenrobot.eventbus.EventBus.getDefault());
             }
             return (T) greenrobotEventBus;
 
-        } else if (className.equals(SoundPlayerOnPianoKeyPressedHandler.class.getName())) {
+        } else if (someClass.equals(SoundPlayerOnPianoKeyPressedHandler.class)) {
             return (T) new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));
 
-        } else if (className.equals(HintDemonstratingOnNewPuzzleCreatedHandler.class.getName())) {
+        } else if (someClass.equals(HintDemonstratingOnNewPuzzleCreatedHandler.class)) {
             return (T) new HintDemonstratingOnNewPuzzleCreatedHandler(get(HintDemonstratorDelegator.class));
 
-        } else if (className.equals(HintDemonstratingOnHintRepeatingRequestedHandler.class.getName())) {
+        } else if (someClass.equals(HintDemonstratingOnHintRepeatingRequestedHandler.class)) {
             return (T) new HintDemonstratingOnHintRepeatingRequestedHandler(get(HintDemonstratorDelegator.class));
 
-        } else if (className.equals(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class.getName())) {
+        } else if (someClass.equals(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class)) {
             return (T) new PuzzleConfigUpdatingOnPianoKeyPressedHandler(get(PuzzleConfigService.class));
 
-        } else if (className.equals(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class.getName())) {
+        } else if (someClass.equals(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class)) {
             return (T) new SessionPianoKeyboardUpdatingOnSessionStartedHandler(get(PianoKeyboardService.class));
 
-        } else if (className.equals(SessionGuessingOnPianoKeyPressedHandler.class.getName())) {
+        } else if (someClass.equals(SessionGuessingOnPianoKeyPressedHandler.class)) {
             // TODO this logic must be in factory
             var sessionServices = new HashMap<Exercise, SessionService<?, ?, ?>>();
             sessionServices.put(new AudioPerfectPitchExercise(), get(AudioPerfectPitchSessionService.class));
             return (T) new SessionGuessingOnPianoKeyPressedHandler(sessionServices);
 
-        } else if (className.equals(LogEventOnSessionStartedHandler.class.getName())) {
+        } else if (someClass.equals(LogEventOnSessionStartedHandler.class)) {
             return (T) new LogEventOnSessionStartedHandler(get(EventStore.class));
 
-        } else if (className.equals(LogEventOnNewPuzzleCreatedHandler.class.getName())) {
+        } else if (someClass.equals(LogEventOnNewPuzzleCreatedHandler.class)) {
             return (T) new LogEventOnNewPuzzleCreatedHandler(get(EventStore.class));
 
-        } else if (className.equals(LogEventOnUserTriedToGuessPuzzleHandler.class.getName())) {
+        } else if (someClass.equals(LogEventOnUserTriedToGuessPuzzleHandler.class)) {
             return (T) new LogEventOnUserTriedToGuessPuzzleHandler(get(EventStore.class));
 
-        } else if (className.equals(LogEventOnHintRepeatingRequestedHandler.class.getName())) {
+        } else if (someClass.equals(LogEventOnHintRepeatingRequestedHandler.class)) {
             return (T) new LogEventOnHintRepeatingRequestedHandler(get(EventStore.class));
 
-        } else if (className.equals(LogEventOnSessionFinishedHandler.class.getName())) {
+        } else if (someClass.equals(LogEventOnSessionFinishedHandler.class)) {
             return (T) new LogEventOnSessionFinishedHandler(get(EventStore.class));
+
+        } else if (someClass.equals(ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler.class)) {
+            return (T) new ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler(get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());

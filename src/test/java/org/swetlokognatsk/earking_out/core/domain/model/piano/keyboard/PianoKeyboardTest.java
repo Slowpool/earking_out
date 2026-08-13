@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
-import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.Before;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
@@ -12,6 +12,8 @@ abstract class PianoKeyboardTest {
     protected PianoKeyboardAggregate pianoKeyboard;
 
     protected static final PianoKeyNumber ANY_PIANO_KEY_NUMBER = FIRST_NOTE_NUMBER;
+    protected static final PianoKeyNumber ANY_ANOTHER_PIANO_KEY_NUMBER = LAST_NOTE_NUMBER;
+    protected static final PianoKeyNumber[] SOME_PIANO_KEYS = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, ANY_ANOTHER_PIANO_KEY_NUMBER };
 
     @Before
     public void before() {

@@ -55,7 +55,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
         var pianoKeyboard = createPianoKeyboard();
         ensureSomePianoKeysAreSelected(pianoKeyboard);
 
-        pianoKeyboard.refreshState();
+        pianoKeyboard.resetState();
 
         assertNoSelectedKeys(pianoKeyboard);
     }
@@ -65,7 +65,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
         var pianoKeyboard = createPianoKeyboard();
         ensureSomePianoKeysArePressed(pianoKeyboard);
 
-        pianoKeyboard.refreshState();
+        pianoKeyboard.resetState();
 
         assertNoPressedKeys(pianoKeyboard);
     }
@@ -75,7 +75,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
         var pianoKeyboard = createPianoKeyboard();
         makeSomeEvents(pianoKeyboard);
 
-        pianoKeyboard.refreshState();
+        pianoKeyboard.resetState();
 
         assertDoesNotHaveEvents(pianoKeyboard);
     }

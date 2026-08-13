@@ -121,4 +121,54 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
         assertOnlyThisKeyIsSelected(nextPianoKeyNumber, pianoKeyboard);
     }
 
+    @Test
+    public void restoreSeveralSelectedKeys() {
+        try {
+            pianoKeyboard.restoreSelectedKeys(SOME_PIANO_KEYS);
+            fail();
+        }
+        // TODO throw different exceptions here for all piano keyboard modes
+        // only one key can be selected
+        catch (IllegalStateException e) {
+        }
+    }
+
+    @Test
+    public void restoreSelectedKey() {
+        var pianoKey = ANY_PIANO_KEY_NUMBER;
+        pianoKeyboard.restoreSelectedKey(pianoKey);
+
+        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
+    }
+
+    @Test
+    public void restoreSelectedKeyDoesNotAddPressedKey() {
+        pianoKeyboard.restoreSelectedKey(ANY_PIANO_KEY_NUMBER);
+
+        assertNull(pianoKeyboard.getPressedPianoKeyNumber());
+    }
+
+    @Test
+    public void restoreSelectedKeyEvents() {
+        pianoKeyboard.flushEvents();
+
+        pianoKeyboard.restoreSelectedKey(ANY_PIANO_KEY_NUMBER);
+
+        var numberOfEvents = pianoKeyboard.flushEvents().size();
+        assertEquals(0, numberOfEvents);
+    }
+
+    @Test
+    public void restoreSelectedKeysWhenSomeAnotherKeyIsSelected() {
+        pianoKeyboard.touchKey(ANY_PIANO_KEY_NUMBER);
+
+        try {
+            pianoKeyboard.restoreSelectedKey(ANY_ANOTHER_PIANO_KEY_NUMBER);
+            fail();
+        }
+        // TODO throw different exceptions here for all piano keyboard modes
+        catch (IllegalStateException e) {
+        }
+    }
+
 }

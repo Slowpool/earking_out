@@ -63,10 +63,10 @@ public final class PianoKeyboardService {
         }
     }
 
-    public void refreshPianoKeyboardState(final PianoKeyboardId pianoKeyboardId) {
+    public void resetPianoKeyboardState(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboardAggregate = repository.get(pianoKeyboardId);
         try {
-            pianoKeyboardAggregate.refreshState();
+            pianoKeyboardAggregate.resetState();
             repository.save(pianoKeyboardAggregate);
         }
         // TODO just Exception?

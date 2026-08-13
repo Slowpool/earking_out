@@ -276,7 +276,7 @@ public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId>
         pianoKey.unselect();
     }
 
-    public void refreshState() {
+    public void resetState() {
         if (pressedKey != null) {
             releaseKey();
         }
@@ -288,5 +288,28 @@ public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId>
         selectedKeys.clear();
 
         flushEvents();
+    }
+
+    public void restoreSelectedKeys(final PianoKeyNumber[] newSelectedKeys) {
+        // TODO refactoring via polymorphism
+        if (mode == PianoKeyboardMode.ONE_KEY_TOUCH) {
+            throw new IllegalStateException("selected keys cannot be set in this mode");
+        }
+
+        if (mode == PianoKeyboardMode.ONE_KEY_SELECT && newSelectedKeys.length > 1) {
+            throw new IllegalStateException("this mode requires no more than one newSelectedKey. passed: " + newSelectedKeys.length);
+        }
+
+        if (selectedKeys.size() != 0) {
+            throw new IllegalStateException("selected keys cannot be restored of some other keys are already selected");
+        }
+
+        for (var newSelectedKey : newSelectedKeys) {
+            selectKey(getPianoKeyEntity(newSelectedKey));
+        }
+    }
+
+    public void restoreSelectedKey(final PianoKeyNumber newSelectedKey) {
+        restoreSelectedKeys(new PianoKeyNumber[] { newSelectedKey });
     }
 }

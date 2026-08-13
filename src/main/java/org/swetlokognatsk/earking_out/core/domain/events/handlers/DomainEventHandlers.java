@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.logging.Handler;
 import static java.util.Map.entry;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
@@ -40,5 +41,7 @@ public final class DomainEventHandlers {
         eventBus.subscribe(SessionStartedEvent.class, DI.get(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class));
 
         eventBus.subscribe(PianoKeyPressedEvent.class, DI.get(SessionGuessingOnPianoKeyPressedHandler.class));
+
+        eventBus.subscribe(AudioPerfectPitchExercisePickedEvent.class, DI.get(ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler.class));
     }
 }

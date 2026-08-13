@@ -18,12 +18,13 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -75,7 +76,7 @@ public class EarkingOutApplication extends Application {
     }
 
     private ExercisesMenu buildExercisesMenu() {
-        var exercisesMenu = new ExercisesMenu("exercises", this::openConfigPane);
+        var exercisesMenu = new ExercisesMenu("exercises", this::openConfigPaneOnExercisePicking);
         return exercisesMenu;
     }
 
@@ -103,9 +104,13 @@ public class EarkingOutApplication extends Application {
         contentPane.setCenter(pane);
     }
 
-    private void openConfigPane(ActionEvent e) {
+    private void openConfigPaneOnExercisePicking(ActionEvent e) {
         var menuItem = (MenuItem) e.getTarget();
-        Exercise exercise = (Exercise) menuItem.getUserData();
+        var exercise = (Exercise) menuItem.getUserData();
+
+        var exerciseService = DI.get(ExerciseService.class);
+        exerciseService.pickExercise(exercise);
+
         showConfigPane(exercise);
     }
 

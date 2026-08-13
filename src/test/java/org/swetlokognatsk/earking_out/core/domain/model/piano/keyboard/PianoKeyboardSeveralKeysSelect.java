@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
@@ -62,4 +63,42 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
         assertNoSelectedKeys(pianoKeyboard);
     }
+// TODO 11 tests are expected to be wrong
+    @Test
+    public void restoreSeveralSelectedKeys() {
+        pianoKeyboard.restoreSelectedKeys(SOME_PIANO_KEYS);
+
+        assertOnlyTheseKeysAreSelected(SOME_PIANO_KEYS, pianoKeyboard);
+    }
+
+    @Test
+    public void restoreSeveralSelectedKeysDoesNotAddPressedKey() {
+        pianoKeyboard.restoreSelectedKeys(SOME_PIANO_KEYS);
+
+        assertNull(pianoKeyboard.getPressedPianoKeyNumber());
+    }
+
+    @Test
+    public void restoreSeveralSelectedKeysEvents() {
+        pianoKeyboard.flushEvents();
+
+        pianoKeyboard.restoreSelectedKeys(SOME_PIANO_KEYS);
+
+        var numberOfEvents = pianoKeyboard.flushEvents().size();
+        assertEquals(0, numberOfEvents);
+    }
+
+    @Test
+    public void restoreSelectedKeyWhenSomeAnotherKeyIsSelected() {
+        pianoKeyboard.touchKey(ANY_PIANO_KEY_NUMBER);
+
+        try {
+            pianoKeyboard.restoreSelectedKey(ANY_ANOTHER_PIANO_KEY_NUMBER);
+            fail();
+        }
+        // TODO it actually can be implemented somehow, but i cannot imagine situation when it's useful
+        catch (IllegalStateException e) {
+        }
+    }
+
 }
