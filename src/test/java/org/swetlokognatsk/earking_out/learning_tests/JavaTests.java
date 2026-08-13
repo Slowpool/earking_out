@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.learning_tests;
 
+import java.lang.Thread;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import static org.junit.Assert.*;
 import java.time.LocalDateTime;
@@ -42,638 +43,709 @@ import javafx.collections.ObservableSet;
 import scala.Int;
 
 public class JavaTests {
-    @Test
-    public void genericTest1() {
-        Foo foo = new Foo();
-        var contains = foo.list.get(0).contains("test");
-        assertTrue(contains);
+    // @Test
+    // public void genericTest1() {
+    //     Foo foo = new Foo();
+    //     var contains = foo.list.get(0).contains("test");
+    //     assertTrue(contains);
+    // }
+
+    // @Test
+    // public void diamondMethodParameterInferringTest1() {
+    //     acceptsBarString(new Bar<>());
+    // }
+
+    // public void acceptsBarString(Bar<String> bar) {
+    //     bar.variable = "test";
+    //     assertEquals(bar.variable.getClass(), String.class);
+    // }
+
+    // @Test
+    // public void diamondMethodParameterInferringTest2() {
+    //     var bar = acceptsBarStringAndReturnsIt(new Bar<>());
+    //     assertEquals(bar.variable.getClass(), String.class);
+    // }
+
+    // public Bar<String> acceptsBarStringAndReturnsIt(Bar<String> bar) {
+    //     bar.variable = "test";
+    //     return bar;
+    // }
+
+    // @Test
+    // public void diamondMethodParameterInferringTest3() {
+    //     var bar = acceptsBarGeneric(new Bar<>());
+    //     assertEquals(Object.class, bar.variable.getClass());
+    // }
+
+    // public <T extends Object> Bar<T> acceptsBarGeneric(Bar<T> bar) {
+    //     // compile error
+    //     // bar.variable = new T();
+    //     bar.variable = (T) new Object();
+    //     return bar;
+    // }
+
+    // @Test
+    // public void scalaBigDecimalSum() {
+    //     scala.math.BigDecimal scalaBigDecimal1 = scala.math.BigDecimal.valueOf(1);
+    //     scala.math.BigDecimal scalaBigDecimal2 = scala.math.BigDecimal.valueOf(2);
+    //     var sum = scalaBigDecimal1.$plus(scalaBigDecimal2);
+    //     assertEquals(scala.math.BigDecimal.valueOf(3), sum);
+    // }
+
+    // @Test
+    // public void javaBigDecimalSum() {
+    //     java.math.BigDecimal javaBigDecimal1 = java.math.BigDecimal.valueOf(1);
+    //     java.math.BigDecimal javaBigDecimal2 = java.math.BigDecimal.valueOf(2);
+    //     var sum = javaBigDecimal1.add(javaBigDecimal2);
+    //     assertNotEquals(scala.math.BigDecimal.valueOf(3), sum);
+    //     assertEquals(scala.math.BigDecimal.valueOf(3).intValue(), sum.intValue());
+    // }
+
+    // @Test
+    // public void recordsEqualityTest() {
+    //     double length = 10;
+    //     double width = 20;
+    //     var rectangle1 = new Rectangle(width, length);
+    //     var rectangle2 = new Rectangle(width, length);
+    //     assertTrue(rectangle1.equals(rectangle2));
+    //     assertTrue(rectangle2.equals(rectangle1));
+    //     assertEquals(rectangle2, rectangle1);
+    //     assertEquals(rectangle1, rectangle2);
+    // }
+
+    // @Test
+    // public void recordToStringTest() {
+    //     double someNumber = 1.0D;
+    //     var rectangle = new Rectangle(someNumber, someNumber);
+    //     assertEquals("Rectangle[width=1.0, length=1.0]", rectangle.toString());
+    // }
+
+    // @Test
+    // public void recordCompactConstructorTest() {
+    //     try {
+    //         var rectangle = new Rectangle(-1, 1);
+    //         fail();
+    //     } catch (IllegalArgumentException e) {
+    //         assertEquals("width cannot be negative", e.getMessage());
+    //     }
+    // }
+
+    // @Test
+    // public void recordsInheritingTest() {
+    //     assertTrue(java.lang.Record.class.isAssignableFrom(Rectangle.class));
+    //     assertFalse(java.lang.Record.class.isAssignableFrom(Foo.class));
+    // }
+
+    // @Test
+    // public void instanceInitializer() {
+    //     var obj = new InstanceInitializer();
+    //     assertEquals(obj.value, 1);
+    // }
+
+    // @Test
+    // public void rawTypeTest() {
+    //     var rawType = new SomeGenericClass();
+    //     var variable = rawType.variable;
+    // }
+
+    // void toCommandHandler(Executor executor) {
+    //     var _this = this;
+    //     // Function test = () -> executor.supplyAsync(() -> _this.doSomething());
+    // }
+
+    // @Test
+    // public void javaTypeHole() {
+    //     var ring = new Ring() {
+    //     };
+    //     try {
+    //         var bring = (Bring) ring;
+    //         fail();
+    //     } catch (ClassCastException e) {
+    //     }
+    // }
+
+    // @Test
+    // public void switchTest1() {
+    //     var day = Day.Mon;
+    //     boolean value = doSwitch(day);
+    //     assertTrue(value);
+    // }
+
+    // @Test
+    // public void switchTest2() {
+    //     var day = Day.Thu;
+    //     boolean value = doSwitch(day);
+    //     assertFalse(value);
+    // }
+
+    // @Test
+    // public void switchTest3() {
+    //     var day = Day.Sun;
+    //     try {
+    //         doSwitch(day);
+    //         fail();
+    //     } catch (RuntimeException e) {
+    //     }
+    // }
+
+    // private boolean doSwitch(Day day) {
+    //     return switch (day) {
+    //     case Mon, Tue -> true;
+    //     case Sun -> throw new RuntimeException();
+    //     default -> false;
+    //     };
+    // }
+
+    // @Test
+    // public void switchTest4() {
+    //     int number1;
+    //     var day = Day.Mon;
+    //     var result = switch (day) {
+    //     case Mon, Tue -> number1 = 1;
+    //     case Sun -> throw new RuntimeException();
+    //     default -> number1 = 2;
+    //     };
+    //     assertEquals(result, number1);
+
+    //     int number2;
+    //     switch (day) {
+    //     case Mon, Tue -> number2 = 1;
+    //     case Sun -> throw new RuntimeException();
+    //     default -> number2 = 2;
+    //     }
+    //     assertEquals(number1, number2);
+    //     assertEquals(1, number1);
+    //     assertEquals(1, number2);
+    // }
+
+    // @Test
+    // public void switchTest5() {
+    //     int number1;
+    //     Day day = null;
+    //     var result = switch (day) {
+    //     case Mon, Tue, Wed, Thu, Fri, Sat, Sun -> 1;
+    //     case null -> 2;
+    //     default -> 3;
+    //     };
+    //     assertEquals(result, 2);
+    // }
+
+    // @Test
+    // public void returningPolymorphObjectViaGeneric() {
+    //     var result = polymorphing();
+    // }
+
+    // private BaseClass polymorphing() {
+    //     return new DerivedClass();
+    // }
+
+    // @Test
+    // public void oneMoreGenericsQuestion1() {
+    //     var genericString1 = gettingTheValue1(new MyGenericString());
+    //     assertEquals(MyGenericString.class.getName(), genericString1);
+
+    //     var genericString2 = gettingTheValue2(new MyGenericString());
+    //     assertEquals(MyGenericString.class.getName(), genericString2);
+
+    //     var generic1 = gettingTheValue1(new MyGeneric<String>());
+    //     assertEquals(MyGeneric.class.getName(), generic1);
+
+    //     var generic2 = gettingTheValue2(new MyGeneric<String>());
+    //     assertEquals(MyGeneric.class.getName(), generic2);
+    // }
+
+    // private String gettingTheValue1(MyGeneric<?> someClass) {
+    //     return someClass.getClass().getName();
+    // }
+
+    // private <T extends MyGeneric<?>> String gettingTheValue2(T someClass) {
+    //     return someClass.getClass().getName();
+    // }
+
+    // @Test
+    // public void oneMoreGenericsQuestion2() {
+    //     var genericString1 = gettingTheValue3(new MyGenericString());
+    //     assertEquals(MyGenericString.class, genericString1.getClass());
+
+    //     var genericString2 = gettingTheValue4(new MyGenericString());
+    //     assertEquals(MyGenericString.class, genericString2.getClass());
+
+    //     var generic1 = gettingTheValue3(new MyGeneric<String>());
+    //     assertEquals(MyGeneric.class, generic1.getClass());
+
+    //     var generic2 = gettingTheValue4(new MyGeneric<String>());
+    //     assertEquals(MyGeneric.class, generic2.getClass());
+    // }
+
+    // private MyGeneric<?> gettingTheValue3(MyGeneric<?> someClass) {
+    //     return someClass;
+    // }
+
+    // private <T extends MyGeneric<?>> T gettingTheValue4(T someClass) {
+    //     return someClass;
+    // }
+
+    // @Test
+    // public void polymorphismTest1() {
+    //     Child child = new Child();
+    //     assertEquals("child", child.foo(child));
+    //     assertEquals("parent", child.parentFooViaSuper(child));
+    //     assertEquals("parent", child.parentFooViaCast(child));
+    // }
+
+    // @Test
+    // public void toStringTest1() {
+    //     assertEquals(String.valueOf(true), "true");
+    // }
+
+    // @Test
+    // public void invalidationListenerTest1() {
+    //     var lol = "bazingalol";
+    //     var result = Child.doSomething((firstArg, secondArg) -> {
+    //         return firstArg + secondArg;
+    //     });
+
+    //     assertEquals(lol, result);
+    // }
+
+    // @Test
+    // public void stringTest1() {
+    //     String string1 = "bazinga";
+
+    //     var castedString1 = string1.toString();
+    //     assertEquals(string1, castedString1);
+
+    //     var castedString2 = (String) string1;
+    //     assertEquals(string1, castedString2);
+
+    //     var castedString3 = String.valueOf(string1);
+    //     assertEquals(string1, castedString3);
+    // }
+
+    // @Test
+    // public void genericMethodWithGenericReturnType1() {
+    //     var varObj = getGenericObj();
+    //     Object objObj = getGenericObj();
+    //     Parent parentObj = getGenericObj();
+    //     Child childObj = getGenericObj();
+
+    //     assertEquals(varObj.getClass().getName(), Child.class.getName());
+    //     assertEquals(objObj.getClass().getName(), Child.class.getName());
+    //     assertEquals(parentObj.getClass().getName(), Child.class.getName());
+    //     assertEquals(childObj.getClass().getName(), Child.class.getName());
+    // }
+
+    // @Test
+    // public void genericMethodWithGenericReturnType2() {
+    //     var varObj = getNotGenericObj();
+    //     Object objObj = getNotGenericObj();
+    //     Parent parentObj = getNotGenericObj();
+    //     Child childObj = (Child) getNotGenericObj();
+
+    //     assertEquals(varObj.getClass().getName(), Child.class.getName());
+    //     assertEquals(objObj.getClass().getName(), Child.class.getName());
+    //     assertEquals(parentObj.getClass().getName(), Child.class.getName());
+    //     assertEquals(childObj.getClass().getName(), Child.class.getName());
+    // }
+
+    // private <P extends Parent> P getGenericObj() {
+    //     return (P) new Child();
+    // }
+
+    // private Parent getNotGenericObj() {
+    //     return new Child();
+    // }
+
+    // @Test
+    // public void enumToStringTest1() {
+    //     var castedValue = Days.MONDAY.toString();
+    //     var interpolatedValue = "" + Days.MONDAY;
+    //     assertEquals("MONDAY", castedValue);
+    //     assertEquals("MONDAY", interpolatedValue);
+    // }
+
+    // @Test
+    // public void weirdoCast() {
+    //     Object object = new Object();
+    //     try {
+    //         var byteObject = (Byte) object;
+    //         fail();
+    //     } catch (ClassCastException e) {
+    //     }
+    //     try {
+    //         var mouseObject = (Mouse) object;
+    //         fail();
+    //     } catch (ClassCastException e) {
+    //     }
+    //     try {
+    //         var observableList = (ObservableSet<Byte>) object;
+    //         fail();
+    //     } catch (ClassCastException e) {
+    //     }
+    // }
+
+    // @Test
+    // public void weirdoCast2() {
+    //     var book = new Book<String>();
+    //     book.cover = "bazinga";
+
+    //     Object objBook = book;
+    //     Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
+    //     try {
+    //         var x = bookWithByteCover.cover;
+    //         fail();
+    //     } catch (ClassCastException e) {
+    //     }
+    // }
+
+    // @Test
+    // public void uncheckedCastCatching() {
+    //     var book = new Book<String>();
+    //     book.cover = "bazinga";
+
+    //     Object objBook = book;
+    //     try {
+    //         Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
+    //     } catch (ClassCastException e) {
+
+    //     }
+    // }
+
+    // @Test
+    // public void theMostWildThingIVeSeenTest() {
+    // }
+
+    // // protected static int test = 5;
+    // // public static final byte source = (byte)((byte)84 / test);
+    // // public static final byte dervied = (byte) (source / 1);
+    // // public static final byte result = dervied * 1;
+
+    // static final int first = 126;
+    // static final byte second = first + 1;
+
+    // @Test
+    // public void genericsTest5() {
+    // }
+
+    // public static <I extends Id, EF extends EntitiesFactory<? extends Entity<I>>> EF createFactory(final I id) {
+    //     var factory = switch (id) {
+    //     case PersonId i -> new PersonsFactory();
+    //     case AnimalId i -> new AnimalsFactory();
+    //     case RockId i -> new RocksFactory();
+    //     default -> throw new IllegalArgumentException("unknown id: " + id);
+    //     };
+    //     return (EF) factory;
+    // }
+
+    // @Test
+    // public void nullTest() {
+    //     Person person = new Person();
+    //     setPersonToNull(person);
+    //     assertNotEquals(null, person);
+    // }
+
+    // protected void setPersonToNull(Person person) {
+    //     person = null;
+    // }
+
+    // @Test
+    // public void genericTest6() {
+    //     getSomething();
+    // }
+
+    // protected Generic<Id> getSomething() {
+    //     // // error
+    //     // Finite finite = new Finite();
+    //     // Generic<Id> casted = finite;
+
+    //     // // error
+    //     // Finite finite = new Finite();
+    //     // Generic<Id> casted = (Generic<Id>) finite;
+
+    //     // fine, though warning
+    //     Generic<?> finite = new Finite();
+    //     Generic<Id> casted = (Generic<Id>) finite;
+
+    //     return casted;
+    // }
+
+    // @Test
+    // public void switchTest6() {
+    //     Object person = new John();
+    //     switch (person) {
+    //     case String s:
+    //         fail();
+    //         break;
+    //     case John p:
+    //         break;
+    //     case Person p:
+    //         fail();
+    //         break;
+    //     default:
+    //         fail();
+    //         break;
+    //     }
+    // }
+
+    // @Test
+    // public void switchGenericTest() {
+    //     Person person = new John();
+    //     switchGeneric1(person);
+    //     switchGeneric2(person);
+    // }
+
+    // protected <P extends Person> void switchGeneric1(P person) {
+    //     switch (person) {
+    //     case John p:
+    //         break;
+    //     case Person p:
+    //         fail();
+    //         break;
+    //     }
+    // }
+
+    // protected <P extends Person> void switchGeneric2(P person) {
+    //     switch (person) {
+    //     case John p:
+    //         break;
+    //     case P p:
+    //         fail();
+    //         break;
+    //     }
+    // }
+
+    // @Test
+    // public void genericTest7() {
+    //     John john = switchGeneric3();
+    // }
+
+    // protected <P extends Person> P switchGeneric3() {
+    //     return (P) new John();
+    // }
+
+    // @Test
+    // public void genericTest8() {
+    //     John john1 = new John();
+    //     John john2 = switchGeneric4(john1);
+    // }
+
+    // protected <P extends Person> P switchGeneric4(P person) {
+    //     return (P) new John();
+    // }
+
+    // @Test
+    // public void genericTest9() {
+    //     Steve steve1 = new Steve();
+    //     try {
+    //         Steve steve2 = switchGeneric4(steve1);
+    //         fail();
+    //     } catch (ClassCastException e) {
+    //     }
+    // }
+
+    // @Test
+    // public void genericTest10() {
+    //     John john = switchGeneric5("1");
+    //     Person person = switchGeneric5("1");
+    //     Entity entity = switchGeneric5("1");
+    //     Object anybody = switchGeneric5("1");
+
+    //     try {
+    //         Steve steve = switchGeneric5("1");
+    //         fail();
+    //     } catch (ClassCastException e) {
+    //     }
+
+    // }
+
+    // protected <P extends Person> P switchGeneric5(String string) {
+    //     return (P) switch (string) {
+    //     case "1" -> new John();
+    //     case "2" -> new Steve();
+    //     default -> throw new IllegalArgumentException();
+    //     };
+    // }
+
+    // @Test
+    // public void asdf() {
+    //     var someClass = Finite.class;
+    //     Finite finite = new Finite();
+    //     assertEquals(someClass, finite.getClass());
+    // }
+
+    // @Test
+    // public void componentType() {
+    //     // var someClass = Finite.class;
+    //     // var componentType = someClass.getComponentType();
+    //     // // var fun = componentType.getComponentType(); // null pointer
+
+    //     Finite[] finites = new Finite[0];
+    //     var clazz = finites.getClass();
+    //     var componentType = clazz.getComponentType();
+
+    //     int i = 1;
+    // }
+
+    // @Test
+    // public void jacksonJsonTest1() {
+    //     var event = new DomainEventsFactory().createSessionStartedEvent(new SessionId(UUID.randomUUID()), null);
+    //     var objectMapper = new ObjectMapper();
+    //     try {
+    //         var jsonObject = objectMapper.writeValueAsString(event);
+    //         int i = 1;
+    //     } catch (Throwable e) {
+    //         fail(e.getMessage());
+    //     }
+
+    // }
+
+    // @Test
+    // public void iteratorTest() {
+    //     var people = new People(new String[] { "John", "Tomorrow", "Stephen" });
+    //     var iteratedPeople = new LinkedList<String>();
+    //     for (var person : people) {
+    //         iteratedPeople.add(person);
+    //     }
+    //     assertArrayEquals(new String[] { "John", "Tomorrow", "Stephen" }, iteratedPeople.toArray(String[]::new));
+    // }
+
+    // private boolean expectedListenerIsCalled = false;
+    // private boolean notExpectedListenerIsCalled = false;
+
+    // @Test
+    // public void typedAndNotTypedCallbackForSpringEventHandler() {
+    //     GenericApplicationContext context = (GenericApplicationContext) new SpringApplication(MockApplication.class).run();
+
+    //     ApplicationListener<?> expectedListener = (e) -> {
+    //         expectedListenerIsCalled = true;
+    //     };
+    //     context.addApplicationListener(expectedListener);
+
+    //     ApplicationListener<?> notExpectedListener = (SpringSessionFinishedEvent e) -> {
+    //         notExpectedListenerIsCalled = true;
+    //     };
+    //     context.addApplicationListener(notExpectedListener);
+
+    //     var event = new SpringPianoKeyPressedEvent(this, null);
+    //     context.publishEvent(event);
+
+    //     assertTrue(expectedListenerIsCalled);
+    //     assertFalse(notExpectedListenerIsCalled);
+    // }
+
+    // @Test
+    // public void castingCallbackForSpringEvent() {
+    //     GenericApplicationContext context = (GenericApplicationContext) new SpringApplication(MockApplication.class).run();
+
+    //     ApplicationListener<?> expectedListener = (e) -> {
+    //         expectedListenerIsCalled = true;
+    //     };
+    //     context.addApplicationListener(expectedListener);
+
+    //     ApplicationListener<?> notExpectedListener = (e) -> {
+    //         notExpectedListenerIsCalled = true;
+    //     };
+    //     notExpectedListener = (ApplicationListener<SpringSessionFinishedEvent>) notExpectedListener;
+    //     context.addApplicationListener(notExpectedListener);
+
+    //     var event = new SpringPianoKeyPressedEvent(this, null);
+    //     context.publishEvent(event);
+
+    //     assertTrue(expectedListenerIsCalled);
+    //     // as expected, it does not work.
+    //     // assertFalse(notExpectedListenerIsCalled);
+    // }
+
+    // @Test
+    // public void classComparingTest1() {
+    //     var class1 = SpringPianoKeyPressedEvent.class;
+    //     var class2 = SpringPianoKeyPressedEvent.class;
+    //     assertEquals(class1, class2);
+    //     assertTrue(class1.equals(class2));
+    // }
+
+    // @Test
+    // public void classComparingTest2() {
+    //     var class1 = SpringPianoKeyPressedEvent.class;
+
+    //     var event = new SpringPianoKeyPressedEvent(this, null);
+    //     var class2 = event.getClass();
+
+    //     assertEquals(class1, class2);
+    //     assertTrue(class1.equals(class2));
+    // }
+
+    // @Test
+    // public void finalizerTest() {
+    //     int number = 100;
+    //     createObjectsWithFinalizer(number);
+    //     assertEquals(0, ClassWithFinalizer.numberOfFinalizedObjects);
+    //     System.gc();
+    //     try {
+    //         Thread.sleep(100);
+    //     } catch (Throwable e) {
+    //     }
+    //     assertEquals(number, ClassWithFinalizer.numberOfFinalizedObjects);
+    // }
+
+    // private void createObjectsWithFinalizer(int number) {
+    //     ClassWithFinalizer[] classesWithFinalizer = new ClassWithFinalizer[number];
+    //     for (int i = 0; i < number; i++) {
+    //         classesWithFinalizer[i] = new ClassWithFinalizer();
+    //     }
+    //     classesWithFinalizer = null;
+    // }
+
+    // @Test
+    // public void hashCodeTest1() {
+    //     var object1 = new Object();
+    //     var object2 = new Object();
+
+    //     // assertNotEquals(object1.hashCode(), object2.hashCode());
+    // }
+
+    // @Test
+    // public void hashCodeTest2() {
+    //     var object1 = new Object().toString();
+    //     var object2 = new Object().toString();
+
+    //     assertNotEquals(object1.hashCode(), object2.hashCode());
+
+    //     // assertEquals(-904613196, object1.hashCode());
+    //     // assertEquals(-95392831, object2.hashCode());
+    // }
+
+    // @Test
+    // public void hashCodeTest3() {
+    //     var object2 = new Object().toString();
+    //     var object1 = new Object().toString();
+
+    //     assertNotEquals(object1.hashCode(), object2.hashCode());
+
+    //     // assertEquals(-904613196, object2.hashCode());
+    //     // assertEquals(-95392831, object1.hashCode());
+    // }
+
+    // @Test
+    // public void primitiveArrayHashcodeTest() {
+    //     int[] numbers1 = { 1, 2, 3, 4, 5 };
+    //     int[] numbers2 = { 1, 2, 3, 4, 5 };
+
+    //     assertNotEquals(numbers1.hashCode(), numbers2.hashCode());
+
+    //     // assertEquals(380242442, numbers1.hashCode());
+    //     // assertEquals(125881207, numbers2.hashCode());
+    // }
+
+    
+}
+
+class ClassWithFinalizer {
+    public static int numberOfFinalizedObjects = 0;
+
+    public void finalize() {
+        numberOfFinalizedObjects++;
     }
-
-    @Test
-    public void diamondMethodParameterInferringTest1() {
-        acceptsBarString(new Bar<>());
-    }
-
-    public void acceptsBarString(Bar<String> bar) {
-        bar.variable = "test";
-        assertEquals(bar.variable.getClass(), String.class);
-    }
-
-    @Test
-    public void diamondMethodParameterInferringTest2() {
-        var bar = acceptsBarStringAndReturnsIt(new Bar<>());
-        assertEquals(bar.variable.getClass(), String.class);
-    }
-
-    public Bar<String> acceptsBarStringAndReturnsIt(Bar<String> bar) {
-        bar.variable = "test";
-        return bar;
-    }
-
-    @Test
-    public void diamondMethodParameterInferringTest3() {
-        var bar = acceptsBarGeneric(new Bar<>());
-        assertEquals(Object.class, bar.variable.getClass());
-    }
-
-    public <T extends Object> Bar<T> acceptsBarGeneric(Bar<T> bar) {
-        // compile error
-        // bar.variable = new T();
-        bar.variable = (T) new Object();
-        return bar;
-    }
-
-    @Test
-    public void scalaBigDecimalSum() {
-        scala.math.BigDecimal scalaBigDecimal1 = scala.math.BigDecimal.valueOf(1);
-        scala.math.BigDecimal scalaBigDecimal2 = scala.math.BigDecimal.valueOf(2);
-        var sum = scalaBigDecimal1.$plus(scalaBigDecimal2);
-        assertEquals(scala.math.BigDecimal.valueOf(3), sum);
-    }
-
-    @Test
-    public void javaBigDecimalSum() {
-        java.math.BigDecimal javaBigDecimal1 = java.math.BigDecimal.valueOf(1);
-        java.math.BigDecimal javaBigDecimal2 = java.math.BigDecimal.valueOf(2);
-        var sum = javaBigDecimal1.add(javaBigDecimal2);
-        assertNotEquals(scala.math.BigDecimal.valueOf(3), sum);
-        assertEquals(scala.math.BigDecimal.valueOf(3).intValue(), sum.intValue());
-    }
-
-    @Test
-    public void recordsEqualityTest() {
-        double length = 10;
-        double width = 20;
-        var rectangle1 = new Rectangle(width, length);
-        var rectangle2 = new Rectangle(width, length);
-        assertTrue(rectangle1.equals(rectangle2));
-        assertTrue(rectangle2.equals(rectangle1));
-        assertEquals(rectangle2, rectangle1);
-        assertEquals(rectangle1, rectangle2);
-    }
-
-    @Test
-    public void recordToStringTest() {
-        double someNumber = 1.0D;
-        var rectangle = new Rectangle(someNumber, someNumber);
-        assertEquals("Rectangle[width=1.0, length=1.0]", rectangle.toString());
-    }
-
-    @Test
-    public void recordCompactConstructorTest() {
-        try {
-            var rectangle = new Rectangle(-1, 1);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals("width cannot be negative", e.getMessage());
-        }
-    }
-
-    @Test
-    public void recordsInheritingTest() {
-        assertTrue(java.lang.Record.class.isAssignableFrom(Rectangle.class));
-        assertFalse(java.lang.Record.class.isAssignableFrom(Foo.class));
-    }
-
-    @Test
-    public void instanceInitializer() {
-        var obj = new InstanceInitializer();
-        assertEquals(obj.value, 1);
-    }
-
-    @Test
-    public void rawTypeTest() {
-        var rawType = new SomeGenericClass();
-        var variable = rawType.variable;
-    }
-
-    void toCommandHandler(Executor executor) {
-        var _this = this;
-        // Function test = () -> executor.supplyAsync(() -> _this.doSomething());
-    }
-
-    @Test
-    public void javaTypeHole() {
-        var ring = new Ring() {
-        };
-        try {
-            var bring = (Bring) ring;
-            fail();
-        } catch (ClassCastException e) {
-        }
-    }
-
-    @Test
-    public void switchTest1() {
-        var day = Day.Mon;
-        boolean value = doSwitch(day);
-        assertTrue(value);
-    }
-
-    @Test
-    public void switchTest2() {
-        var day = Day.Thu;
-        boolean value = doSwitch(day);
-        assertFalse(value);
-    }
-
-    @Test
-    public void switchTest3() {
-        var day = Day.Sun;
-        try {
-            doSwitch(day);
-            fail();
-        } catch (RuntimeException e) {
-        }
-    }
-
-    private boolean doSwitch(Day day) {
-        return switch (day) {
-        case Mon, Tue -> true;
-        case Sun -> throw new RuntimeException();
-        default -> false;
-        };
-    }
-
-    @Test
-    public void switchTest4() {
-        int number1;
-        var day = Day.Mon;
-        var result = switch (day) {
-        case Mon, Tue -> number1 = 1;
-        case Sun -> throw new RuntimeException();
-        default -> number1 = 2;
-        };
-        assertEquals(result, number1);
-
-        int number2;
-        switch (day) {
-        case Mon, Tue -> number2 = 1;
-        case Sun -> throw new RuntimeException();
-        default -> number2 = 2;
-        }
-        assertEquals(number1, number2);
-        assertEquals(1, number1);
-        assertEquals(1, number2);
-    }
-
-    @Test
-    public void switchTest5() {
-        int number1;
-        Day day = null;
-        var result = switch (day) {
-        case Mon, Tue, Wed, Thu, Fri, Sat, Sun -> 1;
-        case null -> 2;
-        default -> 3;
-        };
-        assertEquals(result, 2);
-    }
-
-    @Test
-    public void returningPolymorphObjectViaGeneric() {
-        var result = polymorphing();
-    }
-
-    private BaseClass polymorphing() {
-        return new DerivedClass();
-    }
-
-    @Test
-    public void oneMoreGenericsQuestion1() {
-        var genericString1 = gettingTheValue1(new MyGenericString());
-        assertEquals(MyGenericString.class.getName(), genericString1);
-
-        var genericString2 = gettingTheValue2(new MyGenericString());
-        assertEquals(MyGenericString.class.getName(), genericString2);
-
-        var generic1 = gettingTheValue1(new MyGeneric<String>());
-        assertEquals(MyGeneric.class.getName(), generic1);
-
-        var generic2 = gettingTheValue2(new MyGeneric<String>());
-        assertEquals(MyGeneric.class.getName(), generic2);
-    }
-
-    private String gettingTheValue1(MyGeneric<?> someClass) {
-        return someClass.getClass().getName();
-    }
-
-    private <T extends MyGeneric<?>> String gettingTheValue2(T someClass) {
-        return someClass.getClass().getName();
-    }
-
-    @Test
-    public void oneMoreGenericsQuestion2() {
-        var genericString1 = gettingTheValue3(new MyGenericString());
-        assertEquals(MyGenericString.class, genericString1.getClass());
-
-        var genericString2 = gettingTheValue4(new MyGenericString());
-        assertEquals(MyGenericString.class, genericString2.getClass());
-
-        var generic1 = gettingTheValue3(new MyGeneric<String>());
-        assertEquals(MyGeneric.class, generic1.getClass());
-
-        var generic2 = gettingTheValue4(new MyGeneric<String>());
-        assertEquals(MyGeneric.class, generic2.getClass());
-    }
-
-    private MyGeneric<?> gettingTheValue3(MyGeneric<?> someClass) {
-        return someClass;
-    }
-
-    private <T extends MyGeneric<?>> T gettingTheValue4(T someClass) {
-        return someClass;
-    }
-
-    @Test
-    public void polymorphismTest1() {
-        Child child = new Child();
-        assertEquals("child", child.foo(child));
-        assertEquals("parent", child.parentFooViaSuper(child));
-        assertEquals("parent", child.parentFooViaCast(child));
-    }
-
-    @Test
-    public void toStringTest1() {
-        assertEquals(String.valueOf(true), "true");
-    }
-
-    @Test
-    public void invalidationListenerTest1() {
-        var lol = "bazingalol";
-        var result = Child.doSomething((firstArg, secondArg) -> {
-            return firstArg + secondArg;
-        });
-
-        assertEquals(lol, result);
-    }
-
-    @Test
-    public void stringTest1() {
-        String string1 = "bazinga";
-
-        var castedString1 = string1.toString();
-        assertEquals(string1, castedString1);
-
-        var castedString2 = (String) string1;
-        assertEquals(string1, castedString2);
-
-        var castedString3 = String.valueOf(string1);
-        assertEquals(string1, castedString3);
-    }
-
-    @Test
-    public void genericMethodWithGenericReturnType1() {
-        var varObj = getGenericObj();
-        Object objObj = getGenericObj();
-        Parent parentObj = getGenericObj();
-        Child childObj = getGenericObj();
-
-        assertEquals(varObj.getClass().getName(), Child.class.getName());
-        assertEquals(objObj.getClass().getName(), Child.class.getName());
-        assertEquals(parentObj.getClass().getName(), Child.class.getName());
-        assertEquals(childObj.getClass().getName(), Child.class.getName());
-    }
-
-    @Test
-    public void genericMethodWithGenericReturnType2() {
-        var varObj = getNotGenericObj();
-        Object objObj = getNotGenericObj();
-        Parent parentObj = getNotGenericObj();
-        Child childObj = (Child) getNotGenericObj();
-
-        assertEquals(varObj.getClass().getName(), Child.class.getName());
-        assertEquals(objObj.getClass().getName(), Child.class.getName());
-        assertEquals(parentObj.getClass().getName(), Child.class.getName());
-        assertEquals(childObj.getClass().getName(), Child.class.getName());
-    }
-
-    private <P extends Parent> P getGenericObj() {
-        return (P) new Child();
-    }
-
-    private Parent getNotGenericObj() {
-        return new Child();
-    }
-
-    @Test
-    public void enumToStringTest1() {
-        var castedValue = Days.MONDAY.toString();
-        var interpolatedValue = "" + Days.MONDAY;
-        assertEquals("MONDAY", castedValue);
-        assertEquals("MONDAY", interpolatedValue);
-    }
-
-    @Test
-    public void weirdoCast() {
-        Object object = new Object();
-        try {
-            var byteObject = (Byte) object;
-            fail();
-        } catch (ClassCastException e) {
-        }
-        try {
-            var mouseObject = (Mouse) object;
-            fail();
-        } catch (ClassCastException e) {
-        }
-        try {
-            var observableList = (ObservableSet<Byte>) object;
-            fail();
-        } catch (ClassCastException e) {
-        }
-    }
-
-    @Test
-    public void weirdoCast2() {
-        var book = new Book<String>();
-        book.cover = "bazinga";
-
-        Object objBook = book;
-        Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
-        try {
-            var x = bookWithByteCover.cover;
-            fail();
-        } catch (ClassCastException e) {
-        }
-    }
-
-    @Test
-    public void uncheckedCastCatching() {
-        var book = new Book<String>();
-        book.cover = "bazinga";
-
-        Object objBook = book;
-        try {
-            Book<Byte> bookWithByteCover = (Book<Byte>) objBook;
-        } catch (ClassCastException e) {
-
-        }
-    }
-
-    @Test
-    public void theMostWildThingIVeSeenTest() {
-    }
-
-    // protected static int test = 5;
-    // public static final byte source = (byte)((byte)84 / test);
-    // public static final byte dervied = (byte) (source / 1);
-    // public static final byte result = dervied * 1;
-
-    static final int first = 126;
-    static final byte second = first + 1;
-
-    @Test
-    public void genericsTest5() {
-    }
-
-    public static <I extends Id, EF extends EntitiesFactory<? extends Entity<I>>> EF createFactory(final I id) {
-        var factory = switch (id) {
-        case PersonId i -> new PersonsFactory();
-        case AnimalId i -> new AnimalsFactory();
-        case RockId i -> new RocksFactory();
-        default -> throw new IllegalArgumentException("unknown id: " + id);
-        };
-        return (EF) factory;
-    }
-
-    @Test
-    public void nullTest() {
-        Person person = new Person();
-        setPersonToNull(person);
-        assertNotEquals(null, person);
-    }
-
-    protected void setPersonToNull(Person person) {
-        person = null;
-    }
-
-    @Test
-    public void genericTest6() {
-        getSomething();
-    }
-
-    protected Generic<Id> getSomething() {
-        // // error
-        // Finite finite = new Finite();
-        // Generic<Id> casted = finite;
-
-        // // error
-        // Finite finite = new Finite();
-        // Generic<Id> casted = (Generic<Id>) finite;
-
-        // fine, though warning
-        Generic<?> finite = new Finite();
-        Generic<Id> casted = (Generic<Id>) finite;
-
-        return casted;
-    }
-
-    @Test
-    public void switchTest6() {
-        Object person = new John();
-        switch (person) {
-        case String s:
-            fail();
-            break;
-        case John p:
-            break;
-        case Person p:
-            fail();
-            break;
-        default:
-            fail();
-            break;
-        }
-    }
-
-    @Test
-    public void switchGenericTest() {
-        Person person = new John();
-        switchGeneric1(person);
-        switchGeneric2(person);
-    }
-
-    protected <P extends Person> void switchGeneric1(P person) {
-        switch (person) {
-        case John p:
-            break;
-        case Person p:
-            fail();
-            break;
-        }
-    }
-
-    protected <P extends Person> void switchGeneric2(P person) {
-        switch (person) {
-        case John p:
-            break;
-        case P p:
-            fail();
-            break;
-        }
-    }
-
-    @Test
-    public void genericTest7() {
-        John john = switchGeneric3();
-    }
-
-    protected <P extends Person> P switchGeneric3() {
-        return (P) new John();
-    }
-
-    @Test
-    public void genericTest8() {
-        John john1 = new John();
-        John john2 = switchGeneric4(john1);
-    }
-
-    protected <P extends Person> P switchGeneric4(P person) {
-        return (P) new John();
-    }
-
-    @Test
-    public void genericTest9() {
-        Steve steve1 = new Steve();
-        try {
-            Steve steve2 = switchGeneric4(steve1);
-            fail();
-        } catch (ClassCastException e) {
-        }
-    }
-
-    @Test
-    public void genericTest10() {
-        John john = switchGeneric5("1");
-        Person person = switchGeneric5("1");
-        Entity entity = switchGeneric5("1");
-        Object anybody = switchGeneric5("1");
-
-        try {
-            Steve steve = switchGeneric5("1");
-            fail();
-        } catch (ClassCastException e) {
-        }
-
-    }
-
-    protected <P extends Person> P switchGeneric5(String string) {
-        return (P) switch (string) {
-        case "1" -> new John();
-        case "2" -> new Steve();
-        default -> throw new IllegalArgumentException();
-        };
-    }
-
-    @Test
-    public void asdf() {
-        var someClass = Finite.class;
-        Finite finite = new Finite();
-        assertEquals(someClass, finite.getClass());
-    }
-
-    @Test
-    public void componentType() {
-        // var someClass = Finite.class;
-        // var componentType = someClass.getComponentType();
-        // // var fun = componentType.getComponentType(); // null pointer
-
-        Finite[] finites = new Finite[0];
-        var clazz = finites.getClass();
-        var componentType = clazz.getComponentType();
-
-        int i = 1;
-    }
-
-    @Test
-    public void jacksonJsonTest1() {
-        var event = new DomainEventsFactory().createSessionStartedEvent(new SessionId(UUID.randomUUID()), null);
-        var objectMapper = new ObjectMapper();
-        try {
-            var jsonObject = objectMapper.writeValueAsString(event);
-            int i = 1;
-        } catch (Throwable e) {
-            fail(e.getMessage());
-        }
-
-    }
-
-    @Test
-    public void iteratorTest() {
-        var people = new People(new String[] { "John", "Tomorrow", "Stephen" });
-        var iteratedPeople = new LinkedList<String>();
-        for (var person : people) {
-            iteratedPeople.add(person);
-        }
-        assertArrayEquals(new String[] { "John", "Tomorrow", "Stephen" }, iteratedPeople.toArray(String[]::new));
-    }
-
-    private boolean expectedListenerIsCalled = false;
-    private boolean notExpectedListenerIsCalled = false;
-
-    @Test
-    public void typedAndNotTypedCallbackForSpringEventHandler() {
-        GenericApplicationContext context = (GenericApplicationContext) new SpringApplication(MockApplication.class).run();
-
-        ApplicationListener<?> expectedListener = (e) -> {
-            expectedListenerIsCalled = true;
-        };
-        context.addApplicationListener(expectedListener);
-
-        ApplicationListener<?> notExpectedListener = (SpringSessionFinishedEvent e) -> {
-            notExpectedListenerIsCalled = true;
-        };
-        context.addApplicationListener(notExpectedListener);
-
-        var event = new SpringPianoKeyPressedEvent(this, null);
-        context.publishEvent(event);
-
-        assertTrue(expectedListenerIsCalled);
-        assertFalse(notExpectedListenerIsCalled);
-    }
-
-    @Test
-    public void castingCallbackForSpringEvent() {
-        GenericApplicationContext context = (GenericApplicationContext) new SpringApplication(MockApplication.class).run();
-
-        ApplicationListener<?> expectedListener = (e) -> {
-            expectedListenerIsCalled = true;
-        };
-        context.addApplicationListener(expectedListener);
-
-        ApplicationListener<?> notExpectedListener = (e) -> {
-            notExpectedListenerIsCalled = true;
-        };
-        notExpectedListener = (ApplicationListener<SpringSessionFinishedEvent>) notExpectedListener;
-        context.addApplicationListener(notExpectedListener);
-
-        var event = new SpringPianoKeyPressedEvent(this, null);
-        context.publishEvent(event);
-
-        assertTrue(expectedListenerIsCalled);
-        // as expected, it does not work.
-        // assertFalse(notExpectedListenerIsCalled);
-    }
-
-    @Test
-    public void classComparingTest1() {
-        var class1 = SpringPianoKeyPressedEvent.class;
-        var class2 = SpringPianoKeyPressedEvent.class;
-        assertEquals(class1, class2);
-        assertTrue(class1.equals(class2));
-    }
-
-    @Test
-    public void classComparingTest2() {
-        var class1 = SpringPianoKeyPressedEvent.class;
-        
-        var event = new SpringPianoKeyPressedEvent(this, null);
-        var class2 = event.getClass();
-
-        assertEquals(class1, class2);
-        assertTrue(class1.equals(class2));
-    }
-
 }
 
 @SpringBootApplication

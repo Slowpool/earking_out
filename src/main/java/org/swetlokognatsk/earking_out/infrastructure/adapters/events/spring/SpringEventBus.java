@@ -29,55 +29,21 @@ public final class SpringEventBus implements EventBus {
 
     public <DE extends DomainEvent> void subscribe(final Class<DE> eventClass, final DomainEventHandler<DE> domainEventHandler) {
         ApplicationListener<?> listener;
-        if (eventClass == PianoKeyPressedEvent.class) {
+        if (eventClass.equals(PianoKeyPressedEvent.class)) {
             listener = (SpringPianoKeyPressedEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
-        } else if (eventClass == NewPuzzleCreatedEvent.class) {
+        } else if (eventClass.equals(NewPuzzleCreatedEvent.class)) {
             listener = (SpringNewPuzzleCreatedEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
-        } else if (eventClass == HintRepeatingRequestedEvent.class) {
+        } else if (eventClass.equals(HintRepeatingRequestedEvent.class)) {
             listener = (SpringHintRepeatingRequestedEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
-        } else if (eventClass == SessionStartedEvent.class) {
+        } else if (eventClass.equals(SessionStartedEvent.class)) {
             listener = (SpringSessionStartedEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
-        } else if (eventClass == SessionFinishedEvent.class) {
+        } else if (eventClass.equals(SessionFinishedEvent.class)) {
             listener = (SpringSessionFinishedEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
-        } else if (eventClass == UserTriedToGuessPuzzleEvent.class) {
+        } else if (eventClass.equals(UserTriedToGuessPuzzleEvent.class)) {
             listener = (SpringUserTriedToGuessPuzzleEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
         } else {
-            // TODO restore throwing
-            return;
-            // throw new RuntimeException("unknown event class: " + eventClass.getName());
+            throw new RuntimeException("unknown event class: " + eventClass.getName());
         }
         ctx.addApplicationListener(listener);
     }
-
-    // private Object wrapDomainEventHandler(final DomainEventHandler<?> domainEventHandler) {
-    //     return switch (domainEventHandler) {
-
-    //     };
-    //     // TODO awkwaaaaaard. pretty sure dynamic handlers can be created. via anonymous classes? via so-called `event multicaster`?
-    //     var clazzName = clazz.getName();
-    //     if (clazzName.equals(PianoKeyPressedEvent.class.getName())) {
-    //         var handler = DI.get(SpringPianoKeyPressedHandler.class);
-    //         handler.appendCallback((Consumer<PianoKeyPressedEvent>) action);
-
-    //     } else if (clazzName.equals(SessionStartedEvent.class.getName())) {
-    //         var handler = DI.get(SpringSessionStartedHandler.class);
-    //         handler.appendCallback((Consumer<SessionStartedEvent>) action);
-    //     } else if (clazzName.equals(NewPuzzleCreatedEvent.class.getName())) {
-    //         var handler = DI.get(SpringNewPuzzleCreatedHandler.class);
-    //         handler.appendCallback((Consumer<NewPuzzleCreatedEvent>) action);
-    //     } else if (clazzName.equals(UserTriedToGuessPuzzleEvent.class.getName())) {
-    //         var handler = DI.get(SpringUserTriedToGuessPuzzleHandler.class);
-    //         handler.appendCallback((Consumer<UserTriedToGuessPuzzleEvent>) action);
-    //     } else if (clazzName.equals(HintRepeatingRequestedEvent.class.getName())) {
-    //         var handler = DI.get(SpringHintRepeatingRequestedHandler.class);
-    //         handler.appendCallback((Consumer<HintRepeatingRequestedEvent>) action);
-    //     } else if (clazzName.equals(SessionFinishedEvent.class.getName())) {
-    //         var handler = DI.get(SpringSessionFinishedHandler.class);
-    //         handler.appendCallback((Consumer<SessionFinishedEvent>) action);
-
-    //     } else {
-    //         throw new RuntimeException("unknown class to subscribe: " + clazz.getName());
-    //     }
-    // }
-
 }

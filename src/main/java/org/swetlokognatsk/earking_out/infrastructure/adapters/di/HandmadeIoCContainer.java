@@ -8,6 +8,11 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFact
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnHintRepeatingRequestedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnNewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionFinishedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionStartedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnUserTriedToGuessPuzzleHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.PuzzleConfigUpdatingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
@@ -289,6 +294,21 @@ public final class HandmadeIoCContainer implements IoCContainer {
             var sessionServices = new HashMap<Exercise, SessionService<?, ?, ?>>();
             sessionServices.put(new AudioPerfectPitchExercise(), get(AudioPerfectPitchSessionService.class));
             return (T) new SessionGuessingOnPianoKeyPressedHandler(sessionServices);
+
+        } else if (className.equals(LogEventOnSessionStartedHandler.class.getName())) {
+            return (T) new LogEventOnSessionStartedHandler(get(EventStore.class));
+
+        } else if (className.equals(LogEventOnNewPuzzleCreatedHandler.class.getName())) {
+            return (T) new LogEventOnNewPuzzleCreatedHandler(get(EventStore.class));
+
+        } else if (className.equals(LogEventOnUserTriedToGuessPuzzleHandler.class.getName())) {
+            return (T) new LogEventOnUserTriedToGuessPuzzleHandler(get(EventStore.class));
+
+        } else if (className.equals(LogEventOnHintRepeatingRequestedHandler.class.getName())) {
+            return (T) new LogEventOnHintRepeatingRequestedHandler(get(EventStore.class));
+
+        } else if (className.equals(LogEventOnSessionFinishedHandler.class.getName())) {
+            return (T) new LogEventOnSessionFinishedHandler(get(EventStore.class));
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
