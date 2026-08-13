@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRe
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
-public final class HintDemonstratingOnHintRepeatingRequestedHandler implements DomainEventHandler<HintRepeatingRequestedEvent> {
+public final class HintDemonstratingOnHintRepeatingRequestedHandler extends DomainEventHandler<HintRepeatingRequestedEvent> {
 
     private final HintDemonstrator<Solution> hintDemonstrator;
 

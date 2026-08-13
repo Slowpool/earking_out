@@ -29,7 +29,6 @@ public final class SpringEventBus implements EventBus {
 
     public <DE extends DomainEvent> void subscribe(final Class<DE> eventClass, final DomainEventHandler<DE> domainEventHandler) {
         ApplicationListener<?> listener;
-        // TODO is it possible to just create callback and than cast it instead of creating it for each class
         if (eventClass == PianoKeyPressedEvent.class) {
             listener = (SpringPianoKeyPressedEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
         } else if (eventClass == NewPuzzleCreatedEvent.class) {

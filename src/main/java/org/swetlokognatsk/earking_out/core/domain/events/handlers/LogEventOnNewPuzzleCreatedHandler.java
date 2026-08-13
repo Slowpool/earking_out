@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
-public final class LogEventOnNewPuzzleCreatedHandler extends LoggingToEventStoreHandler implements DomainEventHandler<NewPuzzleCreatedEvent> {
+public final class LogEventOnNewPuzzleCreatedHandler extends LoggingToEventStoreHandler<NewPuzzleCreatedEvent> {
 
     public LogEventOnNewPuzzleCreatedHandler(final EventStore eventStore) {
         super(eventStore);

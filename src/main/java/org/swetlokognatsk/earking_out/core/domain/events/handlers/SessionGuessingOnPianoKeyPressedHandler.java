@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 
-public final class SessionGuessingOnPianoKeyPressedHandler implements DomainEventHandler<PianoKeyPressedEvent> {
+public final class SessionGuessingOnPianoKeyPressedHandler extends DomainEventHandler<PianoKeyPressedEvent> {
 
     private final Map<Exercise, SessionService<?, ?, ?>> sessionServices;
 

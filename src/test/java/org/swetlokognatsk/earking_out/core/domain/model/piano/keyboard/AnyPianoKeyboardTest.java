@@ -47,7 +47,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
         assertEquals(1, events.size());
 
         var event = events.getFirst();
-        assertEquals(PianoKeyPressedEvent.class, event.getClass());
+        assertTrue(PianoKeyPressedEvent.class.equals(event.getClass()));
     }
 
     @Test

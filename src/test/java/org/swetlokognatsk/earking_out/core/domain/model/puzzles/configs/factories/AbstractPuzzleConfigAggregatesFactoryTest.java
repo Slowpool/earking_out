@@ -15,7 +15,7 @@ public final class AbstractPuzzleConfigAggregatesFactoryTest {
 
         var audioPerfectPitchFactory = abstractPuzzleConfigAggregatesFactory.createFactory(exercise);
 
-        assertEquals(AudioPerfectPitchConfigAggregatesFactory.class.getName(), audioPerfectPitchFactory.getClass().getName());
+        assertTrue(AudioPerfectPitchConfigAggregatesFactory.class.equals(audioPerfectPitchFactory.getClass()));
     }
 
 }

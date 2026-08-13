@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 
-public final class LogEventOnSessionFinishedHandler extends LoggingToEventStoreHandler implements DomainEventHandler<SessionFinishedEvent> {
+public final class LogEventOnSessionFinishedHandler extends LoggingToEventStoreHandler <SessionFinishedEvent> {
 
     public LogEventOnSessionFinishedHandler(final EventStore eventStore) {
         super(eventStore);

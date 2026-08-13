@@ -86,7 +86,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
         assertEquals(1, events.size());
 
         var event = events.getFirst();
-        assertEquals(HintRepeatingRequestedEvent.class, event.getClass());
+        assertTrue(HintRepeatingRequestedEvent.class.equals(event.getClass()));
     }
 
     @Test

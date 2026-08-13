@@ -44,7 +44,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
     public void validateAggregateClass() {
         var aggregate = getPerfectPitchConfigAggregate();
 
-        assertEquals(AudioPerfectPitchConfigAggregate.class.getName(), aggregate.getClass().getName());
+        assertTrue(AudioPerfectPitchConfigAggregate.class.equals(aggregate.getClass()));
     }
 
     /**

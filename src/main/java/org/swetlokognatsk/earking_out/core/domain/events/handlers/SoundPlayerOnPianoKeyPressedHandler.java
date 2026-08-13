@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
-public final class SoundPlayerOnPianoKeyPressedHandler implements DomainEventHandler<PianoKeyPressedEvent> {
+public final class SoundPlayerOnPianoKeyPressedHandler extends DomainEventHandler<PianoKeyPressedEvent> {
 
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
     private final PianoKeyboardRepository pianoKeyboardRepository;

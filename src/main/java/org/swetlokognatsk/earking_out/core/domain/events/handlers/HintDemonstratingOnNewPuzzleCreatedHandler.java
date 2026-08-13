@@ -4,7 +4,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreate
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
-public final class HintDemonstratingOnNewPuzzleCreatedHandler implements DomainEventHandler<NewPuzzleCreatedEvent> {
+public final class HintDemonstratingOnNewPuzzleCreatedHandler extends DomainEventHandler<NewPuzzleCreatedEvent> {
 
     private final HintDemonstrator<Solution> hintDemonstrator;
 

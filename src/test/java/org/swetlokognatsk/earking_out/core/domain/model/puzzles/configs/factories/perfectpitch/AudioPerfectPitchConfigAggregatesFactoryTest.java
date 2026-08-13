@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
@@ -16,6 +16,6 @@ public class AudioPerfectPitchConfigAggregatesFactoryTest {
 
         var puzzleConfig = factory.createDefault();
 
-        assertEquals(AudioPerfectPitchConfigAggregate.class.getName(), puzzleConfig.getClass().getName());
+        assertTrue(AudioPerfectPitchConfigAggregate.class.equals(puzzleConfig.getClass()));
     }
 }

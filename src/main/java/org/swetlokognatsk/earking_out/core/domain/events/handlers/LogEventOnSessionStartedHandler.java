@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 
 // TODO check whether `recordStats` is true and if it isn't then do not log
-public final class LogEventOnSessionStartedHandler extends LoggingToEventStoreHandler implements DomainEventHandler<SessionStartedEvent> {
+public final class LogEventOnSessionStartedHandler extends LoggingToEventStoreHandler<SessionStartedEvent> {
 
     public LogEventOnSessionStartedHandler(final EventStore eventStore) {
         super(eventStore);

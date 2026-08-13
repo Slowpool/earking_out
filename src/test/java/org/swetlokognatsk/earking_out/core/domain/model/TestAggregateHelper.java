@@ -16,7 +16,7 @@ public final class TestAggregateHelper {
     public static <E extends DomainEvent> E getOnlyOneThrownEvent(final SessionAggregate<?, ?, ?, ?> aggregate, final Class<E> eventClass) {
         var events = aggregate.flushEvents();
         var stream = events.stream();
-        var filteredStream = stream.filter((someEvent) -> someEvent.getClass() == eventClass);
+        var filteredStream = stream.filter((someEvent) -> someEvent.getClass().equals(eventClass));
         var eventsList = filteredStream.toList();
         assertEquals(1, eventsList.size());
         var event = eventsList.getFirst();

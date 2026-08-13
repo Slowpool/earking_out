@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.learning_tests;
 
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import static org.junit.Assert.*;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -11,12 +13,16 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.support.GenericApplicationContext;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
@@ -27,9 +33,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.EndHintDemonstrator;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring.SpringPianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring.SpringSessionFinishedEvent;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
-
 import tools.jackson.databind.ObjectMapper;
 import javafx.collections.ObservableSet;
 import scala.Int;
@@ -601,6 +608,77 @@ public class JavaTests {
         assertArrayEquals(new String[] { "John", "Tomorrow", "Stephen" }, iteratedPeople.toArray(String[]::new));
     }
 
+    private boolean expectedListenerIsCalled = false;
+    private boolean notExpectedListenerIsCalled = false;
+
+    @Test
+    public void typedAndNotTypedCallbackForSpringEventHandler() {
+        GenericApplicationContext context = (GenericApplicationContext) new SpringApplication(MockApplication.class).run();
+
+        ApplicationListener<?> expectedListener = (e) -> {
+            expectedListenerIsCalled = true;
+        };
+        context.addApplicationListener(expectedListener);
+
+        ApplicationListener<?> notExpectedListener = (SpringSessionFinishedEvent e) -> {
+            notExpectedListenerIsCalled = true;
+        };
+        context.addApplicationListener(notExpectedListener);
+
+        var event = new SpringPianoKeyPressedEvent(this, null);
+        context.publishEvent(event);
+
+        assertTrue(expectedListenerIsCalled);
+        assertFalse(notExpectedListenerIsCalled);
+    }
+
+    @Test
+    public void castingCallbackForSpringEvent() {
+        GenericApplicationContext context = (GenericApplicationContext) new SpringApplication(MockApplication.class).run();
+
+        ApplicationListener<?> expectedListener = (e) -> {
+            expectedListenerIsCalled = true;
+        };
+        context.addApplicationListener(expectedListener);
+
+        ApplicationListener<?> notExpectedListener = (e) -> {
+            notExpectedListenerIsCalled = true;
+        };
+        notExpectedListener = (ApplicationListener<SpringSessionFinishedEvent>) notExpectedListener;
+        context.addApplicationListener(notExpectedListener);
+
+        var event = new SpringPianoKeyPressedEvent(this, null);
+        context.publishEvent(event);
+
+        assertTrue(expectedListenerIsCalled);
+        // as expected, it does not work.
+        // assertFalse(notExpectedListenerIsCalled);
+    }
+
+    @Test
+    public void classComparingTest1() {
+        var class1 = SpringPianoKeyPressedEvent.class;
+        var class2 = SpringPianoKeyPressedEvent.class;
+        assertEquals(class1, class2);
+        assertTrue(class1.equals(class2));
+    }
+
+    @Test
+    public void classComparingTest2() {
+        var class1 = SpringPianoKeyPressedEvent.class;
+        
+        var event = new SpringPianoKeyPressedEvent(this, null);
+        var class2 = event.getClass();
+
+        assertEquals(class1, class2);
+        assertTrue(class1.equals(class2));
+    }
+
+}
+
+@SpringBootApplication
+class MockApplication {
+
 }
 
 record People(String[] innerPeople) implements Iterable<String> {
@@ -611,11 +689,11 @@ record People(String[] innerPeople) implements Iterable<String> {
 
     class PeopleIterator implements Iterator<String> {
         private int currentPerson = -1;
-        
+
         public boolean hasNext() {
             return currentPerson + 1 < innerPeople.length;
         }
-        
+
         public String next() {
             currentPerson++;
             return innerPeople[currentPerson];

@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 
-public final class LogEventOnHintRepeatingRequestedHandler extends LoggingToEventStoreHandler implements DomainEventHandler<HintRepeatingRequestedEvent> {
+public final class LogEventOnHintRepeatingRequestedHandler extends LoggingToEventStoreHandler<HintRepeatingRequestedEvent> {
 
     public LogEventOnHintRepeatingRequestedHandler(final EventStore eventStore) {
         super(eventStore);

@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 
-public final class LogEventOnUserTriedToGuessPuzzleHandler extends LoggingToEventStoreHandler implements DomainEventHandler<UserTriedToGuessPuzzleEvent> {
+public final class LogEventOnUserTriedToGuessPuzzleHandler extends LoggingToEventStoreHandler<UserTriedToGuessPuzzleEvent> {
 
     public LogEventOnUserTriedToGuessPuzzleHandler(final EventStore eventStore) {
         super(eventStore);

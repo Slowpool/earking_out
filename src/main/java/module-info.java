@@ -99,6 +99,8 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.events.session;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.events;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.greenrobot;
+    exports org.swetlokognatsk.earking_out.learning_tests;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
+    opens org.swetlokognatsk.earking_out.learning_tests;
 }

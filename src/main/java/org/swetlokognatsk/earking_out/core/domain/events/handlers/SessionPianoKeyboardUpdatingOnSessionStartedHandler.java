@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 
-public final class SessionPianoKeyboardUpdatingOnSessionStartedHandler implements DomainEventHandler<SessionStartedEvent> {
+public final class SessionPianoKeyboardUpdatingOnSessionStartedHandler extends DomainEventHandler<SessionStartedEvent> {
 
     private final PianoKeyboardService pianoKeyboardService;
 
