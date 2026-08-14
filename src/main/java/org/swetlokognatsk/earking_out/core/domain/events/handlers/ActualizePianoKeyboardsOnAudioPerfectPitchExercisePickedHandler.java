@@ -27,6 +27,7 @@ public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler ext
         return puzzleConfigDtoAssembler.getPuzzleConfigDTO(new AudioPerfectPitchExercise());
     }
 
+    // TODO actually it should happen only once, when user picks this exercise the first time
     public void handle(final AudioPerfectPitchExercisePickedEvent event) {
         var actualConfig = getActualPuzzleConfigDto();
         actualizePianoKeyboardForNormalizedNotesForPuzzle(actualConfig);
@@ -34,8 +35,12 @@ public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler ext
     }
 
     private void actualizePianoKeyboardForNormalizedNotesForPuzzle(final AudioPerfectPitchConfigDTO config) {
-        var pianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER);
         var normalizedNotes = config.normalizedNotesForPuzzle;
+        if (normalizedNotes.length == 0) {
+            return;
+        }
+
+        var pianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER);
 
         pianoKeyboard.resetState();
         pianoKeyboard.restoreSelectedKeys(normalizedNotes);
@@ -44,8 +49,12 @@ public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler ext
     }
 
     private void actualizePianoKeyboardForNormalizedRootNote(final AudioPerfectPitchConfigDTO config) {
-        var pianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         var normalizedRootNote = config.normalizedRootNote;
+        if (normalizedRootNote == null) {
+            return;
+        }
+
+        var pianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
 
         pianoKeyboard.resetState();
         pianoKeyboard.restoreSelectedKey(normalizedRootNote);

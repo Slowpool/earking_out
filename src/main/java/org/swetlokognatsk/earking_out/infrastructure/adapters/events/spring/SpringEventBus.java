@@ -9,6 +9,7 @@ import org.springframework.context.event.GenericApplicationListener;
 import org.springframework.context.event.GenericApplicationListenerAdapter;
 import org.springframework.core.ResolvableType;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
@@ -41,6 +42,8 @@ public final class SpringEventBus implements EventBus {
             listener = (SpringSessionFinishedEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(UserTriedToGuessPuzzleEvent.class)) {
             listener = (SpringUserTriedToGuessPuzzleEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
+        } else if (eventClass.equals(AudioPerfectPitchExercisePickedEvent.class)) {
+            listener = (SpringAudioPerfectPitchExercisePickedEvent e) -> domainEventHandler.handle((DE) (e.domainEvent));
         } else {
             throw new RuntimeException("unknown event class: " + eventClass.getName());
         }

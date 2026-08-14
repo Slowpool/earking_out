@@ -39,6 +39,7 @@ public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId>
     }
 
     private final PianoKey getPianoKeyEntity(final PianoKeyNumber keyNumber) {
+        Objects.requireNonNull(keyNumber);
         var pianoKey = pianoKeys.get(keyNumber);
         if (pianoKey == null) {
             throw new IllegalArgumentException("such a pianoKey is not found: " + keyNumber);
@@ -267,8 +268,13 @@ public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId>
     }
 
     private void selectKey(final PianoKey pianoKey) {
+        validateKeyToSelect(pianoKey);
         selectedKeys.add(pianoKey.keyNumber);
         pianoKey.select();
+    }
+
+    private void validateKeyToSelect(final PianoKey pianoKey) {
+        Objects.requireNonNull(pianoKey);
     }
 
     private void unselectKey(final PianoKey pianoKey) {

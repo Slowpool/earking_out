@@ -117,7 +117,6 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
             pianoKeyboard.restoreSelectedKey(ANY_ANOTHER_PIANO_KEY_NUMBER);
             fail();
         }
-        // one key touch cannot have selected keys. if any key is selected, it also must be pressed, whereas restoreSelectedKeys mustn't do anything with pressed key
         catch (IllegalStateException e) {
         }
     }

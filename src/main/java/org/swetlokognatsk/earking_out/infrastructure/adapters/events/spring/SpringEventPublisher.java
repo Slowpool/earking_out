@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
@@ -26,13 +27,14 @@ public final class SpringEventPublisher implements EventPublisher {
 
     private ApplicationEvent wrapEvent(final DomainEvent domainEvent) {
         return switch (domainEvent) {
-            // TODO what to do with source? remain as is? remove domainEvent?
+        // TODO what to do with source? remain as is? remove domainEvent?
         case PianoKeyPressedEvent de -> new SpringPianoKeyPressedEvent(de, de);
         case NewPuzzleCreatedEvent de -> new SpringNewPuzzleCreatedEvent(de, de);
         case HintRepeatingRequestedEvent de -> new SpringHintRepeatingRequestedEvent(de, de);
         case SessionStartedEvent de -> new SpringSessionStartedEvent(de, de);
         case SessionFinishedEvent de -> new SpringSessionFinishedEvent(de, de);
         case UserTriedToGuessPuzzleEvent de -> new SpringUserTriedToGuessPuzzleEvent(de, de);
+        case AudioPerfectPitchExercisePickedEvent de -> new SpringAudioPerfectPitchExercisePickedEvent(de, de);
         default -> throw new RuntimeException("unknown domainEvent: " + domainEvent.getClass().getName());
         };
     }

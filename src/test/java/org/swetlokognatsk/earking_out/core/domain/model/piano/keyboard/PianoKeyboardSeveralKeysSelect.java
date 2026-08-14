@@ -63,7 +63,8 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
         assertNoSelectedKeys(pianoKeyboard);
     }
-// TODO 11 tests are expected to be wrong
+
+    // TODO 11 tests are expected to be wrong
     @Test
     public void restoreSeveralSelectedKeys() {
         pianoKeyboard.restoreSelectedKeys(SOME_PIANO_KEYS);
@@ -98,6 +99,15 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
         }
         // TODO it actually can be implemented somehow, but i cannot imagine situation when it's useful
         catch (IllegalStateException e) {
+        }
+    }
+
+    @Test
+    public void restoreSelectedKeysWithNullKey() {
+        try {
+            pianoKeyboard.restoreSelectedKeys(new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, null, ANY_ANOTHER_PIANO_KEY_NUMBER });
+            fail();
+        } catch (NullPointerException e) {
         }
     }
 
