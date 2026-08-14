@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import java.util.Objects;
 import org.junit.*;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.piano.MockPianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.MockPianoKeySoundsPlayer;
 
 public final class PianoKeyTest {
     private static PianoKeysFactory pianoKeysFactory;

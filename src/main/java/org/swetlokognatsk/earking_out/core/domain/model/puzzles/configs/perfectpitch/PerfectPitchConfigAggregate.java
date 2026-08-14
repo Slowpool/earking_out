@@ -7,6 +7,7 @@ import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 
 public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise> extends PuzzleConfigAggregate<E> {
@@ -54,8 +55,8 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         this.soundlessGuessingPiano = soundlessGuessingPiano;
     }
 
-    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano, final PianoKeyboardAggregate[] pianoKeyboardAggregates) {
-        super(exercise, targetNumberOfPuzzles, statsRecording, pianoKeyboardAggregates);
+    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {
+        super(exercise, targetNumberOfPuzzles, statsRecording);
 
         setNormalizedNotesForPuzzle(Objects.requireNonNull(normalizedNotesForPuzzle));
         setNormalizedRootNote(normalizedRootNote);
@@ -71,22 +72,6 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
             errors.add("targetNumberOfPuzzles cannot be negative or zero");
         }
         return errors;
-    }
-
-    @Override
-    protected void updatePropertyViaPianoKeyboard(final String propertyName, final PianoKeyboardAggregate pianoKeyboard) {
-        switch (propertyName) {
-        case NORMALIZED_ROOT_NOTE_PROP:
-            var normalizedRootNote = pianoKeyboard.getSelectedKeyNumbers()[0];
-            updateProperty(NORMALIZED_ROOT_NOTE_PROP, normalizedRootNote);
-            break;
-        case NORMALIZED_NOTES_FOR_PUZZLE_PROP:
-            var selectedKeyNumbers = pianoKeyboard.getSelectedKeyNumbers();
-            updateProperty(NORMALIZED_NOTES_FOR_PUZZLE_PROP, selectedKeyNumbers);
-            break;
-        default:
-            throw new RuntimeException();
-        }
     }
 
     protected void updateConfigSpecificProperty(final String propertyName, final Object propertyValue) {

@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.PianoKeyNumberSolution;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 
 // TODO review the domain layer to make sure it does not contain a concepts the domain expert wouldn't understand
 public final class PuzzleTestHelper {

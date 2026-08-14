@@ -1,12 +1,15 @@
 package org.swetlokognatsk.earking_out.core.domain.events;
 
 import java.time.LocalDateTime;
+
+import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
@@ -48,5 +51,10 @@ public final class DomainEventsFactory {
     public SessionFinishedEvent createSessionFinishedEvent(final SessionId sessionId) {
         var timestamp = createTimestamp();
         return new SessionFinishedEvent(timestamp, sessionId);
+    }
+
+    public AudioPerfectPitchExercisePickedEvent createAudioPerfectPitchExercisePickedEvent(final AudioPerfectPitchExercise exercise) {
+        var timestamp = createTimestamp();
+        return new AudioPerfectPitchExercisePickedEvent(timestamp, exercise);
     }
 }

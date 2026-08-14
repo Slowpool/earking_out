@@ -19,7 +19,7 @@ module org.swetlokognatsk {
 
     // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     exports org.swetlokognatsk.earking_out.core.ports.piano;
     exports org.swetlokognatsk.earking_out.core.ports.hints.demonstrators;
     exports org.swetlokognatsk.earking_out.core.domain.events;
@@ -79,25 +79,28 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.services.app.session;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.music;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.piano;
-    exports org.swetlokognatsk.earking_out.inftrastructure.factories.puzzles.generators;
+    exports org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators;
     exports org.swetlokognatsk.earking_out.core.ports.events;
     exports org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound;
     exports org.swetlokognatsk.earking_out.core.ports.puzzles;
     exports org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.ports.session;
     exports org.swetlokognatsk.earking_out.core.ports.session.perfectpitch;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.base;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.hints.demonstrators.sound;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.piano;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.configs;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.puzzles.generators.perfectpitch;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.session;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.session.perfectpitch;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.sounds;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.eventsourcing;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.base;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.sound;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.piano;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.session;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.sounds;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
     exports org.swetlokognatsk.earking_out.core.domain.events.session;
-    exports org.swetlokognatsk.earking_out.inftrastructure.adapters.events;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.events;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.greenrobot;
+    exports org.swetlokognatsk.earking_out.learning_tests;
 
-    opens org.swetlokognatsk.earking_out.inftrastructure.adapters.events.spring;
+    opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
+    opens org.swetlokognatsk.earking_out.learning_tests;
 }

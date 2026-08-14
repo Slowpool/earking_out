@@ -5,7 +5,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
-import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 
@@ -19,15 +18,9 @@ public final class AudioPerfectPitchSessionService extends SessionService<AudioP
         super(puzzleConfigRepository, sessionRepository, sessionAggregatesFactory);
     }
 
-    public void guessViaPianoKeyPressing(final SessionId sessionId, final PianoKeyNumber keyNumber) {
-        var session = (AudioPerfectPitchSessionAggregate) sessionRepository.get(sessionId);
+    public void guessViaPianoKeyPressing(final PianoKeyNumber keyNumber) {
+        var session = (AudioPerfectPitchSessionAggregate) sessionRepository.getActiveSession();
         session.guessViaPianoKeyPressing(keyNumber);
-        sessionRepository.save(session);
-    }
-
-    public void releasePianoKey(final SessionId sessionId) {
-        var session = (AudioPerfectPitchSessionAggregate) sessionRepository.get(sessionId);
-        session.releasePianoKey();
         sessionRepository.save(session);
     }
 

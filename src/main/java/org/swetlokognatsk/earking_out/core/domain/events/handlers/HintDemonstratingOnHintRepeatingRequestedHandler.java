@@ -4,15 +4,15 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRe
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 
-// TODO handlers definitely must not be in core/domain
-public final class HintDemonstratingOnHintRepeatingRequestedHandler {
+public final class HintDemonstratingOnHintRepeatingRequestedHandler extends DomainEventHandler<HintRepeatingRequestedEvent> {
+
     private final HintDemonstrator<Solution> hintDemonstrator;
 
     public HintDemonstratingOnHintRepeatingRequestedHandler(final HintDemonstrator<Solution> hintDemonstrator) {
         this.hintDemonstrator = hintDemonstrator;
     }
 
-    public void handleHintRepeatingRequestedEvent(final HintRepeatingRequestedEvent event) {
+    public void handle(final HintRepeatingRequestedEvent event) {
         hintDemonstrator.demonstrateHint(event.puzzle.solution);
     }
 }

@@ -16,12 +16,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
  * ids are just hardcoded here.
  */
 public enum PianoKeyboardId {
-    AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER(new AudioPerfectPitchExercise()), AUDIO_PERFECT_PITCH_NOTES_PICKER(new AudioPerfectPitchExercise()), AUDIO_PERFECT_PITCH_NOTES_GUESSING(new AudioPerfectPitchExercise());
+    AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER(new AudioPerfectPitchExercise(), PianoKeyboardContext.PUZZLE_CONFIG), AUDIO_PERFECT_PITCH_NOTES_PICKER(new AudioPerfectPitchExercise(), PianoKeyboardContext.PUZZLE_CONFIG), AUDIO_PERFECT_PITCH_NOTES_GUESSING(new AudioPerfectPitchExercise(), PianoKeyboardContext.SESSION);
 
     public final Exercise exercise;
+    public final PianoKeyboardContext context;
 
-    private PianoKeyboardId(final Exercise exercise) {
+    private PianoKeyboardId(final Exercise exercise, final PianoKeyboardContext context) {
         this.exercise = Objects.requireNonNull(exercise);
+        this.context = Objects.requireNonNull(context);
     }
 
     public static PianoKeyboardId[] getPianoKeyboardIds(final Exercise exercise) {

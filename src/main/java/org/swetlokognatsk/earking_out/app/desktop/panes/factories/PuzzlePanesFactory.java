@@ -1,19 +1,26 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.factories;
 
+import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class PuzzlePanesFactory {
-    private final SessionRepositoryDelegator sessionRepository;
 
-    public PuzzlePanesFactory(final SessionRepositoryDelegator sessionRepository) {
+    private final SessionRepositoryDelegator sessionRepository;
+    private final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister;
+    private final PianoKeyboardService pianoKeyboardService;
+
+    public PuzzlePanesFactory(final SessionRepositoryDelegator sessionRepository, final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister, final PianoKeyboardService pianoKeyboardService) {
         this.sessionRepository = sessionRepository;
+        this.pianoKeyboardHandlersRegister = pianoKeyboardHandlersRegister;
+        this.pianoKeyboardService = pianoKeyboardService;
     }
 
     public PuzzlePane<?, ?, ?> create(final SessionId sessionId, final double width, final double height) {
@@ -26,7 +33,7 @@ public final class PuzzlePanesFactory {
         };
 
         var puzzlePane = switch (exercise) {
-        case AudioPerfectPitchExercise e -> new AudioPerfectPitchPane(sessionId, (AudioPerfectPitchConfigDTO) puzzleConfigDto, width, height, (AudioPerfectPitchSessionService) service);
+        case AudioPerfectPitchExercise e -> new AudioPerfectPitchPane(sessionId, (AudioPerfectPitchConfigDTO) puzzleConfigDto, width, height, (AudioPerfectPitchSessionService) service, pianoKeyboardHandlersRegister, pianoKeyboardService);
         default -> throw new RuntimeException("unkown exercise: " + exercise);
         };
 

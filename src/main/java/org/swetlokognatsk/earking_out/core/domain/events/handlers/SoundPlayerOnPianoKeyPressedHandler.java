@@ -1,25 +1,27 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardContext;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.ports.piano.PuzzleConfigPianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
-public final class SoundPlayerOnPianoKeyPressedHandler {
+public final class SoundPlayerOnPianoKeyPressedHandler extends DomainEventHandler<PianoKeyPressedEvent> {
+
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
-    private final PuzzleConfigPianoKeyboardStorageAdapter puzzleConfigPianoKeyboardRepository;
+    private final PianoKeyboardRepository pianoKeyboardRepository;
     private final PuzzleConfigRepository puzzleConfigRepository;
 
-    public SoundPlayerOnPianoKeyPressedHandler(final PianoKeySoundsPlayer pianoKeySoundsPlayer, final PuzzleConfigPianoKeyboardStorageAdapter pianoKeyboardRepository, final PuzzleConfigRepository puzzleConfigRepository) {
+    public SoundPlayerOnPianoKeyPressedHandler(final PianoKeySoundsPlayer pianoKeySoundsPlayer, final PianoKeyboardRepository pianoKeyboardRepository, final PuzzleConfigRepository puzzleConfigRepository) {
         this.pianoKeySoundsPlayer = pianoKeySoundsPlayer;
-        this.puzzleConfigPianoKeyboardRepository = pianoKeyboardRepository;
+        this.pianoKeyboardRepository = pianoKeyboardRepository;
         this.puzzleConfigRepository = puzzleConfigRepository;
     }
 
-    public void handlePianoKeyPressedEvent(final PianoKeyPressedEvent event) {
+    public void handle(final PianoKeyPressedEvent event) {
         if (shouldPlaySound(event.pianoKeyboardId)) {
             pianoKeySoundsPlayer.stopAndPlay(event.pianoKeyNumber);
         }
@@ -32,15 +34,7 @@ public final class SoundPlayerOnPianoKeyPressedHandler {
     }
 
     private boolean pianoKeyboardBelongsToPuzzleConfig(final PianoKeyboardId pianoKeyboardId) {
-        boolean pianoKeyboardExists;
-        try {
-            // check whether it exists or not
-            puzzleConfigPianoKeyboardRepository.get(pianoKeyboardId);
-            pianoKeyboardExists = true;
-        } catch (IllegalArgumentException exception) {
-            pianoKeyboardExists = false;
-        }
-        return pianoKeyboardExists;
+        return pianoKeyboardId.context == PianoKeyboardContext.PUZZLE_CONFIG;
     }
 
     private boolean inspectConfigWhetherShouldPianoKeyMakeSound(final PianoKeyboardId pianoKeyboardId) {

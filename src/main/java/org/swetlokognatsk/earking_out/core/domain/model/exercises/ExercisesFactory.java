@@ -18,4 +18,15 @@ public final class ExercisesFactory {
 
     private ExercisesFactory() {
     }
+
+    public static Exercise create(final ExerciseNames name, final ExerciseTypes type) {
+        return switch (name) {
+        case PERFECT_PITCH -> switch (type) {
+        case VISUAL -> new VisualPerfectPitchExercise();
+        case AUDIO -> new AudioPerfectPitchExercise();
+        default -> throw new IllegalArgumentException("unknown exercise type: " + type);
+        };
+        default -> throw new IllegalArgumentException("unknown exercise: " + name);
+        };
+    }
 }

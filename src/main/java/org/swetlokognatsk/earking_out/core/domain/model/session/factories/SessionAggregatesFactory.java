@@ -15,15 +15,15 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.piano.SessionPianoKeyboardStorageAdapter;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
 public final class SessionAggregatesFactory extends AggregatesFactory<SessionAggregate<?, ?, ?, ?>> {
     private final PuzzleConfigRepository puzzleConfigRepository;
-    private final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository;
+    private final PianoKeyboardRepository pianoKeyboardRepository;
     private final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler;
     private final PuzzlesFactory puzzlesFactory;
 
-    public SessionAggregatesFactory(final ObjectCloner cloner, final PuzzleConfigRepository puzzleConfigRepository, final SessionPianoKeyboardStorageAdapter pianoKeyboardRepository, final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler, final PuzzlesFactory puzzlesFactory) {
+    public SessionAggregatesFactory(final ObjectCloner cloner, final PuzzleConfigRepository puzzleConfigRepository, final PianoKeyboardRepository pianoKeyboardRepository, final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler, final PuzzlesFactory puzzlesFactory) {
         super(cloner);
         // read-only access
         this.puzzleConfigRepository = puzzleConfigRepository;
@@ -40,8 +40,7 @@ public final class SessionAggregatesFactory extends AggregatesFactory<SessionAgg
 
         var sessionAggregate = switch (exercise) {
         case AudioPerfectPitchExercise _e -> {
-            var notesGuessingPianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING);
-            var aggregate = new AudioPerfectPitchSessionAggregate(puzzlesFactory, SessionId.random(), (AudioPerfectPitchConfigDTO) puzzleConfigDto, sessionStats, notesGuessingPianoKeyboard);
+            var aggregate = new AudioPerfectPitchSessionAggregate(puzzlesFactory, SessionId.random(), (AudioPerfectPitchConfigDTO) puzzleConfigDto, sessionStats);
             yield aggregate;
         }
         default -> throw new IllegalArgumentException("unknown exercise: " + exercise);

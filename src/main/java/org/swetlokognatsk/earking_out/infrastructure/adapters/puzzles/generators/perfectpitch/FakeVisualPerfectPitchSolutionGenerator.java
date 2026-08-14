@@ -1,0 +1,8 @@
+package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch;
+
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.FakeSolutionGenerator;
+
+public final class FakeVisualPerfectPitchSolutionGenerator extends FakeSolutionGenerator implements VisualPerfectPitchSolutionGenerator {
+
+}

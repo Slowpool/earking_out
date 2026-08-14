@@ -1,8 +1,9 @@
 package org.swetlokognatsk.earking_out.core.ports.eventsourcing;
 
-import org.swetlokognatsk.earking_out.inftrastructure.EventSavingException;
-import org.swetlokognatsk.earking_out.inftrastructure.eventsourcing.EventStream;
+import org.swetlokognatsk.earking_out.infrastructure.EventSavingException;
+import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 
+// TODO add version to event.
 public interface EventStore {
     // // TODO use it
     // void append(final EventStream<?> eventStream) throws EventSavingException;

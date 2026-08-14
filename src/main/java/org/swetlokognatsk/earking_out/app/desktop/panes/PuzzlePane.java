@@ -5,8 +5,8 @@ import org.swetlokognatsk.earking_out.app.desktop.helpers.TextHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.domain.services.app.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -63,6 +63,7 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
     protected VBox buildPuzzlesProgress(final Label puzzleProgressLabel, final ProgressBar puzzlesProgressBar) {
         var puzzlesProgress = new VBox(puzzleProgressLabel, puzzlesProgressBar);
         puzzlesProgress.setAlignment(Pos.CENTER);
+        // puzzlesProgress.setMaxWidth(500);
         return puzzlesProgress;
     }
 
