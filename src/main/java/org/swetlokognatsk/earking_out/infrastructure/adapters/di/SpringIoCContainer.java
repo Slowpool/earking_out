@@ -21,7 +21,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSess
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnUserTriedToGuessPuzzleHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.PuzzleConfigUpdatingOnPianoKeyPressedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.AudioPerfectPitchGuessingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
@@ -152,12 +152,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class, () -> new PuzzleConfigUpdatingOnPianoKeyPressedHandler(get(PuzzleConfigService.class)));
 
-        // TODO pass service or what?
-        ctx.registerBean(SessionGuessingOnPianoKeyPressedHandler.class, () -> {
-            var services = new HashMap<Exercise, SessionService<?, ?, ?>>();
-            services.put(new AudioPerfectPitchExercise(), get(AudioPerfectPitchSessionService.class));
-            return new SessionGuessingOnPianoKeyPressedHandler(services);
-        });
+        ctx.registerBean(AudioPerfectPitchGuessingOnPianoKeyPressedHandler.class, () -> new AudioPerfectPitchGuessingOnPianoKeyPressedHandler(get(AudioPerfectPitchSessionService.class)));
 
         ctx.registerBean(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class, () -> new SessionPianoKeyboardUpdatingOnSessionStartedHandler(get(PianoKeyboardService.class)));
 

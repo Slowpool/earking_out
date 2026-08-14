@@ -15,7 +15,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSess
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnUserTriedToGuessPuzzleHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.PuzzleConfigUpdatingOnPianoKeyPressedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.AudioPerfectPitchGuessingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
@@ -289,11 +289,8 @@ public final class HandmadeIoCContainer implements IoCContainer {
         } else if (someClass.equals(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class)) {
             return (T) new SessionPianoKeyboardUpdatingOnSessionStartedHandler(get(PianoKeyboardService.class));
 
-        } else if (someClass.equals(SessionGuessingOnPianoKeyPressedHandler.class)) {
-            // TODO this logic must be in factory
-            var sessionServices = new HashMap<Exercise, SessionService<?, ?, ?>>();
-            sessionServices.put(new AudioPerfectPitchExercise(), get(AudioPerfectPitchSessionService.class));
-            return (T) new SessionGuessingOnPianoKeyPressedHandler(sessionServices);
+        } else if (someClass.equals(AudioPerfectPitchGuessingOnPianoKeyPressedHandler.class)) {
+            return (T) new AudioPerfectPitchGuessingOnPianoKeyPressedHandler(get(AudioPerfectPitchSessionService.class));
 
         } else if (someClass.equals(LogEventOnSessionStartedHandler.class)) {
             return (T) new LogEventOnSessionStartedHandler(get(EventStore.class));

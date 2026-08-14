@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.AudioPerfectPitchGuessingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
@@ -35,7 +35,7 @@ public final class GreenrobotEventBus implements org.swetlokognatsk.earking_out.
         case HintDemonstratingOnNewPuzzleCreatedHandler dh -> new GreenrobotHintDemonstratingOnNewPuzzleCreatedHandler(dh);
         case HintDemonstratingOnHintRepeatingRequestedHandler dh -> new GreenrobotHintDemonstratingOnHintRepeatingRequestedHandler(dh);
         case SessionPianoKeyboardUpdatingOnSessionStartedHandler dh -> new GreenrobotSessionPianoKeyboardUpdatingOnSessionStartedHandler(dh);
-        case SessionGuessingOnPianoKeyPressedHandler dh -> new GreenrobotSessionGuessingOnPianoKeyPressedHandler(dh);
+        case AudioPerfectPitchGuessingOnPianoKeyPressedHandler dh -> new GreenrobotSessionGuessingOnPianoKeyPressedHandler(dh);
         default -> throw new IllegalArgumentException("unkown domain event handler: " + domainEventHandler.getClass().getName());
         };
     }
