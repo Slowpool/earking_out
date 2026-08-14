@@ -14,7 +14,7 @@ public final class SessionPianoKeyboardUpdatingOnSessionStartedHandler extends D
     }
 
     public void handle(final SessionStartedEvent event) {
-        switch (event.puzzleConfigDto.exercise) {
+        switch (event.sessionDto.puzzleConfigDto.exercise) {
         case AudioPerfectPitchExercise appe:
             pianoKeyboardService.resetPianoKeyboardState(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING);
             break;

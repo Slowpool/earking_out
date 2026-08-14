@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionDTO;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,7 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class SessionStatsPane<SADTO extends SessionAggregateDTO<?, ?, ?, ?>> extends BorderPane {
+public abstract class SessionStatsPane<SADTO extends SessionDTO<?, ?, ?, ?>> extends BorderPane {
     protected final SADTO sessionDto;
 
     protected abstract Pane buildStatsPane();

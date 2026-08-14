@@ -2,20 +2,16 @@ package org.swetlokognatsk.earking_out.core.domain.events.session;
 
 import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionDTO;
 
-// TODO SessionStartedEvent
 public final class SessionStartedEvent extends DomainEvent {
     private static final long serialVersionUID = 1L;
 
-    public final SessionId sessionId;
-    public final PuzzleConfigDTO<?> puzzleConfigDto;
+    public final SessionDTO<?, ?, ?, ?> sessionDto;
 
-    public SessionStartedEvent(final LocalDateTime timestamp, final SessionId sessionId, final PuzzleConfigDTO<?> puzzleConfigDto) {
+    public SessionStartedEvent(final LocalDateTime timestamp, final SessionDTO<?, ?, ?, ?> sessionDto) {
         super(timestamp);
 
-        this.sessionId = sessionId;
-        this.puzzleConfigDto = puzzleConfigDto;
+        this.sessionDto = sessionDto;
     }
 }
