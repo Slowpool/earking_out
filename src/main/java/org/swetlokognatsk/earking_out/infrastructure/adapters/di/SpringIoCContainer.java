@@ -105,7 +105,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SolutionGeneratorsFactory.class);
 
-        ctx.registerBean(PuzzlesFactory.class, () -> new PuzzlesFactory(ctx.getBean(SolutionGeneratorsFactory.class), ctx.getBean(PuzzleConfigDTOAssembler.class)));
+        ctx.registerBean(PuzzlesFactory.class, () -> new PuzzlesFactory(ctx.getBean(SolutionGeneratorsFactory.class), ctx.getBean(PuzzleConfigRepository.class)));
 
         ctx.registerBean(SessionAggregatesFactory.class, () -> new SessionAggregatesFactory(ctx.getBean(ObjectCloner.class), ctx.getBean(PuzzleConfigRepository.class), ctx.getBean(PianoKeyboardRepository.class), ctx.getBean(PuzzleConfigDTOAssembler.class), ctx.getBean(PuzzlesFactory.class)));
 
@@ -129,7 +129,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SpringEventBus.class);
 
-        ctx.registerBean(PuzzleConfigDTOAssembler.class, () -> new PuzzleConfigDTOAssembler(ctx.getBean(PuzzleConfigRepository.class)));
+        ctx.registerBean(PuzzleConfigDTOAssembler.class, () -> new PuzzleConfigDTOAssembler());
 
         ctx.registerBean(RandomAudioPerfectPitchSolutionGenerator.class, (BeanDefinition bd) -> bd.setScope(BeanDefinition.SCOPE_PROTOTYPE));
 
@@ -160,9 +160,9 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class, () -> new SessionPianoKeyboardUpdatingOnSessionStartedHandler(ctx.getBean(PianoKeyboardService.class)));
 
-        ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class)), (BeanDefinition bd) -> bd.setPrimary(false));
+        ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class), ctx.getBean(PuzzleConfigDTOAssembler.class)), (BeanDefinition bd) -> bd.setPrimary(false));
 
-        ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class), ctx.getBean(PuzzleConfigJsonSerializer.class)), (BeanDefinition bd) -> bd.setPrimary(true));
+        ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(ctx.getBean(AbstractPuzzleConfigAggregatesFactory.class), ctx.getBean(PuzzleConfigJsonSerializer.class), ctx.getBean(PuzzleConfigDTOAssembler.class)), (BeanDefinition bd) -> bd.setPrimary(true));
 
         ctx.registerBean(JacksonJsonSerializer.class, () -> new JacksonJsonSerializer());
 

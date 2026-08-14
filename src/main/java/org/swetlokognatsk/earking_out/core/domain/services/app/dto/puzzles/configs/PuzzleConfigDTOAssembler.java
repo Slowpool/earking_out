@@ -11,10 +11,6 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 public final class PuzzleConfigDTOAssembler {
     private static final Map<Exercise, EndPuzzleConfigDTOAssembler<?, ?, ?>> endDtoAssemblers = new HashMap<>();
 
-    // TODO reverse this dependency, so that `puzzleConfigRepository.getDto(exercise)`
-    // TODO make all dto assemblers to be final utility classes
-    private final PuzzleConfigRepository puzzleConfigRepository;
-
     static {
         EndPuzzleConfigDTOAssembler<?, ?, ?> dtoAssembler;
         for (var exercise : ExercisesFactory.getAll()) {
@@ -23,14 +19,7 @@ public final class PuzzleConfigDTOAssembler {
         }
     }
 
-    public PuzzleConfigDTOAssembler(final PuzzleConfigRepository puzzleConfigRepository) {
-        this.puzzleConfigRepository = puzzleConfigRepository;
-    }
-
-    public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
-        var puzzleConfig = puzzleConfigRepository.get(exercise);
-        var dto = assemble(puzzleConfig);
-        return (PCDTO) dto;
+    public PuzzleConfigDTOAssembler() {
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>, PCDTO extends PuzzleConfigDTO<E>> PCDTO assemble(final PCA aggregate) {

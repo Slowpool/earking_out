@@ -25,6 +25,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -121,8 +122,8 @@ public class EarkingOutApplication extends Application {
 
     private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfigDTO<E>>> CP buildConfigPane(final E exercise) {
         // TODO is it fine to pull it from DI here?
-        var puzzleConfigDTOAssembler = DI.get(PuzzleConfigDTOAssembler.class);
-        var puzzleConfigDto = puzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
+        var puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
+        var puzzleConfigDto = puzzleConfigRepository.getPuzzleConfigDTO(exercise);
 
         var configPanesFactory = DI.get(ConfigPanesFactory.class);
         var configPane = configPanesFactory.create(puzzleConfigDto, WIDTH, HEIGHT);

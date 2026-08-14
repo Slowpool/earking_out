@@ -14,17 +14,15 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler extends DomainEventHandler<AudioPerfectPitchExercisePickedEvent> {
 
     private final PianoKeyboardRepository pianoKeyboardRepository;
-    private final PuzzleConfigDTOAssembler puzzleConfigDtoAssembler;
+    private final PuzzleConfigRepository puzzleConfigRepository;
 
     public ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler(final PianoKeyboardRepository pianoKeyboardRepository, final PuzzleConfigRepository puzzleConfigRepository) {
         this.pianoKeyboardRepository = pianoKeyboardRepository;
-        // TODO put this logic into repository
-        // var puzzleConfig = puzzleConfigRepository.get(new AudioPerfectPitchExercise());
-        this.puzzleConfigDtoAssembler = DI.get(PuzzleConfigDTOAssembler.class);
+        this.puzzleConfigRepository = puzzleConfigRepository;
     }
 
     private AudioPerfectPitchConfigDTO getActualPuzzleConfigDto() {
-        return puzzleConfigDtoAssembler.getPuzzleConfigDTO(new AudioPerfectPitchExercise());
+        return puzzleConfigRepository.getPuzzleConfigDTO(new AudioPerfectPitchExercise());
     }
 
     // TODO actually it should happen only once, when user picks this exercise the first time

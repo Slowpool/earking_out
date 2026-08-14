@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.ports.config;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRootRepository;
 
 public interface PuzzleConfigRepository extends AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>> {
@@ -16,4 +17,7 @@ public interface PuzzleConfigRepository extends AggregateRootRepository<Exercise
     default void save(final PuzzleConfigAggregate<Exercise> aggregate) {
         genericSave(aggregate);
     }
+
+    <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise);
+
 }

@@ -7,15 +7,19 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFacto
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     private final Map<Exercise, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
     private final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
+    private final PuzzleConfigDTOAssembler dtoAssembler;
 
-    public InMemoryPuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory) {
+    public InMemoryPuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigDTOAssembler dtoAssembler) {
         this.abstractPuzzleConfigAggregatesFactory = abstractPuzzleConfigAggregatesFactory;
+        this.dtoAssembler = dtoAssembler;
 
         seedConfigs();
     }
@@ -54,5 +58,11 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     public void genericSave(PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
         aggregates.put(puzzleConfigAggregate.getId(), puzzleConfigAggregate);
+    }
+
+    public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
+        var puzzleConfig = genericGet(exercise);
+        var dto = dtoAssembler.assemble(puzzleConfig);
+        return (PCDTO) dto;
     }
 }

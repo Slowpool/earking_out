@@ -144,7 +144,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (someClass.equals(InMemoryPuzzleConfigRepository.class)) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigDTOAssembler.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 
@@ -179,13 +179,13 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) new SerializationCloner();
 
         } else if (someClass.equals(PuzzlesFactory.class)) {
-            return (T) new PuzzlesFactory(get(SolutionGeneratorsFactory.class), get(PuzzleConfigDTOAssembler.class));
+            return (T) new PuzzlesFactory(get(SolutionGeneratorsFactory.class), get(PuzzleConfigRepository.class));
 
         } else if (someClass.equals(SolutionGeneratorsFactory.class)) {
             return (T) new SolutionGeneratorsFactory();
 
         } else if (someClass.equals(PuzzleConfigDTOAssembler.class)) {
-            return (T) new PuzzleConfigDTOAssembler(get(PuzzleConfigRepository.class));
+            return (T) new PuzzleConfigDTOAssembler();
 
         } else if (someClass.equals(SessionAggregatesFactory.class)) {
             return (T) new SessionAggregatesFactory(get(ObjectCloner.class), get(PuzzleConfigRepository.class), get(PianoKeyboardRepository.class), get(PuzzleConfigDTOAssembler.class), get(PuzzlesFactory.class));

@@ -13,6 +13,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
@@ -76,10 +78,12 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
 
     private final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
     private final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer;
+    private final PuzzleConfigDTOAssembler dtoAssembler;
 
-    public SQLitePuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer) {
+    public SQLitePuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler) {
         this.abstractPuzzleConfigAggregatesFactory = abstractPuzzleConfigAggregatesFactory;
         this.puzzleConfigJsonSerializer = puzzleConfigJsonSerializer;
+        this.dtoAssembler = dtoAssembler;
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
@@ -181,4 +185,9 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
         insertStatement.executeUpdate();
     }
 
+    public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
+        var puzzleConfig = genericGet(exercise);
+        var dto = dtoAssembler.assemble(puzzleConfig);
+        return (PCDTO) dto;
+    }
 }
