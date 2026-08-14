@@ -12,8 +12,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionDTOAssembler;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -80,8 +80,8 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         }
     }
 
-    private AudioPerfectPitchSessionDTO getCurrentSessionDTO() {
-        return (AudioPerfectPitchSessionDTO) SessionDTOAssembler.getSessionDTO(sessionId);
+    private AudioPerfectPitchSessionAggregateDTO getCurrentSessionDTO() {
+        return (AudioPerfectPitchSessionAggregateDTO) SessionAggregateDTOAssembler.getSessionAggregateDTO(sessionId);
     }
 
     public void releasePianoKey(final PianoKeyReleasedEvent e) {

@@ -3,18 +3,18 @@ package org.swetlokognatsk.earking_out.core.domain.events.session;
 import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionDTO;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 
 public final class HintRepeatingRequestedEvent extends DomainEvent {
     private static final long serialVersionUID = 1L;
 
-    public final SessionDTO<?, ?, ?, ?> sessionDto;
+    public final SessionId sessionId;
     public final Puzzle<?, ?> puzzle;
 
-    public HintRepeatingRequestedEvent(final LocalDateTime timestamp, final SessionDTO<?, ?, ?, ?> sessionDto, final Puzzle<?, ?> puzzle) {
+    public HintRepeatingRequestedEvent(final LocalDateTime timestamp, final SessionId sessionId, final Puzzle<?, ?> puzzle) {
         super(timestamp);
 
-        this.sessionDto = sessionDto;
+        this.sessionId = sessionId;
         this.puzzle = puzzle;
     }
 }

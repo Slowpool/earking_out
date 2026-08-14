@@ -62,6 +62,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.model.session;
     exports org.swetlokognatsk.earking_out.core.domain.model.session.factories;
+    exports org.swetlokognatsk.earking_out.core.domain.model.session.factories.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.model.solutions.sound;

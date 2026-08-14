@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.Perfe
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionDTOAssembler;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
 public final class StatsPanesFactory {
@@ -18,7 +18,7 @@ public final class StatsPanesFactory {
     }
 
     public SessionStatsPane<?> create(final SessionId sessionId) {
-        var sessionDto = SessionDTOAssembler.getSessionDTO(sessionId);
+        var sessionDto = SessionAggregateDTOAssembler.getSessionAggregateDTO(sessionId);
         var exercise = sessionDto.puzzleConfigDto.exercise;
         var sessionStatsPane = switch (exercise) {
         case AudioPerfectPitchExercise e -> new PerfectPitchStatsPane<>(sessionDto);

@@ -6,12 +6,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.Aud
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionDTOAssembler;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssembler;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionAggregateDTO;
 
-public final class EndAudioPerfectPitchSessionDTOAssembler extends EndSessionDTOAssembler<AudioPerfectPitchExercise, AudioPerfectPitchSolution, AudioPerfectPitchPuzzle, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionAggregate, AudioPerfectPitchSessionDTO> {
+public final class EndAudioPerfectPitchSessionAggregateDTOAssembler extends EndSessionAggregateDTOAssembler<AudioPerfectPitchExercise, AudioPerfectPitchSolution, AudioPerfectPitchPuzzle, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionAggregate, AudioPerfectPitchSessionAggregateDTO> {
 
-    public AudioPerfectPitchSessionDTO assemble(final AudioPerfectPitchSessionAggregate sessionAggregate) {
+    public AudioPerfectPitchSessionAggregateDTO assemble(final AudioPerfectPitchSessionAggregate sessionAggregate) {
         AudioPerfectPitchPuzzle puzzle;
         try {
             puzzle = sessionAggregate.getPuzzle();
@@ -33,7 +33,7 @@ public final class EndAudioPerfectPitchSessionDTOAssembler extends EndSessionDTO
             numberOfGuessesOfCurrentPuzzle = null;
         }
 
-        var dto = new AudioPerfectPitchSessionDTO(sessionAggregate.getId(), sessionAggregate.getPuzzleConfig(), sessionAggregate.getStats(), sessionAggregate.getState(), puzzle, prevGuessIsSuccessful, numberOfGuessesOfCurrentPuzzle);
+        var dto = new AudioPerfectPitchSessionAggregateDTO(sessionAggregate.getPuzzleConfig(), sessionAggregate.getStats(), sessionAggregate.getState(), puzzle, prevGuessIsSuccessful, numberOfGuessesOfCurrentPuzzle);
         return dto;
     }
 }

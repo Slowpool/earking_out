@@ -9,8 +9,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 // TODO use event sourcing for this aggregate?
@@ -44,7 +42,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     public final boolean isInProgress() {
-        return getState() == SessionStates.IN_PROGRESS;
+        return state == SessionStates.IN_PROGRESS;
     }
 
     protected final void setState(final SessionStates state) {
@@ -52,15 +50,15 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     public final int getPuzzlesCompleted() {
-        return getStats().puzzlesCompleted;
+        return stats.puzzlesCompleted;
     }
 
     public final int getPuzzlesCompletedPerfectly() {
-        return getStats().puzzlesCompletedPerfectly;
+        return stats.puzzlesCompletedPerfectly;
     }
 
     public final P getPuzzle() {
-        if (getState() != SessionStates.IN_PROGRESS) {
+        if (state != SessionStates.IN_PROGRESS) {
             throw new IllegalStateException("session cannot have a puzzle if it is not in progress");
         }
         return puzzle;
@@ -80,7 +78,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected final boolean thereAreNoAnyGuessesInSession() {
-        return getPuzzlesCompleted() == 0 && getNumberOfGuessesOfCurrentPuzzle() == 0;
+        return stats.puzzlesCompleted == 0 && getNumberOfGuessesOfCurrentPuzzle() == 0;
     }
 
     protected final void setPrevGuessIsSuccessful(final boolean prevGuessIsSuccessful) {
@@ -116,31 +114,23 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     private void addSessionStartedEvent() {
-        var event = getDomainEventsFactory().createSessionStartedEvent(assembleOwnDto());
+        var event = getDomainEventsFactory().createSessionStartedEvent(getId(), puzzleConfigDto);
         addEvent(event);
     }
 
     protected final void nextPuzzle() {
-        P puzzle = puzzlesFactory.create(getPuzzleConfig().exercise);
+        P puzzle = puzzlesFactory.create(puzzleConfigDto.exercise);
         setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
 
-        addNewPuzzleCreatedEvent(puzzle);
-    }
-
-    private void addNewPuzzleCreatedEvent(final P puzzle) {
-        var newPuzzleEvent = getDomainEventsFactory().createNewPuzzleCreatedEvent(assembleOwnDto(), puzzle);
+        var newPuzzleEvent = getDomainEventsFactory().createNewpuzzleCreatedEvent(getId(), puzzle);
         addEvent(newPuzzleEvent);
-    }
-
-    private SessionDTO<E, P, PCDTO, ?> assembleOwnDto() {
-        return SessionDTOAssembler.assemble(this);
     }
 
     public final void guess(final S guess) {
         validateGuessing();
 
-        var success = getPuzzle().guess(guess);
+        var success = puzzle.guess(guess);
         incrementNumberOfGuessesOfCurrentPuzzle();
 
         if (success) {
@@ -153,21 +143,21 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     private void addUserTriedToGuessPuzzleEvent(final int puzzleNumber, final S guess, final int attempt, final boolean success) {
-        var event = getDomainEventsFactory().createUserTriedToGuessPuzzleEvent(assembleOwnDto(), puzzleNumber, guess, attempt, success);
+        var event = getDomainEventsFactory().createUserTriedToGuessPuzzleEvent(getId(), puzzleNumber, guess, attempt, success);
         addEvent(event);
     }
 
     protected void validateGuessing() {
-        if (getState() != SessionStates.IN_PROGRESS) {
+        if (state != SessionStates.IN_PROGRESS) {
             throw new IllegalStateException("session is not in progress");
         }
-        if (getPuzzlesCompleted() == getPuzzleConfig().targetNumberOfPuzzles) {
+        if (getPuzzlesCompleted() == puzzleConfigDto.targetNumberOfPuzzles) {
             throw new IllegalStateException("all puzzles are already guessed for this session");
         }
     }
 
     protected void handleSuccessfulGuess(final S guess) {
-        var newStats = isPerfectlyGuessedPuzzle() ? getStats().incrementPerfectlyCompletedPuzzles() : getStats().incrementCompletedPuzzles();
+        var newStats = isPerfectlyGuessedPuzzle() ? stats.incrementPerfectlyCompletedPuzzles() : stats.incrementCompletedPuzzles();
         setStats(newStats);
 
         addUserTriedToGuessPuzzleEvent(getPuzzlesCompleted(), guess, getNumberOfGuessesOfCurrentPuzzle(), true);
@@ -186,11 +176,11 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected final boolean isLastPuzzle() {
-        return getPuzzlesCompleted() == getPuzzleConfig().targetNumberOfPuzzles;
+        return stats.puzzlesCompleted == puzzleConfigDto.targetNumberOfPuzzles;
     }
 
     private void addSessionFinishedEvent() {
-        var event = getDomainEventsFactory().createSessionFinishedEvent(assembleOwnDto());
+        var event = getDomainEventsFactory().createSessionFinishedEvent(getId());
         addEvent(event);
     }
 
@@ -207,11 +197,8 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     public final void demonstrateHintAgain() {
-        addHintRepeatingRequestedEvent();
-    }
-
-    private void addHintRepeatingRequestedEvent() {
-        var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(assembleOwnDto(), getPuzzle());
+        var puzzle = getPuzzle();
+        var hearAgainEvent = getDomainEventsFactory().createHintRepeatingRequestedEvent(getId(), puzzle);
         addEvent(hearAgainEvent);
     }
 

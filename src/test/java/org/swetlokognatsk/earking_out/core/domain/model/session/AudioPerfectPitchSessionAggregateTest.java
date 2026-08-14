@@ -175,7 +175,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
         aggregate.guess(SOLUTION);
 
         var event = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
-        var eventSessionId = event.sessionDto.id;
+        var eventSessionId = event.sessionId;
         assertEquals(aggregateSessionId, eventSessionId);
     }
 
