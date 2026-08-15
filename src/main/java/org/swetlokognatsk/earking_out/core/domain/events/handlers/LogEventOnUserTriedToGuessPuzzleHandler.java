@@ -12,6 +12,7 @@ public final class LogEventOnUserTriedToGuessPuzzleHandler extends LoggingToEven
         super(eventStore);
     }
 
+    // TODO make puzzleConfigDto caching to not ask for it from database each piano key pressing. keep all logged events as-is, without adding session to them.
     public void handle(final UserTriedToGuessPuzzleEvent event) {
         var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
         eventStore.append(eventStream);

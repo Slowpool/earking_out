@@ -1,0 +1,6 @@
+piano key pressing business logic time handling
+    audio perfect pitch, only correct guessses, 9/10 are correct
+        with event logging to sqlite dbms
+            0.043356910454545455
+        without event logging to sqlite dbms
+            0.024991455090909095
