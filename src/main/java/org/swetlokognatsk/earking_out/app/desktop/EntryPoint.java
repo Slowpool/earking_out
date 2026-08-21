@@ -6,13 +6,15 @@ import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
+import javafx.application.Application;
+
 public final class EntryPoint {
 
     public static void main(String[] args) {
         var context = runSpringApp(args);
         initDI(context);
         DomainEventHandlers.registerDomainEventHandlers();
-        EarkingOutApplication.launch();
+        Application.launch(EarkingOutApplication.class, args);
     }
 
     public static void initDI(final ApplicationContext context) {
