@@ -144,15 +144,15 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(HintDemonstratingOnHintRepeatingRequestedHandler.class, () -> new HintDemonstratingOnHintRepeatingRequestedHandler(get(HintDemonstratorDelegator.class)));
 
-        ctx.registerBean(LogEventOnSessionStartedHandler.class, () -> new LogEventOnSessionStartedHandler(get(EventStore.class)));
+        ctx.registerBean(LogEventOnSessionStartedHandler.class, () -> new LogEventOnSessionStartedHandler(get(EventStore.class), get(PuzzleConfigRepository.class)));
 
-        ctx.registerBean(LogEventOnNewPuzzleCreatedHandler.class, () -> new LogEventOnNewPuzzleCreatedHandler(get(EventStore.class)));
+        ctx.registerBean(LogEventOnNewPuzzleCreatedHandler.class, () -> new LogEventOnNewPuzzleCreatedHandler(get(EventStore.class), get(PuzzleConfigRepository.class)));
 
-        ctx.registerBean(LogEventOnUserTriedToGuessPuzzleHandler.class, () -> new LogEventOnUserTriedToGuessPuzzleHandler(get(EventStore.class)));
+        ctx.registerBean(LogEventOnUserTriedToGuessPuzzleHandler.class, () -> new LogEventOnUserTriedToGuessPuzzleHandler(get(EventStore.class), get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class)));
 
-        ctx.registerBean(LogEventOnHintRepeatingRequestedHandler.class, () -> new LogEventOnHintRepeatingRequestedHandler(get(EventStore.class)));
+        ctx.registerBean(LogEventOnHintRepeatingRequestedHandler.class, () -> new LogEventOnHintRepeatingRequestedHandler(get(EventStore.class), get(PuzzleConfigRepository.class)));
 
-        ctx.registerBean(LogEventOnSessionFinishedHandler.class, () -> new LogEventOnSessionFinishedHandler(get(EventStore.class)));
+        ctx.registerBean(LogEventOnSessionFinishedHandler.class, () -> new LogEventOnSessionFinishedHandler(get(EventStore.class), get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class)));
 
         ctx.registerBean(PuzzleConfigUpdatingOnPianoKeyPressedHandler.class, () -> new PuzzleConfigUpdatingOnPianoKeyPressedHandler(get(PuzzleConfigService.class)));
 
@@ -162,7 +162,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigDTOAssembler.class)), (BeanDefinition bd) -> bd.setPrimary(false));
 
-        ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigJsonSerializer.class), get(PuzzleConfigDTOAssembler.class)), (BeanDefinition bd) -> bd.setPrimary(true));
+        ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigJsonSerializer.class), get(PuzzleConfigDTOAssembler.class), get(InMemoryPuzzleConfigRepository.class)), (BeanDefinition bd) -> bd.setPrimary(true));
 
         ctx.registerBean(JacksonJsonSerializer.class, () -> new JacksonJsonSerializer());
 

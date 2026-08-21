@@ -294,19 +294,19 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) new AudioPerfectPitchGuessingOnPianoKeyPressedHandler(get(AudioPerfectPitchSessionService.class));
 
         } else if (someClass.equals(LogEventOnSessionStartedHandler.class)) {
-            return (T) new LogEventOnSessionStartedHandler(get(EventStore.class));
+            return (T) new LogEventOnSessionStartedHandler(get(EventStore.class), get(PuzzleConfigRepository.class));
 
         } else if (someClass.equals(LogEventOnNewPuzzleCreatedHandler.class)) {
-            return (T) new LogEventOnNewPuzzleCreatedHandler(get(EventStore.class));
+            return (T) new LogEventOnNewPuzzleCreatedHandler(get(EventStore.class), get(PuzzleConfigRepository.class));
 
         } else if (someClass.equals(LogEventOnUserTriedToGuessPuzzleHandler.class)) {
-            return (T) new LogEventOnUserTriedToGuessPuzzleHandler(get(EventStore.class));
+            return (T) new LogEventOnUserTriedToGuessPuzzleHandler(get(EventStore.class), get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class));
 
         } else if (someClass.equals(LogEventOnHintRepeatingRequestedHandler.class)) {
-            return (T) new LogEventOnHintRepeatingRequestedHandler(get(EventStore.class));
+            return (T) new LogEventOnHintRepeatingRequestedHandler(get(EventStore.class), get(PuzzleConfigRepository.class));
 
         } else if (someClass.equals(LogEventOnSessionFinishedHandler.class)) {
-            return (T) new LogEventOnSessionFinishedHandler(get(EventStore.class));
+            return (T) new LogEventOnSessionFinishedHandler(get(EventStore.class), get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class));
 
         } else if (someClass.equals(ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler.class)) {
             return (T) new ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler(get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));

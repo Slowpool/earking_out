@@ -319,4 +319,22 @@ public final class SessionAggregateTest {
 
         getOnlyOneThrownEvent(aggregate, SessionFinishedEvent.class);
     }
+
+    @Test
+    public void lastSuccessfulPuzzleGuessingThrowsNotAbortedSessionFinishedEvent() {
+        updateTargetNumberOfPuzzlesOfSomeSession(1);
+        var aggregate = createSomeSessionAndGuessCorrectly();
+
+        var sessionFinishedEvent = getOnlyOneThrownEvent(aggregate, SessionFinishedEvent.class);
+        assertFalse(sessionFinishedEvent.isAborted);
+    }
+
+    @Test
+    public void abortThrowsSessionFinishedEvent() {
+        var aggregate = createSomeSession();
+        aggregate.abort();
+
+        var sessionFinishedEvent = getOnlyOneThrownEvent(aggregate, SessionFinishedEvent.class);
+        assertTrue(sessionFinishedEvent.isAborted);
+    }
 }

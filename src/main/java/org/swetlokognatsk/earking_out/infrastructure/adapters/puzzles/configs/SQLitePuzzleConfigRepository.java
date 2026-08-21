@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
@@ -79,21 +80,32 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
     private final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
     private final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer;
     private final PuzzleConfigDTOAssembler dtoAssembler;
+    private final InMemoryPuzzleConfigRepository cacheRepository;
 
-    public SQLitePuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler) {
+    public SQLitePuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
         this.abstractPuzzleConfigAggregatesFactory = abstractPuzzleConfigAggregatesFactory;
         this.puzzleConfigJsonSerializer = puzzleConfigJsonSerializer;
         this.dtoAssembler = dtoAssembler;
+
+        actualizeCache(cacheRepository);
+        this.cacheRepository = cacheRepository;
+    }
+
+    private void actualizeCache(final InMemoryPuzzleConfigRepository cacheRepository) {
+        for (var exercise : ExercisesFactory.getAll()) {
+            var aggregate = genericGet(exercise);
+            cacheRepository.save(aggregate);
+        }
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
         // TODO
-        var puzzleConfigJson = getPuzzleConfigJson(exercise);
+        var puzzleConfigJson = getOrCreatePuzzleConfigJson(exercise);
         var aggregate = mapJsonToAggregate(exercise, puzzleConfigJson);
         return (PCA) aggregate;
     }
 
-    private String getPuzzleConfigJson(final Exercise exercise) {
+    private String getOrCreatePuzzleConfigJson(final Exercise exercise) {
         var selectCommand = "SELECT `serialized_config` FROM `puzzle_configs` WHERE `exercise` = ?";
 
         try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.prepareStatement(selectCommand);) {
@@ -110,7 +122,7 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
                 }
                 createAndSaveDefaultConfig(exercise);
                 alreadyCreatedConfigs.add(exercise);
-                return getPuzzleConfigJson(exercise);
+                return getOrCreatePuzzleConfigJson(exercise);
             }
         } catch (SQLException e) {
             // TODO use it
@@ -137,8 +149,8 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
     }
 
     private void createAndSaveDefaultConfig(final Exercise exercise) {
-        AudioPerfectPitchConfigAggregatesFactory factory = abstractPuzzleConfigAggregatesFactory.createFactory(new AudioPerfectPitchExercise());
         // TODO crutch
+        AudioPerfectPitchConfigAggregatesFactory factory = abstractPuzzleConfigAggregatesFactory.createFactory(new AudioPerfectPitchExercise());
         var newPuzzleConfig = factory.createDefault();
         genericSave(newPuzzleConfig);
     }
@@ -189,5 +201,16 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
         var puzzleConfig = genericGet(exercise);
         var dto = dtoAssembler.assemble(puzzleConfig);
         return (PCDTO) dto;
+    }
+
+    public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {
+        // puzzle configs are always loaded in repo constructor, so there's no need in asking for them from database
+        return cacheRepository.get(exercise);
+    }
+
+    public void save(final PuzzleConfigAggregate<Exercise> aggregate) {
+        // no consistency because in-memory value does not matter after power outage
+        genericSave(aggregate);
+        cacheRepository.save(aggregate);
     }
 }

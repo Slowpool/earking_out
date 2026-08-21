@@ -9,10 +9,12 @@ public final class SessionFinishedEvent extends DomainEvent {
     private static final long serialVersionUID = 1L;
 
     public final SessionId sessionId;
+    public final boolean isAborted;
 
-    public SessionFinishedEvent(final LocalDateTime timestamp, final SessionId sessionId) {
+    public SessionFinishedEvent(final LocalDateTime timestamp, final SessionId sessionId, final boolean isAborted) {
         super(timestamp);
 
         this.sessionId = sessionId;
+        this.isAborted = isAborted;
     }
 }

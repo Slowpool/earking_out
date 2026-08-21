@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.events;
 
 import java.time.LocalDateTime;
-
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
@@ -49,8 +48,12 @@ public final class DomainEventsFactory {
     }
 
     public SessionFinishedEvent createSessionFinishedEvent(final SessionId sessionId) {
+        return createSessionFinishedEvent(sessionId, false);
+    }
+
+    public SessionFinishedEvent createSessionFinishedEvent(final SessionId sessionId, final boolean isAborted) {
         var timestamp = createTimestamp();
-        return new SessionFinishedEvent(timestamp, sessionId);
+        return new SessionFinishedEvent(timestamp, sessionId, isAborted);
     }
 
     public AudioPerfectPitchExercisePickedEvent createAudioPerfectPitchExercisePickedEvent(final AudioPerfectPitchExercise exercise) {
