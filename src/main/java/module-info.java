@@ -103,4 +103,5 @@ module org.swetlokognatsk {
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;
+    opens org.swetlokognatsk.earking_out.app.desktop;
 }

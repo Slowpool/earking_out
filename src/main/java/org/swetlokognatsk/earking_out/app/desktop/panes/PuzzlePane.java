@@ -41,7 +41,7 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
         setHeight(height);
 
         puzzleProgressLabel = buildPuzzleProgressLabel();
-        puzzlesProgressBar = new ProgressBar(0.0);
+        puzzlesProgressBar = buildPuzzlesProgressBar(width);
         puzzlesProgress = buildPuzzlesProgress(puzzleProgressLabel, puzzlesProgressBar);
         setTop(puzzlesProgress);
 
@@ -60,10 +60,15 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
         return new Label(formattedCaption);
     }
 
+    protected ProgressBar buildPuzzlesProgressBar(final double width) {
+        var progressBar = new ProgressBar(0.0);
+        progressBar.setMaxWidth(width);
+        return progressBar;
+    }
+
     protected VBox buildPuzzlesProgress(final Label puzzleProgressLabel, final ProgressBar puzzlesProgressBar) {
         var puzzlesProgress = new VBox(puzzleProgressLabel, puzzlesProgressBar);
         puzzlesProgress.setAlignment(Pos.CENTER);
-        // puzzlesProgress.setMaxWidth(500);
         return puzzlesProgress;
     }
 

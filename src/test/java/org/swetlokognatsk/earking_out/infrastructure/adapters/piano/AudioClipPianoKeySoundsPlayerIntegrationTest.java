@@ -11,7 +11,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.AudioClipPia
  * Lightweight infrastructure test - just checks that files are in place and
  * there's no any exception during play, that's it.
  */
-public final class AudioClipPianoKeySoundsPlayerTest {
+public final class AudioClipPianoKeySoundsPlayerIntegrationTest {
 
     private AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
 

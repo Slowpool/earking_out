@@ -40,7 +40,7 @@ public final class DomainEventHandlers {
 
         eventBus.subscribe(SessionStartedEvent.class, DI.get(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class));
 
-        eventBus.subscribe(PianoKeyPressedEvent.class, DI.get(SessionGuessingOnPianoKeyPressedHandler.class));
+        eventBus.subscribe(PianoKeyPressedEvent.class, DI.get(AudioPerfectPitchGuessingOnPianoKeyPressedHandler.class));
 
         eventBus.subscribe(AudioPerfectPitchExercisePickedEvent.class, DI.get(ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler.class));
     }

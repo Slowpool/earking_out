@@ -163,9 +163,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         addUserTriedToGuessPuzzleEvent(getPuzzlesCompleted(), guess, getNumberOfGuessesOfCurrentPuzzle(), true);
 
         if (isLastPuzzle()) {
-            setState(SessionStates.COMPLETED);
-            addSessionFinishedEvent();
-            setPuzzle(null);
+            finish();
         } else {
             nextPuzzle();
         }
@@ -179,8 +177,8 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         return stats.puzzlesCompleted == puzzleConfigDto.targetNumberOfPuzzles;
     }
 
-    private void addSessionFinishedEvent() {
-        var event = getDomainEventsFactory().createSessionFinishedEvent(getId());
+    private void addSessionFinishedEvent(final boolean isAborted) {
+        var event = getDomainEventsFactory().createSessionFinishedEvent(getId(), isAborted);
         addEvent(event);
     }
 
@@ -194,6 +192,14 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
 
     public final void abort() {
         setState(SessionStates.ABORTED);
+        addSessionFinishedEvent(true);
+        setPuzzle(null);
+    }
+
+    private void finish() {
+        setState(SessionStates.COMPLETED);
+        addSessionFinishedEvent(false);
+        setPuzzle(null);
     }
 
     public final void demonstrateHintAgain() {
@@ -206,4 +212,5 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         inputStream.defaultReadObject();
         puzzlesFactory = DI.get(PuzzlesFactory.class);
     }
+
 }

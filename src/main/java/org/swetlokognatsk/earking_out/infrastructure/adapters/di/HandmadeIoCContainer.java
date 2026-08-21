@@ -15,7 +15,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSess
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnUserTriedToGuessPuzzleHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.PuzzleConfigUpdatingOnPianoKeyPressedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionGuessingOnPianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.AudioPerfectPitchGuessingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
@@ -48,6 +48,7 @@ import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.AudioPerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundFilesResolver;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
@@ -65,7 +66,6 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrator
 import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.AudioClipPianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.MockPianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.PianoKeySoundFilesBuilder;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
@@ -73,6 +73,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
+import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBuilder;
 
 public final class HandmadeIoCContainer implements IoCContainer {
 
@@ -144,7 +145,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (someClass.equals(InMemoryPuzzleConfigRepository.class)) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigDTOAssembler.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 
@@ -179,13 +180,13 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) new SerializationCloner();
 
         } else if (someClass.equals(PuzzlesFactory.class)) {
-            return (T) new PuzzlesFactory(get(SolutionGeneratorsFactory.class), get(PuzzleConfigDTOAssembler.class));
+            return (T) new PuzzlesFactory(get(SolutionGeneratorsFactory.class), get(PuzzleConfigRepository.class));
 
         } else if (someClass.equals(SolutionGeneratorsFactory.class)) {
             return (T) new SolutionGeneratorsFactory();
 
         } else if (someClass.equals(PuzzleConfigDTOAssembler.class)) {
-            return (T) new PuzzleConfigDTOAssembler(get(PuzzleConfigRepository.class));
+            return (T) new PuzzleConfigDTOAssembler();
 
         } else if (someClass.equals(SessionAggregatesFactory.class)) {
             return (T) new SessionAggregatesFactory(get(ObjectCloner.class), get(PuzzleConfigRepository.class), get(PianoKeyboardRepository.class), get(PuzzleConfigDTOAssembler.class), get(PuzzlesFactory.class));
@@ -212,7 +213,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) audioClipPianoKeySoundsPlayer;
 
         } else if (someClass.equals(PianoKeySoundFilesBuilder.class)) {
-            return (T) new PianoKeySoundFilesBuilder();
+            return (T) new PianoKeySoundFilesBuilder(get(PianoKeySoundFilesResolver.class));
 
         } else if (someClass.equals(AudioPerfectPitchHintDemonstrator.class)) {
             return (T) get(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class);
@@ -289,26 +290,23 @@ public final class HandmadeIoCContainer implements IoCContainer {
         } else if (someClass.equals(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class)) {
             return (T) new SessionPianoKeyboardUpdatingOnSessionStartedHandler(get(PianoKeyboardService.class));
 
-        } else if (someClass.equals(SessionGuessingOnPianoKeyPressedHandler.class)) {
-            // TODO this logic must be in factory
-            var sessionServices = new HashMap<Exercise, SessionService<?, ?, ?>>();
-            sessionServices.put(new AudioPerfectPitchExercise(), get(AudioPerfectPitchSessionService.class));
-            return (T) new SessionGuessingOnPianoKeyPressedHandler(sessionServices);
+        } else if (someClass.equals(AudioPerfectPitchGuessingOnPianoKeyPressedHandler.class)) {
+            return (T) new AudioPerfectPitchGuessingOnPianoKeyPressedHandler(get(AudioPerfectPitchSessionService.class));
 
         } else if (someClass.equals(LogEventOnSessionStartedHandler.class)) {
-            return (T) new LogEventOnSessionStartedHandler(get(EventStore.class));
+            return (T) new LogEventOnSessionStartedHandler(get(EventStore.class), get(PuzzleConfigRepository.class));
 
         } else if (someClass.equals(LogEventOnNewPuzzleCreatedHandler.class)) {
-            return (T) new LogEventOnNewPuzzleCreatedHandler(get(EventStore.class));
+            return (T) new LogEventOnNewPuzzleCreatedHandler(get(EventStore.class), get(PuzzleConfigRepository.class));
 
         } else if (someClass.equals(LogEventOnUserTriedToGuessPuzzleHandler.class)) {
-            return (T) new LogEventOnUserTriedToGuessPuzzleHandler(get(EventStore.class));
+            return (T) new LogEventOnUserTriedToGuessPuzzleHandler(get(EventStore.class), get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class));
 
         } else if (someClass.equals(LogEventOnHintRepeatingRequestedHandler.class)) {
-            return (T) new LogEventOnHintRepeatingRequestedHandler(get(EventStore.class));
+            return (T) new LogEventOnHintRepeatingRequestedHandler(get(EventStore.class), get(PuzzleConfigRepository.class));
 
         } else if (someClass.equals(LogEventOnSessionFinishedHandler.class)) {
-            return (T) new LogEventOnSessionFinishedHandler(get(EventStore.class));
+            return (T) new LogEventOnSessionFinishedHandler(get(EventStore.class), get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class));
 
         } else if (someClass.equals(ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler.class)) {
             return (T) new ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler(get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));

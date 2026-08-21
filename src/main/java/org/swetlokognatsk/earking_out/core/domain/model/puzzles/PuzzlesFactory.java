@@ -8,20 +8,21 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.Vis
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 
 // TODO encapsulate factory inside di, so that instead his could be used: `DI.createPuzzle(new AudioPerfectPitchExercise())` or kinda
 public final class PuzzlesFactory {
     private final SolutionGeneratorsFactory solutionGeneratorsFactory;
-    private final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler;
+    private final PuzzleConfigRepository puzzleConfigRepository;
 
-    public PuzzlesFactory(final SolutionGeneratorsFactory solutionGeneratorsFactory, final PuzzleConfigDTOAssembler puzzleConfigDTOAssembler) {
+    public PuzzlesFactory(final SolutionGeneratorsFactory solutionGeneratorsFactory, final PuzzleConfigRepository puzzleConfigRepository) {
         this.solutionGeneratorsFactory = solutionGeneratorsFactory;
-        this.puzzleConfigDTOAssembler = puzzleConfigDTOAssembler;
+        this.puzzleConfigRepository = puzzleConfigRepository;
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, r, P extends Puzzle<E, ?>> P create(final Exercise exercise) {
-        var puzzleConfigDto = puzzleConfigDTOAssembler.getPuzzleConfigDTO(exercise);
+        var puzzleConfigDto = puzzleConfigRepository.getPuzzleConfigDTO(exercise);
         // TODO cache?
         var solutionGenerator = solutionGeneratorsFactory.create(puzzleConfigDto);
         var solution = solutionGenerator.generate();

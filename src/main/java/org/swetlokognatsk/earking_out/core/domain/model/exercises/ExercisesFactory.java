@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 
 public final class ExercisesFactory {
-    private static final Exercise[] allExercises = new Exercise[] { new VisualPerfectPitchExercise(), new AudioPerfectPitchExercise() };
+    private static final Exercise[] allExercises = new Exercise[] { new AudioPerfectPitchExercise() };
 
     public static Exercise[] getAll() {
         return allExercises;
