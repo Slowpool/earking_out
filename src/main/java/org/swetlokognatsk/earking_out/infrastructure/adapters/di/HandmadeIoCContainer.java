@@ -48,6 +48,7 @@ import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.AudioPerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.SoundHarmonicIntervalHintDemonstrator;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundFilesResolver;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
@@ -65,7 +66,6 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrator
 import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.AudioClipPianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.MockPianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.PianoKeySoundFilesBuilder;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeVisualPerfectPitchSolutionGenerator;
@@ -73,6 +73,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.RandomVisualPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
+import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBuilder;
 
 public final class HandmadeIoCContainer implements IoCContainer {
 
@@ -212,7 +213,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) audioClipPianoKeySoundsPlayer;
 
         } else if (someClass.equals(PianoKeySoundFilesBuilder.class)) {
-            return (T) new PianoKeySoundFilesBuilder();
+            return (T) new PianoKeySoundFilesBuilder(get(PianoKeySoundFilesResolver.class));
 
         } else if (someClass.equals(AudioPerfectPitchHintDemonstrator.class)) {
             return (T) get(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class);
