@@ -11,7 +11,6 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedE
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
 
 // TODO learning tests
-// TODO my bad. I completely forgot that record's injected field is public. change it back to constructors for all events in this package
 public final class GreenrobotEventBus implements org.swetlokognatsk.earking_out.core.ports.events.EventBus, EventPublisher {
     private final EventBus innerEventBus;
 
