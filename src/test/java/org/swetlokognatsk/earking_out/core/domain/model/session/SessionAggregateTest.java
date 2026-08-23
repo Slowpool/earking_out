@@ -15,7 +15,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.Aud
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
@@ -190,17 +190,6 @@ public final class SessionAggregateTest {
             sessionAggregate.guess(SOLUTION);
             fail();
         } catch (IllegalStateException e) {
-        }
-    }
-
-    @Test
-    public void createSessionWith0TargetNumberOfPuzzles() {
-        updateTargetNumberOfPuzzlesOfSomeSession(0);
-
-        try {
-            createSomeSession();
-            fail();
-        } catch (InvalidPuzzleConfigException e) {
         }
     }
 

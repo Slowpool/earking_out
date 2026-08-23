@@ -37,6 +37,8 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerf
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.EditableAudioPerfectPitchConfigValidator;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.FinalizedAudioPerfectPitchConfigValidator;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.IoCContainer;
@@ -159,7 +161,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             return (T) inMemoryPianoKeyboardRepository;
 
         } else if (someClass.equals(AudioPerfectPitchSessionService.class)) {
-            return (T) new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class));
+            return (T) new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class), get(FinalizedAudioPerfectPitchConfigValidator.class));
 
         } else if (someClass.equals(PianoKeyboardService.class)) {
             return (T) new PianoKeyboardService(get(PianoKeyboardRepository.class), get(AudioPerfectPitchSessionRepository.class));
@@ -310,6 +312,12 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (someClass.equals(ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler.class)) {
             return (T) new ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler(get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));
+
+        } else if (someClass.equals(EditableAudioPerfectPitchConfigValidator.class)) {
+            return (T) new EditableAudioPerfectPitchConfigValidator();
+
+        } else if (someClass.equals(FinalizedAudioPerfectPitchConfigValidator.class)) {
+            return (T) new FinalizedAudioPerfectPitchConfigValidator();
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());

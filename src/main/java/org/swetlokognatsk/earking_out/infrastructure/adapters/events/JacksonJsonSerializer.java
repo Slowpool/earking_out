@@ -60,6 +60,7 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
 
     public <E extends Exercise> PuzzleConfigAggregate<?> deserializePuzzleConfig(final E exercise, final String serializedPuzzleConfig) {
         // TODO select in specific method
+        // TODO DEFINITELY NEEDS REFACTORING
         var jsonTree = objectMapper.readTree(serializedPuzzleConfig);
 
         JsonNode idNode = jsonTree.get("id");

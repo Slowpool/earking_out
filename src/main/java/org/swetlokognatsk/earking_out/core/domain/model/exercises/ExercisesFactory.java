@@ -5,6 +5,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 
 public final class ExercisesFactory {
+    // TODO use it everywhere instead of new AudioPerfectPitchExercise()
+    public static final AudioPerfectPitchExercise AUDIO_PERFECT_PITCH_EXERCISE = new AudioPerfectPitchExercise();
+    
     private static final Exercise[] allExercises = new Exercise[] { new AudioPerfectPitchExercise() };
 
     public static Exercise[] getAll() {

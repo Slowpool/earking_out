@@ -7,18 +7,13 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
-public abstract class Aggregate<ID> extends Entity<ID> implements Model {
+public abstract class Aggregate<ID> extends Entity<ID> {
     private static final long serialVersionUID = 1L;
 
     private final List<DomainEvent> events = new ArrayList<>();
 
     public Aggregate(final ID id) {
         super(id);
-    }
-
-    // TODO delete this latch, implement it inside each aggregate
-    public List<String> getErrors() {
-        throw new NotImplementedException();
     }
 
     protected final void addEvent(final DomainEvent event) {
