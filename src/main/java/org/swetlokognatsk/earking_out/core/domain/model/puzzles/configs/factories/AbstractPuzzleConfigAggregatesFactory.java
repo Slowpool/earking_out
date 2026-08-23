@@ -15,6 +15,7 @@ public final class AbstractPuzzleConfigAggregatesFactory {
         this.objectCloner = objectCloner;
     }
 
+    // TODO remake.
     public <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>>> PCAF createFactory(final E exercise) {
         PuzzleConfigAggregatesFactory<?> factory = switch (exercise) {
             case AudioPerfectPitchExercise e -> new AudioPerfectPitchConfigAggregatesFactory(objectCloner);

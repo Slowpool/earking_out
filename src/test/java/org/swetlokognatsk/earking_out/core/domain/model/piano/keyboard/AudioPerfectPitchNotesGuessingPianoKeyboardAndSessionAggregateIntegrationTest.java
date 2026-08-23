@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -12,6 +13,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.Aud
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
@@ -25,14 +27,14 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     private static final PianoKeyNumber SOLUTION = ANY_PIANO_KEY;
     private static final PianoKeyNumber WRONG_SOLUTION = SOLUTION.increment();
 
+    private final PianoKeyboardId pianoKeyboardId = PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING;
+    private final AudioPerfectPitchExercise exercise = ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
+
     private PianoKeyboardService pianoKeyboardService;
     private PianoKeyboardRepository pianoKeyboardRepository;
     private AudioPerfectPitchSessionService sessionService;
     private AudioPerfectPitchSessionRepository sessionRepository;
     private PuzzleConfigRepository puzzleConfigRepository;
-
-    private PianoKeyboardId pianoKeyboardId;
-    private AudioPerfectPitchExercise exercise;
 
     private void pressSomePianoKeyboardKey() {
         pressPianoKey(ANY_PIANO_KEY);
@@ -79,12 +81,12 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         return sessionRepository.getActiveSession();
     }
 
-    private AudioPerfectPitchSessionAggregate startSession() {
+    private AudioPerfectPitchSessionAggregate startSession() throws InvalidPuzzleConfigException {
         sessionService.start();
         return sessionRepository.getActiveSession();
     }
 
-    private AudioPerfectPitchSessionAggregate startAndAbortSession() {
+    private AudioPerfectPitchSessionAggregate startAndAbortSession() throws InvalidPuzzleConfigException {
         var activeSession = startSession();
         var activeSessionId = activeSession.getId();
         sessionService.abort(activeSessionId);
@@ -94,6 +96,14 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
 
     private void abortSession(final SessionId sessionId) {
         sessionService.abort(sessionId);
+    }
+
+    private void configureSomeValidPuzzleConfig() {
+        var puzzleConfig = puzzleConfigRepository.get(exercise);
+        // TODO use common SOME_PIANO_KEYS
+        var somePianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, LAST_NOTE_NUMBER };
+        puzzleConfig.updateProperty(PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP, somePianoKeys);
+        puzzleConfigRepository.save(puzzleConfig);
     }
 
     @Before
@@ -106,12 +116,11 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         sessionRepository = DI.get(AudioPerfectPitchSessionRepository.class);
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
 
-        pianoKeyboardId = PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING;
-        exercise = (AudioPerfectPitchExercise) pianoKeyboardId.exercise;
+        configureSomeValidPuzzleConfig();
     }
 
     @Test
-    public void pianoKeyboardDoesNotHaveSelectedKeysAfterSessionStarting() {
+    public void pianoKeyboardDoesNotHaveSelectedKeysAfterSessionStarting() throws InvalidPuzzleConfigException {
         var session = startSession();
         selectSomePianoKeyboardKey();
         abortSession(session.getId());
@@ -122,7 +131,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void pianoKeyboardDoesNotHavePressedKeysAfterSessionStarting() {
+    public void pianoKeyboardDoesNotHavePressedKeysAfterSessionStarting() throws InvalidPuzzleConfigException {
         var session = startSession();
         pressSomePianoKeyboardKey();
         abortSession(session.getId());
@@ -133,7 +142,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void sessionCountsThePuzzleAsCompletedAfterCorrectGuess() {
+    public void sessionCountsThePuzzleAsCompletedAfterCorrectGuess() throws InvalidPuzzleConfigException {
         updateNormalizedNotesForPuzzle(SOLUTION);
         sessionService.start();
         assertActiveSessionHasCompletedPuzzles(0);
@@ -144,7 +153,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void sessionDoesNotCountThePuzzleAsCompletedAfterWrongGuess() {
+    public void sessionDoesNotCountThePuzzleAsCompletedAfterWrongGuess() throws InvalidPuzzleConfigException {
         updateNormalizedNotesForPuzzle(SOLUTION);
         sessionService.start();
         assertActiveSessionHasCompletedPuzzles(0);
@@ -155,7 +164,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void pressPianoKeyAfterSessionAbort() {
+    public void pressPianoKeyAfterSessionAbort() throws InvalidPuzzleConfigException {
         startAndAbortSession();
 
         try {
@@ -168,7 +177,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void releasePianoKeyAfterAbort() {
+    public void releasePianoKeyAfterAbort() throws InvalidPuzzleConfigException {
         startAndAbortSession();
 
         try {

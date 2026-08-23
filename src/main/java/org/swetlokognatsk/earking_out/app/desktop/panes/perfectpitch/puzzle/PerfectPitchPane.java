@@ -9,7 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 
-public abstract class PerfectPitchPane<E extends PerfectPitchExercise, PCDTO extends PerfectPitchConfigDTO<E>, SS extends SessionService<E, ? extends SessionAggregate<E, ?, ?, PCDTO>, ? extends SessionRepository<?>>> extends PuzzlePane<E, PCDTO, SS> {
+public abstract class PerfectPitchPane<E extends PerfectPitchExercise, PCDTO extends PerfectPitchConfigDTO<E>, SS extends SessionService<E, ? extends SessionAggregate<E, ?, ?, PCDTO>, ? extends SessionRepository<?>, ?, ?>> extends PuzzlePane<E, PCDTO, SS> {
 
     protected final PianoKeyboardService pianoKeyboardService;
 

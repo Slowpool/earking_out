@@ -16,16 +16,18 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -114,17 +116,23 @@ public class EarkingOutApplication extends Application {
             var sessionId = sessionService.start();
             showPuzzlePane(sessionId);
         } catch (InvalidPuzzleConfigException e) {
-            // TODO message
-            // DialogPane.
+            var errorMessages = e.errors.stream()
+                .map((error) -> error.message())
+                .toList();
+
+            var alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Invalid config");
+            alert.setContentText(String.join("\n", errorMessages));
+            alert.showAndWait();
         }
     }
 
-    private <E extends Exercise> SessionService<E, ?, ?> getSessionService(final E exercise) {
+    private <E extends Exercise> SessionService<E, ?, ?, ?, ?> getSessionService(final E exercise) {
         var sessionService = switch (exercise) {
         case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSessionService.class);
         default -> throw new IllegalArgumentException("unknown exercise: " + exercise);
         };
-        return (SessionService<E, ?, ?>) sessionService;
+        return (SessionService<E, ?, ?, ?, ?>) sessionService;
     }
 
     private void showPuzzlePane(final SessionId sessionId) {

@@ -1,80 +1,46 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs;
 
-import static org.junit.Assert.*;
-import java.util.List;
-import org.junit.*;
+import org.junit.Before;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.base.validators.Error;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.TestPuzzleConfigValidatorHelper.*;
 
-public final class PuzzleConfigValidatorTest {
+import java.util.List;
 
-    private static final boolean ANY_STATS_RECORDING = false;
+public abstract class PuzzleConfigValidatorTest<E extends Exercise, PCA extends PuzzleConfigAggregate<E>, PCAF extends PuzzleConfigAggregatesFactory<PCA>, VC extends PuzzleConfigValidator<PCA>> {
 
-    private PuzzleConfigValidator<SomePuzzleConfigAggregate> getValidator() {
-        return new PuzzleConfigValidator<SomePuzzleConfigAggregate>() {
-        };
+    protected final PCAF aggregatesFactory;
+    protected VC validator;
+
+    protected abstract E getExercise();
+
+    protected abstract Class<VC> getValidatorClass();
+
+    public PuzzleConfigValidatorTest() {
+        aggregatesFactory = (PCAF) DI.get(AbstractPuzzleConfigAggregatesFactory.class).createFactory(getExercise());
     }
 
-    private SomePuzzleConfigAggregate createSomePuzzleConfig(final int targetNumberOfPuzzles, final boolean statsRecording) {
-        return new SomePuzzleConfigAggregate(new SomeExercise(), targetNumberOfPuzzles, statsRecording);
+    @Before
+    public void setup() {
+        validator = (VC) DI.get(getValidatorClass());
     }
 
-    public void thisTargetNumberOfPuzzlesFails(final int targetNumberOfPuzzles) {
-        var validator = getValidator();
-        var puzzleConfig = createSomePuzzleConfig(targetNumberOfPuzzles, ANY_STATS_RECORDING);
+    protected PCA createPuzzleConfig() {
+        return aggregatesFactory.createDefault();
+    }
 
+    protected void assertNoValidationErrors(final PCA puzzleConfig) {
         var validationResult = validator.validate(puzzleConfig);
-
-        assertContainsTheseErrors(validationResult, List.of(PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP));
+        TestPuzzleConfigValidatorHelper.assertNoValidationErrors(validationResult);
     }
 
-    // TODO how about parameterized test like [TestCase] in c#
-    @Test
-    public void zeroTargetNumberOfPuzzlesFails() {
-        thisTargetNumberOfPuzzlesFails(0);
-    }
-
-    @Test
-    public void negativeTargetNumberOfPuzzlesFails() {
-        thisTargetNumberOfPuzzlesFails(-1);
-    }
-
-    @Test
-    public void positiveTargetNumberOfPuzzlesIsOk() {
-        var validator = getValidator();
-        var puzzleConfig = createSomePuzzleConfig(1, ANY_STATS_RECORDING);
-
+    protected void assertThesePropertiesLedToErrors(final PCA puzzleConfig, final List<String> expectedPropertiesToFail) {
         var validationResult = validator.validate(puzzleConfig);
-
-        assertNoErrors(validationResult);
-    }
-}
-
-class SomePuzzleConfigAggregate extends PuzzleConfigAggregate<SomeExercise> {
-
-    public SomePuzzleConfigAggregate(final SomeExercise exercise, final int targetNumberOfPuzzles, final boolean statsRecording) {
-        super(exercise, targetNumberOfPuzzles, statsRecording);
+        TestPuzzleConfigValidatorHelper.assertThesePropertiesLedToErrors(validationResult, expectedPropertiesToFail);
     }
 
-    public void updateConfigSpecificProperty(String a, Object o) {
-    }
-}
-
-class SomeExercise extends Exercise {
-
-    public String tName() {
-        return "latch";
-    }
-
-    public String tType() {
-        return "latch";
-    }
-
-    public SomeExercise() {
-        // does not matter
-        super(ExerciseNames.PERFECT_PITCH, ExerciseTypes.AUDIO);
-    }
 }

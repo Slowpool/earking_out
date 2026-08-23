@@ -75,7 +75,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.session;
     exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.assemblers;
-    exports org.swetlokognatsk.earking_out.core.domain.services.app.exceptions;
+    exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions;
     exports org.swetlokognatsk.earking_out.core.domain.services.app.session;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.music;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.piano;
@@ -100,6 +100,8 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.events;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.greenrobot;
     exports org.swetlokognatsk.earking_out.learning_tests;
+    exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs;
+    exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;

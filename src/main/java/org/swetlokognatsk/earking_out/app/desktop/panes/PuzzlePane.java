@@ -17,7 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, SS extends SessionService<E, ? extends SessionAggregate<E, ?, ?, PCDTO>, ? extends SessionRepository<?>>> extends BorderPane {
+public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, SS extends SessionService<E, ? extends SessionAggregate<E, ?, ?, PCDTO>, ? extends SessionRepository<?>, ?, ?>> extends BorderPane {
     protected final SessionId sessionId;
     protected final E exercise;
     protected final int targetNumberOfPuzzles;

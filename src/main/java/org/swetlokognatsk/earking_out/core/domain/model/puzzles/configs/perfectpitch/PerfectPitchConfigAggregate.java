@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 
 public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise> extends PuzzleConfigAggregate<E> {
@@ -64,6 +62,7 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         setSoundlessGuessingPiano(soundlessGuessingPiano);
     }
 
+    // TODO eliminate
     public List<String> getErrors() {
         var errors = new ArrayList<String>();
         // TODO move it to PuzzleConfig, then create getChildErrors() via polymorphism

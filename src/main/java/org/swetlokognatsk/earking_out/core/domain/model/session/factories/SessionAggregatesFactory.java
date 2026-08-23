@@ -12,7 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.Aud
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.exceptions.InvalidPuzzleConfigException;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
@@ -34,7 +34,7 @@ public final class SessionAggregatesFactory extends AggregatesFactory<SessionAgg
     }
 
     public <E extends Exercise, SA extends SessionAggregate<E, ?, ?, ?>> SA create(final E exercise) {
-        var puzzleConfigDto = validateConfigAndGet(exercise);
+        var puzzleConfigDto = getPuzzleConfigDto(exercise);
         // TODO SessionStatsFactory
         var sessionStats = new SessionStats(0, 0);
 
@@ -48,12 +48,8 @@ public final class SessionAggregatesFactory extends AggregatesFactory<SessionAgg
         return (SA) sessionAggregate;
     }
 
-    private <E extends Exercise> PuzzleConfigDTO<E> validateConfigAndGet(final E exercise) {
-        var puzzleConfigAggregate = puzzleConfigRepository.get(exercise);
-        var puzzleConfigDto = puzzleConfigDTOAssembler.assemble(puzzleConfigAggregate);
-        if (!puzzleConfigAggregate.isValid()) {
-            throw new InvalidPuzzleConfigException(puzzleConfigDto);
-        }
+    private <E extends Exercise> PuzzleConfigDTO<E> getPuzzleConfigDto(final E exercise) {
+        var puzzleConfigDto = puzzleConfigRepository.getPuzzleConfigDTO(exercise);
         return (PuzzleConfigDTO<E>) puzzleConfigDto;
     }
 }

@@ -12,7 +12,7 @@ public final class TestPuzzleConfigValidatorHelper {
     private TestPuzzleConfigValidatorHelper() {
     }
 
-    public static void assertNoErrors(final ValidationResult validationResult) {
+    public static void assertNoValidationErrors(final ValidationResult validationResult) {
         assertTrue(validationResult.isValid());
         assertEquals(0, validationResult.errors().size());
     }
@@ -22,7 +22,7 @@ public final class TestPuzzleConfigValidatorHelper {
      * fail. if one property is expected to have two errors, put this property in
      * this list twice.
      **/
-    public static void assertContainsTheseErrors(final ValidationResult validationResult, final List<String> expectedPropertiesToFail) {
+    public static void assertThesePropertiesLedToErrors(final ValidationResult validationResult, final List<String> expectedPropertiesToFail) {
         assertFalse(validationResult.isValid());
 
         var errors = validationResult.errors();
