@@ -41,17 +41,25 @@ I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing,
 
    Scenario:
    1. User starts the `Audio perfect pitch` exercise
-   2. App gives the user a puzzle with `C#1` note as solution. The hint in this case is playing the **.mp3** sound file of `C#1` note. With this hint user is supposed to approach the solution - that is why it's a hint
+   2. App gives the user a puzzle with `C#1` note as solution. The `Hint` in this case is playing the **.mp3** sound file of `C#1` note. With this `Hint` user is supposed to approach the `Solution` - that is why it's a hint
 
 6. `Puzzle config` - user-configured settings, specific for and relating to the concrete exercise.
 
-   In `Perfect pitch` exercise user can pick on which **notes** to train. It can be done via `Puzzle config`. App will generate solutions with only those notes.
+   In `Perfect pitch` exercise user can pick on which **notes** to train. It can be done via `Puzzle config`. App will generate `Solutions` with only those notes.
 
    Whereas in `Chords guessing` exercise a user can pick on which **chords** to train. It shows that each `Puzzle` has it's own config structure.
 
    <img width="1920" height="699" alt="image" src="https://github.com/user-attachments/assets/93ff75c5-6505-4465-a45a-42ef091a5920" />
 
-7. `Session` - after picking the exercise and setting up the puzzle config, the exercise is started and session is started also. session has unique id. during the puzzle creating, it uses current puzzle config. session can be in states: `in progress` - means the puzzle guessing is in process; `completed` - puzzle guessing is finished naturally due to finishing the last puzzle; `aborted` - puzzle guesing is finished manually via "abort" button. after the session is completed or aborted, it cannot be changed any more.
+7. `Session` - after picking an `Exercise` and setting up the `Puzzle config`, user wants to start the **guessing process** and app does it via `Session` starting. `Session` has unique id. When app creates the next `Puzzle` and generates the `Solution`, it uses the current `Puzzle config`.
+
+   `Session` can be in one of these states:
+   - `In progress` - means the `Puzzle` guessing is in process
+   - `Completed` - `Puzzle` guessing is finished naturally due to finishing the last `Puzzle`
+   - `Aborted` - `Puzzle` guesing is finished manually via "abort" button.
+
+   If the `Session` is `Completed` or `Aborted`, it cannot be changed any more.
+
 // TODO
 x. Achievement
 
