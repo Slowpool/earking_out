@@ -10,6 +10,7 @@ I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing,
 # Ubiquitous langauge
 
 1. `Exercise` - some type of *musical* training activity, that is conducted in order to improve the one narrowly focused skill. E.g.: `Perfect pitch`, `Melodic intervals`.
+
    <img width="854" height="480" alt="Screencast from 2026-08-26 11-04-15 (online-video-cutter com)" src="https://github.com/user-attachments/assets/0e7fcb6b-4b95-4794-a390-7be114132e97" />
 
    Exercise can be:
@@ -42,7 +43,14 @@ I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing,
    1. User starts the `Audio perfect pitch` exercise
    2. App gives the user a puzzle with `C#1` note as solution. The hint in this case is playing the **.mp3** sound file of `C#1` note. With this hint user is supposed to approach the solution - that is why it's a hint
 
-6. `Puzzle config` - user-configured settings, specific for and relating to the concrete exercise. In `Perfect pitch` exercise user can pick on which **notes** to train. App will generate puzzles with only those solutions, which are in the list of these notes specified by user. It can be done via `Puzzle config`. Whereas in `Chords guessing` exercise a user can pick on which **chords** to train. It shows each puzzle has it's own config structure. 
+6. `Puzzle config` - user-configured settings, specific for and relating to the concrete exercise.
+
+   In `Perfect pitch` exercise user can pick on which **notes** to train. It can be done via `Puzzle config`. App will generate solutions with only those notes.
+
+   Whereas in `Chords guessing` exercise a user can pick on which **chords** to train. It shows that each `Puzzle` has it's own config structure.
+
+   <img width="1920" height="699" alt="image" src="https://github.com/user-attachments/assets/93ff75c5-6505-4465-a45a-42ef091a5920" />
+
 7. `Session` - after picking the exercise and setting up the puzzle config, the exercise is started and session is started also. session has unique id. during the puzzle creating, it uses current puzzle config. session can be in states: `in progress` - means the puzzle guessing is in process; `completed` - puzzle guessing is finished naturally due to finishing the last puzzle; `aborted` - puzzle guesing is finished manually via "abort" button. after the session is completed or aborted, it cannot be changed any more.
 // TODO
 x. Achievement
