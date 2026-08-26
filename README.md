@@ -1,13 +1,21 @@
 Inspired by https://tonedear.com/
 
-Earking out = Ear + working out;
+Earking out = Ear + working out
 
 # Brief description
 
 An app to train **perfect pitch** and related musical skills. There are billions of similar apps, but this one is the best in my honest opinion, at least because I can modify it on my own and do **whatever** i want.
-I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing, PosgreSQL, SQLite, Hibernate
+I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing, PosgreSQL, SQLite, Hibernateю
 
-# Ubiquitous langauge
+# Domains
+P.S. yep, the sole domain cuz i ain't gonna difficulty (the ending is pronounced like in simplify) things with separating it in two different domains (the training itself and statistics)
+
+## Musical skills training // TODO think think think
+### Subdomains
+   - Different musical skills **training** via `Exercises`
+   - Dashboard with parameterized **statistics** // TODO implement
+
+# Ubiquitous language
 
 ### The vast majority of points are made-up-by-me terms, cuz dunno how to correctly name these actions/phenomena. There're no any definitions for them neither in english nor in russian. So, they may be not clear without these definitions.
 
@@ -16,8 +24,8 @@ I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing,
    <img width="854" height="480" alt="Screencast from 2026-08-26 11-04-15 (online-video-cutter com)" src="https://github.com/user-attachments/assets/0e7fcb6b-4b95-4794-a390-7be114132e97" />
 
    `Exercise` can be:
-   1. `Audio` - user **listens** sounds and guesses basing on them. E.g.: **.mp3** sound of `C#1` note
-   2. `Visual` - user **watches** at visual views and guesses basing on them. E.g.: `C#1` note on the stave
+   - `Audio` - user **listens** sounds and guesses basing on them. E.g.: **.mp3** sound of `C#1` note
+   - `Visual` - user **watches** at visual views and guesses basing on them. E.g.: `C#1` note on the stave
 
 2. `Puzzle` - one independent **set/repetition/step** of `Exercise`.
 
@@ -36,13 +44,14 @@ I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing,
    1. In `Audio perfect pitch` exercise the app generated some note
    2. User thinks: "Is it `C#1`?"
    3. User presses `C#1` on piano keyboard. Here the `C#1` is `Guess`
+   4. If `Guess` was successful, user gets to the next `Puzzle` (or `Session` is finished if it was the last one). Otherwise app waits for the next `Guess` on the same `Puzzle`
 
 4. `Solution` - the correct **answer** to `Puzzle`.
 
    Scenario:
-   In `Audio perfect pitch` exercise app generated `C#1` note as `Solution`. If user will press any note except `C#1`, the guess will be wrong. When and only when user pressed `C#1` note, the guess is correct.
+   In `Audio perfect pitch` exercise app generated `C#1` note as `Solution`. If user will press any note except `C#1`, the guess will be wrong. When and only when user pressed `C#1` note, the `Guess` is successful.
 
-5. `Hint` - **multimedia item** (sound, picture, video, etc.), which is used by user to make guesses.
+5. `Hint` - **multimedia item** (sound, picture, video, etc.), which is used by user to make `Guesses`.
 
    Scenario:
    1. User starts the `Audio perfect pitch` exercise
@@ -67,25 +76,30 @@ I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing,
    - `Completed` - `Puzzle` guessing is finished **naturally** due to finishing the last `Puzzle`
    - `Aborted` - `Puzzle` guessing is finished **manually** via "abort" button, when user have yet not completed the specified target number of `Puzzles`
 
-   If the `Session` is `Completed` or `Aborted`, it cannot be changed any more.
+   If the `Session` status is `Completed` or `Aborted`, it cannot be changed any more.
 
 // TODO the draft is further
 x. Achievement
 
 
+# Technical implementation details:
 
-domains/subdomain:
-1. Training ear for music
-   a) ear training via exercises
-   b) statistics dashboard
+- Hexagonal architecture (Ports/Adapters)
 
-P.S. yep, the sole domain cuz i ain't gonna difficulty (the ending is pronounced like in simplify) things with separating it in two different domains (the training itself and statistics)
+- In general, the whole app is supposed to be tightly coupled to `spring.boot` (though so far it never was), because it's decoupling framework by itself. Although it's still possible to decouple it and it'd be fine for really high complexity software
 
+- There are two modes:
+  - `app mode` - used to launch app and **use** it as **finite** user
+  - `test mode` - lightweight infrastructure implementations for **fast test launching**
 
-technical details:
-* in general, the whole app is supposed to be tightly coupled to spring.boot. because it's decoupling framework by itself. although it's still possible to decouple it and it'd be fine for really high complexity software.
-* domain events publishing and subscribing interface is decoupled via port, so that implementation can be replaced, current one is via spring.boot.
-* di container is decoupled. two implementaions of it exist:
-1. Spring framework (for real app utilizing). so, yes, spring annotations aren't used
-2. handmade DI (for tests)
-// TODO two different builds: 1. web 2. desktop. - they implement the same app port (general ui code), though the core is the same.
+- Domain events publishing and subscribing are decoupled, so that implementation can be replaced. The current ones are via: `spring.boot` for app mode and `greenrobot.eventbus` (lightweight third-party event bus) for test mode.
+
+- IoC container is decoupled. Two implementaions of it exist now:
+   - Spring framework (for app mode). So, yes, spring annotations aren't used and beans factory API is used instead.
+   - Handmade IoC container (for test mode)
+
+- There are two different builds:
+   - Web: PostgreSQL, MongoDB and Redis // TODO implement
+   - Desktop: SQLite // TODO implement in less spaghetti way
+   
+   Hexagonal architecture allows to do it via the shared core.
