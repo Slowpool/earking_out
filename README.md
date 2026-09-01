@@ -100,6 +100,6 @@ x. Achievement
 
 - There are two different builds:
    - Web: PostgreSQL, MongoDB and Redis // TODO implement
-   - Desktop: SQLite // TODO implement in less spaghetti way
+   - Desktop: SQLite // TODO implement via Hibernate/JPA
    
    Hexagonal architecture allows to do it via the shared core.
