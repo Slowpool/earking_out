@@ -32,4 +32,8 @@ public abstract class Exercise extends ValueObject implements Serializable {
     public int hashCode() {
         return name.hashCode() + type.hashCode();
     }
+
+    public Exercise valueOf(final String value) {
+        
+    }
 }

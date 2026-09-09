@@ -16,6 +16,7 @@ module org.swetlokognatsk {
     requires java.sql;
     requires tools.jackson.core;
     requires tools.jackson.databind;
+    requires jakarta.persistence;
 
     // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
