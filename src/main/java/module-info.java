@@ -11,6 +11,8 @@ module org.swetlokognatsk {
     requires spring.context;
     requires spring.beans;
     requires spring.core;
+    requires spring.tx;
+    requires spring.jdbc;
     // org.greenrobot.eventbus.java
     requires eventbus.java;
     requires java.sql;

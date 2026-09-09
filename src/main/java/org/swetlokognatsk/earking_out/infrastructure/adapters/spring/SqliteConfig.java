@@ -1,18 +1,15 @@
-package org.swetlokognatsk.earking_out.app.desktop;
+package org.swetlokognatsk.earking_out.infrastructure.adapters.spring;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-@SpringBootApplication(scanBasePackages = { "org.swetlokognatsk.earking_out.app.desktop", "org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring" })
-class SpringApp {
-
+// TODO sort it out. either remove or add to spring scanning.
+@Configuration
+public class SqliteConfig {
     @Bean
     DataSource dataSource(final Environment env) {
-        // TODO why env is empty!
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty("driverClassName"));
         dataSource.setUrl(env.getProperty("url"));

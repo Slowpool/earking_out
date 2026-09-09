@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,11 +15,20 @@ public class PuzzleConfigEntity {
     @Column(name = "serialized_config")
     private String serializedConfig;
 
-    public Exercise getExercise() {
-        return 
+    public final String getExercise() {
+        return exercise;
     }
-    
+
+    public final String getSerializedPuzzleConfig() {
+        return serializedConfig;
+    }
+
     public PuzzleConfigEntity() {
-        
+
+    }
+
+    public PuzzleConfigEntity(final String exercise, final String serializedConfig) {
+        this.exercise = exercise;
+        this.serializedConfig = serializedConfig;
     }
 }

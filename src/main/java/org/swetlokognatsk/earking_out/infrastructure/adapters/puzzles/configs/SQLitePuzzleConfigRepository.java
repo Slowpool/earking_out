@@ -85,8 +85,8 @@ public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRe
         var selectCommand = "SELECT `serialized_config` FROM `puzzle_configs` WHERE `exercise` = ?";
 
         try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.prepareStatement(selectCommand);) {
-            var exerciseDeterminant = buildExerciseDeterminant(exercise);
-            statement.setString(1, exerciseDeterminant);
+            var exerciseId = exercise.toString();
+            statement.setString(1, exerciseId);
 
             var resultSet = statement.executeQuery();
             if (puzzleConfigIsFound(resultSet)) {
@@ -120,10 +120,6 @@ public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRe
         return resultSet.next();
     }
 
-    private static String buildExerciseDeterminant(final Exercise exercise) {
-        return String.format("%s_%s", exercise.type.toString(), exercise.name.toString());
-    }
-
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var exercise = puzzleConfigAggregate.getId();
 
@@ -131,13 +127,13 @@ public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRe
         var selectCommand = "INSERT INTO `puzzle_configs` (`exercise`, `serialized_config`) VALUES (?, ?)";
 
         try (Connection connection = DriverManager.getConnection(connectionString); var deleteStatement = connection.prepareStatement(deleteCommand); var insertStatement = connection.prepareStatement(selectCommand);) {
-            var exerciseDeterminant = buildExerciseDeterminant(exercise);
+            var exerciseId = exercise.toString();
 
             connection.setAutoCommit(false);
 
-            deletePrevConfigVersionIfExists(exerciseDeterminant, deleteStatement);
+            deletePrevConfigVersionIfExists(exerciseId, deleteStatement);
 
-            insertPuzzleConfig(exerciseDeterminant, puzzleConfigAggregate, insertStatement);
+            insertPuzzleConfig(exerciseId, puzzleConfigAggregate, insertStatement);
 
             connection.commit();
         } catch (SQLException e) {
@@ -147,13 +143,13 @@ public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRe
         }
     }
 
-    private void deletePrevConfigVersionIfExists(final String exerciseDeterminant, final PreparedStatement deleteStatement) throws SQLException {
-        deleteStatement.setString(1, exerciseDeterminant);
+    private void deletePrevConfigVersionIfExists(final String exerciseId, final PreparedStatement deleteStatement) throws SQLException {
+        deleteStatement.setString(1, exerciseId);
         deleteStatement.executeUpdate();
     }
 
-    private void insertPuzzleConfig(final String exerciseDeterminant, final PuzzleConfigAggregate<?> puzzleConfigAggregate, final PreparedStatement insertStatement) throws SQLException {
-        insertStatement.setString(1, exerciseDeterminant);
+    private void insertPuzzleConfig(final String exerciseId, final PuzzleConfigAggregate<?> puzzleConfigAggregate, final PreparedStatement insertStatement) throws SQLException {
+        insertStatement.setString(1, exerciseId);
 
         var puzzleConfigJson = puzzleConfigJsonSerializer.serializePuzzleConfig(puzzleConfigAggregate);
         insertStatement.setString(2, puzzleConfigJson);
