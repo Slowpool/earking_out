@@ -164,7 +164,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigDTOAssembler.class)), (BeanDefinition bd) -> bd.setPrimary(false));
 
-        ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigJsonSerializer.class), get(PuzzleConfigDTOAssembler.class), get(InMemoryPuzzleConfigRepository.class)), (BeanDefinition bd) -> bd.setPrimary(true));
+        ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigJsonSerializer.class), get(PuzzleConfigDTOAssembler.class), get(InMemoryPuzzleConfigRepository.class)), (BeanDefinition bd) -> bd.setPrimary(false));
 
         ctx.registerBean(JacksonJsonSerializer.class, () -> new JacksonJsonSerializer());
         

@@ -5,6 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,8 @@ import jakarta.persistence.PersistenceContext;
 
 @Repository
 @Primary
-public final class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepository {
+@Lazy
+public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
