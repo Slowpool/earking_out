@@ -5,22 +5,19 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
-@Repository
-@Primary
-@Lazy
 public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepository {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
+    private final TransactionTemplate transactionTemplate;
 
-    public SpringJpaPuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
+    public SpringJpaPuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository, final EntityManager entityManager, final PlatformTransactionManager transactionManager) {
+        this.entityManager = entityManager;
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
         super(abstractPuzzleConfigAggregatesFactory, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
     }
 
@@ -29,8 +26,18 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
         var serializedPuzzleConfig = puzzleConfigJsonSerializer.serializePuzzleConfig(puzzleConfigAggregate);
         var stringedExercise = puzzleConfigAggregate.getId()
                 .toString();
-        var puzzleConfigEntity = new PuzzleConfigEntity(stringedExercise, serializedPuzzleConfig);
-        entityManager.persist(puzzleConfigEntity);
+
+        transactionTemplate.execute(status -> {
+            var puzzleConfigEntity = findByExercise(puzzleConfigAggregate.getId());
+            if (puzzleConfigEntity == null) {
+                puzzleConfigEntity = new PuzzleConfigEntity(stringedExercise, serializedPuzzleConfig);
+            } else {
+                puzzleConfigEntity.setSerializedPuzzleConfig(serializedPuzzleConfig);
+            }
+
+            entityManager.persist(puzzleConfigEntity);
+            return null;
+        });
     }
 
     protected String getOrCreatePuzzleConfigJson(final Exercise exercise) {

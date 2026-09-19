@@ -23,6 +23,10 @@ public class PuzzleConfigEntity {
         return serializedConfig;
     }
 
+    public final void setSerializedPuzzleConfig(final String serializedConfig) {
+        this.serializedConfig = serializedConfig;
+    }
+
     public PuzzleConfigEntity() {
 
     }
