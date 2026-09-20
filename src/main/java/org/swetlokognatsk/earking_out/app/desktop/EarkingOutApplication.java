@@ -32,7 +32,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class EarkingOutApplication extends Application {
+public final class EarkingOutApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
     private static final int WIDTH = 1920;
@@ -99,7 +99,6 @@ public class EarkingOutApplication extends Application {
     }
 
     private <E extends Exercise, CP extends ConfigPane<E, ? extends PuzzleConfigDTO<E>>> CP buildConfigPane(final E exercise) {
-        // TODO is it fine to pull it from DI here?
         var puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         var puzzleConfigDto = puzzleConfigRepository.getPuzzleConfigDTO(exercise);
 
@@ -117,8 +116,8 @@ public class EarkingOutApplication extends Application {
             showPuzzlePane(sessionId);
         } catch (InvalidPuzzleConfigException e) {
             var errorMessages = e.errors.stream()
-                .map((error) -> error.message())
-                .toList();
+                    .map((error) -> error.message())
+                    .toList();
 
             var alert = new Alert(AlertType.ERROR);
             alert.setHeaderText("Invalid config");
@@ -128,6 +127,7 @@ public class EarkingOutApplication extends Application {
     }
 
     private <E extends Exercise> SessionService<E, ?, ?, ?, ?> getSessionService(final E exercise) {
+        // TODO remake
         var sessionService = switch (exercise) {
         case AudioPerfectPitchExercise e -> DI.get(AudioPerfectPitchSessionService.class);
         default -> throw new IllegalArgumentException("unknown exercise: " + exercise);

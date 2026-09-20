@@ -5,112 +5,38 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
-/*
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
+/**
+    awkward ad-hoc implementation to just make sure the business logic works
 */
-// TODO full rewriting. via hibernate?
-public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepository {
+@Deprecated
+public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRepository {
 
-    // TODO eliminate
     public static final String fullDbPath = "/Java/earking_out/earking_out.db";
-    // TODO exterminate
     public static final String connectionString = String.format("jdbc:sqlite:%s", fullDbPath);
 
     // wild cratch to avoid 10000000 configs creating due to recursion in method
     static List<Exercise> alreadyCreatedConfigs = new LinkedList<Exercise>();
 
-    private final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
-    private final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer;
-    private final PuzzleConfigDTOAssembler dtoAssembler;
-    private final InMemoryPuzzleConfigRepository cacheRepository;
-
+    @Deprecated
     public SQLitePuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
-        this.abstractPuzzleConfigAggregatesFactory = abstractPuzzleConfigAggregatesFactory;
-        this.puzzleConfigJsonSerializer = puzzleConfigJsonSerializer;
-        this.dtoAssembler = dtoAssembler;
-
-        actualizeCache(cacheRepository);
-        this.cacheRepository = cacheRepository;
+        super(abstractPuzzleConfigAggregatesFactory, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
     }
 
-    private void actualizeCache(final InMemoryPuzzleConfigRepository cacheRepository) {
-        for (var exercise : ExercisesFactory.getAll()) {
-            var aggregate = genericGet(exercise);
-            cacheRepository.save(aggregate);
-        }
-    }
-
-    public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
-        // TODO
-        var puzzleConfigJson = getOrCreatePuzzleConfigJson(exercise);
-        var aggregate = mapJsonToAggregate(exercise, puzzleConfigJson);
-        return (PCA) aggregate;
-    }
-
-    private String getOrCreatePuzzleConfigJson(final Exercise exercise) {
+    @Deprecated
+    protected final String getOrCreatePuzzleConfigJson(final Exercise exercise) {
         var selectCommand = "SELECT `serialized_config` FROM `puzzle_configs` WHERE `exercise` = ?";
 
         try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.prepareStatement(selectCommand);) {
-            var exerciseDeterminant = buildExerciseDeterminant(exercise);
-            statement.setString(1, exerciseDeterminant);
+            var exerciseId = exercise.toString();
+            statement.setString(1, exerciseId);
 
             var resultSet = statement.executeQuery();
             if (puzzleConfigIsFound(resultSet)) {
@@ -131,6 +57,7 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
         }
     }
 
+    // TODO liquibase
     private static void createPuzzleConfigsTable(String connectionString) {
         // try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.createStatement();) {
         //     // statement.executeUpdate("CREATE TABLE `puzzle_configs` (`exercise` TEXT NOT NULL, `serialized_config` TEXT NOT NULL)");
@@ -144,22 +71,7 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
         return resultSet.next();
     }
 
-    private static String buildExerciseDeterminant(final Exercise exercise) {
-        return String.format("%s_%s", exercise.type.toString(), exercise.name.toString());
-    }
-
-    private void createAndSaveDefaultConfig(final Exercise exercise) {
-        // TODO crutch
-        AudioPerfectPitchConfigAggregatesFactory factory = abstractPuzzleConfigAggregatesFactory.createFactory(new AudioPerfectPitchExercise());
-        var newPuzzleConfig = factory.createDefault();
-        genericSave(newPuzzleConfig);
-    }
-
-    private <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA mapJsonToAggregate(final E exercise, final String puzzleConfigJson) {
-        var aggregate = puzzleConfigJsonSerializer.deserializePuzzleConfig(exercise, puzzleConfigJson);
-        return (PCA) aggregate;
-    }
-
+    @Deprecated
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var exercise = puzzleConfigAggregate.getId();
 
@@ -167,13 +79,13 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
         var selectCommand = "INSERT INTO `puzzle_configs` (`exercise`, `serialized_config`) VALUES (?, ?)";
 
         try (Connection connection = DriverManager.getConnection(connectionString); var deleteStatement = connection.prepareStatement(deleteCommand); var insertStatement = connection.prepareStatement(selectCommand);) {
-            var exerciseDeterminant = buildExerciseDeterminant(exercise);
+            var exerciseId = exercise.toString();
 
             connection.setAutoCommit(false);
 
-            deletePrevConfigVersionIfExists(exerciseDeterminant, deleteStatement);
+            deletePrevConfigVersionIfExists(exerciseId, deleteStatement);
 
-            insertPuzzleConfig(exerciseDeterminant, puzzleConfigAggregate, insertStatement);
+            insertPuzzleConfig(exerciseId, puzzleConfigAggregate, insertStatement);
 
             connection.commit();
         } catch (SQLException e) {
@@ -183,34 +95,17 @@ public final class SQLitePuzzleConfigRepository implements PuzzleConfigRepositor
         }
     }
 
-    private void deletePrevConfigVersionIfExists(final String exerciseDeterminant, final PreparedStatement deleteStatement) throws SQLException {
-        deleteStatement.setString(1, exerciseDeterminant);
+    private void deletePrevConfigVersionIfExists(final String exerciseId, final PreparedStatement deleteStatement) throws SQLException {
+        deleteStatement.setString(1, exerciseId);
         deleteStatement.executeUpdate();
     }
 
-    private void insertPuzzleConfig(final String exerciseDeterminant, final PuzzleConfigAggregate<?> puzzleConfigAggregate, final PreparedStatement insertStatement) throws SQLException {
-        insertStatement.setString(1, exerciseDeterminant);
+    private void insertPuzzleConfig(final String exerciseId, final PuzzleConfigAggregate<?> puzzleConfigAggregate, final PreparedStatement insertStatement) throws SQLException {
+        insertStatement.setString(1, exerciseId);
 
         var puzzleConfigJson = puzzleConfigJsonSerializer.serializePuzzleConfig(puzzleConfigAggregate);
         insertStatement.setString(2, puzzleConfigJson);
 
         insertStatement.executeUpdate();
-    }
-
-    public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
-        var puzzleConfig = genericGet(exercise);
-        var dto = dtoAssembler.assemble(puzzleConfig);
-        return (PCDTO) dto;
-    }
-
-    public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {
-        // puzzle configs are always loaded in repo constructor, so there's no need in asking for them from database
-        return cacheRepository.get(exercise);
-    }
-
-    public void save(final PuzzleConfigAggregate<Exercise> aggregate) {
-        // no consistency because in-memory value does not matter after power outage
-        genericSave(aggregate);
-        cacheRepository.save(aggregate);
     }
 }

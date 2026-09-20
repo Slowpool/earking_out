@@ -55,8 +55,8 @@ public final class SQLiteEventStore implements EventStore {
     // TODO move it to migration
     private void createDatabase(String connectionString) {
         try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.createStatement();) {
-            // statement.executeUpdate("CREATE TABLE `event_sourcing_events` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `created_on` TEXT NOT NULL, `payload` TEXT NOT NULL)");
-            // statement.executeUpdate("INSERT INTO `event_sourcing_events` VALUES (\"test\", \"\", \"\", \"\")");
+            // statement.executeUpdate("CREATE TABLE `event_sourcing_events` (`id` TEXT PRIMARY KEY NOT NULL, `type` TEXT NOT NULL, `created_on` TEXT NOT NULL, `payload` TEXT NOT NULL)");
+            // statement.executeUpdate("INSERT INTO `event_sourcing_events` VALUES (\"test\", \"\", \"\", \"\")"); -- AUDIO/PERFECT_PITCH|{"targetNumberOfPuzzles":250,"statsRecording":true,"normalizedNotesForPuzzle":[52,53,54,55,40,56,41,57,42,43,44,45],"normalizedRootNote":40,"inputMode":"KEYBOARD_AS_PIANO","soundlessGuessingPiano":true,"errors":[],"id":{"name":"PERFECT_PITCH","type":"AUDIO"}}
             // var result = statement.executeQuery("SELECT * FROM `event_sourcing_events` WHERE `id` = \"test\"");
             // var nextResult = result.next();
             // var deletedRows = statement.executeUpdate("DELETE FROM `event_sourcing_events` WHERE `id` = \"test\"");
