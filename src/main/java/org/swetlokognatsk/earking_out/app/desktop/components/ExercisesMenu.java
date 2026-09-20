@@ -6,8 +6,6 @@ import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.intervals.melodic.VisualMelodicIntervalsExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,7 +13,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
 public final class ExercisesMenu extends Menu {
-    private static final List<Exercise> EXERCISES_LIST = List.of(AUDIO_PERFECT_PITCH_EXERCISE, new VisualPerfectPitchExercise(), new VisualMelodicIntervalsExercise());
+    private static final List<Exercise> EXERCISES_LIST = List.of(AUDIO_PERFECT_PITCH_EXERCISE, VISUAL_PERFECT_PITCH_EXERCISE, new VisualMelodicIntervalsExercise());
 
     private final Map<Exercise, MenuItem> menuItems = new HashMap<>();
 

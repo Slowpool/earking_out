@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.V
 
 public final class ExercisesFactory {
     public static final AudioPerfectPitchExercise AUDIO_PERFECT_PITCH_EXERCISE = new AudioPerfectPitchExercise();
+    public static final VisualPerfectPitchExercise VISUAL_PERFECT_PITCH_EXERCISE = new VisualPerfectPitchExercise();
 
     private static final Exercise[] allExercises = new Exercise[] { AUDIO_PERFECT_PITCH_EXERCISE };
 
@@ -26,7 +27,7 @@ public final class ExercisesFactory {
     public static Exercise create(final ExerciseNames name, final ExerciseTypes type) {
         return switch (name) {
         case PERFECT_PITCH -> switch (type) {
-        case VISUAL -> new VisualPerfectPitchExercise();
+        case VISUAL -> VISUAL_PERFECT_PITCH_EXERCISE;
         case AUDIO -> AUDIO_PERFECT_PITCH_EXERCISE;
         default -> throw new IllegalArgumentException("unknown exercise type: " + type);
         };
