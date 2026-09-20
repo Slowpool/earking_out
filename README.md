@@ -5,7 +5,7 @@ Earking out = Ear + working out
 # Brief description
 
 An app to train **perfect pitch** and related musical skills. There are billions of similar apps, but this one is the best in my honest opinion, at least because I can modify it on my own and do **whatever** i want.
-I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing, PosgreSQL, SQLite, Hibernateю
+I also develop it in learning purposes - Java, JavaFX, DDD, TDD, Event sourcing, PostgreSQL, SQLite, Hibernate
 
 # Domains
 P.S. yep, the sole domain cuz i ain't gonna difficulty (the ending is pronounced like in simplify) things with separating it in two different domains (the training itself and statistics)
@@ -100,6 +100,6 @@ x. Achievement
 
 - There are two different builds:
    - Web: PostgreSQL, MongoDB and Redis // TODO implement
-   - Desktop: SQLite // TODO implement in less spaghetti way
+   - Desktop: SQLite // TODO implement via Hibernate/JPA
    
    Hexagonal architecture allows to do it via the shared core.
