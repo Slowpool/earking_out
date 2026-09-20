@@ -20,6 +20,10 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
 
     protected abstract String getOrCreatePuzzleConfigJson(final Exercise exercise);
 
+    protected PuzzleConfigJsonSerializer getPuzzleConfigJsonSerializer() {
+        return puzzleConfigJsonSerializer;
+    }
+    
     public PersistentPuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
         this.abstractPuzzleConfigAggregatesFactory = abstractPuzzleConfigAggregatesFactory;
         this.puzzleConfigJsonSerializer = puzzleConfigJsonSerializer;
@@ -42,7 +46,7 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
     }
 
     private <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA mapJsonToAggregate(final E exercise, final String puzzleConfigJson) {
-        var aggregate = puzzleConfigJsonSerializer.deserializePuzzleConfig(exercise, puzzleConfigJson);
+        var aggregate = getPuzzleConfigJsonSerializer().deserializePuzzleConfig(exercise, puzzleConfigJson);
         return (PCA) aggregate;
     }
 
