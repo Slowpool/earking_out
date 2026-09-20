@@ -4,3 +4,11 @@ piano key pressing business logic time handling
             0.043356910454545455
         without event logging to sqlite dbms
             0.024991455090909095
+
+        with event logging to sqlite dbms
+            0.033410744124999996
+        without event logging to sqlite dbms
+            0.01602457742857143
+
+        with logging via tasks
+            0.0158963672

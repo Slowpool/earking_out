@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
+import org.springframework.scheduling.annotation.Async;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -13,7 +14,6 @@ public final class LogEventOnSessionStartedHandler extends LoggingToEventStoreHa
         super(eventStore, puzzleConfigRepository);
     }
 
-    // TODO add this event to aggregate
     public void handle(final SessionStartedEvent event) {
         if (loggingIsEnabled(event.puzzleConfigDto.exercise)) {
             var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
