@@ -4,10 +4,8 @@ import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelp
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.*;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
@@ -15,10 +13,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.Aud
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 public final class SessionAggregateTest {
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
@@ -42,7 +40,7 @@ public final class SessionAggregateTest {
     private AudioPerfectPitchSessionAggregate createAudioPerfectPitchSession(final AudioPerfectPitchSolution fakeSolution) {
         FakeAudioPerfectPitchSolutionGenerator.fakeSolution = fakeSolution;
 
-        return (AudioPerfectPitchSessionAggregate) sessionAggregatesFactory.create(new AudioPerfectPitchExercise());
+        return (AudioPerfectPitchSessionAggregate) sessionAggregatesFactory.create(AUDIO_PERFECT_PITCH_EXERCISE);
     }
 
     private AudioPerfectPitchSessionAggregate createAudioPerfectPitchSession() {
@@ -54,7 +52,6 @@ public final class SessionAggregateTest {
     }
 
     private <S extends Solution> SessionAggregate<?, S, ?, ?> createSomeSessionAndGuessCorrectly() {
-        // TODO why aggregate is considered to have cqrs design?
         var sessionAggregate = createAudioPerfectPitchSession();
         sessionAggregate.guess(SOLUTION);
         return (SessionAggregate<?, S, ?, ?>) sessionAggregate;
@@ -73,7 +70,7 @@ public final class SessionAggregateTest {
     }
 
     private void updateTargetNumberOfPuzzlesOfSomeSession(int targetNumberOfPuzzles) {
-        var puzzleConfig = puzzleConfigRepository.get(new AudioPerfectPitchExercise());
+        var puzzleConfig = puzzleConfigRepository.get(AUDIO_PERFECT_PITCH_EXERCISE);
         puzzleConfig.updateProperty(PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP, targetNumberOfPuzzles);
         puzzleConfigRepository.save(puzzleConfig);
     }

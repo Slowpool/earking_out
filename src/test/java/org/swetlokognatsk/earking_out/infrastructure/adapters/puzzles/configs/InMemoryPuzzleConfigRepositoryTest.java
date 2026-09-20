@@ -3,14 +3,13 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRootRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.InMemoryRepositoryTest;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
@@ -85,7 +84,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
     }
 
     private AudioPerfectPitchConfigAggregate getPerfectPitchConfigAggregate() {
-        var exercise = new AudioPerfectPitchExercise();
+        var exercise = AUDIO_PERFECT_PITCH_EXERCISE;
         AudioPerfectPitchConfigAggregate aggregate = repository.genericGet(exercise);
         return aggregate;
     }

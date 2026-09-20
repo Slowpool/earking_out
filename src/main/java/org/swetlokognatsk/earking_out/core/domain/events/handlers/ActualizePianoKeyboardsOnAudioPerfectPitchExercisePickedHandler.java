@@ -1,15 +1,11 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
-import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler extends DomainEventHandler<AudioPerfectPitchExercisePickedEvent> {
 
@@ -22,7 +18,7 @@ public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler ext
     }
 
     private AudioPerfectPitchConfigDTO getActualPuzzleConfigDto() {
-        return puzzleConfigRepository.getPuzzleConfigDTO(new AudioPerfectPitchExercise());
+        return puzzleConfigRepository.getPuzzleConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE);
     }
 
     // TODO actually it should happen only once, when user picks this exercise the first time
