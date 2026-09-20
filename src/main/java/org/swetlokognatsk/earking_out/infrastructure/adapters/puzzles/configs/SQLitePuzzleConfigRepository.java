@@ -5,82 +5,32 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
-/*
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
-    !ALARM! THE MOST WILD CODE I'VE EVER WRITTEN !ALARM!
+/**
+    awkward ad-hoc implementation to just make sure the business logic works
 */
-// TODO full rewriting. via hibernate?
+@Deprecated
 public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRepository {
 
-    // TODO eliminate
     public static final String fullDbPath = "/Java/earking_out/earking_out.db";
-    // TODO exterminate
     public static final String connectionString = String.format("jdbc:sqlite:%s", fullDbPath);
 
     // wild cratch to avoid 10000000 configs creating due to recursion in method
     static List<Exercise> alreadyCreatedConfigs = new LinkedList<Exercise>();
 
+    @Deprecated
     public SQLitePuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
         super(abstractPuzzleConfigAggregatesFactory, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
     }
 
+    @Deprecated
     protected final String getOrCreatePuzzleConfigJson(final Exercise exercise) {
         var selectCommand = "SELECT `serialized_config` FROM `puzzle_configs` WHERE `exercise` = ?";
 
@@ -107,6 +57,7 @@ public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRe
         }
     }
 
+    // TODO liquibase
     private static void createPuzzleConfigsTable(String connectionString) {
         // try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.createStatement();) {
         //     // statement.executeUpdate("CREATE TABLE `puzzle_configs` (`exercise` TEXT NOT NULL, `serialized_config` TEXT NOT NULL)");
@@ -120,6 +71,7 @@ public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRe
         return resultSet.next();
     }
 
+    @Deprecated
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var exercise = puzzleConfigAggregate.getId();
 
