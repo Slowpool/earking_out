@@ -21,7 +21,6 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
         super(abstractPuzzleConfigAggregatesFactory, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
     }
 
-    @Transactional
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var serializedPuzzleConfig = puzzleConfigJsonSerializer.serializePuzzleConfig(puzzleConfigAggregate);
         var stringedExercise = puzzleConfigAggregate.getId()
