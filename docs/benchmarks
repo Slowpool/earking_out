@@ -12,3 +12,9 @@ piano key pressing business logic time handling
 
         with logging via tasks
             0.0158963672
+
+solution generator in puzzles factory
+    creating the new one each time:
+        0.0060298546000000005
+    caching the last one:
+        0.0039171798

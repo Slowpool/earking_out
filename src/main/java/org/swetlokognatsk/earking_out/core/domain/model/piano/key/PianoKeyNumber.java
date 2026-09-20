@@ -96,6 +96,18 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
         return other.value == value;
     }
 
+    public static boolean equal(final PianoKeyNumber[] keyNumbers, final PianoKeyNumber[]otherKeyNumbers) {
+        if (keyNumbers.length != otherKeyNumbers.length) {
+            return false;
+        }
+        for (int i = 0; i < keyNumbers.length; i++) {
+            if (!keyNumbers[i].equals(otherKeyNumbers[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public PianoKeyNumber add(final byte number) {
         return add((int) number);
     }
