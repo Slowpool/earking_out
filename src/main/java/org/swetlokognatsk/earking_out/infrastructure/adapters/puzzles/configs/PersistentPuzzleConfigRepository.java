@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
@@ -13,7 +13,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 
 abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepository {
 
-    protected final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
+    protected final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver;
     protected final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer;
     protected final PuzzleConfigDTOAssembler dtoAssembler;
     protected final InMemoryPuzzleConfigRepository cacheRepository;
@@ -24,8 +24,8 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
         return puzzleConfigJsonSerializer;
     }
 
-    public PersistentPuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
-        this.abstractPuzzleConfigAggregatesFactory = abstractPuzzleConfigAggregatesFactory;
+    public PersistentPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
+        this.puzzleConfigAggregatesFactoryResolver = puzzleConfigAggregatesFactoryResolver;
         this.puzzleConfigJsonSerializer = puzzleConfigJsonSerializer;
         this.dtoAssembler = dtoAssembler;
 
@@ -69,7 +69,7 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
 
     protected final void createAndSaveDefaultConfig(final Exercise exercise) {
         // TODO crutch
-        AudioPerfectPitchConfigAggregatesFactory factory = abstractPuzzleConfigAggregatesFactory.createFactory(AUDIO_PERFECT_PITCH_EXERCISE);
+        AudioPerfectPitchConfigAggregatesFactory factory = puzzleConfigAggregatesFactoryResolver.resolveFactory(AUDIO_PERFECT_PITCH_EXERCISE);
         var newPuzzleConfig = factory.createDefault();
         genericSave(newPuzzleConfig);
     }

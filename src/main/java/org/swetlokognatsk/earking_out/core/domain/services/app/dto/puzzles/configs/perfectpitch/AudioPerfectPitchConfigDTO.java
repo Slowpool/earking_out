@@ -4,6 +4,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 // TODO DOMAIN IS A WRONG PLACE FOR DTOS!
 public final class AudioPerfectPitchConfigDTO extends PerfectPitchConfigDTO<AudioPerfectPitchExercise> {
 
@@ -29,8 +32,8 @@ public final class AudioPerfectPitchConfigDTO extends PerfectPitchConfigDTO<Audi
         return exercise.equals(other.exercise)
                 && targetNumberOfPuzzles == other.targetNumberOfPuzzles
                 && statsRecording == other.statsRecording
-                && PianoKeyNumber.equal(normalizedNotesForPuzzle, other.normalizedNotesForPuzzle)
-                && normalizedRootNote.equals(other.normalizedRootNote)
+                && Arrays.equals(normalizedNotesForPuzzle, other.normalizedNotesForPuzzle)
+                && Objects.equals(normalizedRootNote, other.normalizedRootNote)
                 && inputMode.equals(other.inputMode)
                 && soundlessGuessingPiano == other.soundlessGuessingPiano;
     }

@@ -24,7 +24,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.VisualPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
@@ -142,12 +144,16 @@ public final class HandmadeIoCContainer implements IoCContainer {
         } else if (someClass.equals(PuzzleConfigRepository.class)) {
             return (T) get(InMemoryPuzzleConfigRepository.class);
 
-        } else if (someClass.equals(AbstractPuzzleConfigAggregatesFactory.class)) {
-            return (T) new AbstractPuzzleConfigAggregatesFactory(get(ObjectCloner.class));
+        } else if (someClass.equals(PuzzleConfigAggregatesFactoryResolver.class)) {
+            return (T) new PuzzleConfigAggregatesFactoryResolver();
+        } else if (someClass.equals(AudioPerfectPitchConfigAggregatesFactory.class)) {
+            return (T) new AudioPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class));
+        } else if (someClass.equals(VisualPerfectPitchConfigAggregatesFactory.class)) {
+            return (T) new VisualPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class));
 
         } else if (someClass.equals(InMemoryPuzzleConfigRepository.class)) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(AbstractPuzzleConfigAggregatesFactory.class), get(PuzzleConfigDTOAssembler.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigDTOAssembler.class));
             }
             return (T) inMemoryPuzzleConfigRepository;
 

@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
@@ -23,8 +23,8 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 public class RandomAudioPerfectPitchSolutionGeneratorTest {
     private static int ITERATIONS_NUMBER = 100;
 
-    private static AudioPerfectPitchConfigAggregatesFactory configFactory = new AbstractPuzzleConfigAggregatesFactory(new SerializationCloner())
-            .createFactory(AUDIO_PERFECT_PITCH_EXERCISE);
+    private static AudioPerfectPitchConfigAggregatesFactory configFactory = new PuzzleConfigAggregatesFactoryResolver()
+            .resolveFactory(AUDIO_PERFECT_PITCH_EXERCISE);
 
     private static RandomAudioPerfectPitchSolutionGenerator createPuzzleGenerator(final PianoKeyNumber[] normalizedNotesForPuzzle) {
         // TODO how to validate aggregate?
