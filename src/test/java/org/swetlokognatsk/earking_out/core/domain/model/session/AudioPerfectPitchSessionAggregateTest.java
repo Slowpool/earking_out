@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.session;
 import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelper.*;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.assertNoSelectedKeys;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
@@ -14,6 +14,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.Aud
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 public final class AudioPerfectPitchSessionAggregateTest {
     private SessionAggregatesFactory sessionAggregatesFactory;
@@ -28,7 +29,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     private AudioPerfectPitchExercise getExercise() {
-        return new AudioPerfectPitchExercise();
+        return AUDIO_PERFECT_PITCH_EXERCISE;
     }
 
     private AudioPerfectPitchSessionAggregate createAggregate() {
@@ -58,8 +59,6 @@ public final class AudioPerfectPitchSessionAggregateTest {
         assertEquals(puzzleNumber, userTriedToGuessEvent.puzzleNumber);
     }
 
-    
-
     private void assertUserTriedToGuessEventHasAttempt(final SessionAggregate<?, ?, ?, ?> aggregate, final int attempt) {
         var event = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
         assertEquals(attempt, event.attempt);
@@ -74,8 +73,6 @@ public final class AudioPerfectPitchSessionAggregateTest {
         var event = getOnlyOneThrownEvent(aggregate, UserTriedToGuessPuzzleEvent.class);
         assertEquals(false, event.success);
     }
-
-    
 
     @Test
     public void demonstrateHintGivesCorrectEvent() {

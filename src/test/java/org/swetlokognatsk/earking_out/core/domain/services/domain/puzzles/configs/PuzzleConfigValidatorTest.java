@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.confi
 import org.junit.Before;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.base.validators.Error;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
@@ -21,7 +21,7 @@ public abstract class PuzzleConfigValidatorTest<E extends Exercise, PCA extends 
     protected abstract Class<VC> getValidatorClass();
 
     public PuzzleConfigValidatorTest() {
-        aggregatesFactory = (PCAF) DI.get(AbstractPuzzleConfigAggregatesFactory.class).createFactory(getExercise());
+        aggregatesFactory = (PCAF) DI.get(PuzzleConfigAggregatesFactoryResolver.class).resolveFactory(getExercise());
     }
 
     @Before

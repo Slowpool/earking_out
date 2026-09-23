@@ -1,16 +1,14 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 import org.junit.Test;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 public final class PerfectPitchConfigAggregateTest {
 
@@ -43,7 +41,7 @@ public final class PerfectPitchConfigAggregateTest {
 
     private PerfectPitchConfigAggregate<?> getPerfectPitchAggregate() {
         var repository = DI.get(PuzzleConfigRepository.class);
-        var aggregate = repository.get(new AudioPerfectPitchExercise());
+        var aggregate = repository.get(AUDIO_PERFECT_PITCH_EXERCISE);
         return (PerfectPitchConfigAggregate<?>) aggregate;
     }
 }

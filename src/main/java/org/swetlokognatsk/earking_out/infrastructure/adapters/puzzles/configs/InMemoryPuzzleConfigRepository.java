@@ -5,7 +5,7 @@ import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
@@ -14,11 +14,11 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     private final Map<Exercise, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
-    private final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory;
+    private final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver;
     private final PuzzleConfigDTOAssembler dtoAssembler;
 
-    public InMemoryPuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigDTOAssembler dtoAssembler) {
-        this.abstractPuzzleConfigAggregatesFactory = abstractPuzzleConfigAggregatesFactory;
+    public InMemoryPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigDTOAssembler dtoAssembler) {
+        this.puzzleConfigAggregatesFactoryResolver = puzzleConfigAggregatesFactoryResolver;
         this.dtoAssembler = dtoAssembler;
 
         seedConfigs();
@@ -35,7 +35,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     }
 
     private <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>>> PCAF createFactory(final E exercise) {
-        return abstractPuzzleConfigAggregatesFactory.createFactory(exercise);
+        return puzzleConfigAggregatesFactoryResolver.resolveFactory(exercise);
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {

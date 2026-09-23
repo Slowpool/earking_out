@@ -2,14 +2,12 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.session;
 
 import static org.junit.Assert.*;
 import org.junit.*;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.session.InMemorySessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 public final class InMemorySessionRepositoryTest {
 
@@ -42,15 +40,14 @@ public final class InMemorySessionRepositoryTest {
         try {
             repository.getActiveSession();
             fail();
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
         }
     }
 
     @Test
     public void addingAnotherActiveSessionWhenTheFirstOneIsYetActive() {
-        AudioPerfectPitchSessionAggregate newSessionAggregate = sessionAggregatesFactory.create(new AudioPerfectPitchExercise());
-        
+        AudioPerfectPitchSessionAggregate newSessionAggregate = sessionAggregatesFactory.create(AUDIO_PERFECT_PITCH_EXERCISE);
+
         repository.save(newSessionAggregate);
 
         var activeSession = repository.getActiveSession();

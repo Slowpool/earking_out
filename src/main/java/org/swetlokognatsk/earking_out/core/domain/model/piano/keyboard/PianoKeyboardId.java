@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import java.util.Arrays;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 // TODO use DTOs wherever it's possible instead of aggregates
 /**
@@ -16,7 +16,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
  * ids are just hardcoded here.
  */
 public enum PianoKeyboardId {
-    AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER(new AudioPerfectPitchExercise(), PianoKeyboardContext.PUZZLE_CONFIG), AUDIO_PERFECT_PITCH_NOTES_PICKER(new AudioPerfectPitchExercise(), PianoKeyboardContext.PUZZLE_CONFIG), AUDIO_PERFECT_PITCH_NOTES_GUESSING(new AudioPerfectPitchExercise(), PianoKeyboardContext.SESSION);
+    AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER(AUDIO_PERFECT_PITCH_EXERCISE, PianoKeyboardContext.PUZZLE_CONFIG), AUDIO_PERFECT_PITCH_NOTES_PICKER(AUDIO_PERFECT_PITCH_EXERCISE, PianoKeyboardContext.PUZZLE_CONFIG), AUDIO_PERFECT_PITCH_NOTES_GUESSING(AUDIO_PERFECT_PITCH_EXERCISE, PianoKeyboardContext.SESSION);
 
     public final Exercise exercise;
     public final PianoKeyboardContext context;

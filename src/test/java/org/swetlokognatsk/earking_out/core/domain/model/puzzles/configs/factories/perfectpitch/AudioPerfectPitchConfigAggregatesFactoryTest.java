@@ -3,16 +3,17 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factori
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.SerializationCloner;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 public class AudioPerfectPitchConfigAggregatesFactoryTest {
 
     @Test
     public void createDefault() {
-        var abstractPuzzleConfigAggregatesFactory = new AbstractPuzzleConfigAggregatesFactory(new SerializationCloner());
-        AudioPerfectPitchConfigAggregatesFactory factory = abstractPuzzleConfigAggregatesFactory.createFactory(new AudioPerfectPitchExercise());
+        var puzzleConfigAggregatesFactoryResolver = new PuzzleConfigAggregatesFactoryResolver();
+        AudioPerfectPitchConfigAggregatesFactory factory = puzzleConfigAggregatesFactoryResolver.resolveFactory(AUDIO_PERFECT_PITCH_EXERCISE);
 
         var puzzleConfig = factory.createDefault();
 

@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.AbstractPuzzleConfigAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 
@@ -26,8 +26,8 @@ public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRe
     static List<Exercise> alreadyCreatedConfigs = new LinkedList<Exercise>();
 
     @Deprecated
-    public SQLitePuzzleConfigRepository(final AbstractPuzzleConfigAggregatesFactory abstractPuzzleConfigAggregatesFactory, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
-        super(abstractPuzzleConfigAggregatesFactory, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
+    public SQLitePuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
+        super(puzzleConfigAggregatesFactoryResolver, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
     }
 
     @Deprecated
