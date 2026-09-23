@@ -32,7 +32,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public final class EarkingOutApplication extends Application {
+public final class EarkingOutDesktopApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
 
     private static final int WIDTH = 1920;
@@ -42,7 +42,7 @@ public final class EarkingOutApplication extends Application {
     private final ExercisesMenu exercisesMenu;
     private final Scene mainScene;
 
-    public EarkingOutApplication() {
+    public EarkingOutDesktopApplication() {
         contentPane = buildContentPane();
         exercisesMenu = buildExercisesMenu();
         buildAndDisplayMenu();

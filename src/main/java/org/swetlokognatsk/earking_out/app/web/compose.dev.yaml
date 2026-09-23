@@ -1,0 +1,38 @@
+services:
+  earking-out-web:
+    container_name:
+      'earking-out-web'
+    build:
+      dockerfile: './Dockerfile'
+    volumes:
+      # TODO is it ok?
+      - '../../../../../../../../target/classes:/app/BOOT-INF/classes:delegated'
+      - '../../../../../../../../target/lib:/app/BOOT-INF/lib:delegated'
+    environment:
+      SPRING_APPLICATION_NAME: "${APP_NAME}"
+      SPRING_DATASOURCE_URL: "${POSTGRES_CONNECTION_URI}"
+      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER}"
+      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD}"
+      # SPRING_DATA_REDIS_HOST: "${SPRING_DATA_REDIS_HOST}"
+      # SPRING_DATA_REDIS_PORT: "${SPRING_DATA_REDIS_PORT}"
+      # SPRING_DATA_REDIS_PASSWORD: "${SPRING_DATA_REDIS_PASSWORD}"
+    ports:
+      - "250:250"
+      - '5015:5005'
+    depends_on:
+      - postgres
+
+  postgres:
+    image: 'postgres:18.6'
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - 'pg_db:/var/lib/postgresql'
+    ports:
+      - '5432'
+
+volumes:
+  pg_db:
+  # redis_data:

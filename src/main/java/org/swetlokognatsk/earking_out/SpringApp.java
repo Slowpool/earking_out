@@ -10,7 +10,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @SpringBootApplication
-class SpringApp {
+public class SpringApp {
+
+    public static Build build;
 
     @Bean
     @Primary
@@ -36,7 +38,7 @@ class SpringApp {
         executor.setAwaitTerminationSeconds(10);
 
         executor.initialize();
-        
+
         return executor;
     }
 

@@ -8,12 +8,21 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundFilesResolver;
+import org.swetlokognatsk.earking_out.Build;
+import org.swetlokognatsk.earking_out.SpringApp;
 
 // TODO yet it's wild dev-only resources accessing. prod requires different sound player, because javafx works only with File, whereas fat .jar does not allow files manipulating.
 // p.s.: wrong. javafx audioclip works with `HTTP, HTTPS, FILE or JAR`
 public final class SpringPianoKeySoundFilesResolver implements PianoKeySoundFilesResolver, ApplicationContextAware {
 
-    private static final Path RESOURCE_DIR = Path.of(System.getProperty("user.dir"), "src/main/resources");
+    private static final Path RESOURCE_DIR = Path.of(
+            System.getProperty("user.dir"),
+            switch (SpringApp.build) {
+            case DESKTOP -> "src/main/resources";
+            // on compiling, maven puts resources into the classes dir
+            case WEB -> "BOOT-INF/classes";
+            default -> throw new RuntimeException("unkonwn build: %s".formatted(SpringApp.build));
+            });
     private static final String PIANO_KEY_LOCATION_TEMPLATE = "file:///org/swetlokognatsk/sounds/piano_keys/key%s.wav";
 
     private ApplicationContext ctx;
