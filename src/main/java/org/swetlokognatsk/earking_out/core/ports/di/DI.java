@@ -51,7 +51,6 @@ public final class DI implements ApplicationContextAware {
 
     // never called actually. it's mandatory for ApplicationContextAware interface. that interface is implemented by DI to explicitly show that it knows about context. small partcile of coupling to spring.
     public void setApplicationContext(final ApplicationContext context) throws BeansException {
-        DI.setContext(context);
     }
 
     public static void setContext(final ApplicationContext context) throws BeansException {

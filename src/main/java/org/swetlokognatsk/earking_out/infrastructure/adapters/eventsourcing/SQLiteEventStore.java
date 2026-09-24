@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
@@ -32,7 +34,7 @@ public final class SQLiteEventStore implements EventStore {
         try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.prepareStatement(createCommand);) {
             for (var event : eventStream) {
 
-                statement.setString(1, eventStream.id().toString());
+                statement.setString(1, generateEventId().toString());
                 statement.setString(2, event.getClass().getName().toString());
                 statement.setString(3, getCreatedOn());
                 statement.setString(4, domainEventJsonSerializer.serializeDomainEvent(event));
@@ -50,6 +52,10 @@ public final class SQLiteEventStore implements EventStore {
             throw new RuntimeException("failed to append event", e);
         }
 
+    }
+
+    private UUID generateEventId() {
+        return UUID.randomUUID();
     }
 
     // TODO move it to migration
