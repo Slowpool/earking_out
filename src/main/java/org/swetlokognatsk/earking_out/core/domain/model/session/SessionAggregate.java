@@ -157,7 +157,9 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected void handleSuccessfulGuess(final S guess) {
-        var newStats = isPerfectlyGuessedPuzzle() ? stats.incrementPerfectlyCompletedPuzzles() : stats.incrementCompletedPuzzles();
+        var newStats = isPerfectlyGuessedPuzzle()
+                ? stats.incrementPerfectlyCompletedPuzzles()
+                : stats.incrementCompletedPuzzles();
         setStats(newStats);
 
         addUserTriedToGuessPuzzleEvent(getPuzzlesCompleted(), guess, getNumberOfGuessesOfCurrentPuzzle(), true);

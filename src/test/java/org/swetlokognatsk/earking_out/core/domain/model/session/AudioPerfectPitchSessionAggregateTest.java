@@ -8,7 +8,10 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
@@ -21,6 +24,10 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
+    private static final String COMPLETELY_INVALID_TEXT_NOTE = "bazinga";
+    private static final String TEXT_NOTE_SOLUTION = "C#1";
+    private static final String WRONG_TEXT_NOTE_SOLUTION = "C#1";
+    private static final String OUT_OF_RANGE_TEXT_NOTE = "C#999";
 
     @Before
     public void setup() {
@@ -264,6 +271,44 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
         aggregate.guess(WRONG_SOLUTION);
         assertUserTriedToGuessEventDoesNotHaveSuccess(aggregate);
+    }
+
+    @Test
+    public void guessViaTextWithInvalidNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(COMPLETELY_INVALID_TEXT_NOTE);
+            fail();
+        } catch (InvalidTextNoteException e) {
+        }
+    }
+
+    @Test
+    public void guessViaTextWithOutOfRangeNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(OUT_OF_RANGE_TEXT_NOTE);
+            fail();
+        } catch (OutOfRangeTextNoteException e) {
+        }
+    }
+
+    @Test
+    public void successfulGuessViaTextNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        aggregate.guessViaTextNote(TEXT_NOTE_SOLUTION);
+        assertTrue(aggregate.getPrevGuessIsSuccessful());
+    }
+
+    @Test
+    public void wrongGuessViaTextNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        aggregate.guessViaTextNote(WRONG_TEXT_NOTE_SOLUTION);
+        assertFalse(aggregate.getPrevGuessIsSuccessful());
     }
 
 }

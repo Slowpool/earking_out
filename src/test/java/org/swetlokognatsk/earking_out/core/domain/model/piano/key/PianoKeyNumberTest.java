@@ -122,4 +122,23 @@ public final class PianoKeyNumberTest {
     private record Dummy() {
     };
 
+    // // WAIT, i've remembered why there was no such a toString() logic. because there are several ways to represent the same PianoKeyNumber - e.g. PianoKeyNumber with number 4 can be either B#0 or C1
+    // @Test
+    // public void toStringTest1() {
+    //     var pianoKeyNumber = FIRST_NOTE_NUMBER;
+
+    //     var stringedKeyNumber = pianoKeyNumber.toString();
+
+    //     assertEquals("C#1", stringedKeyNumber);
+    // }
+
+    // @Test
+    // public void toStringTest2() {
+    //     var pianoKeyNumber = LAST_NOTE_NUMBER;
+
+    //     var stringedKeyNumber = pianoKeyNumber.toString();
+
+    //     assertEquals("B7", stringedKeyNumber);
+    // }
+
 }

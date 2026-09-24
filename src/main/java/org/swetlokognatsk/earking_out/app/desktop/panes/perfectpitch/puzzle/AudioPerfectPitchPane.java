@@ -17,6 +17,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -114,7 +115,9 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
 
     private Region buildNotesTextFieldForGuessing() {
         var notesTextField = new TextField();
-        // TODO event handlers?
+        notesTextField.setOnAction((ActionEvent event) -> {
+            
+        });
         return notesTextField;
     }
 
