@@ -72,6 +72,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBuilder;
+import org.swetlokognatsk.earking_out.web_infrastructure.adapters.eventsourcing.JpaEventStore;
 import org.swetlokognatsk.earking_out.web_infrastructure.adapters.piano.FakeKeySoundsPlayer;
 import jakarta.persistence.EntityManager;
 
@@ -218,6 +219,8 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(FakeKeySoundsPlayer.class);
 
         ctx.registerBean(SpringPianoKeySoundFilesResolver.class);
+
+        ctx.registerBean(JpaEventStore.class);
     }
 
     public <T> T get(Class<T> someClass, Object... args) {

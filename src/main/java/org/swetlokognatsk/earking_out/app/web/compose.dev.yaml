@@ -17,7 +17,7 @@ services:
       # SPRING_DATA_REDIS_PORT: "${SPRING_DATA_REDIS_PORT}"
       # SPRING_DATA_REDIS_PASSWORD: "${SPRING_DATA_REDIS_PASSWORD}"
     ports:
-      - "250:250"
+      - "1941:8081"
       - '5015:5005'
     depends_on:
       - postgres
@@ -31,7 +31,7 @@ services:
     volumes:
       - 'pg_db:/var/lib/postgresql'
     ports:
-      - '5432'
+      - "5433:5432"
 
 volumes:
   pg_db:

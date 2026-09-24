@@ -110,10 +110,13 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.learning_tests;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch;
+    exports org.swetlokognatsk.earking_out.web_infrastructure.adapters.piano;
+    exports org.swetlokognatsk.earking_out.web_infrastructure.adapters.eventsourcing;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;
     opens org.swetlokognatsk.earking_out.app.desktop;
     opens org.swetlokognatsk.earking_out;
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
+    opens org.swetlokognatsk.earking_out.app.web;
 }

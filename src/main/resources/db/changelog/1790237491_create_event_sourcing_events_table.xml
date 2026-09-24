@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2" author="slowpool">
+        <createTable tableName="event_sourcing_events">
+            <column name="id" type="text">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="type" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="payload" type="text">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
