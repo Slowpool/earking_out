@@ -4,6 +4,7 @@
 // TODO if unfinished session is found, prompt the user to restore this session
 // TODO divide the infrastructure into: 1. the shared one 2. web 3. desktop. actually, think about physical architecture generally - how to make web independent on desktop and vice versa keeping the shared business core
 // TODO dive into spring warnings for desktop
+// TODO can javafx 21 be updated to 26?
 module org.swetlokognatsk {
     requires javafx.controls;
     requires javafx.media;

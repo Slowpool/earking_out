@@ -15,7 +15,7 @@ public class AudioPerfectPitchConfigDTOTest {
     // TODO make it more readable (for fun)
     @Test
     public void positiveEquals() {
-        var firstConfig = new AudioPerfectPitchConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE, 0, true, SOME_PIANO_KEYS, FIRST_NOTE_NUMBER, PerfectPitchInputMode.NOTES_AS_CHARACTERS, true);
+        var firstConfig = new AudioPerfectPitchConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE, 0, true, SOME_PIANO_KEYS, FIRST_NOTE_NUMBER, PerfectPitchInputMode.NOTES_AS_TEXT, true);
         var secondConfig = new AudioPerfectPitchConfigDTO(firstConfig.exercise, firstConfig.targetNumberOfPuzzles, firstConfig.statsRecording, new PianoKeyNumber[] { FIRST_NOTE_NUMBER, LAST_NOTE_NUMBER }, firstConfig.normalizedRootNote, firstConfig.inputMode, firstConfig.soundlessGuessingPiano);
 
         assertTrue(firstConfig.equals(secondConfig));
@@ -23,7 +23,7 @@ public class AudioPerfectPitchConfigDTOTest {
 
     @Test
     public void negativeEquals() {
-        var firstConfig = new AudioPerfectPitchConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE, 0, true, SOME_PIANO_KEYS, FIRST_NOTE_NUMBER, PerfectPitchInputMode.NOTES_AS_CHARACTERS, true);
+        var firstConfig = new AudioPerfectPitchConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE, 0, true, SOME_PIANO_KEYS, FIRST_NOTE_NUMBER, PerfectPitchInputMode.NOTES_AS_TEXT, true);
         var secondConfig = new AudioPerfectPitchConfigDTO(firstConfig.exercise, 1, firstConfig.statsRecording, firstConfig.normalizedNotesForPuzzle, firstConfig.normalizedRootNote, firstConfig.inputMode, firstConfig.soundlessGuessingPiano);
 
         assertFalse(firstConfig.equals(secondConfig));
@@ -31,7 +31,7 @@ public class AudioPerfectPitchConfigDTOTest {
 
     @Test
     public void theSameHashCodes() {
-        var firstConfig = new AudioPerfectPitchConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE, 0, true, SOME_PIANO_KEYS, FIRST_NOTE_NUMBER, PerfectPitchInputMode.NOTES_AS_CHARACTERS, true);
+        var firstConfig = new AudioPerfectPitchConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE, 0, true, SOME_PIANO_KEYS, FIRST_NOTE_NUMBER, PerfectPitchInputMode.NOTES_AS_TEXT, true);
         var secondConfig = new AudioPerfectPitchConfigDTO(firstConfig.exercise, firstConfig.targetNumberOfPuzzles, firstConfig.statsRecording, firstConfig.normalizedNotesForPuzzle, firstConfig.normalizedRootNote, firstConfig.inputMode, firstConfig.soundlessGuessingPiano);
 
         assertEquals(firstConfig.hashCode(), secondConfig.hashCode());
