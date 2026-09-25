@@ -22,12 +22,14 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 public final class AudioPerfectPitchSessionAggregateTest {
     private SessionAggregatesFactory sessionAggregatesFactory;
 
-    private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
+    private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER.increment());
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
     private static final String COMPLETELY_INVALID_TEXT_NOTE = "bazinga";
-    private static final String TEXT_NOTE_SOLUTION = "C#1";
-    private static final String WRONG_TEXT_NOTE_SOLUTION = "C#1";
-    private static final String OUT_OF_RANGE_TEXT_NOTE = "C#999";
+    private static final String TEXT_NOTE_SOLUTION_1 = "C#1";
+    private static final String TEXT_NOTE_SOLUTION_2 = "Db1";
+    private static final String WRONG_TEXT_NOTE_SOLUTION_1 = "C1";
+    private static final String WRONG_TEXT_NOTE_SOLUTION_2 = "D1";
+    private static final String OUT_OF_RANGE_TEXT_NOTE = "C#9";
 
     @Before
     public void setup() {
@@ -274,13 +276,15 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void guessViaTextWithInvalidNote() {
+    public void guessViaTextNoteWithInvalidNote() {
         var aggregate = createAggregateAndFlushEvents();
 
         try {
             aggregate.guessViaTextNote(COMPLETELY_INVALID_TEXT_NOTE);
             fail();
         } catch (InvalidTextNoteException e) {
+        } catch (OutOfRangeTextNoteException e) {
+            fail();
         }
     }
 
@@ -292,6 +296,8 @@ public final class AudioPerfectPitchSessionAggregateTest {
             aggregate.guessViaTextNote(OUT_OF_RANGE_TEXT_NOTE);
             fail();
         } catch (OutOfRangeTextNoteException e) {
+        } catch (InvalidTextNoteException e) {
+            fail();
         }
     }
 
@@ -299,7 +305,25 @@ public final class AudioPerfectPitchSessionAggregateTest {
     public void successfulGuessViaTextNote() {
         var aggregate = createAggregateAndFlushEvents();
 
-        aggregate.guessViaTextNote(TEXT_NOTE_SOLUTION);
+        try {
+            aggregate.guessViaTextNote(TEXT_NOTE_SOLUTION_1);
+        } catch (Throwable e) {
+            fail();
+        }
+
+        assertTrue(aggregate.getPrevGuessIsSuccessful());
+    }
+
+    @Test
+    public void alternativeSuccessfulGuessViaTextNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(TEXT_NOTE_SOLUTION_2);
+        } catch (Throwable e) {
+            fail();
+        }
+
         assertTrue(aggregate.getPrevGuessIsSuccessful());
     }
 
@@ -307,7 +331,25 @@ public final class AudioPerfectPitchSessionAggregateTest {
     public void wrongGuessViaTextNote() {
         var aggregate = createAggregateAndFlushEvents();
 
-        aggregate.guessViaTextNote(WRONG_TEXT_NOTE_SOLUTION);
+        try {
+            aggregate.guessViaTextNote(WRONG_TEXT_NOTE_SOLUTION_1);
+        } catch (Throwable e) {
+            fail();
+        }
+
+        assertFalse(aggregate.getPrevGuessIsSuccessful());
+    }
+
+    @Test
+    public void anotherWrongGuessViaTextNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(WRONG_TEXT_NOTE_SOLUTION_2);
+        } catch (Throwable e) {
+            fail();
+        }
+
         assertFalse(aggregate.getPrevGuessIsSuccessful());
     }
 
