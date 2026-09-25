@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
-import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 
 // jdbc implementation for fun instead of orm using. to learn jdbc api a bit. 
 public final class SQLiteEventStore implements EventStore {

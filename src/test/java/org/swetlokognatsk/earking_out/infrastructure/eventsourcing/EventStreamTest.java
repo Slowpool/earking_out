@@ -5,6 +5,7 @@ import static org.junit.Assert.assertArrayEquals;
 import java.util.LinkedList;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
+import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class EventStreamTest {

@@ -25,6 +25,7 @@ public final class SpringEventBus implements EventBus {
     }
 
     public <DE extends DomainEvent> void subscribe(final Class<DE> eventClass, DomainEventHandler<DE> domainEventHandler) {
+        // TODO one more optimization: keep keep keep keep flush keep keep keep flush
         var handler = shouldWrapInTask(domainEventHandler)
                 ? new DomainEventHandler<DE>() {
                     public void handle(final DE domainEvent) {

@@ -2,7 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.domain.services.app.session.ExtendedSessionStats;
+
 import java.util.Objects;
 
 // TODO yet it's rather dto than value object

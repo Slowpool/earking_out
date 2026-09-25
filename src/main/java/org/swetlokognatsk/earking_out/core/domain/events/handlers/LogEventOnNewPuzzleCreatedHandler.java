@@ -1,9 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 

@@ -3,9 +3,10 @@ package org.swetlokognatsk.earking_out.app.desktop.panes;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.GeneralSessionStats;
+import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.ExtendedSessionStats;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.session.ExtendedSessionStats;
-import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionStatsService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.ExtendedSessionStatsService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.session.ExtendedSessionStatsAggregator;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -15,7 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class SessionStatsPane<E extends Exercise, SADTO extends SessionAggregateDTO<E, ?, ?, ?>, ESSA extends SessionStatsService<E, ? extends ExtendedSessionStats<E>>> extends BorderPane {
+public abstract class SessionStatsPane<E extends Exercise, SADTO extends SessionAggregateDTO<E, ?, ?, ?>, ESSA extends ExtendedSessionStatsService<E, ? extends ExtendedSessionStats<E>, ? extends ExtendedSessionStatsAggregator<E, ?>>> extends BorderPane {
     protected final SADTO sessionDto;
 
     protected abstract Pane buildStatsPane();

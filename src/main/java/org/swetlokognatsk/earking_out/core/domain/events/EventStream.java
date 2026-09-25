@@ -1,7 +1,6 @@
-package org.swetlokognatsk.earking_out.infrastructure.eventsourcing;
+package org.swetlokognatsk.earking_out.core.domain.events;
 
 import java.util.Iterator;
-import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 
 // TODO use immutable collection for events
 public record EventStream<ID>(ID id, DomainEvent[] events) implements Iterable<DomainEvent> {
@@ -10,7 +9,7 @@ public record EventStream<ID>(ID id, DomainEvent[] events) implements Iterable<D
         return this.new EventStreamIterator();
     }
 
-    // the most interesting using of inner classes yet
+    // the most interesting using of inner classes yet i've seen
     class EventStreamIterator implements Iterator<DomainEvent> {
 
         private int currentEventIndex = -1;

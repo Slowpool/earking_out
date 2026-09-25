@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.services.app.session;
+package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
