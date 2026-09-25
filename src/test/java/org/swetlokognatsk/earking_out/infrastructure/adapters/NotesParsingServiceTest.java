@@ -48,6 +48,7 @@ public class NotesParsingServiceTest {
         itn.put("C##", InvalidTextNoteException.class);
         itn.put("C#b", InvalidTextNoteException.class);
         itn.put("#bC1", InvalidTextNoteException.class);
+        itn.put("C#", InvalidTextNoteException.class);
         itn.put("C#9", OutOfRangeTextNoteException.class);
         itn.put("Cb9", OutOfRangeTextNoteException.class);
         itn.put("Bb9", OutOfRangeTextNoteException.class);

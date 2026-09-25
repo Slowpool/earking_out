@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop;
 
 import org.swetlokognatsk.earking_out.app.desktop.components.ExercisesMenu;
+import org.swetlokognatsk.earking_out.app.desktop.events.PopupRequestEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
@@ -21,16 +22,21 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionSe
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public final class EarkingOutDesktopApplication extends Application {
     public static final int LABEL_FIELD_SPACING = 10;
@@ -38,6 +44,7 @@ public final class EarkingOutDesktopApplication extends Application {
     private static final int WIDTH = 1920;
     private static final int HEIGHT = 700;
 
+    private Stage primaryStage;
     private final BorderPane contentPane;
     private final ExercisesMenu exercisesMenu;
     private final Scene mainScene;
@@ -69,8 +76,16 @@ public final class EarkingOutDesktopApplication extends Application {
         return scene;
     }
 
+    private void registerEventHandlers() {
+        primaryStage.addEventHandler(PopupRequestEvent.POPUP_REQUEST_EVENT, this::handlePopupRequest);
+    }
+
     public void start(Stage primaryStage) throws Exception {
         configurePrimaryStage(primaryStage);
+
+        this.primaryStage = primaryStage;
+        registerEventHandlers();
+
         primaryStage.show();
     }
 
@@ -176,5 +191,23 @@ public final class EarkingOutDesktopApplication extends Application {
 
         sessionStatsPane.addEventHandler(ExerciseStartedOverEvent.EXERCISE_STARTED_OVER, this::openConfigPaneOver);
         return sessionStatsPane;
+    }
+
+    private void handlePopupRequest(final PopupRequestEvent popupRequestEvent) {
+        popupRequestEvent.consume();
+
+        var label = new Label(popupRequestEvent.message);
+        var popup = new Popup();
+        popup.getContent().add(label);
+        popup.setOnShown(e -> {
+            popup.setX(200);
+            popup.setY(500);
+        });
+
+        popup.show(primaryStage);
+
+        var keyFrame = new KeyFrame(Duration.seconds(2), e -> popup.hide());
+        var timeline = new Timeline(keyFrame);
+        timeline.play();
     }
 }

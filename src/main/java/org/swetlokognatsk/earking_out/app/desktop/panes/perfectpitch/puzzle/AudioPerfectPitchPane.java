@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
 import org.swetlokognatsk.earking_out.DebugUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
+import org.swetlokognatsk.earking_out.app.desktop.events.PopupRequestEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
@@ -11,6 +12,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
@@ -20,10 +23,12 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerf
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 
 public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionService> {
 
@@ -85,14 +90,16 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         pianoKeyboardService.pressPianoKey(e.pianoKeyboardId, e.keyNumber);
         pianoKeyboardHandlersRegister.updatePianoKeyboardView((PianoKeyboard) guessingComponent);
         // TODO other ui updates
+        applyPostGuessingUpdate();
+    }
+
+    private void applyPostGuessingUpdate() {
         var session = getCurrentSessionDTO();
 
         if (session.state != SessionStates.IN_PROGRESS) {
             fireExerciseFinishedEvent();
         } else if (session.prevGuessIsSuccessful.equals(Boolean.TRUE)) {
             updateCompletedPuzzlesNumber(session.stats.puzzlesCompleted);
-        } else {
-
         }
     }
 
@@ -115,10 +122,28 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
 
     private Region buildNotesTextFieldForGuessing() {
         var notesTextField = new TextField();
-        notesTextField.setOnAction((ActionEvent event) -> {
-            
-        });
+        notesTextField.setOnAction(this::handleTextNoteInsert);
         return notesTextField;
+    }
+
+    private void handleTextNoteInsert(ActionEvent event) {
+        var textNoteField = (TextField) guessingComponent;
+        try {
+            sessionService.guessViaTextNote(textNoteField.getText());
+
+            textNoteField.clear();
+            applyPostGuessingUpdate();
+        } catch (InvalidTextNoteException e) {
+            popup("Invalid note");
+        } catch (OutOfRangeTextNoteException e) {
+            popup("Note is out of range");
+        }
+    }
+
+    // TODO make it general somehow
+    private void popup(final String message) {
+        var event = new PopupRequestEvent(PopupRequestEvent.POPUP_REQUEST_EVENT, message);
+        fireEvent(event);
     }
 
 }

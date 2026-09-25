@@ -41,6 +41,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesParsingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.EditableAudioPerfectPitchConfigValidator;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.FinalizedAudioPerfectPitchConfigValidator;
@@ -193,6 +194,8 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(EditableAudioPerfectPitchConfigValidator.class, () -> new EditableAudioPerfectPitchConfigValidator());
 
         ctx.registerBean(FinalizedAudioPerfectPitchConfigValidator.class, () -> new FinalizedAudioPerfectPitchConfigValidator());
+
+        ctx.registerBean(NotesParsingService.class);
     }
 
     private void initDesktopBeans() {

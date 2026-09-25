@@ -9,6 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.Inval
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeOctaveException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 
+// TODO refactoring
 public final class NotesParsingService {
 
     private static final String SHARP = "#";
@@ -69,6 +70,9 @@ public final class NotesParsingService {
     }
 
     private Octaves parseOctave(final String textNote, final boolean hasAccidentalChar) throws OutOfRangeOctaveException {
+        if (textNote.length() == 2 && hasAccidentalChar) {
+            return null;
+        }
         // 01
         // C1
         // _^

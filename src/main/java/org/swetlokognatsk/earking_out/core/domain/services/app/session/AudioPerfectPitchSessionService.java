@@ -4,6 +4,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.FinalizedAudioPerfectPitchConfigValidator;
@@ -24,6 +26,12 @@ public final class AudioPerfectPitchSessionService extends SessionService<AudioP
     public void guessViaPianoKeyPressing(final PianoKeyNumber keyNumber) {
         var session = (AudioPerfectPitchSessionAggregate) sessionRepository.getActiveSession();
         session.guessViaPianoKeyPressing(keyNumber);
+        sessionRepository.save(session);
+    }
+
+    public void guessViaTextNote(final String textNote) throws InvalidTextNoteException, OutOfRangeTextNoteException {
+        var session = (AudioPerfectPitchSessionAggregate) sessionRepository.getActiveSession();
+        session.guessViaTextNote(textNote);
         sessionRepository.save(session);
     }
 
