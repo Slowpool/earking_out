@@ -1,7 +1,12 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.session.GeneralSessionStats;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.ExtendedSessionStats;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionStatsService;
+
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,7 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class SessionStatsPane<SADTO extends SessionAggregateDTO<?, ?, ?, ?>> extends BorderPane {
+public abstract class SessionStatsPane<E extends Exercise, SADTO extends SessionAggregateDTO<E, ?, ?, ?>, ESSA extends SessionStatsService<E, ? extends ExtendedSessionStats<E>>> extends BorderPane {
     protected final SADTO sessionDto;
 
     protected abstract Pane buildStatsPane();
@@ -23,7 +28,7 @@ public abstract class SessionStatsPane<SADTO extends SessionAggregateDTO<?, ?, ?
         titleLabelBox.setAlignment(Pos.CENTER);
 
         var stats = sessionDto.stats;
-        var briefResultsText = interpolateBriefResult(stats.puzzlesCompletedPerfectly, stats.puzzlesCompleted);
+        var briefResultsText = interpolateBriefResult(stats);
         var briefResultLabel = new Label(briefResultsText);
         var briefResultBox = new VBox(briefResultLabel);
         briefResultBox.setAlignment(Pos.CENTER);
@@ -41,9 +46,8 @@ public abstract class SessionStatsPane<SADTO extends SessionAggregateDTO<?, ?, ?
         setCenter(statsPane);
     }
 
-    private static String interpolateBriefResult(int puzzlesCompleted, int targetNumberOfPuzzles) {
-        var percentage = ((double) puzzlesCompleted) / targetNumberOfPuzzles;
-        return "%d of %d or %.2f are guessed correctly".formatted(puzzlesCompleted, targetNumberOfPuzzles, percentage);
+    private static String interpolateBriefResult(final GeneralSessionStats stats) {
+        return "%d of %d or %.2f are guessed correctly".formatted(stats.puzzlesCompletedPerfectly, stats.puzzlesCompleted, stats.getPerfectlyCompletedPuzzlesRate());
     }
 
     private void fireExerciseStartOverEvent(ActionEvent e) {

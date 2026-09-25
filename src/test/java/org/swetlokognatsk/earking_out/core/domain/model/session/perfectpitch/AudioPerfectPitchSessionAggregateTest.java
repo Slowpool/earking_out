@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.session;
+package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelper.*;
 import static org.junit.Assert.*;
@@ -10,6 +10,8 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGues
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;

@@ -28,4 +28,9 @@ public final class GeneralSessionStats extends ValueObject implements Serializab
         return new GeneralSessionStats(puzzlesCompletedPerfectly, puzzlesCompleted + 1);
     }
 
+    // TODO test
+    public double getPerfectlyCompletedPuzzlesRate() {
+        return ((double) puzzlesCompletedPerfectly) / puzzlesCompleted;
+    }
+
 }
