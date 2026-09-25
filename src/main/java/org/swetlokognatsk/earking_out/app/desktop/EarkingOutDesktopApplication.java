@@ -206,6 +206,7 @@ public final class EarkingOutDesktopApplication extends Application {
 
         popup.show(primaryStage);
 
+        // TODO what's going on here
         var keyFrame = new KeyFrame(Duration.seconds(2), e -> popup.hide());
         var timeline = new Timeline(keyFrame);
         timeline.play();

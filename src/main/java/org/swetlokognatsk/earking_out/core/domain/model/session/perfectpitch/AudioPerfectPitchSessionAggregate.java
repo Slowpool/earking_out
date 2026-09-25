@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStats;
+import org.swetlokognatsk.earking_out.core.domain.model.session.GeneralSessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
@@ -23,7 +23,7 @@ public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSession
     private transient NotesNormalizingService notesNormalizer;
     private transient NotesParsingService notesParser;
 
-    public AudioPerfectPitchSessionAggregate(final PuzzlesFactory puzzlesFactory, final SessionId id, final AudioPerfectPitchConfigDTO puzzleConfigDto, final SessionStats stats, final NotesParsingService notesParser, final NotesNormalizingService notesNormalizer) {
+    public AudioPerfectPitchSessionAggregate(final PuzzlesFactory puzzlesFactory, final SessionId id, final AudioPerfectPitchConfigDTO puzzleConfigDto, final GeneralSessionStats stats, final NotesParsingService notesParser, final NotesNormalizingService notesNormalizer) {
         super(puzzlesFactory, id, puzzleConfigDto, stats);
         this.notesNormalizer = notesNormalizer;
         this.notesParser = notesParser;

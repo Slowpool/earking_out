@@ -42,7 +42,8 @@ public abstract class SessionStatsPane<SADTO extends SessionAggregateDTO<?, ?, ?
     }
 
     private static String interpolateBriefResult(int puzzlesCompleted, int targetNumberOfPuzzles) {
-        return String.format("%d of %d are guessed correctly", puzzlesCompleted, targetNumberOfPuzzles);
+        var percentage = ((double) puzzlesCompleted) / targetNumberOfPuzzles;
+        return "%d of %d or %.2f are guessed correctly".formatted(puzzlesCompleted, targetNumberOfPuzzles, percentage);
     }
 
     private void fireExerciseStartOverEvent(ActionEvent e) {

@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStats;
+import org.swetlokognatsk.earking_out.core.domain.model.session.GeneralSessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
@@ -39,7 +39,7 @@ public final class SessionAggregatesFactory extends AggregatesFactory<SessionAgg
     public <E extends Exercise, SA extends SessionAggregate<E, ?, ?, ?>> SA create(final E exercise) {
         var puzzleConfigDto = getPuzzleConfigDto(exercise);
         // TODO SessionStatsFactory
-        var sessionStats = new SessionStats(0, 0);
+        var sessionStats = new GeneralSessionStats(0, 0);
 
         var sessionAggregate = switch (exercise) {
         case AudioPerfectPitchExercise e -> new AudioPerfectPitchSessionAggregate(puzzlesFactory, SessionId.random(), (AudioPerfectPitchConfigDTO) puzzleConfigDto, sessionStats, DI.get(NotesParsingService.class), DI.get(NotesNormalizingService.class));
