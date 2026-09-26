@@ -21,6 +21,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnP
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
@@ -42,6 +43,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesPar
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.EditableAudioPerfectPitchConfigValidator;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.FinalizedAudioPerfectPitchConfigValidator;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch.PerfectPitchSessionStatsAggregator;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.IoCContainer;
@@ -328,6 +330,9 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (someClass.equals(NotesParsingService.class)) {
             dep = new NotesParsingService();
+
+        } else if (someClass.equals(PerfectPitchSessionStatsAggregator.class)) {
+            dep = new PerfectPitchSessionStatsAggregator<PerfectPitchExercise>();
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());

@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.A
 public final class AudioPerfectPitchPuzzle extends PerfectPitchPuzzle<AudioPerfectPitchExercise, AudioPerfectPitchSolution> {
     private static final long serialVersionUID = 1L;
 
+    // TODO is it possible to remove exercise here and pass it inside constructor like super(AudioPerfectPitc...)
     public AudioPerfectPitchPuzzle(final AudioPerfectPitchExercise exercise, final AudioPerfectPitchSolution solution) {
         super(exercise, solution);
     }
