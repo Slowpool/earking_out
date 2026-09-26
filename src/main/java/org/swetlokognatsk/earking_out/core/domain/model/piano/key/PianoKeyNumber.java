@@ -3,9 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -34,7 +32,7 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
         for (byte i = BYTE_FIRST_NOTE_NUMBER; i <= BYTE_LAST_NOTE_NUMBER; i++) {
             tempInnerStorage.put(i, new PianoKeyNumber(i));
         }
-        // to avoid static initializers wrong order. the wrong order error will be more obvious, kinda `innerStorage uninitialized variable using`
+        // to avoid static initializers wrong order. replace `tempInnerStorage` with `innerStorage` in this block of code and the wrong order error will rise (it's kinda `innerStorage uninitialized variable using`)
         innerStorage = tempInnerStorage;
 
         FIRST_NOTE_NUMBER = PianoKeyNumber.valueOf(BYTE_FIRST_NOTE_NUMBER);
@@ -138,6 +136,11 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
             keyNumber = PianoKeyNumber.valueOf(byteKeyNumber);
             action.accept(keyNumber);
         }
+    }
+
+    public static PianoKeyNumber[] getAll() {
+        return innerStorage.values()
+                .toArray(PianoKeyNumber[]::new);
     }
 
 }
