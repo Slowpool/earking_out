@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note.*;
@@ -26,74 +27,61 @@ import net.jqwik.api.Property;
 import net.jqwik.api.state.Action;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public final class PerfectPitchSessionStatsAggregatorPBTTest {
 
+    private static final SessionId SESSION_ID = SessionId.random();
+    
     private PerfectPitchSessionStatsAggregator<?> statsAggregator = DI.get(PerfectPitchSessionStatsAggregator.class);
     private DomainEventsFactory eventsFactory = DI.get(DomainEventsFactory.class);
     private PuzzlesFactory puzzlesFactory = DI.get(PuzzlesFactory.class);
 
-    @Property
-    public void test(@ForAll int number) {
-        if (number == Integer.MIN_VALUE) {
-            return;
+    DomainEvent[] buildDomainEventsTimeline(final List<PianoKeyNumber> possibleSolutions, final List<Boolean> guesses) {
+        List<DomainEvent> domainEvents = new LinkedList<>();
+        var puzzleCreatedEvent = createNewPuzzleCreatedEvent();
+        domainEvents.add(puzzleCreatedEvent);
+
+        UserTriedToGuessPuzzleEvent guessEvent;
+        for (var guess : guesses) {
+            guessEvent = createUserTriedToGuessPuzzleEvent(guess);
         }
-        assertTrue(Math.abs(number) >= 0);
+        // TODO
+        return null;
     }
 
-}
-
-class SessionState {
-    boolean puzzleIsActive = false;
-    // init fake data
-    boolean puzzleIsGuessed = true;
-    private List<DomainEvent> domainEvents = new LinkedList<>();
-
-    void addDomainEvent(final DomainEvent domainEvent) {
-        domainEvents.add(domainEvent);
+    NewPuzzleCreatedEvent createNewPuzzleCreatedEvent() {
+        // TODO put possible solutions to puzzle config dto somehow
+        var puzzle = puzzlesFactory.create(AUDIO_PERFECT_PITCH_EXERCISE);
+        return eventsFactory.createNewPuzzleCreatedEvent(SESSION_ID, puzzle);
     }
 
-    DomainEvent[] getDomainEvents() {
-        return domainEvents.toArray(DomainEvent[]::new);
+    UserTriedToGuessPuzzleEvent createUserTriedToGuessPuzzleEvent(final Boolean guess) {
+        eventsFactory.createUserTriedToGuessPuzzleEvent(SESSION_ID, , , );
     }
 
-    void goToSuccessfulGuessState() {
-        puzzleIsActive = false;
-        puzzleIsGuessed = true;
+    PerfectPitchSessionStats<?> aggregate(final DomainEvent[] domainEvents) {
+        var eventStream = new EventStream<SessionId>(SessionId.random(), domainEvents);
+        return statsAggregator.aggregate(eventStream);
     }
 
-    void goToNewPuzzleCreatedState() {
-        puzzleIsActive = true;
-        puzzleIsGuessed = false;
-    }
-}
-
-class CreateNewPuzzleEventAction implements Action<SessionState> {
-
-    public boolean precondition(final SessionState state) {
-        return state.puzzleIsGuessed;
+    PerfectPitchSessionStats<?> generateStats(final List<PianoKeyNumber> possibleSolutions, final List<Boolean> guesses) {
+        var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
+        return aggregate(domainEvents);
     }
 
-    public SessionState run(final SessionState state) {
-        // TODO so, where is the new event generated?
+    @Property
+    public void allNotesAreDistinct(@ForAll final List<PianoKeyNumber> possibleSolutions, @ForAll final List<Boolean> guesses) {
+        var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
 
-        state.goToNewPuzzleCreatedState();
-        return state;
-    }
-}
+        var stats = aggregate(domainEvents);
 
-class CreateUserTriedToGuessPuzzleEventAction implements Action<SessionState> {
-
-    public boolean precondition(final SessionState state) {
-        return state.puzzleIsActive;
+        var distinctNotesStream = Arrays.stream(stats.notesStats)
+                .map(noteStats -> noteStats.note)
+                .distinct();
+        assertEquals(stats.notesStats.length, distinctNotesStream.count());
     }
 
-    public SessionState run(final SessionState state) {
-        // TODO so, where is the new event generated?
-
-        state.goToSuccessfulGuessState();
-        return state;
-    }
 }
