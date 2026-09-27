@@ -11,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreate
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.PerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.PerfectPitchNoteStats;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.PerfectPitchSessionStats;
@@ -19,7 +20,12 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.session.Extend
 
 public final class PerfectPitchSessionStatsAggregator<E extends PerfectPitchExercise> extends ExtendedSessionStatsAggregator<E, PerfectPitchSessionStats<E>> {
 
+    private PerfectPitchPuzzle<?, ?> currentPuzzle;
+
     public PerfectPitchSessionStats<E> aggregate(final EventStream<SessionId> eventStream) {
+        // for reusability of current method
+        currentPuzzle = null;
+
         var notesStats = new HashMap<PianoKeyNumber, PerfectPitchNoteStats>();
         for (var event : eventStream) {
             apply(notesStats, event);
@@ -43,7 +49,7 @@ public final class PerfectPitchSessionStatsAggregator<E extends PerfectPitchExer
     }
 
     private void applyGuessEvent(final Map<PianoKeyNumber, PerfectPitchNoteStats> notesStats, final UserTriedToGuessPuzzleEvent guessEvent) {
-        var pianoKeyNumber = ((PerfectPitchSolution) guessEvent.guess).keyNumber;
+        var pianoKeyNumber = currentPuzzle.solution.keyNumber;
         var oldNoteStats = getOrCreateNoteStats(notesStats, pianoKeyNumber);
         var newNoteStats = withGuessEvent(oldNoteStats, guessEvent);
         notesStats.put(pianoKeyNumber, newNoteStats);
@@ -59,14 +65,16 @@ public final class PerfectPitchSessionStatsAggregator<E extends PerfectPitchExer
     }
 
     private void applyNewPuzzleEvent(final Map<PianoKeyNumber, PerfectPitchNoteStats> notesStats, final NewPuzzleCreatedEvent newPuzzleEvent) {
-        var pianoKeyNumber = ((PerfectPitchSolution) newPuzzleEvent.puzzle.solution).keyNumber;
+        currentPuzzle = (PerfectPitchPuzzle<?, ?>) newPuzzleEvent.puzzle;
+
+        var pianoKeyNumber = ((PerfectPitchSolution) currentPuzzle.solution).keyNumber;
         var oldNoteStats = getOrCreateNoteStats(notesStats, pianoKeyNumber);
         var newNoteStats = withNewPuzzleEvent(oldNoteStats, newPuzzleEvent);
         notesStats.put(pianoKeyNumber, newNoteStats);
     }
 
     private PerfectPitchNoteStats withNewPuzzleEvent(final PerfectPitchNoteStats noteStats, final NewPuzzleCreatedEvent newPuzzleEvent) {
-        
+        return new PerfectPitchNoteStats(noteStats.note, noteStats.numberOfAppearances + 1, noteStats.numberOfAllGuesses, noteStats.numberOfPerfectGuesses);
     }
 
     private PerfectPitchNoteStats getOrCreateNoteStats(final Map<PianoKeyNumber, PerfectPitchNoteStats> notesStats, final PianoKeyNumber note) {

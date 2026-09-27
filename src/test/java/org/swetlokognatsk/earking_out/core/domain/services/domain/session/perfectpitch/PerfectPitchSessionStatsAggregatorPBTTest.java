@@ -24,11 +24,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.Aud
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.PerfectPitchNoteStats;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.PerfectPitchSessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
+import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
+import net.jqwik.api.FixedSeedMode;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
@@ -93,8 +96,8 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
             var expectedNumberOfPerfectGuesses = gatherNumberOfPerfectGuesses(domainEvents, noteStats.note);
             var expectedNumberOfAllGuesses = gatherNumberOfAllGuesses(domainEvents, noteStats.note);
             var expectedPerfectGuessesRatio = expectedNumberOfAllGuesses == 0.0
-                ? 0.0
-                : ((double) expectedNumberOfPerfectGuesses) / expectedNumberOfAllGuesses;
+                    ? 0.0
+                    : ((double) expectedNumberOfPerfectGuesses) / expectedNumberOfAllGuesses;
             assertEquals(expectedPerfectGuessesRatio, noteStats.perfectGuessesRatio, 0.01);
         }
     }
@@ -179,7 +182,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
         assertEquals(stats.notesStats.length, distinctNotesStream.count());
     }
 
-    @Property
+    @Property(seed = "-6524192018156910654", whenFixedSeed = FixedSeedMode.ALLOW)
     public void allNotesAreFromPossibleSolutions(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
         var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
 

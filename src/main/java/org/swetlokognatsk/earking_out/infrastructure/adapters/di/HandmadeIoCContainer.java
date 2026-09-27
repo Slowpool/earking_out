@@ -126,6 +126,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
         } else if (someClass == SoundHarmonicIntervalHintDemonstrator.class) {
             dep = (DI.inTestMode() ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
+            // TODO here i stopped. how to replace it with random generator on runtime for test in the most elegant way?
         } else if (someClass.equals(AudioPerfectPitchSolutionGenerator.class)) {
             dep = (DI.inTestMode() ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
 
