@@ -8,4 +8,6 @@
 
     <include file="1790237491_create_event_sourcing_events_table.xml" relativeToChangelogFile="true" />
 
+    <include file="1790502775_rename_event_sourcing_events_id_column_to_stream_id.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

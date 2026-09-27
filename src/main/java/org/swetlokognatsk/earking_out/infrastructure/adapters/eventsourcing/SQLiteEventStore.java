@@ -6,12 +6,15 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
-
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
-// jdbc implementation for fun instead of orm using. to learn jdbc api a bit. 
+/**
+ * {@code JDBC} implementation for fun instead of some full fledged {@code ORM}. To learn {@code JDBC} API a
+ * bit.
+ */
+@Deprecated
 public final class SQLiteEventStore implements EventStore {
 
     private final DomainEventJsonSerializer domainEventJsonSerializer;
@@ -20,15 +23,9 @@ public final class SQLiteEventStore implements EventStore {
         this.domainEventJsonSerializer = domainEventJsonSerializer;
     }
 
-    // // TODO use it
-    // public void append(final EventStream<?> eventStream) throws EventSavingException {
     public void append(final EventStream<?> eventStream) {
-        // TODO is there any security concerns with that? it can be any? sql-injection-like stuff?
-        // TODO move it to config
         var fullDbPath = "/Java/earking_out/earking_out.db";
         var connectionString = String.format("jdbc:sqlite:%s", fullDbPath);
-        // createDatabase(connectionString);
-        // return;
 
         var createCommand = ("INSERT INTO `event_sourcing_events` (`id`, `type`, `created_on`, `payload`) VALUES (?, ?, ?, ?)");
         try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.prepareStatement(createCommand);) {
@@ -41,17 +38,12 @@ public final class SQLiteEventStore implements EventStore {
 
                 int countOfInsertedRows = statement.executeUpdate();
                 if (countOfInsertedRows != 1) {
-                    // TODO use it
-                    // throw new EventSavingException("failed to append event", e);
                     throw new RuntimeException("insert went wrong. expected countOfInsertedRows: 1. actual: " + countOfInsertedRows);
                 }
             }
         } catch (SQLException e) {
-            // TODO use it
-            // throw new EventSavingException("failed to append event", e);
             throw new RuntimeException("failed to append event", e);
         }
-
     }
 
     private UUID generateEventId() {
@@ -76,8 +68,12 @@ public final class SQLiteEventStore implements EventStore {
         return LocalDateTime.now().format(SQLiteConfig.dateTimeFormat);
     }
 
-    // TODO refactoring
     private class SQLiteConfig {
         public static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
+    }
+
+    public <ID> EventStream<ID> getAllEvents(final ID id) {
+        // latch
+        return null;
     }
 }

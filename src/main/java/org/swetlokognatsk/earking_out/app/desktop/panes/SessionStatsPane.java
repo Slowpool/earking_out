@@ -7,7 +7,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.Ext
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.ExtendedSessionStatsService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.session.ExtendedSessionStatsAggregator;
-
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -16,13 +15,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class SessionStatsPane<E extends Exercise, SADTO extends SessionAggregateDTO<E, ?, ?, ?>, ESSA extends ExtendedSessionStatsService<E, ? extends ExtendedSessionStats<E>, ? extends ExtendedSessionStatsAggregator<E, ?>>> extends BorderPane {
+public abstract class SessionStatsPane<E extends Exercise, SADTO extends SessionAggregateDTO<E, ?, ?, ?>, ESSS extends ExtendedSessionStatsService<E, ? extends ExtendedSessionStats<E>, ? extends ExtendedSessionStatsAggregator<E, ?>>> extends BorderPane {
     protected final SADTO sessionDto;
+    protected final ESSS statsService;
 
     protected abstract Pane buildStatsPane();
 
-    public SessionStatsPane(final SADTO sessionDto) {
+    public SessionStatsPane(final SADTO sessionDto, final ESSS statsService) {
         this.sessionDto = sessionDto;
+        this.statsService = statsService;
 
         var titleLabel = new Label("finished");
         var titleLabelBox = new VBox(titleLabel);

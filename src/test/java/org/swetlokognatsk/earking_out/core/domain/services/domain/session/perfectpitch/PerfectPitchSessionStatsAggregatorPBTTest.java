@@ -177,7 +177,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
                 .list()
                 .ofMinSize(0)
                 .ofMaxSize(100)
-                // when last item is false, some tests logic is broken (because it's not trivial how to handle such cases), though aggregator works fine
+                // when last item is false, some tests logic is broken (because it's not obvious (at least for me) how to implement the testing of such cases), though aggregator works fine
                 .map(this::makeLastItemTrue);
     }
 

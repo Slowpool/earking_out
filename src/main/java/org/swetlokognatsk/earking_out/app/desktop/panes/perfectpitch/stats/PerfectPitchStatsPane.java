@@ -12,15 +12,12 @@ import javafx.scene.layout.VBox;
 // no further inheritance because stats are the same for both visual and audio exercise types
 public final class PerfectPitchStatsPane<E extends PerfectPitchExercise, SADTO extends PerfectPitchSessionAggregateDTO<E, ?, ?, ?>> extends SessionStatsPane<E, SADTO, PerfectPitchSessionStatsService<E>> {
 
-    private final PerfectPitchSessionStatsService<?> statsService;
-
-    public PerfectPitchStatsPane(final SADTO sessionDto, final PerfectPitchSessionStatsService<?> statsAggregator) {
-        super(sessionDto);
-        this.statsService = statsAggregator;
+    public PerfectPitchStatsPane(final SADTO sessionDto, final PerfectPitchSessionStatsService<E> statsAggregator) {
+        super(sessionDto, statsAggregator);
     }
 
     protected Pane buildStatsPane() {
-        var perfectPitchStats = statsService.aggregate(sessionDto.sessionId);
+        var perfectPitchStats = statsService.getAggregatedStats(sessionDto.sessionId);
         // TODO PerfectPitchStatsPane
         var pane = new VBox(new Label("some stats are here"));
         pane.setAlignment(Pos.CENTER);

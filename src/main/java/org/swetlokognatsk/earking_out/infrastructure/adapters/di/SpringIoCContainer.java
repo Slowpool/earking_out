@@ -41,11 +41,13 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboar
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.PerfectPitchSessionStatsService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesParsingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.EditableAudioPerfectPitchConfigValidator;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.FinalizedAudioPerfectPitchConfigValidator;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch.PerfectPitchSessionStatsAggregator;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -61,6 +63,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.base.Serialization
 import org.swetlokognatsk.earking_out.infrastructure.adapters.events.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring.SpringEventBus;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring.SpringEventPublisher;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing.SpringJpaEventStore;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing.SQLiteEventStore;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.sound.PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator;
@@ -74,8 +77,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBuilder;
-import org.swetlokognatsk.earking_out.web_infrastructure.adapters.eventsourcing.JpaEventStore;
-import org.swetlokognatsk.earking_out.web_infrastructure.adapters.piano.FakeKeySoundsPlayer;
+import org.swetlokognatsk.earking_out.infrastructure.web.adapters.piano.FakeKeySoundsPlayer;
 import jakarta.persistence.EntityManager;
 
 public final class SpringIoCContainer implements IoCContainer {
@@ -197,6 +199,13 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(FinalizedAudioPerfectPitchConfigValidator.class, () -> new FinalizedAudioPerfectPitchConfigValidator());
 
         ctx.registerBean(NotesParsingService.class);
+
+        // TODO experiment: what if use raw type?
+        ctx.registerBean(PerfectPitchSessionStatsService.class, () -> new PerfectPitchSessionStatsService(get(PerfectPitchSessionStatsAggregator.class), get(EventStore.class)));
+
+        ctx.registerBean(PerfectPitchSessionStatsAggregator.class);
+
+        ctx.registerBean(SpringJpaEventStore.class, () -> new SpringJpaEventStore(get(EntityManager.class)), bd -> bd.setPrimary(true));
     }
 
     private void initDesktopBeans() {
@@ -216,15 +225,13 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(ConfigPanesFactory.class, () -> new ConfigPanesFactory(get(PianoKeyboardHandlersRegister.class)));
 
         // event sourcing
-        ctx.registerBean(SQLiteEventStore.class, () -> new SQLiteEventStore(get(DomainEventJsonSerializer.class)));
+        ctx.registerBean(SQLiteEventStore.class, () -> new SQLiteEventStore(get(DomainEventJsonSerializer.class)), bd -> bd.setPrimary(false));
     }
 
     private void initWebBeans() {
         ctx.registerBean(FakeKeySoundsPlayer.class);
 
         ctx.registerBean(SpringPianoKeySoundFilesResolver.class);
-
-        ctx.registerBean(JpaEventStore.class);
     }
 
     public <T> T get(Class<T> someClass, Object... args) {
