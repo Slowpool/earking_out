@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.di;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
@@ -85,6 +87,7 @@ import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBu
 public final class HandmadeIoCContainer implements IoCContainer {
 
     private Map<Class<?>, ?> singletons;
+    private Map<Class<?>, Function<Object[], ?>> dynamicDependencies = new HashMap<>();
     // singleton lifetime simulation
     private static InMemoryPuzzleConfigRepository inMemoryPuzzleConfigRepository;
     private static PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
@@ -126,9 +129,15 @@ public final class HandmadeIoCContainer implements IoCContainer {
         } else if (someClass == SoundHarmonicIntervalHintDemonstrator.class) {
             dep = (DI.inTestMode() ? new FakeSoundHarmonicIntervalHintDemonstrator() : new AudioClipSoundHarmonicIntervalHintDemonstrator());
 
-            // TODO here i stopped. how to replace it with random generator on runtime for test in the most elegant way?
         } else if (someClass.equals(AudioPerfectPitchSolutionGenerator.class)) {
-            dep = (DI.inTestMode() ? new FakeAudioPerfectPitchSolutionGenerator() : new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]));
+            var dynamicDepFactory = dynamicDependencies.get(someClass);
+            if (dynamicDepFactory != null) {
+                dep = dynamicDepFactory.apply(args);
+            } else if (DI.inTestMode()) {
+                dep = new FakeAudioPerfectPitchSolutionGenerator();
+            } else {
+                dep = new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0]);
+            }
 
         } else if (someClass.equals(VisualPerfectPitchSolutionGenerator.class)) {
             dep = (DI.inTestMode() ? new FakeVisualPerfectPitchSolutionGenerator() : new RandomVisualPerfectPitchSolutionGenerator((VisualPerfectPitchConfigDTO) args[0]));
@@ -356,4 +365,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
         pianoKeyboardDtoAssembler = null;
     }
 
+    public <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory) {
+        dynamicDependencies.put(someClass, depFactory);
+    }
 }

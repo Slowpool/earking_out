@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.di;
 
+import java.util.function.Function;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
@@ -242,6 +243,10 @@ public final class SpringIoCContainer implements IoCContainer {
 
     public void refreshDependencies() {
         throw new IllegalStateException("spring dependencies refreshing is not supposed to be implemented/called");
+    }
+
+    public <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory) {
+        throw new IllegalStateException("this container does not support dynamic dependencies registering");
     }
 
 }

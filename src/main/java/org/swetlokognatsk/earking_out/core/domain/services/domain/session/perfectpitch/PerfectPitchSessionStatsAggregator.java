@@ -85,7 +85,7 @@ public final class PerfectPitchSessionStatsAggregator<E extends PerfectPitchExer
     }
 
     private boolean isPerfectGuess(final UserTriedToGuessPuzzleEvent guessEvent) {
-        return guessEvent.attempt == 1;
+        return guessEvent.success && guessEvent.attempt == 1;
     }
 
 }

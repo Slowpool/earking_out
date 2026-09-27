@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports.di;
 
+import java.util.function.Function;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -80,5 +82,9 @@ public final class DI implements ApplicationContextAware {
         default:
             throw new RuntimeException("unknown environment: " + mode);
         }
+    }
+
+    public static <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory) {
+        iocContainer.register(someClass, depFactory);
     }
 }
