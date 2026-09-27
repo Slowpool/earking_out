@@ -28,9 +28,46 @@ public final class PerfectPitchNoteStats extends ValueObject {
         this.perfectGuessesRatio = calcPerfectGuessesRatio(numberOfPerfectGuesses, numberOfAllGuesses);
     }
 
+    private void validateNumberOfAppearances(final int numberOfAppearances) {
+        if (numberOfAppearances < 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private void validateNumberOfAllGuesses(final int numberOfAppearances, final int numberOfAllGuesses) {
+        if (numberOfAllGuesses < 0) {
+            throw new IllegalArgumentException();
+        }
+        // `numberOfAppearances - 1` because this case is possible:
+        // 1. user starts session
+        // 2. app generates 0 or many puzzles, user passes them (loop step)
+        // 3. app generates next puzzle
+        // 4. user aborts the session.
+        // at this point, theoretically we can have x generated puzzles and x-1 all guesses
+        if (numberOfAppearances == 0 && numberOfAllGuesses != 0) {
+            throw new IllegalArgumentException();
+        }
+        if (numberOfAppearances - 1 > numberOfAllGuesses) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private void validateNumberOfPerfectGuesses(final int numberOfAllGuesses, final int numberOfAppearances, final int numberOfPerfectGuesses) {
+        if (numberOfPerfectGuesses < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (numberOfPerfectGuesses > numberOfAllGuesses) {
+            throw new IllegalArgumentException();
+        }
+        if (numberOfPerfectGuesses > numberOfAppearances) {
+            throw new IllegalArgumentException();
+        }
+    }
+
     private double calcPerfectGuessesRatio(final int numberOfPerfectGuesses, final int numberOfAllGuesses) {
-        // TODO
-        return 0.0;
+        return numberOfAllGuesses == 0
+                ? 0.0
+                : ((double) numberOfPerfectGuesses) / numberOfAllGuesses;
     }
 
     public PerfectPitchNoteStats(final PianoKeyNumber note) {

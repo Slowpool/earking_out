@@ -3,8 +3,8 @@ package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
 import org.junit.*;
 import org.junit.Assert.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -77,28 +77,27 @@ public class PerfectPitchNoteStatsTest {
 
     @Provide
     private Arbitrary<AllGuessesAndPerfectGuessesPair> allGuessesAndPerfectGuesses() {
-        var allPairs = generateAllGuessesAndPerfectGuessesPairs();
-        return Arbitraries.of(allPairs)
-                .list();
-    }
+        var someAllGuesses = Arbitraries.integers()
+                .greaterOrEqual(0);
+        var pair = someAllGuesses.flatMap(allGuesses -> Arbitraries.integers()
+                .between(0, allGuesses)
+                .map(perfectGuesses -> new AllGuessesAndPerfectGuessesPair(allGuesses, perfectGuesses)));
 
-    private Collection<AllGuessesAndPerfectGuessesPair> generateAllGuessesAndPerfectGuessesPairs() {
-        var allGuesses = randomPositiveOrZeroInt();
-        var perfectGuesses = randomPositiveOrZeroInt(allGuesses);
-        return new AllGuessesAndPerfectGuessesPair(allGuesses, perfectGuesses);
-    }
-
-    private int randomPositiveOrZeroInt() {
-        return randomPositiveOrZeroInt(Integer.MAX_VALUE);
-    }
-
-    private int randomPositiveOrZeroInt(final int includedUpperBoundary) {
-        return ThreadLocalRandom.current().nextInt(0, includedUpperBoundary);
+        return pair;
     }
 
     @Property
     public void perfectGuessesRatio(@ForAll("allGuessesAndPerfectGuesses") final AllGuessesAndPerfectGuessesPair allGuessesAndPerfectGuesses) {
+        var allGuesses = allGuessesAndPerfectGuesses.numberOfAllGuesses;
+        var perfectGuesses = allGuessesAndPerfectGuesses.numberOfPerfectGuesses;
 
+        var stats = new PerfectPitchNoteStats(ANY_NOTE, allGuesses, allGuesses, perfectGuesses);
+
+        if (allGuesses == 0) {
+            return;
+        }
+        var expectedRatio = ((double) perfectGuesses) / allGuesses;
+        assertEquals(expectedRatio, stats.perfectGuessesRatio, 0.01);
     }
 
     static record AllGuessesAndPerfectGuessesPair(int numberOfAllGuesses, int numberOfPerfectGuesses) {

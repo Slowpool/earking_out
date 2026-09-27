@@ -203,7 +203,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
         assertEquals(stats.notesStats.length, distinctNotesStream.count());
     }
 
-    @Property(seed = "-6524192018156910654", whenFixedSeed = FixedSeedMode.ALLOW)
+    @Property //(seed = "-6524192018156910654", whenFixedSeed = FixedSeedMode.ALLOW)
     public void allNotesAreFromPossibleSolutions(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
         var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
 
