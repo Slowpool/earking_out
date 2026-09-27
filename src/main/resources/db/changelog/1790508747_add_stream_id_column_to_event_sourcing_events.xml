@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="4" author="slowpool">
+        <renameColumn tableName="event_sourcing_events" oldColumnName="stream_id" newColumnName="id" columnDataType="text" />
+        <addColumn tableName="event_sourcing_events">
+            <column name="stream_id" type="text" defaultValue="placeholder">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -60,7 +60,6 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.events.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring.SpringEventBus;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring.SpringEventPublisher;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing.SpringJpaEventStore;
@@ -74,6 +73,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.In
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.SQLitePuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.SpringJpaPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.serialization.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBuilder;
@@ -205,7 +205,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(PerfectPitchSessionStatsAggregator.class);
 
-        ctx.registerBean(SpringJpaEventStore.class, () -> new SpringJpaEventStore(get(EntityManager.class)), bd -> bd.setPrimary(true));
+        ctx.registerBean(SpringJpaEventStore.class, () -> new SpringJpaEventStore(get(EntityManager.class), get(PlatformTransactionManager.class), get(DomainEventJsonSerializer.class)), bd -> bd.setPrimary(true));
     }
 
     private void initDesktopBeans() {

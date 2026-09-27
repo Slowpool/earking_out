@@ -107,7 +107,6 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.sounds;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
     exports org.swetlokognatsk.earking_out.core.domain.events.session;
-    exports org.swetlokognatsk.earking_out.infrastructure.adapters.events;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.greenrobot;
     exports org.swetlokognatsk.earking_out.learning_tests;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs;
@@ -115,6 +114,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.infrastructure.web.adapters.piano;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.serialization;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;
