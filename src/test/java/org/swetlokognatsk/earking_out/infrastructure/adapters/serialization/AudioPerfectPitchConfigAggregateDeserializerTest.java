@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.serialization;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +47,6 @@ public class AudioPerfectPitchConfigAggregateDeserializerTest {
                     }
                 }
                 """;
-        ;
-
         var puzzleConfig = objectMapper.readValue(serializedConfig, AudioPerfectPitchConfigAggregate.class);
 
         assertEquals(puzzleConfig.getId(), AUDIO_PERFECT_PITCH_EXERCISE);

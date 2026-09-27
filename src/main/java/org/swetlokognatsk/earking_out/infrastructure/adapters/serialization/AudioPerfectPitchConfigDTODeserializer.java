@@ -14,6 +14,7 @@ public final class AudioPerfectPitchConfigDTODeserializer extends StdDeserialize
     
     @Override
     public AudioPerfectPitchConfigDTO deserialize(final JsonParser parser, final DeserializationContext ctxt) {
-        // TODO
+        // TODO AudioPerfectPitchConfigDTODeserializer, share the logic with aggregate deserializer somehow
+        return null;
     }
 }
