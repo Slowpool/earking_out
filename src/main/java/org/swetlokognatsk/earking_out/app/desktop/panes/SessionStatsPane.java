@@ -49,7 +49,7 @@ public abstract class SessionStatsPane<E extends Exercise, SADTO extends Session
     }
 
     private static String interpolateBriefResult(final GeneralSessionStats stats) {
-        return "%d of %d or %.2f are guessed correctly".formatted(stats.puzzlesCompletedPerfectly, stats.puzzlesCompleted, stats.getPerfectlyCompletedPuzzlesRate());
+        return "%d of %d or %.2f%% are guessed correctly".formatted(stats.puzzlesCompletedPerfectly, stats.puzzlesCompleted, stats.getPerfectlyCompletedPuzzlesRate() * 100);
     }
 
     private void fireExerciseStartOverEvent(ActionEvent e) {

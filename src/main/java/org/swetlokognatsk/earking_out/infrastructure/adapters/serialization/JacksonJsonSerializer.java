@@ -11,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
+import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
@@ -46,7 +47,7 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
         var miscModule = new SimpleModule()
                 .addSerializer(new PianoKeyNumberSerializer())
                 .addDeserializer(Puzzle.class, new PuzzleDeserializer(Puzzle.class))
-                ;
+                .addDeserializer(Solution.class, new SolutionDeserializer(Solution.class));
 
         var jsonMapper = JsonMapper.builder()
                 .configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true)
