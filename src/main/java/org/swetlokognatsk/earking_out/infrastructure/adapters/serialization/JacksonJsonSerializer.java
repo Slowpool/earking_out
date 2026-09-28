@@ -38,15 +38,12 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
 
     public JacksonJsonSerializer() {
         var puzzleConfigsModule = new SimpleModule()
-        // TODO why to add class here?
+                // TODO why to add class here?
                 .addDeserializer(AudioPerfectPitchConfigAggregate.class, new AudioPerfectPitchConfigAggregateDeserializer())
-                .addDeserializer(PuzzleConfigDTO.class, new PuzzleConfigDTODeserializer(PuzzleConfigDTO.class))
-                // .addDeserializer(AudioPerfectPitchConfigDTO.class, new AudioPerfectPitchConfigDTODeserializer())
-                ;
+                .addDeserializer(PuzzleConfigDTO.class, new PuzzleConfigDTODeserializer(PuzzleConfigDTO.class));
 
         var miscSerializersModule = new SimpleModule()
-                .addSerializer(new PianoKeyNumberSerializer())
-                ;
+                .addSerializer(new PianoKeyNumberSerializer());
 
         var jsonMapper = JsonMapper.builder()
                 .configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true)

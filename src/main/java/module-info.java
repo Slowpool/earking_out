@@ -123,4 +123,5 @@ module org.swetlokognatsk {
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
     opens org.swetlokognatsk.earking_out.app.web;
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
+    opens org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 }
