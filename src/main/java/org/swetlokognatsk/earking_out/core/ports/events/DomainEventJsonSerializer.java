@@ -4,4 +4,5 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 
 public interface DomainEventJsonSerializer {
     String serializeDomainEvent(final DomainEvent event);
+    DomainEvent deserializeDomainEvent(final String serializedEvent, final Class<? extends DomainEvent> eventClass);
 }

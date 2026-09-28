@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.core.ports.di;
 
+import java.util.function.Function;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -51,7 +53,6 @@ public final class DI implements ApplicationContextAware {
 
     // never called actually. it's mandatory for ApplicationContextAware interface. that interface is implemented by DI to explicitly show that it knows about context. small partcile of coupling to spring.
     public void setApplicationContext(final ApplicationContext context) throws BeansException {
-        DI.setContext(context);
     }
 
     public static void setContext(final ApplicationContext context) throws BeansException {
@@ -81,5 +82,9 @@ public final class DI implements ApplicationContextAware {
         default:
             throw new RuntimeException("unknown environment: " + mode);
         }
+    }
+
+    public static <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory) {
+        iocContainer.register(someClass, depFactory);
     }
 }

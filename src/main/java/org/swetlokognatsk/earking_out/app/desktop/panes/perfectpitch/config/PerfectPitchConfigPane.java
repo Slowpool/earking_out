@@ -96,8 +96,9 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
     }
 
     protected RadioButton[] buildInputModeRadioButtons(ToggleGroup inputModeToggleGroup, PerfectPitchInputMode selectedInputMode) {
-        var inputModeRadioButtons = RadioButtonHelper.makeList(PerfectPitchInputMode.class, inputModeToggleGroup, selectedInputMode, this::handleRadioButtonSelected);
-        inputModeToggleGroup.selectedToggleProperty().addListener(createConfigPropertyUpadtingEvent(INPUT_MODE_PROP));
+        var inputModeRadioButtons = RadioButtonHelper.makeList(PerfectPitchInputMode.class, inputModeToggleGroup, selectedInputMode, this::handleInputModeRadioButtonSelected);
+        inputModeToggleGroup.selectedToggleProperty()
+                .addListener(createConfigPropertyUpadtingEvent(INPUT_MODE_PROP));
 
         return inputModeRadioButtons;
     }
@@ -124,14 +125,24 @@ abstract class PerfectPitchConfigPane<E extends PerfectPitchExercise, PCDTO exte
         getChildren().addAll(notesPickerKeyboardBox, rootNoteBox, inputModeBox, soundlessGuessingPianoCheckBox);
     }
 
-    protected void handleRadioButtonSelected(ActionEvent e) {
+    protected void handleInputModeRadioButtonSelected(ActionEvent e) {
         var selectedRadioButton = (RadioButton) inputModeToggleGroup.getSelectedToggle();
         var selectedRadioButtonId = selectedRadioButton.getId();
         if (selectedRadioButtonId == PerfectPitchInputMode.KEYBOARD_AS_PIANO.name()) {
-            rootNoteBox.setVisible(true);
-        } else if (selectedRadioButtonId == PerfectPitchInputMode.NOTES_AS_CHARACTERS.name()) {
-            rootNoteBox.setVisible(false);
+            showRootNoteBox();
+        } else if (selectedRadioButtonId == PerfectPitchInputMode.NOTES_AS_TEXT.name()) {
+            hideRootNoteBox();
+        } else if (selectedRadioButtonId == PerfectPitchInputMode.PIANO_ON_SCREEN.name()) {
+            hideRootNoteBox();
         }
+    }
+
+    protected void hideRootNoteBox() {
+        rootNoteBox.setVisible(false);
+    }
+
+    protected void showRootNoteBox() {
+        rootNoteBox.setVisible(true);
     }
 
     protected Object castCustomConfigPropertyNewValue(String configProperty, Object newValue) {

@@ -6,9 +6,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.V
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 
-public final class VisualPerfectPitchConfigDTO extends PerfectPitchConfigDTO<VisualPerfectPitchExercise> implements Serializable {
+public final class VisualPerfectPitchConfigDTO extends PerfectPitchConfigDTO<VisualPerfectPitchExercise> {
 
-    public VisualPerfectPitchConfigDTO(final VisualPerfectPitchExercise exercise, final int targetNumberOfPuzzles, final boolean statsRecording, PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode) {
-        super(exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode);
+    public VisualPerfectPitchConfigDTO(final VisualPerfectPitchExercise exercise, final int targetNumberOfPuzzles, final boolean statsRecording, PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {
+        super(exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
     }
 }

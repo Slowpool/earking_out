@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <include file="1790237476_create_puzzle_configs_table.xml" relativeToChangelogFile="true" />
+
+    <include file="1790237491_create_event_sourcing_events_table.xml" relativeToChangelogFile="true" />
+
+    <include file="1790502775_rename_event_sourcing_events_id_column_to_stream_id.xml" relativeToChangelogFile="true" />
+
+    <include file="1790508747_add_stream_id_column_to_event_sourcing_events.xml" relativeToChangelogFile="true" />
+
+</databaseChangeLog>

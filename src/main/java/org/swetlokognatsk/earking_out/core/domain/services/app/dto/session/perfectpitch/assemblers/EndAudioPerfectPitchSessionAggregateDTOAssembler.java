@@ -33,7 +33,7 @@ public final class EndAudioPerfectPitchSessionAggregateDTOAssembler extends EndS
             numberOfGuessesOfCurrentPuzzle = null;
         }
 
-        var dto = new AudioPerfectPitchSessionAggregateDTO(sessionAggregate.getPuzzleConfig(), sessionAggregate.getStats(), sessionAggregate.getState(), puzzle, prevGuessIsSuccessful, numberOfGuessesOfCurrentPuzzle);
+        var dto = new AudioPerfectPitchSessionAggregateDTO(sessionAggregate.getId(), sessionAggregate.getPuzzleConfig(), sessionAggregate.getStats(), sessionAggregate.getState(), puzzle, prevGuessIsSuccessful, numberOfGuessesOfCurrentPuzzle);
         return dto;
     }
 }

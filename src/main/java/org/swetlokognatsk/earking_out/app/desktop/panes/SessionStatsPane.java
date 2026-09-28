@@ -1,7 +1,12 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedOverEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.session.GeneralSessionStats;
+import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.ExtendedSessionStats;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.ExtendedSessionStatsService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.session.ExtendedSessionStatsAggregator;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,20 +15,22 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class SessionStatsPane<SADTO extends SessionAggregateDTO<?, ?, ?, ?>> extends BorderPane {
+public abstract class SessionStatsPane<E extends Exercise, SADTO extends SessionAggregateDTO<E, ?, ?, ?>, ESSS extends ExtendedSessionStatsService<E, ? extends ExtendedSessionStats<E>, ? extends ExtendedSessionStatsAggregator<E, ?>>> extends BorderPane {
     protected final SADTO sessionDto;
+    protected final ESSS statsService;
 
     protected abstract Pane buildStatsPane();
 
-    public SessionStatsPane(final SADTO sessionDto) {
+    public SessionStatsPane(final SADTO sessionDto, final ESSS statsService) {
         this.sessionDto = sessionDto;
+        this.statsService = statsService;
 
         var titleLabel = new Label("finished");
         var titleLabelBox = new VBox(titleLabel);
         titleLabelBox.setAlignment(Pos.CENTER);
 
         var stats = sessionDto.stats;
-        var briefResultsText = interpolateBriefResult(stats.puzzlesCompletedPerfectly, stats.puzzlesCompleted);
+        var briefResultsText = interpolateBriefResult(stats);
         var briefResultLabel = new Label(briefResultsText);
         var briefResultBox = new VBox(briefResultLabel);
         briefResultBox.setAlignment(Pos.CENTER);
@@ -41,8 +48,8 @@ public abstract class SessionStatsPane<SADTO extends SessionAggregateDTO<?, ?, ?
         setCenter(statsPane);
     }
 
-    private static String interpolateBriefResult(int puzzlesCompleted, int targetNumberOfPuzzles) {
-        return String.format("%d of %d are guessed correctly", puzzlesCompleted, targetNumberOfPuzzles);
+    private static String interpolateBriefResult(final GeneralSessionStats stats) {
+        return "%d of %d or %.2f%% are guessed correctly".formatted(stats.puzzlesCompletedPerfectly, stats.puzzlesCompleted, stats.getPerfectlyCompletedPuzzlesRate() * 100);
     }
 
     private void fireExerciseStartOverEvent(ActionEvent e) {

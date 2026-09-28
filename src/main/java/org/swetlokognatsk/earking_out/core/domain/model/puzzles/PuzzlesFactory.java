@@ -37,10 +37,7 @@ public final class PuzzlesFactory {
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>, r, P extends Puzzle<E, ?>> P create(final E exercise) {
-        // TODO cache only the last solution generator
-        DebugUtils.startStopwatch();
         var solutionGenerator = getSolutionGenerator(exercise);
-        DebugUtils.stopStopwatch();
 
         var solution = solutionGenerator.generate();
 

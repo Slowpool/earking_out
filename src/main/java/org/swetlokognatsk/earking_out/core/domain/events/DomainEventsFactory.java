@@ -27,7 +27,7 @@ public final class DomainEventsFactory {
         return new PianoKeyPressedEvent(timestamp, pianoKeyboardId, pianoKeyNumber);
     }
 
-    public NewPuzzleCreatedEvent createNewpuzzleCreatedEvent(final SessionId sessionId, final Puzzle<?, ?> puzzle) {
+    public NewPuzzleCreatedEvent createNewPuzzleCreatedEvent(final SessionId sessionId, final Puzzle<?, ?> puzzle) {
         var timestamp = createTimestamp();
         return new NewPuzzleCreatedEvent(timestamp, sessionId, puzzle);
     }

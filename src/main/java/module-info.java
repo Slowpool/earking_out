@@ -2,6 +2,9 @@
 // TODO make picked notes to be highlighted durin the guessing somehow
 // TODO add mode for visual piano key notes picking using mouse
 // TODO if unfinished session is found, prompt the user to restore this session
+// TODO divide the infrastructure into: 1. the shared one 2. web 3. desktop. actually, think about physical architecture generally - how to make web independent on desktop and vice versa keeping the shared business core
+// TODO dive into spring warnings for desktop
+// TODO can javafx 21 be updated to 26?
 module org.swetlokognatsk {
     requires javafx.controls;
     requires javafx.media;
@@ -13,6 +16,8 @@ module org.swetlokognatsk {
     requires spring.core;
     requires spring.tx;
     requires spring.jdbc;
+    requires spring.web;
+    requires spring.webmvc;
     // org.greenrobot.eventbus.java
     requires eventbus.java;
     requires java.sql;
@@ -102,15 +107,21 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.sounds;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
     exports org.swetlokognatsk.earking_out.core.domain.events.session;
-    exports org.swetlokognatsk.earking_out.infrastructure.adapters.events;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.greenrobot;
     exports org.swetlokognatsk.earking_out.learning_tests;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs;
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch;
+    exports org.swetlokognatsk.earking_out.infrastructure.web.adapters.piano;
+    exports org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.serialization;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;
     opens org.swetlokognatsk.earking_out.app.desktop;
     opens org.swetlokognatsk.earking_out;
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
+    opens org.swetlokognatsk.earking_out.app.web;
+    opens org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
+    opens org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 }

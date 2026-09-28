@@ -13,4 +13,6 @@ public enum Accidentals {
         var shift = accidental == null ? 0 : accidental.shift;
         return shift;
     }
+
+    
 }

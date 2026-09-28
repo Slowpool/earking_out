@@ -6,7 +6,11 @@ import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDeleg
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionAggregateDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.PerfectPitchSessionAggregateDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.PerfectPitchSessionStatsService;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 public final class StatsPanesFactory {
     private final PuzzleConfigRepository puzzleConfigRepository;
@@ -17,13 +21,13 @@ public final class StatsPanesFactory {
         this.sessionRepository = sessionRepository;
     }
 
-    public SessionStatsPane<?> create(final SessionId sessionId) {
+    public SessionStatsPane<?, ?, ?> create(final SessionId sessionId) {
         var sessionDto = SessionAggregateDTOAssembler.getSessionAggregateDTO(sessionId);
         var exercise = sessionDto.puzzleConfigDto.exercise;
         var sessionStatsPane = switch (exercise) {
-        case AudioPerfectPitchExercise e -> new PerfectPitchStatsPane<>(sessionDto);
+        case AudioPerfectPitchExercise e -> new PerfectPitchStatsPane<AudioPerfectPitchExercise, AudioPerfectPitchSessionAggregateDTO>((AudioPerfectPitchSessionAggregateDTO) sessionDto, DI.get(PerfectPitchSessionStatsService.class));
         default -> throw new RuntimeException("unknown exercise: " + exercise);
         };
-        return sessionStatsPane;
+        return (SessionStatsPane<?, ?, ?>) sessionStatsPane;
     }
 }

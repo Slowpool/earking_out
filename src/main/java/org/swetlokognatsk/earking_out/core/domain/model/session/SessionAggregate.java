@@ -18,7 +18,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     private transient PuzzlesFactory puzzlesFactory;
 
     private final PCDTO puzzleConfigDto;
-    private SessionStats stats;
+    private GeneralSessionStats stats;
 
     private SessionStates state;
     private P puzzle;
@@ -29,11 +29,11 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         return puzzleConfigDto;
     }
 
-    public final SessionStats getStats() {
+    public final GeneralSessionStats getStats() {
         return stats;
     }
 
-    protected final void setStats(final SessionStats stats) {
+    protected final void setStats(final GeneralSessionStats stats) {
         this.stats = stats;
     }
 
@@ -98,7 +98,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         this.numberOfGuessesOfCurrentPuzzle = numberOfGuessesOfCurrentPuzzle;
     }
 
-    public SessionAggregate(final PuzzlesFactory puzzlesFactory, final SessionId id, final PCDTO puzzleConfigDto, final SessionStats stats) {
+    public SessionAggregate(final PuzzlesFactory puzzlesFactory, final SessionId id, final PCDTO puzzleConfigDto, final GeneralSessionStats stats) {
         super(id);
 
         this.puzzlesFactory = Objects.requireNonNull(puzzlesFactory);
@@ -123,7 +123,7 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
         setPuzzle(puzzle);
         setNumberOfGuessesOfCurrentPuzzle(0);
 
-        var newPuzzleEvent = getDomainEventsFactory().createNewpuzzleCreatedEvent(getId(), puzzle);
+        var newPuzzleEvent = getDomainEventsFactory().createNewPuzzleCreatedEvent(getId(), puzzle);
         addEvent(newPuzzleEvent);
     }
 
@@ -157,7 +157,9 @@ public abstract class SessionAggregate<E extends Exercise, S extends Solution, P
     }
 
     protected void handleSuccessfulGuess(final S guess) {
-        var newStats = isPerfectlyGuessedPuzzle() ? stats.incrementPerfectlyCompletedPuzzles() : stats.incrementCompletedPuzzles();
+        var newStats = isPerfectlyGuessedPuzzle()
+                ? stats.incrementPerfectlyCompletedPuzzles()
+                : stats.incrementCompletedPuzzles();
         setStats(newStats);
 
         addUserTriedToGuessPuzzleEvent(getPuzzlesCompleted(), guess, getNumberOfGuessesOfCurrentPuzzle(), true);

@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "DesktopApp",
+            "request": "launch",
+            "mainClass": "org.swetlokognatsk/org.swetlokognatsk.earking_out.DesktopEntryPoint",
+            "vmArgs": "-Dspring.profiles.active=desktop"
+        },
+        {
+            "type": "java",
+            "name": "WebApp",
+            "request": "launch",
+            "mainClass": "org.swetlokognatsk/org.swetlokognatsk.earking_out.WebEntryPoint",
+            "vmArgs": "-Dspring.profiles.active=web"
+        },
+        {
+            "type": "java",
+            "name": "Debug",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": "5015",
+            "preLaunchTask": "WaitForBootstrap"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "WebAppDebug",
+            "configurations": [
+                "WebApp",
+                "Debug"
+            ]
+        }
+    ]
+}

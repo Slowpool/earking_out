@@ -3,9 +3,9 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
-import org.swetlokognatsk.earking_out.infrastructure.eventsourcing.EventStream;
 
 public class InMemoryEventStore implements EventStore {
 

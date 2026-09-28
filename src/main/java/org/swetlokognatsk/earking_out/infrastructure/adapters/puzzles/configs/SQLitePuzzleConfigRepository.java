@@ -60,7 +60,7 @@ public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRe
     // TODO liquibase
     private static void createPuzzleConfigsTable(String connectionString) {
         // try (Connection connection = DriverManager.getConnection(connectionString); var statement = connection.createStatement();) {
-        //     // statement.executeUpdate("CREATE TABLE `puzzle_configs` (`exercise` TEXT NOT NULL, `serialized_config` TEXT NOT NULL)");
+        //     // statement.executeUpdate("CREATE TABLE `puzzle_configs` (`exercise` TEXT NOT NULL, `serialized_config` TEXT NOT NULL)"); // and event sourcing: CREATE TABLE `event_sourcing_events` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `created_on` TEXT NOT NULL, `payload` TEXT NOT NULL);
         //     int i = 1;
         // } catch (Throwable e) {
         //     int i = 1;

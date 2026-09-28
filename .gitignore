@@ -12,14 +12,12 @@
 hs_err_pid*
 replay_pid*
 
-.vscode
-
 target/
 /demo
 
 # playing up there
 /src/main/java/org/swetlokognatsk/test
-/earking_out.db
+*.db
 
 /src/test/java/org/swetlokognatsk/earking_out/learning_tests
 

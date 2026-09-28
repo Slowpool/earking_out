@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model.session;
+package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelper.*;
 import static org.junit.Assert.*;
@@ -8,7 +8,12 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
@@ -19,8 +24,14 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 public final class AudioPerfectPitchSessionAggregateTest {
     private SessionAggregatesFactory sessionAggregatesFactory;
 
-    private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
+    private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER.increment());
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
+    private static final String COMPLETELY_INVALID_TEXT_NOTE = "bazinga";
+    private static final String TEXT_NOTE_SOLUTION_1 = "C#1";
+    private static final String TEXT_NOTE_SOLUTION_2 = "Db1";
+    private static final String WRONG_TEXT_NOTE_SOLUTION_1 = "C1";
+    private static final String WRONG_TEXT_NOTE_SOLUTION_2 = "D1";
+    private static final String OUT_OF_RANGE_TEXT_NOTE = "C#9";
 
     @Before
     public void setup() {
@@ -264,6 +275,84 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
         aggregate.guess(WRONG_SOLUTION);
         assertUserTriedToGuessEventDoesNotHaveSuccess(aggregate);
+    }
+
+    @Test
+    public void guessViaTextNoteWithInvalidNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(COMPLETELY_INVALID_TEXT_NOTE);
+            fail();
+        } catch (InvalidTextNoteException e) {
+        } catch (OutOfRangeTextNoteException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void guessViaTextWithOutOfRangeNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(OUT_OF_RANGE_TEXT_NOTE);
+            fail();
+        } catch (OutOfRangeTextNoteException e) {
+        } catch (InvalidTextNoteException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void successfulGuessViaTextNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(TEXT_NOTE_SOLUTION_1);
+        } catch (Throwable e) {
+            fail();
+        }
+
+        assertTrue(aggregate.getPrevGuessIsSuccessful());
+    }
+
+    @Test
+    public void alternativeSuccessfulGuessViaTextNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(TEXT_NOTE_SOLUTION_2);
+        } catch (Throwable e) {
+            fail();
+        }
+
+        assertTrue(aggregate.getPrevGuessIsSuccessful());
+    }
+
+    @Test
+    public void wrongGuessViaTextNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(WRONG_TEXT_NOTE_SOLUTION_1);
+        } catch (Throwable e) {
+            fail();
+        }
+
+        assertFalse(aggregate.getPrevGuessIsSuccessful());
+    }
+
+    @Test
+    public void anotherWrongGuessViaTextNote() {
+        var aggregate = createAggregateAndFlushEvents();
+
+        try {
+            aggregate.guessViaTextNote(WRONG_TEXT_NOTE_SOLUTION_2);
+        } catch (Throwable e) {
+            fail();
+        }
+
+        assertFalse(aggregate.getPrevGuessIsSuccessful());
     }
 
 }

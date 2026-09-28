@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.di;
 
+import java.util.function.Function;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
@@ -7,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.swetlokognatsk.earking_out.SpringApp;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
@@ -38,11 +40,14 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigServi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
-import org.swetlokognatsk.earking_out.core.domain.services.app.session.AudioPerfectPitchSessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.PerfectPitchSessionStatsService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesParsingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.EditableAudioPerfectPitchConfigValidator;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.FinalizedAudioPerfectPitchConfigValidator;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch.PerfectPitchSessionStatsAggregator;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -55,9 +60,9 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.events.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring.SpringEventBus;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring.SpringEventPublisher;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing.SpringJpaEventStore;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing.SQLiteEventStore;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.sound.PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator;
@@ -68,25 +73,41 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.In
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.SQLitePuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.SpringJpaPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.serialization.JacksonJsonSerializer;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBuilder;
+import org.swetlokognatsk.earking_out.infrastructure.web.adapters.piano.FakeKeySoundsPlayer;
 import jakarta.persistence.EntityManager;
 
 public final class SpringIoCContainer implements IoCContainer {
 
     public ApplicationContext context;
+    public GenericApplicationContext ctx;
 
     public void setContext(final ApplicationContext context) {
         this.context = context;
+        this.ctx = (GenericApplicationContext) context;
+
         initBeans();
     }
 
     private void initBeans() {
-        // TODO this cast seems awkward
-        var ctx = (GenericApplicationContext) context;
+        initSharedBeans();
+        switch (SpringApp.build) {
+        case DESKTOP:
+            initDesktopBeans();
+            break;
+        case WEB:
+            initWebBeans();
+            break;
+        default:
+            throw new RuntimeException("unknown build: %s".formatted(SpringApp.build));
+        }
+    }
 
-        ctx.registerBean(AudioClipPianoKeySoundsPlayer.class);
+    private void initSharedBeans() {
+        // TODO this cast seems awkward
 
         ctx.registerBean(NotesNormalizingService.class);
 
@@ -120,10 +141,6 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SessionRepositoryDelegator.class);
 
-        ctx.registerBean(PianoKeySoundFilesBuilder.class, () -> new PianoKeySoundFilesBuilder(get(PianoKeySoundFilesResolver.class)));
-
-        ctx.registerBean(SpringPianoKeySoundFilesResolver.class);
-
         ctx.registerBean(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class, () -> new PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(get(PianoKeySoundsPlayer.class)));
 
         ctx.registerBean(InMemoryAudioPerfectPitchSessionRepository.class, () -> new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class)));
@@ -136,6 +153,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SpringEventPublisher.class, () -> new SpringEventPublisher((ApplicationEventPublisher) context));
 
+        // TODO how to manage userId in events for web/desktop builds
         ctx.registerBean(SpringEventBus.class);
 
         ctx.registerBean(PuzzleConfigDTOAssembler.class, () -> new PuzzleConfigDTOAssembler());
@@ -180,6 +198,23 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(FinalizedAudioPerfectPitchConfigValidator.class, () -> new FinalizedAudioPerfectPitchConfigValidator());
 
+        ctx.registerBean(NotesParsingService.class);
+
+        // TODO experiment: what if use raw type?
+        ctx.registerBean(PerfectPitchSessionStatsService.class, () -> new PerfectPitchSessionStatsService(get(PerfectPitchSessionStatsAggregator.class), get(EventStore.class)));
+
+        ctx.registerBean(PerfectPitchSessionStatsAggregator.class);
+
+        ctx.registerBean(SpringJpaEventStore.class, () -> new SpringJpaEventStore(get(EntityManager.class), get(PlatformTransactionManager.class), get(DomainEventJsonSerializer.class)), bd -> bd.setPrimary(true));
+    }
+
+    private void initDesktopBeans() {
+        ctx.registerBean(AudioClipPianoKeySoundsPlayer.class);
+
+        ctx.registerBean(PianoKeySoundFilesBuilder.class, () -> new PianoKeySoundFilesBuilder(get(PianoKeySoundFilesResolver.class)));
+
+        ctx.registerBean(SpringPianoKeySoundFilesResolver.class);
+
         // javafx beans
         ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(get(SessionRepositoryDelegator.class), get(PianoKeyboardHandlersRegister.class), get(PianoKeyboardService.class)));
 
@@ -190,7 +225,13 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(ConfigPanesFactory.class, () -> new ConfigPanesFactory(get(PianoKeyboardHandlersRegister.class)));
 
         // event sourcing
-        ctx.registerBean(SQLiteEventStore.class, () -> new SQLiteEventStore(get(DomainEventJsonSerializer.class)));
+        ctx.registerBean(SQLiteEventStore.class, () -> new SQLiteEventStore(get(DomainEventJsonSerializer.class)), bd -> bd.setPrimary(false));
+    }
+
+    private void initWebBeans() {
+        ctx.registerBean(FakeKeySoundsPlayer.class);
+
+        ctx.registerBean(SpringPianoKeySoundFilesResolver.class);
     }
 
     public <T> T get(Class<T> someClass, Object... args) {
@@ -209,6 +250,10 @@ public final class SpringIoCContainer implements IoCContainer {
 
     public void refreshDependencies() {
         throw new IllegalStateException("spring dependencies refreshing is not supposed to be implemented/called");
+    }
+
+    public <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory) {
+        throw new IllegalStateException("this container does not support dynamic dependencies registering");
     }
 
 }

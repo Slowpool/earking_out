@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes;
 
-import org.swetlokognatsk.earking_out.app.desktop.EarkingOutApplication;
+import org.swetlokognatsk.earking_out.app.desktop.EarkingOutDesktopApplication;
 import org.swetlokognatsk.earking_out.app.desktop.events.configs.ConfigPropertyUpdatingEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
@@ -72,7 +72,7 @@ public abstract class ConfigPane<E extends Exercise, PCDTO extends PuzzleConfigD
         var numberOfPuzzlesLabel = new Label("number of puzzles");
         var numberOfPuzzlesBox = new HBox(numberOfPuzzlesLabel, numberOfPuzzlesField);
         numberOfPuzzlesBox.setAlignment(Pos.CENTER);
-        numberOfPuzzlesBox.setSpacing(EarkingOutApplication.LABEL_FIELD_SPACING);
+        numberOfPuzzlesBox.setSpacing(EarkingOutDesktopApplication.LABEL_FIELD_SPACING);
         return numberOfPuzzlesBox;
     }
 
