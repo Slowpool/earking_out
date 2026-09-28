@@ -10,13 +10,9 @@ import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.deser.std.StdDeserializer;
 
-public class PuzzleConfigDtoDeserializer extends StdDeserializer<PuzzleConfigDTO<?>> {
+public class PuzzleConfigDTODeserializer extends StdDeserializer<PuzzleConfigDTO<?>> {
 
-    public PuzzleConfigDtoDeserializer() {
-        this(null);
-    }
-
-    public PuzzleConfigDtoDeserializer(final Class<?> vc) {
+    public PuzzleConfigDTODeserializer(final Class<?> vc) {
         super(vc);
     }
 

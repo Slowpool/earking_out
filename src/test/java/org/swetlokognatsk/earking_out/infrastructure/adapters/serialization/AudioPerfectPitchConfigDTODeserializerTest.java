@@ -2,7 +2,6 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.serialization;
 
 import static org.junit.Assert.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
-
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
@@ -44,7 +43,7 @@ public class AudioPerfectPitchConfigDTODeserializerTest {
                     "inputMode": "KEYBOARD_AS_PIANO",
                     "soundlessGuessingPiano": true
                 }
-                            """;
+                """;
 
         var puzzleConfig = objectMapper.readValue(serializedConfigDto, AudioPerfectPitchConfigDTO.class);
 

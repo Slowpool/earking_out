@@ -21,7 +21,6 @@ public final class AudioPerfectPitchConfigAggregateDeserializer extends StdDeser
     // TODO is final for method params in interface propagated to implementing classes or not?
     @Override
     public AudioPerfectPitchConfigAggregate deserialize(final JsonParser parser, final DeserializationContext ctxt) {
-        // TODO DEFINITELY NEEDS REFACTORING
         // nice. high-level JsonNode in low-level JsonParser
         var jsonTree = (JsonNode) parser.readValueAsTree();
 
@@ -32,25 +31,15 @@ public final class AudioPerfectPitchConfigAggregateDeserializer extends StdDeser
 
         var statsRecording = jsonTree.get("statsRecording").asBoolean();
 
-        var normalizedNotesForPuzzleNode = jsonTree.get("normalizedNotesForPuzzle").asArray();
-        PianoKeyNumber[] normalizedNotesForPuzzle = new PianoKeyNumber[normalizedNotesForPuzzleNode.size()];
-        for (int i = 0; i < normalizedNotesForPuzzleNode.size(); i++) {
-            var node = normalizedNotesForPuzzleNode.get(i);
-            var pianoKeyNumber = node.asInt();
-            normalizedNotesForPuzzle[i] = PianoKeyNumber.valueOf(pianoKeyNumber);
-        }
+        var normalizedNotesForPuzzleNode = jsonTree.get("normalizedNotesForPuzzle");
+
+        PianoKeyNumber[] normalizedNotesForPuzzle = ctxt.readTreeAsValue(normalizedNotesForPuzzleNode, PianoKeyNumber[].class);
 
         var normalizedRootNoteNode = jsonTree.get("normalizedRootNote");
-        PianoKeyNumber normalizedRootNote;
-        if (normalizedRootNoteNode.isInt()) {
-            var normalizedRootNoteNumber = normalizedRootNoteNode.asInt();
-            normalizedRootNote = PianoKeyNumber.valueOf(normalizedRootNoteNumber);
-        } else {
-            normalizedRootNote = null;
-        }
+        PianoKeyNumber normalizedRootNote = ctxt.readTreeAsValue(normalizedRootNoteNode, PianoKeyNumber.class);
 
-        var inputModeValue = jsonTree.get("inputMode").asString();
-        var inputMode = PerfectPitchInputMode.valueOf(inputModeValue);
+        var inputModeNode = jsonTree.get("inputMode");
+        var inputMode = ctxt.readTreeAsValue(inputModeNode, PerfectPitchInputMode.class);
 
         var soundlessGuessingPiano = jsonTree.get("soundlessGuessingPiano").asBoolean();
 
