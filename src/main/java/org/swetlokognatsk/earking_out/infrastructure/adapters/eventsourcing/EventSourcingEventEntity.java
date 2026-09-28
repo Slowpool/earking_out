@@ -22,6 +22,8 @@ public class EventSourcingEventEntity {
 
     private String payload;
 
+    private int version;
+
     public String getId() {
         return id;
     }
@@ -42,15 +44,20 @@ public class EventSourcingEventEntity {
         return payload;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
     public EventSourcingEventEntity() {
 
     }
 
-    public EventSourcingEventEntity(final String id, final String streamId, final String type, final String createdOn, final String payload) {
+    public EventSourcingEventEntity(final String id, final String streamId, final String type, final String createdOn, final String payload, final int version) {
         this.id = requireNonNull(id);
         this.streamId = requireNonNull(streamId);
         this.type = requireNonNull(type);
         this.createdOn = requireNonNull(createdOn);
         this.payload = requireNonNull(payload);
+        this.version = requireNonNull(version);
     }
 }
