@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
@@ -42,13 +43,15 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
                 .addDeserializer(AudioPerfectPitchConfigAggregate.class, new AudioPerfectPitchConfigAggregateDeserializer())
                 .addDeserializer(PuzzleConfigDTO.class, new PuzzleConfigDTODeserializer(PuzzleConfigDTO.class));
 
-        var miscSerializersModule = new SimpleModule()
-                .addSerializer(new PianoKeyNumberSerializer());
+        var miscModule = new SimpleModule()
+                .addSerializer(new PianoKeyNumberSerializer())
+                .addDeserializer(Puzzle.class, new PuzzleDeserializer(Puzzle.class))
+                ;
 
         var jsonMapper = JsonMapper.builder()
                 .configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true)
                 .addModule(puzzleConfigsModule)
-                .addModule(miscSerializersModule)
+                .addModule(miscModule)
                 .build();
         this.objectMapper = jsonMapper;
     }
@@ -75,17 +78,4 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
         }
         return puzzleConfig;
     }
-
-    // TODO refactoring
-    private class PianoKeyNumberSerializer extends StdSerializer<PianoKeyNumber> {
-
-        public PianoKeyNumberSerializer() {
-            super(PianoKeyNumber.class);
-        }
-
-        public void serialize(final PianoKeyNumber pianoKeyNumber, final JsonGenerator generator, final SerializationContext ctx) {
-            generator.writeNumber(pianoKeyNumber.value);
-        }
-    }
-
 }

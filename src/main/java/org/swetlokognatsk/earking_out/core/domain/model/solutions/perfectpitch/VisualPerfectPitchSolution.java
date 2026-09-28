@@ -1,13 +1,17 @@
 package org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch;
 
-import java.io.Serializable;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.VISUAL_PERFECT_PITCH_EXERCISE;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.PianoKeyNumberSolution;
+public final class VisualPerfectPitchSolution extends PerfectPitchSolution {
 
-public final class VisualPerfectPitchSolution extends PerfectPitchSolution implements Serializable {
+    public VisualPerfectPitchSolution(final PianoKeyNumber keyNumber) {
+        super(VISUAL_PERFECT_PITCH_EXERCISE, keyNumber);
+    }
 
-    public VisualPerfectPitchSolution(final Note note) {
-        super(note);
+    public VisualPerfectPitchSolution(final VisualPerfectPitchExercise exercise, @JsonProperty("keyNumber") final PianoKeyNumber keyNumber) {
+        super(exercise, keyNumber);
     }
 }

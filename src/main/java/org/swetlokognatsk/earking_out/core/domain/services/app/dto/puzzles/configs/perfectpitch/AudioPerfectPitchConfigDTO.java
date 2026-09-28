@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.conf
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -14,5 +15,8 @@ public final class AudioPerfectPitchConfigDTO extends PerfectPitchConfigDTO<Audi
         super(exercise, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
     }
 
-    
+    public boolean equals(final Object obj) {
+        return super.equals(obj)
+                && obj instanceof AudioPerfectPitchConfigDTO;
+    }
 }

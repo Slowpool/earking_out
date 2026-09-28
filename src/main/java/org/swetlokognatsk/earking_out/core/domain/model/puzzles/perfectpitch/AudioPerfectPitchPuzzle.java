@@ -11,18 +11,8 @@ public final class AudioPerfectPitchPuzzle extends PerfectPitchPuzzle<AudioPerfe
         super(exercise, solution);
     }
 
-    public int hashCode() {
-        return exercise.hashCode() + solution.hashCode();
-    }
-
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof AudioPerfectPitchPuzzle)) {
-            return false;
-        }
-        var other = (AudioPerfectPitchPuzzle) obj;
-        return exercise.equals(other.exercise) && solution.equals(other.solution);
+    public boolean equals(final Object obj) {
+        return super.equals(obj)
+                && obj instanceof AudioPerfectPitchPuzzle;
     }
 }

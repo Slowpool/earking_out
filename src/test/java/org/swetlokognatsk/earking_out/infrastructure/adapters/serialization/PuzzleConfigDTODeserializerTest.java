@@ -10,13 +10,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
-import tools.jackson.databind.module.SimpleModule;
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.json.JsonMapper;
 
-public class PuzzleConfigDTODeserializerTest {
+public class PuzzleConfigDTODeserializerTest extends DeserializerBaseTest<PuzzleConfigDTO<?>, PuzzleConfigDTODeserializer> {
 
-    private ObjectMapper objectMapper;
     // APPE - (A)udio(P)erfect(P)itch(E)xercise
     private static final String APPE_SERIALIZED_CONFIG_DTO = """
             {
@@ -53,28 +49,33 @@ public class PuzzleConfigDTODeserializerTest {
             }
             """;
 
-    @Before
-    public void setup() {
-        var module = new SimpleModule()
-                .addDeserializer(PuzzleConfigDTO.class, new PuzzleConfigDTODeserializer(PuzzleConfigDTO.class));
-
-        objectMapper = JsonMapper.builder()
-                .addModule(module)
-                .build();
+    protected Class<PuzzleConfigDTODeserializer> getTestedDeserializerClass() {
+        return PuzzleConfigDTODeserializer.class;
     }
 
-    private void assertAudioPerfectPitchConfigDto(final AudioPerfectPitchConfigDTO puzzleConfig) {
-        assertTrue(puzzleConfig instanceof AudioPerfectPitchConfigDTO);
-        assertEquals(puzzleConfig.exercise.type, ExerciseTypes.AUDIO);
-
-        assertPerfectPitchConfigDto(puzzleConfig);
+    @SuppressWarnings("unchecked")
+    protected Class<PuzzleConfigDTO<?>> getTestedDeserializerType() {
+        return (Class<PuzzleConfigDTO<?>>) (Class<?>) PuzzleConfigDTO.class;
     }
 
-    private void assertVisualPerfectPitchConfigDto(final VisualPerfectPitchConfigDTO puzzleConfig) {
-        assertTrue(puzzleConfig instanceof VisualPerfectPitchConfigDTO);
-        assertEquals(puzzleConfig.exercise.type, ExerciseTypes.VISUAL);
+    private void assertAudioPerfectPitchConfigDto(final PuzzleConfigDTO<?> puzzleConfig) {
+        if (puzzleConfig instanceof AudioPerfectPitchConfigDTO typedDto) {
+            assertEquals(typedDto.exercise.type, ExerciseTypes.AUDIO);
 
-        assertPerfectPitchConfigDto(puzzleConfig);
+            assertPerfectPitchConfigDto(typedDto);
+        } else {
+            fail();
+        }
+    }
+
+    private void assertVisualPerfectPitchConfigDto(final PuzzleConfigDTO<?> puzzleConfig) {
+        if (puzzleConfig instanceof VisualPerfectPitchConfigDTO typedDto) {
+            assertEquals(typedDto.exercise.type, ExerciseTypes.VISUAL);
+
+            assertPerfectPitchConfigDto(typedDto);
+        } else {
+            fail();
+        }
     }
 
     private void assertPerfectPitchConfigDto(final PerfectPitchConfigDTO<?> puzzleConfig) {
@@ -90,28 +91,28 @@ public class PuzzleConfigDTODeserializerTest {
 
     @Test
     public void deserializeAudioPerfectPitchConfigWithVC() {
-        var puzzleConfig = objectMapper.readValue(APPE_SERIALIZED_CONFIG_DTO, AudioPerfectPitchConfigDTO.class);
+        var puzzleConfig = readValue(APPE_SERIALIZED_CONFIG_DTO, AudioPerfectPitchConfigDTO.class);
 
         assertAudioPerfectPitchConfigDto(puzzleConfig);
     }
 
     @Test
     public void deserializeAudioPerfectPitchConfigWithAbstractVC() {
-        var puzzleConfig = (AudioPerfectPitchConfigDTO) objectMapper.readValue(APPE_SERIALIZED_CONFIG_DTO, PuzzleConfigDTO.class);
+        var puzzleConfig = (AudioPerfectPitchConfigDTO) readValue(APPE_SERIALIZED_CONFIG_DTO, PuzzleConfigDTO.class);
 
         assertAudioPerfectPitchConfigDto(puzzleConfig);
     }
 
     @Test
     public void deserializeVisualPerfectPitchConfigWithVC() {
-        var puzzleConfig = objectMapper.readValue(VPPE_SERIALIZED_CONFIG_DTO, VisualPerfectPitchConfigDTO.class);
+        var puzzleConfig = readValue(VPPE_SERIALIZED_CONFIG_DTO, VisualPerfectPitchConfigDTO.class);
 
         assertVisualPerfectPitchConfigDto(puzzleConfig);
     }
 
     @Test
     public void deserializeVisualPerfectPitchConfigWithAbstractVC() {
-        var puzzleConfig = (VisualPerfectPitchConfigDTO) objectMapper.readValue(VPPE_SERIALIZED_CONFIG_DTO, PuzzleConfigDTO.class);
+        var puzzleConfig = (VisualPerfectPitchConfigDTO) readValue(VPPE_SERIALIZED_CONFIG_DTO, PuzzleConfigDTO.class);
 
         assertVisualPerfectPitchConfigDto(puzzleConfig);
     }
