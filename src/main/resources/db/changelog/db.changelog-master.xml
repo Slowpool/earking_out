@@ -14,4 +14,8 @@
 
     <include file="1790608301_add_version_column_to_event_sourcing_events.xml" relativeToChangelogFile="true" />
 
+    <include file="1790662060_create_users_table.xml" relativeToChangelogFile="true" />
+
+    <include file="1790668097_add_user_id_foreign_keys.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>
