@@ -7,13 +7,16 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
+import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+
 public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<AudioPerfectPitchConfigAggregate> {
     // protected final PianoKeyboardRepository pianoKeyboardRepository;
     // // composition
     // protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
 
-    public AudioPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner) {
-        super(cloner);
+    public AudioPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner, final User user) {
+        super(cloner, user);
     }
 
     // // TODO why i specified pianoKeyboardRepository here?
@@ -26,6 +29,6 @@ public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfig
     }
 
     public AudioPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {
-        return new AudioPerfectPitchConfigAggregate(AUDIO_PERFECT_PITCH_EXERCISE, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
+        return new AudioPerfectPitchConfigAggregate(userId, AUDIO_PERFECT_PITCH_EXERCISE, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
     }
 }

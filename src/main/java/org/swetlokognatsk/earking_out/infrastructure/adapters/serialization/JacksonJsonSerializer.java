@@ -42,7 +42,6 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
     public JacksonJsonSerializer() {
         var puzzleConfigsModule = new SimpleModule()
                 // TODO why to add class here?
-                .addDeserializer(AudioPerfectPitchConfigAggregate.class, new AudioPerfectPitchConfigAggregateDeserializer())
                 .addDeserializer(PuzzleConfigDTO.class, new PuzzleConfigDTODeserializer(PuzzleConfigDTO.class));
 
         var miscModule = new SimpleModule()

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
 import org.junit.Assert.*;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
@@ -13,14 +14,15 @@ import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
 
-public class AudioPerfectPitchConfigAggregateDeserializerTest {
+public class AudioPerfectPitchConfigAggregateDeserializationTest {
 
     private ObjectMapper objectMapper;
 
     @Before
     public void setup() {
         var module = new SimpleModule()
-                .addDeserializer(AudioPerfectPitchConfigAggregate.class, new AudioPerfectPitchConfigAggregateDeserializer());
+                // .addDeserializer(AudioPerfectPitchConfigAggregate.class, new AudioPerfectPitchConfigAggregateDeserializer())
+                .addDeserializer(UserId.class, new UserIdDeserializer());
 
         objectMapper = JsonMapper.builder()
                 .addModule(module)
@@ -31,6 +33,7 @@ public class AudioPerfectPitchConfigAggregateDeserializerTest {
     public void deserialize() {
         var serializedConfig = """
                 {
+                    "userId": 1,
                     "targetNumberOfPuzzles": 5,
                     "statsRecording": true,
                     "normalizedNotesForPuzzle": [
@@ -50,6 +53,7 @@ public class AudioPerfectPitchConfigAggregateDeserializerTest {
         var puzzleConfig = objectMapper.readValue(serializedConfig, AudioPerfectPitchConfigAggregate.class);
 
         assertEquals(puzzleConfig.getId(), AUDIO_PERFECT_PITCH_EXERCISE);
+        assertEquals(puzzleConfig.getUserId(), new UserId(1));
         assertEquals(puzzleConfig.getTargetNumberOfPuzzles(), 5);
         assertEquals(puzzleConfig.getStatsRecording(), true);
         var pianoKeyNumbers = new PianoKeyNumber[] { PianoKeyNumber.valueOf(52), PianoKeyNumber.valueOf(53) };

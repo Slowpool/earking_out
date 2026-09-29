@@ -6,6 +6,7 @@ import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import static org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.TestPuzzleConfigValidatorHelper.*;
 
@@ -56,7 +57,7 @@ public final class SomePuzzleConfigValidatorTest {
 class SomePuzzleConfigAggregate extends PuzzleConfigAggregate<SomeExercise> {
 
     public SomePuzzleConfigAggregate(final SomeExercise exercise, final int targetNumberOfPuzzles, final boolean statsRecording) {
-        super(exercise, targetNumberOfPuzzles, statsRecording);
+        super(new UserId(1), exercise, targetNumberOfPuzzles, statsRecording);
     }
 
     public void updateConfigSpecificProperty(String a, Object o) {

@@ -126,8 +126,8 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(InMemoryPianoKeyboardRepository.class, () -> new InMemoryPianoKeyboardRepository(get(PianoKeyboardAggregatesFactory.class), get(PianoKeyboardDtoAssembler.class)));
 
         ctx.registerBean(PuzzleConfigAggregatesFactoryResolver.class, () -> new PuzzleConfigAggregatesFactoryResolver());
-        ctx.registerBean(AudioPerfectPitchConfigAggregatesFactory.class, () -> new AudioPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class)));
-        ctx.registerBean(VisualPerfectPitchConfigAggregatesFactory.class, () -> new VisualPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class)));
+        ctx.registerBean(AudioPerfectPitchConfigAggregatesFactory.class, () -> new AudioPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class), get(User.class)));
+        ctx.registerBean(VisualPerfectPitchConfigAggregatesFactory.class, () -> new VisualPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class), get(User.class)));
 
         ctx.registerBean(PuzzleConfigService.class, () -> new PuzzleConfigService(get(PuzzleConfigRepository.class), get(PianoKeyboardRepository.class)));
 
@@ -188,7 +188,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigJsonSerializer.class), get(PuzzleConfigDTOAssembler.class), get(InMemoryPuzzleConfigRepository.class)), (BeanDefinition bd) -> bd.setPrimary(false));
 
-        ctx.registerBean(SpringJpaPuzzleConfigRepository.class, () -> new SpringJpaPuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigJsonSerializer.class), get(PuzzleConfigDTOAssembler.class), get(InMemoryPuzzleConfigRepository.class), get(EntityManager.class), get(PlatformTransactionManager.class)), (BeanDefinition bd) -> bd.setPrimary(true));
+        ctx.registerBean(SpringJpaPuzzleConfigRepository.class, () -> new SpringJpaPuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigJsonSerializer.class), get(PuzzleConfigDTOAssembler.class), get(InMemoryPuzzleConfigRepository.class), get(EntityManager.class), get(PlatformTransactionManager.class), get(User.class)), (BeanDefinition bd) -> bd.setPrimary(true));
 
         ctx.registerBean(JacksonJsonSerializer.class, () -> new JacksonJsonSerializer());
 

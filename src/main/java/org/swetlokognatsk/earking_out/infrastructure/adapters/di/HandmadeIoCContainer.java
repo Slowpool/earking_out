@@ -24,6 +24,7 @@ import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDeleg
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.DesktopUser;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
@@ -105,6 +106,8 @@ public final class HandmadeIoCContainer implements IoCContainer {
     private static JacksonJsonSerializer jacksonDomainEventJsonSerializer;
     private static PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
 
+    private static final User TEST_USER = new DesktopUser();
+
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
     //     var singleton = singletons.get(someClass);
@@ -163,9 +166,9 @@ public final class HandmadeIoCContainer implements IoCContainer {
         } else if (someClass.equals(PuzzleConfigAggregatesFactoryResolver.class)) {
             dep = new PuzzleConfigAggregatesFactoryResolver();
         } else if (someClass.equals(AudioPerfectPitchConfigAggregatesFactory.class)) {
-            dep = new AudioPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class));
+            dep = new AudioPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class), get(User.class));
         } else if (someClass.equals(VisualPerfectPitchConfigAggregatesFactory.class)) {
-            dep = new VisualPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class));
+            dep = new VisualPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class), get(User.class));
 
         } else if (someClass.equals(InMemoryPuzzleConfigRepository.class)) {
             if (inMemoryPuzzleConfigRepository == null) {
@@ -349,6 +352,9 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (someClass.equals(PerfectPitchSessionStatsAggregator.class)) {
             dep = new PerfectPitchSessionStatsAggregator<PerfectPitchExercise>();
+
+        } else if (someClass.equals(User.class)) {
+            dep = TEST_USER;
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());

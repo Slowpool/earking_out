@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 
@@ -53,8 +54,8 @@ public abstract class PerfectPitchConfigAggregate<E extends PerfectPitchExercise
         this.soundlessGuessingPiano = soundlessGuessingPiano;
     }
 
-    public PerfectPitchConfigAggregate(final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {
-        super(exercise, targetNumberOfPuzzles, statsRecording);
+    public PerfectPitchConfigAggregate(final UserId userId, final E exercise, final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {
+        super(userId, exercise, targetNumberOfPuzzles, statsRecording);
 
         setNormalizedNotesForPuzzle(Objects.requireNonNull(normalizedNotesForPuzzle));
         setNormalizedRootNote(normalizedRootNote);

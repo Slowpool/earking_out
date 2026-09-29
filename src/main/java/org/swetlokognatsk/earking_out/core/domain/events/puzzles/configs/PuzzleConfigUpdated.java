@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 
+@Deprecated
 public abstract class PuzzleConfigUpdated<E extends Exercise, PC extends PuzzleConfigAggregate<E>> extends DomainEvent {
     public final E exercise;
     public final PC newConfig;
