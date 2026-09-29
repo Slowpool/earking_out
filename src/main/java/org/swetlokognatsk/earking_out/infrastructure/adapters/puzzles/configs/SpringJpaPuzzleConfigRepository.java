@@ -22,8 +22,8 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
     public SpringJpaPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository, final EntityManager entityManager, final PlatformTransactionManager transactionManager, final User user) {
         this.entityManager = entityManager;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
-        super(puzzleConfigAggregatesFactoryResolver, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
         this.userId = user.id;
+        super(puzzleConfigAggregatesFactoryResolver, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
     }
 
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
@@ -55,7 +55,8 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
 
     private final PuzzleConfigEntity findByExercise(final Exercise exercise) {
         var exerciseId = exercise.toString();
-        var puzzleConfig = entityManager.find(PuzzleConfigEntity.class, exerciseId);
+        var id = new PuzzleConfigId(exerciseId, userId.id());
+        var puzzleConfig = entityManager.find(PuzzleConfigEntity.class, id);
         return puzzleConfig;
     }
 

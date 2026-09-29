@@ -6,12 +6,14 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "puzzle_configs")
+@IdClass (PuzzleConfigId.class)
 public class PuzzleConfigEntity {
 
     @Id
     // TODO use Exercise instead
     private String exercise;
 
+    @Id
     @Column(name = "user_id")
     private int userId;
 
@@ -35,7 +37,6 @@ public class PuzzleConfigEntity {
     }
 
     public PuzzleConfigEntity() {
-
     }
 
     public PuzzleConfigEntity(final int userId, final String exercise, final String serializedConfig) {

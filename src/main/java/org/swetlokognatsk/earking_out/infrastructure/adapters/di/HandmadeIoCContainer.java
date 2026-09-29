@@ -90,6 +90,8 @@ import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBu
 
 public final class HandmadeIoCContainer implements IoCContainer {
 
+    private static final User TEST_USER = new DesktopUser();
+
     private Map<Class<?>, ?> singletons;
     private Map<Class<?>, Function<Object[], ?>> dynamicDependencies = new HashMap<>();
     // singleton lifetime simulation
@@ -105,8 +107,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
     private static InMemoryEventStore inMemoryEventStore;
     private static JacksonJsonSerializer jacksonDomainEventJsonSerializer;
     private static PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
-
-    private static final User TEST_USER = new DesktopUser();
+    private static User user = TEST_USER;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -172,7 +173,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (someClass.equals(InMemoryPuzzleConfigRepository.class)) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigDTOAssembler.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigDTOAssembler.class), get(User.class));
             }
             dep = inMemoryPuzzleConfigRepository;
 
@@ -354,7 +355,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             dep = new PerfectPitchSessionStatsAggregator<PerfectPitchExercise>();
 
         } else if (someClass.equals(User.class)) {
-            dep = TEST_USER;
+            dep = user;
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
@@ -377,7 +378,18 @@ public final class HandmadeIoCContainer implements IoCContainer {
         pianoKeyboardDtoAssembler = null;
     }
 
-    public <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory) {
+    public <T> void register(final Class<T> someClass, final Function<Object[], T> depFactory) {
         dynamicDependencies.put(someClass, depFactory);
+    }
+
+    // TODO refactoring
+    public <T> void register(final Class<T> someClass, final T dependency) {
+        switch (dependency) {
+        case User user:
+            HandmadeIoCContainer.user = user;
+            break;
+        default:
+            throw new IllegalArgumentException("unknown dependency");
+        }
     }
 }

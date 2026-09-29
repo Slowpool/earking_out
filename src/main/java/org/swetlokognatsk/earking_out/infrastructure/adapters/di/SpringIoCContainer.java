@@ -184,7 +184,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SessionPianoKeyboardUpdatingOnSessionStartedHandler.class, () -> new SessionPianoKeyboardUpdatingOnSessionStartedHandler(get(PianoKeyboardService.class)));
 
-        ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigDTOAssembler.class)), (BeanDefinition bd) -> bd.setPrimary(false));
+        ctx.registerBean(InMemoryPuzzleConfigRepository.class, () -> new InMemoryPuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigDTOAssembler.class), get(User.class)), (BeanDefinition bd) -> bd.setPrimary(false));
 
         ctx.registerBean(SQLitePuzzleConfigRepository.class, () -> new SQLitePuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigJsonSerializer.class), get(PuzzleConfigDTOAssembler.class), get(InMemoryPuzzleConfigRepository.class)), (BeanDefinition bd) -> bd.setPrimary(false));
 
@@ -256,10 +256,14 @@ public final class SpringIoCContainer implements IoCContainer {
     }
 
     public void refreshDependencies() {
-        throw new IllegalStateException("spring dependencies refreshing is not supposed to be implemented/called");
+        throw new IllegalStateException("this container does not support dependencies refreshing");
     }
 
-    public <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory) {
+    public <T> void register(final Class<T> someClass, final Function<Object[], T> depFactory) throws IllegalStateException {
+        throw new IllegalStateException("this container does not support dynamic dependencies registering");
+    }
+
+    public <T> void register(final Class<T> someClass, T dependency) throws IllegalStateException {
         throw new IllegalStateException("this container does not support dynamic dependencies registering");
     }
 

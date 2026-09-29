@@ -1,0 +1,23 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="8-sqlite" author="slowpool" dbms="sqlite">
+        <sql>
+            DROP TABLE puzzle_configs;
+
+            CREATE TABLE puzzle_configs (
+            exercise VARCHAR(200) NOT NULL,
+            serialized_config TEXT NOT NULL,
+            user_id INTEGER REFERENCES users(id),
+            CONSTRAINT PK_PUZZLE_CONFIGS PRIMARY KEY (exercise,user_id)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="8-standard" author="slowpool" dbms="!sqlite">
+        <dropPrimaryKey tableName="puzzle_configs" />
+        <addPrimaryKey tableName="puzzle_configs" columnNames="exercise,user_id" constraintName="PK_PUZZLE_CONFIGS" />
+    </changeSet>
+
+</databaseChangeLog>

@@ -29,7 +29,9 @@ public final class SoundPlayerOnPianoKeyPressedHandler extends DomainEventHandle
 
     private boolean shouldPlaySound(final PianoKeyboardId pianoKeyboardId) {
         // for now, if piano keyboard type is not puzzleConfig, sound should always be played
-        boolean shouldPlaySound = pianoKeyboardBelongsToPuzzleConfig(pianoKeyboardId) ? true : inspectConfigWhetherShouldPianoKeyMakeSound(pianoKeyboardId);
+        boolean shouldPlaySound = pianoKeyboardBelongsToPuzzleConfig(pianoKeyboardId)
+                ? true
+                : inspectConfigWhetherShouldPianoKeyMakeSound(pianoKeyboardId);
         return shouldPlaySound;
     }
 
