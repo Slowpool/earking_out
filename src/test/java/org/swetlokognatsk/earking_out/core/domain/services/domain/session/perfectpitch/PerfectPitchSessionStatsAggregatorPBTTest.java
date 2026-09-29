@@ -4,43 +4,29 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.junit.Assert.*;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
-import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note.*;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
-import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
-import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.PerfectPitchNoteStats;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.PerfectPitchSessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
-import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
-import net.jqwik.api.FixedSeedMode;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
-import net.jqwik.api.ShrinkingMode;
-import net.jqwik.api.constraints.Size;
 import net.jqwik.api.lifecycle.BeforeProperty;
-import net.jqwik.api.state.Action;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import java.util.Arrays;
@@ -203,7 +189,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
         assertEquals(stats.notesStats.length, distinctNotesStream.count());
     }
 
-    @Property //(seed = "-6524192018156910654", whenFixedSeed = FixedSeedMode.ALLOW)
+    @Property
     public void allNotesAreFromPossibleSolutions(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
         var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
 
@@ -222,7 +208,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
         assertNumberOfNoteApperancesEqual(domainEvents, stats);
     }
 
-    @Property //(seed = "-8941593373704697446", whenFixedSeed = FixedSeedMode.ALLOW, shrinking = ShrinkingMode.OFF)
+    @Property
     public void numberOfEachNoteAllGuesses(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
         var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
 
