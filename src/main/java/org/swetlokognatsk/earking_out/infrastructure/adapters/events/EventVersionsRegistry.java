@@ -28,8 +28,7 @@ public enum EventVersionsRegistry {
         this.version = version;
     }
 
-    /* well, it's only for dynamic using. i'm not sure it can ever be used instead `HINT_REPEATING_REQUESTED_EVENT.version` call */
-    @Deprecated
+    // TODO use Map<> instead? it has O(1) complexity
     public static int getVersion(final Class<? extends DomainEvent> eventClass) {
         return Arrays.stream(values())
             .filter(event -> event.eventClass.equals(eventClass))

@@ -115,6 +115,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.serialization;
+    exports org.swetlokognatsk.earking_out.core.domain.model.identity;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;

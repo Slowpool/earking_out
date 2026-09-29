@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -46,6 +47,8 @@ public final class JacksonJsonSerializer implements DomainEventJsonSerializer, P
 
         var miscModule = new SimpleModule()
                 .addSerializer(new PianoKeyNumberSerializer())
+                .addSerializer(new UserIdSerializer())
+                .addDeserializer(UserId.class, new UserIdDeserializer())
                 .addDeserializer(Puzzle.class, new PuzzleDeserializer(Puzzle.class))
                 .addDeserializer(Solution.class, new SolutionDeserializer(Solution.class));
 

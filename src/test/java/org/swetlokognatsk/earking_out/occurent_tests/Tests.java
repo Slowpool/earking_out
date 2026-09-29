@@ -18,6 +18,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public class Tests {
@@ -53,4 +54,16 @@ public class Tests {
         return MongoClients.create("mongodb://root:password@localhost:27017");
     }
 
+    @Test
+    public void generateUUID() {
+        // assertEquals(null, UUID.randomUUID().toString());
+    }
+
+    @Test
+    public void testUUID() {
+        var uuid = "00000000-0000-0000-0000-000000000001";
+        assertTrue(UUID.fromString(uuid)
+                .toString()
+                .equals(uuid));
+    }
 }

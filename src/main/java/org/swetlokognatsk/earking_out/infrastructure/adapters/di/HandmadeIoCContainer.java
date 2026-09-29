@@ -2,8 +2,8 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.di;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
-
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
@@ -24,6 +24,9 @@ import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDeleg
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
@@ -262,7 +265,10 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (someClass.equals(DomainEventsFactory.class)) {
             if (domainEventsFactory == null) {
-                domainEventsFactory = new DomainEventsFactory();
+                var userId = new UserId(1);
+                var userUuid = new UserUuid(UUID.randomUUID());
+                var user = new User(userId, userUuid, "test");
+                domainEventsFactory = new DomainEventsFactory(user);
             }
             dep = domainEventsFactory;
 

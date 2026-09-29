@@ -27,6 +27,8 @@ import org.swetlokognatsk.earking_out.core.domain.events.handlers.AudioPerfectPi
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.DesktopUser;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
@@ -149,7 +151,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(PianoKeyboardDtoAssembler.class, () -> new PianoKeyboardDtoAssembler());
 
-        ctx.registerBean(DomainEventsFactory.class);
+        ctx.registerBean(DomainEventsFactory.class, () -> new DomainEventsFactory(get(User.class)));
 
         ctx.registerBean(SpringEventPublisher.class, () -> new SpringEventPublisher((ApplicationEventPublisher) context));
 
@@ -205,7 +207,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(PerfectPitchSessionStatsAggregator.class);
 
-        ctx.registerBean(SpringJpaEventStore.class, () -> new SpringJpaEventStore(get(EntityManager.class), get(PlatformTransactionManager.class), get(DomainEventJsonSerializer.class)), bd -> bd.setPrimary(true));
+        ctx.registerBean(SpringJpaEventStore.class, () -> new SpringJpaEventStore(get(EntityManager.class), get(PlatformTransactionManager.class), get(DomainEventJsonSerializer.class), get(User.class)), bd -> bd.setPrimary(true));
     }
 
     private void initDesktopBeans() {
@@ -226,12 +228,17 @@ public final class SpringIoCContainer implements IoCContainer {
 
         // event sourcing
         ctx.registerBean(SQLiteEventStore.class, () -> new SQLiteEventStore(get(DomainEventJsonSerializer.class)), bd -> bd.setPrimary(false));
+
+        // identity
+        ctx.registerBean(DesktopUser.class);
     }
 
     private void initWebBeans() {
         ctx.registerBean(FakeKeySoundsPlayer.class);
 
         ctx.registerBean(SpringPianoKeySoundFilesResolver.class);
+
+        // TODO register user somehow. take it's identity from session cookie
     }
 
     public <T> T get(Class<T> someClass, Object... args) {

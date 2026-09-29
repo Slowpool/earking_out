@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
 
 import static java.util.Objects.requireNonNull;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,9 @@ public class EventSourcingEventEntity {
 
     // TODO use UUID instead
     private String streamId;
+
+    // TODO use UUID instead
+    private int userId;
 
     private String type;
 
@@ -30,6 +34,10 @@ public class EventSourcingEventEntity {
 
     public String getStreamId() {
         return streamId;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     public String getType() {
@@ -52,9 +60,10 @@ public class EventSourcingEventEntity {
 
     }
 
-    public EventSourcingEventEntity(final String id, final String streamId, final String type, final String createdOn, final String payload, final int version) {
+    public EventSourcingEventEntity(final String id, final String streamId, final int userId, final String type, final String createdOn, final String payload, final int version) {
         this.id = requireNonNull(id);
         this.streamId = requireNonNull(streamId);
+        this.userId = requireNonNull(userId);
         this.type = requireNonNull(type);
         this.createdOn = requireNonNull(createdOn);
         this.payload = requireNonNull(payload);
