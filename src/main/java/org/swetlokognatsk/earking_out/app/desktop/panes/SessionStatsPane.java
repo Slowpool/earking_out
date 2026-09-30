@@ -25,6 +25,7 @@ public abstract class SessionStatsPane<E extends Exercise, SADTO extends Session
         this.sessionDto = sessionDto;
         this.statsService = statsService;
 
+        // TODO or "aborted" when aborted
         var titleLabel = new Label("finished");
         var titleLabelBox = new VBox(titleLabel);
         titleLabelBox.setAlignment(Pos.CENTER);

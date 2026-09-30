@@ -1,0 +1,11 @@
+piano_keyboard.html
+<div th:id="|${pianoKeyboardModel.id}-piano-keyboard|" class="piano-keyboard">
+    <button
+        th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"
+        th:class="|piano-key ${pianoKey.color}|"
+        th:data-keyNumber="${pianoKey.keyNumber.value}"
+        th:data-isPressed="${pianoKey.isPressed}"
+        th:data-isSelected="${pianoKey.isSelected}"
+        th:text="${pianoKey.keyNumber.value}"
+    ></button>
+</div>
