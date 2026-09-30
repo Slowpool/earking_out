@@ -13,6 +13,15 @@ puzzle_configs/audio_perfect_pitch.html
         <input type="checkbox" th:checked="${statsRecording}">
     </div>
     <div>
+        notes
+        <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${notesPickerPianoKeyboardModel})}"></div>
+    </div>
+    <!-- TODO display it conditionally, if input mode is KEYBOARD_AS_PIANO -->
+    <div>
+        root note
+        <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${rootNotePickerPianoKeyboardModel})}"></div>
+    </div>
+    <div>
         input mode:
         <select name="inputMode">
             <option th:each="inputMode : ${inputModes}" th:value="${inputMode.name()}" th:text="${inputMode.name()}"></option>
