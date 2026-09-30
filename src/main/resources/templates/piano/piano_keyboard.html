@@ -5,7 +5,6 @@
     <body>
         piano_keyboard.html
         <div th:id="|${pianoKeyboardModel.id}-piano-keyboard|" class="piano-keyboard">
-            <!-- Layer 1: White Keys Flow -->
             <div class="white-keys-layer">
                 <button
                     th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"
@@ -16,8 +15,8 @@
                     th:data-isSelected="${pianoKey.isSelected}"
                 ></button>
             </div>
-            <!-- Layer 2: Black Keys Grid Placement Overlay -->
             <div class="black-keys-layer">
+                <!-- TODO th:with can be simplified by passing some constants from backend -->
                 <button
                     th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"
                     th:if="${#strings.toString(pianoKey.color) == 'BLACK'}"
