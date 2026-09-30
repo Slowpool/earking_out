@@ -5,14 +5,42 @@
     <body>
         piano_keyboard.html
         <div th:id="|${pianoKeyboardModel.id}-piano-keyboard|" class="piano-keyboard">
-            <button
-                th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"
-                th:class="|piano-key ${pianoKey.color}|"
-                th:data-keyNumber="${pianoKey.keyNumber.value}"
-                th:data-isPressed="${pianoKey.isPressed}"
-                th:data-isSelected="${pianoKey.isSelected}"
-                th:text="${pianoKey.keyNumber.value}"
-            ></button>
+            <!-- Layer 1: White Keys Flow -->
+            <div class="white-keys-layer">
+                <button
+                    th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"
+                    th:if="${#strings.toString(pianoKey.color) == 'WHITE'}"
+                    th:class="|piano-key ${pianoKey.color}|"
+                    th:data-keyNumber="${pianoKey.keyNumber.value}"
+                    th:data-isPressed="${pianoKey.isPressed}"
+                    th:data-isSelected="${pianoKey.isSelected}"
+                ></button>
+            </div>
+            <!-- Layer 2: Black Keys Grid Placement Overlay -->
+            <div class="black-keys-layer">
+                <button
+                    th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"
+                    th:if="${#strings.toString(pianoKey.color) == 'BLACK'}"
+                    th:with="
+                indexInOctave=${(pianoKey.keyNumber.value - 4) % 12},
+                octaveNumber=${(pianoKey.keyNumber.value - 4) / 12},
+                whiteKeysInOctave=${
+                    indexInOctave == 1  ? 1 : 
+                    (indexInOctave == 3  ? 2 : 
+                    (indexInOctave == 6  ? 4 : 
+                    (indexInOctave == 8  ? 5 : 
+                    (indexInOctave == 10 ? 6 : 0))))
+                },
+                totalWhiteToLeft=${(octaveNumber * 7) + whiteKeysInOctave},
+                gridStart=${(totalWhiteToLeft * 3) + 1}
+            "
+                    th:style="|grid-column-start: ${gridStart};|"
+                    th:class="|piano-key ${pianoKey.color}|"
+                    th:data-keyNumber="${pianoKey.keyNumber.value}"
+                    th:data-isPressed="${pianoKey.isPressed}"
+                    th:data-isSelected="${pianoKey.isSelected}"
+                ></button>
+            </div>
         </div>
     </body>
 </html>

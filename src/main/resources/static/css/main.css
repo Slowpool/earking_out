@@ -39,68 +39,91 @@
 .exercise-types a:hover {
     background-color: #ddd;
 }
-/* 1. Main Container (Prevents wrapping completely) */
+/* 1. Main Root Container (Enforces relative anchoring) */
 .piano-keyboard {
     position: relative;
-    display: flex;
-    flex-wrap: nowrap; /* Forces all keys to stay on a single, long horizontal row */
     width: 100%;
-    /* Calculated from your 49 white keys count: 49 * 2.357cm / 15cm = 7.69 aspect ratio */
+    /* Calculated from your 49 white keys: 49 * 2.357cm / 15cm = 7.69 aspect ratio */
     aspect-ratio: 49 / 6.36; 
-    background-color: #111;
-    padding: 10px;
     box-sizing: border-box;
-    overflow-x: auto; /* Adds a clean scrollbar if the screen gets too narrow */
 }
 
-/* 2. White Keys: Clean Auto-Scaling Row */
+/* 2. Layer Wrappers: Glued exactly on top of each other */
+.white-keys-layer, 
+.black-keys-layer {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    display: grid;
+    /* 49 white keys * 3 tracks per key = 147 total grid tracks */
+    grid-template-columns: repeat(147, 1fr); 
+    box-sizing: border-box;
+}
+
+/* 3. Black keys wrapper shouldn't block clicking white keys underneath */
+.black-keys-layer {
+    z-index: 2;
+    pointer-events: none; 
+}
+
+/* 4. White Keys Styling (Spans 3 tracks, fills the base height) */
 .piano-key.WHITE {
-    flex: 1 0 0%; /* Every white key divides the container width perfectly equally */
+    grid-column: span 3;
     height: 100%;
     background: linear-gradient(to bottom, #fff 0%, #ebebeb 100%);
-    border: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
     border-bottom: 4px solid #bbb;
     border-radius: 0 0 4px 4px;
-    position: relative;
-    z-index: 1; /* Keeps them in the background layer */
+    color: #999;
+    font-size: 10px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 6px;
+    cursor: pointer;
+    box-sizing: border-box;
+    z-index: 1;
 }
 
-/* 3. Black Keys: Zero-Duplication Positioning Logic */
+/* 5. Black Keys Styling (Spans 2 tracks, shifts left to sit on cracks) */
 .piano-key.BLACK {
-    position: absolute;
-    z-index: 2; /* Floats them directly on top */
-    
-    /* Exact proportionality from your constants: 0.95cm / (49 * 2.357cm) = ~0.82% of total width */
-    width: 0.82%; 
-    height: 60%; /* Your 9cm / 15cm length ratio */
-    
+    grid-column: span 2;
+    /* Exact 9cm / 15cm length proportion from your constants */
+    height: 60%; 
     background: linear-gradient(to bottom, #333 0%, #050505 100%);
     border-bottom: 3px solid #444;
     border-radius: 0 0 3px 3px;
-    box-shadow: 0 3px 5px rgba(0,0,0,0.6);
+    color: #fff;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 4px;
+    cursor: pointer;
+    box-sizing: border-box;
     
-    /* Shifts the black key box so its center perfectly aligns with the white key's left edge */
-    transform: translateX(-50%); 
+    /* Re-enables clicking on the actual black key boxes */
+    pointer-events: auto; 
+    
+    /* Math trick: shifts the 2-track width left by exactly half 
+       so its center line snaps precisely over the white key seams */
+    margin-left: -50%; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
 }
 
-/* 4. Automated Alignment Rule (No Copy-Paste)
-   This selector tells the browser: "Find any black key that is placed directly after a white key,
-   and anchor its absolute 'left' position to that specific white key's left coordinate bounding box." */
-.piano-key.WHITE + .piano-key.BLACK {
-    left: left; /* Tells the layout engine to align with the preceding sibling's origin marker */
-}
-
-/* Interactive States */
-.piano-key[data-ispressed="true"].WHITE {
+/* 6. Active State Interactions */
+.piano-key[data-isPressed="true"].WHITE {
     background: #a8dadc;
     border-bottom-width: 1px;
     transform: translateY(2px);
 }
-.piano-key[data-ispressed="true"].BLACK {
+.piano-key[data-isPressed="true"].BLACK {
     background: #457b9d;
     border-bottom-width: 1px;
-    transform: translateX(-50%) translateY(1px);
+    transform: translateY(1px);
 }
-.piano-key[data-isselected="true"] {
+.piano-key[data-isSelected="true"] {
     box-shadow: 0 0 6px #e63946 inset, 0 0 3px #e63946;
 }
