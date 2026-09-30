@@ -99,16 +99,13 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.5);
 }
 /* TODO finish reviewing */
-.piano-key[data-isPressed="true"].WHITE {
-    background: #a8dadc;
+.piano-key[data-isSelected="true"].WHITE {
+    background: #00b4d8;
     border-bottom-width: 1px;
     transform: translateY(2px);
 }
-.piano-key[data-isPressed="true"].BLACK {
-    background: #457b9d;
+.piano-key[data-isSelected="true"].BLACK {
+    background: #0014a9;
     border-bottom-width: 1px;
     transform: translateY(1px);
-}
-.piano-key[data-isSelected="true"] {
-    box-shadow: 0 0 6px #e63946 inset, 0 0 3px #e63946;
 }
