@@ -30,7 +30,9 @@ public final class GeneralSessionStats extends ValueObject implements Serializab
 
     // TODO test
     public double getPerfectlyCompletedPuzzlesRate() {
-        return ((double) puzzlesCompletedPerfectly) / puzzlesCompleted;
+        return puzzlesCompleted == 0
+                ? 0
+                : ((double) puzzlesCompletedPerfectly) / puzzlesCompleted;
     }
 
 }

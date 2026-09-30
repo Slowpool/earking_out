@@ -230,7 +230,8 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(SQLiteEventStore.class, () -> new SQLiteEventStore(get(DomainEventJsonSerializer.class)), bd -> bd.setPrimary(false));
 
         // identity
-        ctx.registerBean(DesktopUser.class);
+        // TODO restore it back later
+        // ctx.registerBean(DesktopUser.class);
     }
 
     private void initWebBeans() {

@@ -55,6 +55,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats;
     exports org.swetlokognatsk.earking_out.app.desktop.services;
     exports org.swetlokognatsk.earking_out.app.web;
+    exports org.swetlokognatsk.earking_out.app.web.controllers;
     exports org.swetlokognatsk.earking_out.core.domain.events.exercises;
     exports org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs;
     exports org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs.perfectpitch;
