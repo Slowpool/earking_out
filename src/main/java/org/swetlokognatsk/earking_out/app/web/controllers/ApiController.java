@@ -1,24 +1,23 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.PIANO_KEYS_NUMBER;
-import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
-import java.util.ArrayList;
-import org.springframework.ui.Model;
+import java.util.List;
+import java.util.Map;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyViewModel;
-import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModel;
+import org.swetlokognatsk.earking_out.app.web.services.SimplePuzzleConfigPropertiesCaster;
+import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewModelFiller;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode.*;
 
 // TODO all code here is yet a draft, for experiments
 @RestController
@@ -28,27 +27,10 @@ public class ApiController {
     @GetMapping("/exercise/{exerciseName}/{exerciseType}")
     public ModelAndView exercise(@PathVariable final String exerciseName, @PathVariable final String exerciseType, final Exercise exercise) {
         var view = getExerciseView(exercise);
-
         var modelAndView = new ModelAndView(view);
-        
-        modelAndView.addObject("targetNumberOfPuzzles", 1937);
 
-        modelAndView.addObject("statsRecording", true);
-
-        var notesPickerPianoKeyboardModel = buildPianoKeyboardViewModel(AUDIO_PERFECT_PITCH_NOTES_PICKER);
-        modelAndView.addObject("notesPickerPianoKeyboardModel", notesPickerPianoKeyboardModel);
-
-        // TODO pass it conditionally, if input mode is KEYBOARD_AS_PIANO
-        var rootNotePickerPianoKeyboardModel = buildPianoKeyboardViewModel(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
-        modelAndView.addObject("rootNotePickerPianoKeyboardModel", rootNotePickerPianoKeyboardModel);
-
-        modelAndView.addObject("inputModes", PerfectPitchInputMode.values());
-        modelAndView.addObject("inputMode", KEYBOARD_AS_PIANO);
-
-        modelAndView.addObject("guessingPianoIsSoundless", true);
-
-        modelAndView.addObject("exerciseName", exerciseName);
-        modelAndView.addObject("exerciseType", exerciseType);
+        var puzzleConfigViewModelFiller = DI.get(PuzzleConfigViewModelFiller.class);
+        puzzleConfigViewModelFiller.fill(exercise, modelAndView);
 
         return modelAndView;
     }
@@ -67,8 +49,8 @@ public class ApiController {
 
         modelAndView.addObject("targetNumberOfPuzzles", 100);
 
-        var guessingPianoKeyboardViewModel = buildPianoKeyboardViewModel(AUDIO_PERFECT_PITCH_NOTES_GUESSING);
-        modelAndView.addObject("guessingPianoKeyboardModel", guessingPianoKeyboardViewModel);
+        // var guessingPianoKeyboardViewModel = buildPianoKeyboardViewModel(AUDIO_PERFECT_PITCH_NOTES_GUESSING);
+        // modelAndView.addObject("guessingPianoKeyboardModel", guessingPianoKeyboardViewModel);
 
         modelAndView.addObject("exerciseName", exerciseName);
         modelAndView.addObject("exerciseType", exerciseType);
@@ -79,22 +61,6 @@ public class ApiController {
     private String getSessionView(final Exercise exercise) {
         // TODO getSessionView
         return "puzzles/perfect_pitch/audio_perfect_pitch_puzzle";
-    }
-
-    private PianoKeyboardViewModel buildPianoKeyboardViewModel(final PianoKeyboardId pianoKeyboardId) {
-        var pianoKeys = buildPianoKeyViewModels(pianoKeyboardId);
-        return new PianoKeyboardViewModel(pianoKeyboardId, pianoKeys);
-    }
-
-    private PianoKeyViewModel[] buildPianoKeyViewModels(final PianoKeyboardId pianoKeyboardId) {
-        // TODO obviously, refactoring, use pianoKeyboardId
-        final var models = new ArrayList<PianoKeyViewModel>(PIANO_KEYS_NUMBER);
-        PianoKeyNumber.forEachKey((PianoKeyNumber keyNumber) -> {
-            var colorService = DI.get(PianoKeyColorService.class);
-            var pianoKeyModel = new PianoKeyViewModel(keyNumber, colorService.getColor(keyNumber), false, keyNumber.equals(FIRST_NOTE_NUMBER));
-            models.add(pianoKeyModel);
-        });
-        return models.toArray(PianoKeyViewModel[]::new);
     }
 
     @GetMapping("/session/finish/{exerciseName}/{exerciseType}")
@@ -114,5 +80,24 @@ public class ApiController {
     private String getStatsSessionView(final Exercise exercise) {
         // TODO getStatsSessionView
         return "stats/session/perfect_pitch/audio_perfect_pitch_session_stats";
+    }
+
+    // TODO the difference between @RequestParam/RequestBody? why not Map<String,String>?
+    @PatchMapping("/puzzles/configs/{exerciseName}/{exerciseType}/update/{propertyName}")
+    public ResponseEntity<?> updatePuzzleConfigProperty(final Exercise exercise, @PathVariable final String propertyName, @RequestParam final MultiValueMap<String, String> body) {
+        var puzzleConfigService = DI.get(PuzzleConfigService.class);
+        var simplePuzzleConfigPropertiesCaster = DI.get(SimplePuzzleConfigPropertiesCaster.class);
+        var newValueList = body.get(propertyName);
+        var newValue = newValueList == null || newValueList.isEmpty()
+                ? null
+                : newValueList.getFirst();
+        try {
+            var castedNewValue = simplePuzzleConfigPropertiesCaster.cast(exercise, propertyName, newValue);
+            puzzleConfigService.updateProperty(exercise, propertyName, castedNewValue);
+            return ResponseEntity.ok().body(null);
+        } catch (IllegalArgumentException e) {
+            // TODO add detailed info
+            return ResponseEntity.badRequest().body("bad request");
+        }
     }
 }

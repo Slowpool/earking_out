@@ -6,11 +6,11 @@ puzzle_configs/audio_perfect_pitch.html
 <div>
     <div>
         number of puzzles:
-        <input type="number" min="0" th:value="${targetNumberOfPuzzles}">
+        <input type="number" th:name="${targetNumberOfPuzzlesProp}" min="0" th:value="${targetNumberOfPuzzles}" th:hx-patch="|/api/v1/puzzles/configs/perfect-pitch/audio/update/${targetNumberOfPuzzlesProp}|" hx-trigger="keyup changed delay:500ms" hx-swap="none">
     </div>
     <div>
         stats recording:
-        <input type="checkbox" th:checked="${statsRecording}">
+        <input type="checkbox" th:name="${statsRecordingProp}" th:checked="${statsRecording}" th:hx-patch="|/api/v1/puzzles/configs/perfect-pitch/audio/update/${statsRecordingProp}|" hx-trigger="change" hx-swap="none">
     </div>
     <div>
         notes
@@ -23,21 +23,18 @@ puzzle_configs/audio_perfect_pitch.html
     </div>
     <div>
         input mode:
-        <select name="inputMode">
-            <option th:each="inputMode : ${inputModes}" th:value="${inputMode.name()}" th:text="${inputMode.name()}"></option>
+        <select th:name="${inputModeProp}" th:hx-patch="|/api/v1/puzzles/configs/perfect-pitch/audio/update/${inputModeProp}|" hx-trigger="change" hx-swap="none">
+            <option
+                th:each="mode : ${inputModes}"
+                th:value="${mode.name()}"
+                th:text="${mode.name()}"
+                th:selected="${inputMode == mode}"
+            ></option>
         </select>
     </div>
     <div>
         guessing piano is soundless:
-        <input type="checkbox" th:checked="${guessingPianoIsSoundless}">
-    </div>
-    <div>
-        exercise name:
-        <span th:text="${exerciseName}"></span>
-    </div>
-    <div>
-        exercise type:
-        <span th:text="${exerciseType}"></span>
+        <input type="checkbox" th:name="${guessingPianoIsSoundlessProp}" th:checked="${guessingPianoIsSoundless}" th:hx-patch="|/api/v1/puzzles/configs/perfect-pitch/audio/update/${guessingPianoIsSoundlessProp}|" hx-trigger="change" hx-swap="none">
     </div>
     <button type="submit">Start</button>
 </div>

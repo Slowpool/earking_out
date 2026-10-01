@@ -119,6 +119,8 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.serialization;
     exports org.swetlokognatsk.earking_out.core.domain.model.identity;
     exports org.swetlokognatsk.earking_out.app.web.views.models;
+    exports org.swetlokognatsk.earking_out.app.web.views.models.fillers;
+    exports org.swetlokognatsk.earking_out.app.web.services;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;

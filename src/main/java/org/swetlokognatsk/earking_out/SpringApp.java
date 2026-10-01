@@ -17,7 +17,8 @@ public class SpringApp {
 
     public static Build build;
 
-    private static final String IS_DESKTOP_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).DESKTOP";
+    public static final String IS_DESKTOP_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).DESKTOP";
+    public static final String IS_WEB_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).WEB";
 
     @Bean
     @Primary

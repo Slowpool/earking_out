@@ -8,9 +8,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PianoKeyViewModel {
-    private PianoKeyNumber keyNumber;
-    private PianoKeyColor color;
-    private boolean isPressed;
-    private boolean isSelected;
+    private final PianoKeyNumber keyNumber;
+    private final PianoKeyColor color;
+    private final boolean isPressed;
+    private final boolean isSelected;
 
 }

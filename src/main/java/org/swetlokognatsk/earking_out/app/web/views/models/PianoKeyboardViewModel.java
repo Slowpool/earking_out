@@ -9,6 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class PianoKeyboardViewModel {
 
-    public PianoKeyboardId id;
-    private PianoKeyViewModel[] pianoKeys;
+    public final PianoKeyboardId id;
+    public final PianoKeyViewModel[] pianoKeys;
 }

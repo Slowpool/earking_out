@@ -14,6 +14,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 
+// TODO put it in some more specific package
 // TODO test
 @Component
 public class ExerciseArgumentResolver implements HandlerMethodArgumentResolver {

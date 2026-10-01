@@ -48,4 +48,9 @@ public abstract class Exercise extends ValueObject implements Serializable {
         var name = ExerciseTypes.valueOf(typeValue);
         return ExercisesFactory.create(type, name);
     }
+
+    // TODO use it everywhere
+    public static String unknownExercise(final Exercise exercise) {
+        return "unknown exercise: %s".formatted(exercise.toString());
+    }
 }
