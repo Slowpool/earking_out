@@ -81,7 +81,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
 
         var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesGuessing(pianoKeyboardWidth, pianoKeyboardHeight);
         pianoKeyboard.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, this::handlePianoKeyPressing);
-        pianoKeyboard.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, this::releasePianoKey);
+        pianoKeyboard.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, this::handlePianoKeyReleasing);
 
         return pianoKeyboard;
     }
@@ -108,7 +108,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         return (AudioPerfectPitchSessionAggregateDTO) SessionAggregateDTOAssembler.getSessionAggregateDTO(sessionId);
     }
 
-    public void releasePianoKey(final PianoKeyReleasedEvent e) {
+    public void handlePianoKeyReleasing(final PianoKeyReleasedEvent e) {
         var session = getCurrentSessionDTO();
         // in case the last piano key pressing was successful and it was the last puzzle, the session closes, so it's not allowed to edit piano keyboard state any more. ui will just show the stats page. guessing piano keyboard state will be reset on the starting of the following session. summarizing, without this state check it'll cause `NoActiveSessionException`
         if (session.state != SessionStates.IN_PROGRESS) {
