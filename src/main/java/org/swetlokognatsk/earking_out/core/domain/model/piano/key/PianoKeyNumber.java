@@ -3,6 +3,9 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -70,7 +73,7 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
         return valueOf((int) value);
     }
 
-    public static void validate(final int value) {
+    private static void validate(final int value) {
         if (value < BYTE_FIRST_NOTE_NUMBER) {
             throw new IllegalArgumentException("keyNumber is too small: " + value);
         }

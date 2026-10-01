@@ -121,6 +121,8 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.app.web.views.models;
     exports org.swetlokognatsk.earking_out.app.web.views.models.fillers;
     exports org.swetlokognatsk.earking_out.app.web.services;
+    exports org.swetlokognatsk.earking_out.app.web.models.responses;
+    exports org.swetlokognatsk.earking_out.app.web.models.requests;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;

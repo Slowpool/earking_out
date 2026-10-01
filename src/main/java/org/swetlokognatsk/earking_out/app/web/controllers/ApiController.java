@@ -7,19 +7,33 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.swetlokognatsk.earking_out.app.web.models.requests.PuzzleConfigPianoKeyboardActionRequest;
+import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyPressingResponse;
 import org.swetlokognatsk.earking_out.app.web.services.SimplePuzzleConfigPropertiesCaster;
+import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewModelFiller;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 // TODO all code here is yet a draft, for experiments
+/**
+ * I gave this controller an `Api` name because it never returns entire html
+ * documents - it returns only an html fragments without html/head/body tags,
+ * json objects and etc.
+ */
 @RestController
 @RequestMapping("/api/v1")
 public class ApiController {
@@ -83,7 +97,7 @@ public class ApiController {
     }
 
     // TODO the difference between @RequestParam/RequestBody? why not Map<String,String>?
-    @PatchMapping("/puzzles/configs/{exerciseName}/{exerciseType}/update/{propertyName}")
+    @PatchMapping("/puzzle/config/{exerciseName}/{exerciseType}/update/{propertyName}")
     public ResponseEntity<?> updatePuzzleConfigProperty(final Exercise exercise, @PathVariable final String propertyName, @RequestParam final MultiValueMap<String, String> body) {
         var puzzleConfigService = DI.get(PuzzleConfigService.class);
         var simplePuzzleConfigPropertiesCaster = DI.get(SimplePuzzleConfigPropertiesCaster.class);
@@ -99,5 +113,20 @@ public class ApiController {
             // TODO add detailed info
             return ResponseEntity.badRequest().body("bad request");
         }
+    }
+
+    // TODO should ResponseEntity<?> remain or should it return PuzzleConfigPianoKeyPressingResult
+    @PostMapping("/puzzle/config/{exerciseName}/{exerciseType}/piano-keyboard/press-key")
+    public ResponseEntity<PuzzleConfigPianoKeyPressingResponse> pressPuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PuzzleConfigPianoKeyboardActionRequest body) {
+        var pianoKeyboardId = body.pianoKeyboardId;
+        var pianoKeyboardService = DI.get(PianoKeyboardService.class);
+        pianoKeyboardService.pressPianoKey(pianoKeyboardId, body.pianoKeyNumber);
+
+        var pianoKeyboardBuilder = DI.get(PianoKeyboardViewModelsBuilder.class);
+        var pianoKeyboardViewModel = pianoKeyboardBuilder.build(pianoKeyboardId);
+
+        var response = new PuzzleConfigPianoKeyPressingResponse(pianoKeyboardViewModel);
+
+        return ResponseEntity.ok(response);
     }
 }

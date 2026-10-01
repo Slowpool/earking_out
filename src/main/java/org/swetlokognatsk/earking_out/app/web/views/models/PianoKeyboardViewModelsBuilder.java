@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.PIANO_KEYS_NUMBER;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
 
+// TODO think about naming. builder is not quite descripting word
 @Component
 @Lazy
 @AllArgsConstructor
