@@ -3,6 +3,7 @@ const WHITE = 'WHITE';
 const BLACK = 'BLACK';
 
 var pressedPianoKey = null;
+var playingAudios = {};
 
 document.addEventListener('mousedown', function (e) {
     var pianoKey = e.target.closest('.piano-key')
@@ -11,6 +12,8 @@ document.addEventListener('mousedown', function (e) {
     }
 
     pressedPianoKey = pianoKey;
+    // TODO remove it. added in experimenting purposes
+    playPianoKeySound(pianoKey.getAttribute('data-keyNumber'));
 
     var pianoKeyboard = pianoKey.closest('.piano-keyboard.puzzle-config');
     if (pianoKeyboard) {
@@ -113,4 +116,22 @@ function updatePianoKeyboardState(pianoKeyboard, newState) {
         key.setAttribute('data-isPressed', newPianoKey.pressed);
         key.setAttribute('data-isSelected', newPianoKey.selected);
     }
+}
+
+function playPianoKeySound(pianoKeyNumber) {
+    if (playingAudios.length > 1) {
+        stopAllSounds();
+    }
+
+    const audioPath = `/sounds/piano_keys/key${pianoKeyNumber}.wav`;
+    const audio = new Audio(audioPath);
+
+    playingAudios[pianoKeyNumber] = audio;
+    audio.play();
+}
+
+function stopAllSounds() {
+    // it may seem awkward that it stops only one sound, but it's because in future several sounds played the same moment feature will be added, probably with setting allowing to on/off this behavior
+    playingAudios[0].pause();
+    playingAudios[0].currentTime = 0;
 }
