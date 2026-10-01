@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.swetlokognatsk.earking_out.app.web.models.requests.PuzzleConfigPianoKeyboardActionRequest;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyPressingResponse;
+import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyReleasingResponse;
 import org.swetlokognatsk.earking_out.app.web.services.SimplePuzzleConfigPropertiesCaster;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewModelFiller;
@@ -115,17 +116,28 @@ public class ApiController {
         }
     }
 
+    // TODO create new PianoKey view model, with only variable piano key data (isPressed, isSelected), without color and octaveScopedKeyNumber
     // TODO should ResponseEntity<?> remain or should it return PuzzleConfigPianoKeyPressingResult
     @PostMapping("/puzzle/config/{exerciseName}/{exerciseType}/piano-keyboard/press-key")
     public ResponseEntity<PuzzleConfigPianoKeyPressingResponse> pressPuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PuzzleConfigPianoKeyboardActionRequest body) {
-        var pianoKeyboardId = body.pianoKeyboardId;
         var pianoKeyboardService = DI.get(PianoKeyboardService.class);
-        pianoKeyboardService.pressPianoKey(pianoKeyboardId, body.pianoKeyNumber);
+        pianoKeyboardService.pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
 
         var pianoKeyboardBuilder = DI.get(PianoKeyboardViewModelsBuilder.class);
-        var pianoKeyboardViewModel = pianoKeyboardBuilder.build(pianoKeyboardId);
-
+        var pianoKeyboardViewModel = pianoKeyboardBuilder.build(body.pianoKeyboardId);
         var response = new PuzzleConfigPianoKeyPressingResponse(pianoKeyboardViewModel);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/puzzle/config/{exerciseName}/{exerciseType}/piano-keyboard/release-key")
+    public ResponseEntity<PuzzleConfigPianoKeyReleasingResponse> releasePuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PuzzleConfigPianoKeyboardActionRequest body) {
+        var pianoKeyboardService = DI.get(PianoKeyboardService.class);
+        pianoKeyboardService.releasePianoKey(body.pianoKeyboardId);
+
+        var pianoKeyboardBuilder = DI.get(PianoKeyboardViewModelsBuilder.class);
+        var pianoKeyboardViewModel = pianoKeyboardBuilder.build(body.pianoKeyboardId);
+        var response = new PuzzleConfigPianoKeyReleasingResponse(pianoKeyboardViewModel);
 
         return ResponseEntity.ok(response);
     }
