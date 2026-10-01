@@ -1,10 +1,16 @@
 // DISCLAIMER: i'm not a frontend developer, so i allow the mess here
+const WHITE = 'WHITE';
+const BLACK = 'BLACK';
+
+var pressedPianoKey = null;
 
 document.addEventListener('mousedown', function (e) {
     var pianoKey = e.target.closest('.piano-key')
     if (pianoKey == null) {
         return;
     }
+
+    pressedPianoKey = pianoKey;
 
     var pianoKeyboard = pianoKey.closest('.piano-keyboard.puzzle-config');
     if (pianoKeyboard) {
@@ -17,7 +23,40 @@ document.addEventListener('mousedown', function (e) {
                     pianoKeyboardId: pianoKeyboardId,
                     pianoKeyNumber: keyNumber
                 },
-                handler: function(response) {
+                handler: function (response) {
+                    // TODO display errors
+                    console.log(`response: ${JSON.stringify(response)}`);
+                    updatePianoKeyboardState(pianoKeyboard, response.pianoKeyboard);
+                }
+            }
+        );
+        return;
+    }
+
+    // TODO looking for other piano keyboard types
+});
+
+document.addEventListener('mouseup', function (e) {
+    if (pressedPianoKey) {
+        var pianoKey = pressedPianoKey;
+    }
+    else {
+        return;
+        
+    }
+
+    var pianoKeyboard = pianoKey.closest('.piano-keyboard.puzzle-config');
+    if (pianoKeyboard) {
+        const pianoKeyboardId = pianoKeyboard.getAttribute("data-pianoKeyboardId")
+        const keyNumber = pianoKey.getAttribute('data-keyNumber');
+
+        ajax('POST', '/api/v1/puzzle/config/perfect-pitch/audio/piano-keyboard/release-key',
+            {
+                body: {
+                    pianoKeyboardId: pianoKeyboardId,
+                    pianoKeyNumber: keyNumber
+                },
+                handler: function (response) {
                     // TODO display errors
                     console.log(`response: ${JSON.stringify(response)}`);
                     updatePianoKeyboardState(pianoKeyboard, response.pianoKeyboard);
@@ -49,10 +88,29 @@ function ajax(method, url, options = {}) {
         console.error('network error');
     };
 
-    const bodyData = options.body ? JSON.stringify(options.body) : null;
+    const bodyData = options.body
+        ? JSON.stringify(options.body)
+        : null;
     xhr.send(bodyData);
 }
 
 function updatePianoKeyboardState(pianoKeyboard, newState) {
-    var whiteKeysLayer = pianoKeyboard
+    var whiteKeysLayer = pianoKeyboard.querySelector('.white-keys-layer');
+    var blackKeysLayer = pianoKeyboard.querySelector('.black-keys-layer');
+
+    var whiteI = 0;
+    var blackI = 0;
+    for (var i = 0; i < newState.pianoKeys.length; i++) {
+        let newPianoKey = newState.pianoKeys[i];
+        if (newPianoKey.color == WHITE) {
+            key = whiteKeysLayer.children[whiteI];
+            whiteI++;
+        }
+        else {
+            key = blackKeysLayer.children[blackI];
+            blackI++;
+        }
+        key.setAttribute('data-isPressed', newPianoKey.pressed);
+        key.setAttribute('data-isSelected', newPianoKey.selected);
+    }
 }
