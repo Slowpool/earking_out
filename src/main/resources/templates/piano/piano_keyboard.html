@@ -1,5 +1,5 @@
 piano_keyboard.html
-<div th:id="|${pianoKeyboardModel.id}-piano-keyboard|" class="piano-keyboard">
+<div th:id="|piano-keyboard-${pianoKeyboardModel.id}|" th:data-pianoKeyboardId="${pianoKeyboardModel.id}" class="piano-keyboard puzzle-config">
     <div class="white-keys-layer">
         <button
             th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"
@@ -8,7 +8,7 @@ piano_keyboard.html
             th:data-keyNumber="${pianoKey.keyNumber.value}"
             th:data-isPressed="${pianoKey.isPressed}"
             th:data-isSelected="${pianoKey.isSelected}"
-        ></button>
+            ></button>
     </div>
     <div class="black-keys-layer">
         <!-- TODO th:with can be simplified by passing some constants from backend -->

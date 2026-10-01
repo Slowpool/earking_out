@@ -153,6 +153,7 @@ public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId>
 
     private void validatePianoKeyToPress(final PianoKeyNumber keyNumber) {
         if (pressedKey != null) {
+            // TODO throw new AnotherPianoKeyIsAlreadyPressed
             throw new IllegalStateException("another key is already pressed");
         }
 
