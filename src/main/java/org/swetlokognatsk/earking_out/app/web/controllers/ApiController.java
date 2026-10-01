@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyViewModel;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModel;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
@@ -25,10 +26,11 @@ import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.p
 public class ApiController {
 
     @GetMapping("/exercise/{exerciseName}/{exerciseType}")
-    public ModelAndView exercise(@PathVariable final String exerciseName, @PathVariable final String exerciseType) {
-        var view = getExerciseView(exerciseName, exerciseType);
-        var modelAndView = new ModelAndView(view);
+    public ModelAndView exercise(@PathVariable final String exerciseName, @PathVariable final String exerciseType, final Exercise exercise) {
+        var view = getExerciseView(exercise);
 
+        var modelAndView = new ModelAndView(view);
+        
         modelAndView.addObject("targetNumberOfPuzzles", 1937);
 
         modelAndView.addObject("statsRecording", true);
@@ -51,14 +53,14 @@ public class ApiController {
         return modelAndView;
     }
 
-    private String getExerciseView(final String exerciseName, final String exerciseType) {
+    private String getExerciseView(final Exercise exercise) {
         // TODO getExerciseView
         return "puzzles/configs/perfect_pitch/audio_perfect_pitch_puzzle_config";
     }
 
     @GetMapping("/session/start/{exerciseName}/{exerciseType}")
-    public ModelAndView startSession(@PathVariable final String exerciseName, @PathVariable final String exerciseType) {
-        var view = getSessionView(exerciseName, exerciseType);
+    public ModelAndView startSession(@PathVariable final String exerciseName, @PathVariable final String exerciseType, final Exercise exercise) {
+        var view = getSessionView(exercise);
         var modelAndView = new ModelAndView(view);
 
         modelAndView.addObject("numberOfCompletedPuzzles", 5);
@@ -74,7 +76,7 @@ public class ApiController {
         return modelAndView;
     }
 
-    private String getSessionView(final String exerciseName, final String exerciseType) {
+    private String getSessionView(final Exercise exercise) {
         // TODO getSessionView
         return "puzzles/perfect_pitch/audio_perfect_pitch_puzzle";
     }
@@ -96,8 +98,8 @@ public class ApiController {
     }
 
     @GetMapping("/session/finish/{exerciseName}/{exerciseType}")
-    public ModelAndView finishSession(@PathVariable final String exerciseName, @PathVariable final String exerciseType) {
-        var view = getStatsSessionView(exerciseName, exerciseType);
+    public ModelAndView finishSession(@PathVariable final String exerciseName, @PathVariable final String exerciseType, final Exercise exercise) {
+        var view = getStatsSessionView(exercise);
         var modelAndView = new ModelAndView(view);
         modelAndView.addObject("puzzlesCompletedPerfectly", 5);
         modelAndView.addObject("numberOfCompletedPuzzles", 50);
@@ -109,7 +111,7 @@ public class ApiController {
         return modelAndView;
     }
 
-    private String getStatsSessionView(final String exerciseName, final String exerciseType) {
+    private String getStatsSessionView(final Exercise exercise) {
         // TODO getStatsSessionView
         return "stats/session/perfect_pitch/audio_perfect_pitch_session_stats";
     }
