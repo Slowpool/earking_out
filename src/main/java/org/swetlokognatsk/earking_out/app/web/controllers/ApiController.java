@@ -31,6 +31,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
@@ -172,16 +173,18 @@ public class ApiController {
     //     return ResponseEntity.ok(response);
     // }
 
+    // why to receive sessionId only on pressing? to prevent from case when the guess was last and we obtain the updated session info via getActiveSession(), which fails in that case. schematically: frontend---press key-->backend---update domain state-->responseBuilder-->update domain state via `getActiveSession()`, but wait, it'll throw exception beause it just was finished! well, then, let's get session by it's id - no exception, good!
     @PostMapping("/puzzle/{exerciseName}/{exerciseType}/piano-keyboard/press-key")
-    public ResponseEntity<? extends PuzzlePianoKeyPressingResponse> pressPuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
+    public ResponseEntity<? extends PuzzlePianoKeyPressingResponse> pressPuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body, @RequestParam final SessionId sessionId) {
         DI.get(PianoKeyboardService.class)
                 .pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
 
         var response = DI.get(PuzzlePianoKeyPressingResponseBuilder.class)
-                .build(exercise);
+                .build(exercise, sessionId);
         return ResponseEntity.ok(response);
     }
 
+    // why no sessionId? because either the session is open, either it's closed and ui must not send any release commands after session is closed. such a convention.
     @PostMapping("/puzzle/{exerciseName}/{exerciseType}/piano-keyboard/release-key")
     public ResponseEntity<? extends PuzzlePianoKeyReleasingResponse> releasePuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
         var pianoKeyboardService = DI.get(PianoKeyboardService.class);

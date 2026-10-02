@@ -20,11 +20,11 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFacto
 public class ExerciseArgumentResolver implements HandlerMethodArgumentResolver {
 
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(Exercise.class);
+        return parameter.getParameterType()
+                .equals(Exercise.class);
     }
 
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-            NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         var pathParamsMap = (Map<String, String>) webRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
 
         var exerciseName = pathParamsMap.get("exerciseName");
@@ -45,7 +45,7 @@ public class ExerciseArgumentResolver implements HandlerMethodArgumentResolver {
         }
 
         return ExercisesFactory.create(exerciseName, exerciseType);
-        
+
     }
 
     private <T> T toUpperAndTryToFindAmong(final String slug, final T[] enumValues) {

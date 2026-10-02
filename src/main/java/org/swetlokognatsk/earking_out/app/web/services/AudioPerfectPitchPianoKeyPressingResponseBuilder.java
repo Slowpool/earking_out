@@ -6,6 +6,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.Pi
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
@@ -20,11 +21,11 @@ public class AudioPerfectPitchPianoKeyPressingResponseBuilder {
     private final PianoKeyboardViewModelsBuilder pianoKeyboardViewModelsBuilder;
     private final AudioPerfectPitchSessionRepository sessionRepository;
 
-    public AudioPerfectPitchPianoKeyPressingResponse build() {
+    public AudioPerfectPitchPianoKeyPressingResponse build(final SessionId sessionId) {
         // well, i'm not sure it should be hardcoded, but i can't made up cases when another piano keyboard id may be used here
         var pianoKeyboard = pianoKeyboardViewModelsBuilder.build(AUDIO_PERFECT_PITCH_NOTES_GUESSING);
 
-        var session = sessionRepository.getActiveSession();
+        var session = sessionRepository.getSessionDto(sessionId);
 
         var prevGuessIsSuccessful = session.getPrevGuessIsSuccessful();
         var newHint = prevGuessIsSuccessful ? DI.get(WebAudioPerfectPitchHintDemonstrator.class)
