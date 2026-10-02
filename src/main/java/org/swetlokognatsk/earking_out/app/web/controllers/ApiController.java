@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise.unknownExercise;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,15 @@ import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewMode
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleViewFiller;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
+import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
@@ -186,5 +190,27 @@ public class ApiController {
         var response = DI.get(PuzzlePianoKeyReleasingResponseBuilder.class)
                 .build(exercise);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/puzzle/{exerciseName}/{exerciseType}/hear-hint-again")
+    public ResponseEntity<?> hearHintAgain(final Exercise exercise) {
+        if (exerciseDoesNotSupportHintReplaying(exercise)) {
+            return ResponseEntity.badRequest()
+                    .body("this exercise does not support hint replaying");
+        }
+
+        switch (exercise) {
+        case AudioPerfectPitchExercise appe:
+            DI.get(AudioPerfectPitchSessionService.class)
+                    .hearAgain();
+            break;
+        default:
+            throw new RuntimeException(unknownExercise(exercise));
+        }
+        return ResponseEntity.ok().body(null);
+    }
+
+    private static boolean exerciseDoesNotSupportHintReplaying(final Exercise exercise) {
+        return exercise.type != ExerciseTypes.AUDIO;
     }
 }

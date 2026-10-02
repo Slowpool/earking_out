@@ -134,7 +134,7 @@ function playPianoKeySound(pianoKey) {
     var pianoKeyboard = pianoKey.closest(".piano-keyboard");
 
     var shouldPlaySound = pianoKeyboard.getAttribute("data-areKeySoundsEnabled");
-    if (shouldPlaySound == 'false') {
+    if (shouldPlaySound === 'false') {
         return;
     }
 

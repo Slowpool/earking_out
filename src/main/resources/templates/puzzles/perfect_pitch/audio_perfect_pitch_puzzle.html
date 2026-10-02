@@ -4,7 +4,7 @@ puzzles/audio_perfect_pitch.html
 </h1>
 </br>
 <div th:replace="~{puzzles/puzzle_progress}"></div>
-<button id="audio-perfect-pitch-request-hint">hear again</button>
+<button id="audio-perfect-pitch-request-hint" hx-post="/api/v1/puzzle/perfect-pitch/audio/hear-hint-again" hx-trigger="click" hx-swap="none" hx-on:click="let audio = document.getElementById('audio-perfect-pitch-hint-player'); audio.currentTime = 0; audio.play();">hear again</button>
 <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${guessingPianoKeyboardModel})}">guessing piano keyboard</div>
 <button>finish</button>
 <audio id="audio-perfect-pitch-hint-player" autoplay th:src="${hint}"></audio>

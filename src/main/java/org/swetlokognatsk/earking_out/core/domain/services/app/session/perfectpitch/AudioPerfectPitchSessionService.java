@@ -36,8 +36,16 @@ public final class AudioPerfectPitchSessionService extends SessionService<AudioP
         sessionRepository.save(session);
     }
 
+    @Deprecated
     public void hearAgain(final SessionId sessionId) {
+        // TODO replace with getActiveSession()
         var session = (AudioPerfectPitchSessionAggregate) sessionRepository.get(sessionId);
+        session.demonstrateHintAgain();
+        sessionRepository.save(session);
+    }
+
+    public void hearAgain() {
+        var session = (AudioPerfectPitchSessionAggregate) sessionRepository.getActiveSession();
         session.demonstrateHintAgain();
         sessionRepository.save(session);
     }
