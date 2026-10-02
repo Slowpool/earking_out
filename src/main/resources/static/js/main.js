@@ -21,7 +21,7 @@ document.addEventListener('mousedown', function (e) {
     }
 
     // sound playing logic is duplicated on frontend for performance
-    playPianoKeySound(pianoKey.getAttribute('data-keyNumber'));
+    playPianoKeySound(pianoKey);
 
     var pianoKeyboard = pianoKey.closest('.piano-keyboard.puzzle-config');
     if (pianoKeyboard) {
@@ -130,7 +130,15 @@ function updatePianoKeyboardState(pianoKeyboard, newState) {
     }
 }
 
-function playPianoKeySound(pianoKeyNumber) {
+function playPianoKeySound(pianoKey) {
+    var pianoKeyboard = pianoKey.closest(".piano-keyboard");
+
+    var shouldPlaySound = pianoKeyboard.getAttribute("data-areKeySoundsEnabled");
+    if (shouldPlaySound == 'false') {
+        return;
+    }
+
+    var pianoKeyNumber = pianoKey.getAttribute('data-keyNumber');
     if (playingAudios.length > 1) {
         stopAllSounds();
     }

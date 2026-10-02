@@ -47,6 +47,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpi
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesParsingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoSoundPolicyService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.EditableAudioPerfectPitchConfigValidator;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.FinalizedAudioPerfectPitchConfigValidator;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch.PerfectPitchSessionStatsAggregator;
@@ -307,7 +308,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             dep = greenrobotEventBus;
 
         } else if (someClass.equals(SoundPlayerOnPianoKeyPressedHandler.class)) {
-            dep = new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));
+            dep = new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PianoKeyboardRepository.class), get(PianoSoundPolicyService.class));
 
         } else if (someClass.equals(HintDemonstratingOnNewPuzzleCreatedHandler.class)) {
             dep = new HintDemonstratingOnNewPuzzleCreatedHandler(get(HintDemonstratorDelegator.class));

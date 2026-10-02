@@ -10,5 +10,6 @@ public class PianoKeyboardViewModel {
 
     public final PianoKeyboardId id;
     public final String htmlClass;
+    public final boolean areKeySoundsEnabled;
     public final PianoKeyViewModel[] pianoKeys;
 }

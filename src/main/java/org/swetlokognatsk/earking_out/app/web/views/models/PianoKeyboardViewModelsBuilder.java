@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoSoundPolicyService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import lombok.AllArgsConstructor;
@@ -20,10 +21,12 @@ public class PianoKeyboardViewModelsBuilder {
 
     private final PianoKeyboardRepository pianoKeyboardRepository;
     private final PianoKeyColorService colorService;
+    private final PianoSoundPolicyService pianoSoundPolicyService;
 
     public PianoKeyboardViewModel build(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeys = buildPianoKeyViewModels(pianoKeyboardId);
-        return new PianoKeyboardViewModel(pianoKeyboardId, getHtmlClass(pianoKeyboardId), pianoKeys);
+        var areKeySoundsEnabled = pianoSoundPolicyService.shouldPlaySound(pianoKeyboardId);
+        return new PianoKeyboardViewModel(pianoKeyboardId, getHtmlClass(pianoKeyboardId), areKeySoundsEnabled, pianoKeys);
     }
 
     private String getHtmlClass(final PianoKeyboardId pianoKeyboardId) {
