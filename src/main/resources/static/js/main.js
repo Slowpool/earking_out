@@ -20,7 +20,7 @@ document.addEventListener('mousedown', function (e) {
         return;
     }
 
-    // TODO remove it. added in experimenting purposes
+    // sound playing logic is duplicated on frontend for performance
     playPianoKeySound(pianoKey.getAttribute('data-keyNumber'));
 
     var pianoKeyboard = pianoKey.closest('.piano-keyboard.puzzle-config');

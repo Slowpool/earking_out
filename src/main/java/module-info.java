@@ -28,7 +28,7 @@ module org.swetlokognatsk {
     requires org.hibernate.orm.core;
     requires lombok;
 
-    // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
+    // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them for learning/training. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     exports org.swetlokognatsk.earking_out.core.ports.piano;
