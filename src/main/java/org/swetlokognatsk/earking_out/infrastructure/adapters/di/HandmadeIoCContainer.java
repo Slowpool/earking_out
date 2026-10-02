@@ -89,6 +89,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpit
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBuilder;
 
+@Deprecated(forRemoval = true)
 public final class HandmadeIoCContainer implements IoCContainer {
 
     private static final User TEST_USER = new DesktopUser();
@@ -357,6 +358,9 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (someClass.equals(User.class)) {
             dep = user;
+
+        } else if (someClass.equals(PianoSoundPolicyService.class)) {
+            dep = new PianoSoundPolicyService(get(PuzzleConfigRepository.class));
 
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
