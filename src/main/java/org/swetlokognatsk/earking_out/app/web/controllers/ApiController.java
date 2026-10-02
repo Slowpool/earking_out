@@ -23,6 +23,7 @@ import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigV
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
@@ -41,6 +42,9 @@ public class ApiController {
 
     @GetMapping("/exercise/{exerciseName}/{exerciseType}")
     public ModelAndView exercise(@PathVariable final String exerciseName, @PathVariable final String exerciseType, final Exercise exercise) {
+        var exerciseService = DI.get(ExerciseService.class);
+        exerciseService.pickExercise(exercise);
+        
         var view = getExerciseView(exercise);
         var modelAndView = new ModelAndView(view);
 
