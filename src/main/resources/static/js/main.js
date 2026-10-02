@@ -49,7 +49,8 @@ document.addEventListener('mousedown', function (e) {
                 return;
             }
             if (response.guessIsSuccessful) {
-                updateCompletedPuzzlesNumber(response.numberOfCompletedPuzzles)
+                updateCompletedPuzzlesNumber(response.numberOfCompletedPuzzles);
+                updateHint(response.newHint);
             }
         });
         return;
@@ -150,6 +151,11 @@ function stopAllSounds() {
 function updateCompletedPuzzlesNumber(newCompletedPuzzlesNumber) {
     var numberOfPuzzlesElement = document.querySelector("#number-of-completed-puzzles");
     numberOfPuzzlesElement.textContent = newCompletedPuzzlesNumber;
+}
+
+function updateHint(newHint) {
+    var hintElement = document.querySelector("#audio-perfect-pitch-hint-player");
+    hintElement.setAttribute("src", newHint);
 }
 
 function sendPianoKeyAction(action, pianoKeyboardContext, pianoKeyboard, pianoKey, callback) {

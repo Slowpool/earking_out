@@ -15,4 +15,8 @@ public class WebAudioPerfectPitchHintDemonstrator implements AudioPerfectPitchHi
     public void demonstrateHint(final AudioPerfectPitchSolution solution) {
         pianoKeyNumberToPlay = solution.keyNumber;
     }
+
+    public String getHintUrl() {
+        return "/sounds/piano_keys/key%d.wav".formatted(pianoKeyNumberToPlay.value);
+    }
 }

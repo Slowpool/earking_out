@@ -11,7 +11,6 @@ import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDeleg
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.sound.WebAudioPerfectPitchHintDemonstrator;
-
 import lombok.AllArgsConstructor;
 
 @Component
@@ -29,12 +28,10 @@ public class AudioPerfectPitchPuzzleViewFiller {
 
         modelAndView.addObject("targetNumberOfPuzzles", session.getPuzzleConfig().targetNumberOfPuzzles);
 
-        var pianoKeyNumberHint = DI.get(WebAudioPerfectPitchHintDemonstrator.class)
-            .pianoKeyNumberToPlay.value;
-            // TODO specific class for this logic?
-        var hint = "/sounds/piano_keys/key%d.wav".formatted(pianoKeyNumberHint);
+        var hint = DI.get(WebAudioPerfectPitchHintDemonstrator.class)
+                .getHintUrl();
         modelAndView.addObject("hint", hint);
-        
+
         var guessingPianoKeyboardViewModel = pianoKeyboardsBuilder.build(AUDIO_PERFECT_PITCH_NOTES_GUESSING);
         modelAndView.addObject("guessingPianoKeyboardModel", guessingPianoKeyboardViewModel);
     }
