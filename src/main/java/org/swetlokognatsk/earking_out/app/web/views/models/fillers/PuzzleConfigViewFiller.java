@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyViewModel;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModel;
-import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewModelFiller;
-import org.swetlokognatsk.earking_out.app.web.views.models.fillers.perfectpitch.AudioPerfectPitchViewModelFiller;
+import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
+import org.swetlokognatsk.earking_out.app.web.views.models.fillers.perfectpitch.AudioPerfectPitchConfigViewFiller;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -24,14 +24,15 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise.unknownExercise;
 
 @Component
-public class PuzzleConfigViewModelFiller {
+public class PuzzleConfigViewFiller {
 
     public void fill(final Exercise exercise, final ModelAndView modelAndView) {
         var concreteFiller = switch (exercise) {
-        case AudioPerfectPitchExercise appe -> DI.get(AudioPerfectPitchViewModelFiller.class);
-        default -> throw new IllegalArgumentException("unknown exercise: %s".formatted(exercise.toString()));
+        case AudioPerfectPitchExercise appe -> DI.get(AudioPerfectPitchConfigViewFiller.class);
+        default -> throw new IllegalArgumentException(unknownExercise(exercise));
         };
         concreteFiller.fill(modelAndView);
     }

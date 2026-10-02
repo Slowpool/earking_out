@@ -36,5 +36,5 @@ puzzle_configs/audio_perfect_pitch.html
         guessing piano is soundless:
         <input type="checkbox" th:name="${guessingPianoIsSoundlessProp}" th:checked="${guessingPianoIsSoundless}" th:hx-patch="|/api/v1/puzzle/config/perfect-pitch/audio/update/${guessingPianoIsSoundlessProp}|" hx-trigger="change" hx-swap="none">
     </div>
-    <button type="submit">Start</button>
+    <button type="submit" hx-trigger="click" hx-post="/api/v1/session/start/perfect-pitch/audio" hx-target="#main-content">Start</button>
 </div>

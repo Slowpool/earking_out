@@ -23,7 +23,15 @@ public class PianoKeyboardViewModelsBuilder {
 
     public PianoKeyboardViewModel build(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeys = buildPianoKeyViewModels(pianoKeyboardId);
-        return new PianoKeyboardViewModel(pianoKeyboardId, pianoKeys);
+        return new PianoKeyboardViewModel(pianoKeyboardId, getHtmlClass(pianoKeyboardId), pianoKeys);
+    }
+
+    private String getHtmlClass(final PianoKeyboardId pianoKeyboardId) {
+        return switch (pianoKeyboardId) {
+            case AUDIO_PERFECT_PITCH_NOTES_PICKER, AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER -> "puzzle-config";
+            case AUDIO_PERFECT_PITCH_NOTES_GUESSING -> "perfect-pitch-guessing";
+            default -> throw new IllegalArgumentException("unkown piano keyboard id: %s".formatted(pianoKeyboardId.toString()));
+        };
     }
 
     private PianoKeyViewModel[] buildPianoKeyViewModels(final PianoKeyboardId pianoKeyboardId) {

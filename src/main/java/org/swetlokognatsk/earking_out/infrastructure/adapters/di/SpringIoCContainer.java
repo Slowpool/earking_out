@@ -143,8 +143,6 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(SessionRepositoryDelegator.class);
 
-        ctx.registerBean(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class, () -> new PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(get(PianoKeySoundsPlayer.class)));
-
         ctx.registerBean(InMemoryAudioPerfectPitchSessionRepository.class, () -> new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class)));
 
         ctx.registerBean(EndSessionAggregateDTOAssemblersFactory.class);
@@ -232,6 +230,9 @@ public final class SpringIoCContainer implements IoCContainer {
         // identity
         // TODO restore it back later
         // ctx.registerBean(DesktopUser.class);
+
+        ctx.registerBean(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class, () -> new PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(get(PianoKeySoundsPlayer.class)));
+
     }
 
     private void initWebBeans() {

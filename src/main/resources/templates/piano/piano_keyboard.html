@@ -1,5 +1,5 @@
 piano_keyboard.html
-<div th:id="|piano-keyboard-${pianoKeyboardModel.id}|" th:data-pianoKeyboardId="${pianoKeyboardModel.id}" class="piano-keyboard puzzle-config">
+<div th:id="|piano-keyboard-${pianoKeyboardModel.id}|" th:data-pianoKeyboardId="${pianoKeyboardModel.id}" th:class="|piano-keyboard ${pianoKeyboardModel.htmlClass}|">
     <div class="white-keys-layer">
         <button
             th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"

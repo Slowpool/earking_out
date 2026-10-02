@@ -19,13 +19,16 @@ import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPiano
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyReleasingResponse;
 import org.swetlokognatsk.earking_out.app.web.services.SimplePuzzleConfigPropertiesCaster;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
-import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewModelFiller;
+import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
+import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleViewFiller;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,15 +44,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ApiController {
 
     @GetMapping("/exercise/{exerciseName}/{exerciseType}")
-    public ModelAndView exercise(@PathVariable final String exerciseName, @PathVariable final String exerciseType, final Exercise exercise) {
+    public ModelAndView exercise(final Exercise exercise) {
         var exerciseService = DI.get(ExerciseService.class);
         exerciseService.pickExercise(exercise);
-        
+
         var view = getExerciseView(exercise);
         var modelAndView = new ModelAndView(view);
 
-        var puzzleConfigViewModelFiller = DI.get(PuzzleConfigViewModelFiller.class);
-        puzzleConfigViewModelFiller.fill(exercise, modelAndView);
+        var puzzleConfigViewFiller = DI.get(PuzzleConfigViewFiller.class);
+        puzzleConfigViewFiller.fill(exercise, modelAndView);
 
         return modelAndView;
     }
@@ -59,20 +62,21 @@ public class ApiController {
         return "puzzles/configs/perfect_pitch/audio_perfect_pitch_puzzle_config";
     }
 
-    @GetMapping("/session/start/{exerciseName}/{exerciseType}")
-    public ModelAndView startSession(@PathVariable final String exerciseName, @PathVariable final String exerciseType, final Exercise exercise) {
+    @PostMapping("/session/start/{exerciseName}/{exerciseType}")
+    public ModelAndView startSession(final Exercise exercise) {
+        var sessionService = DI.get(SessionService.class);
+        try {
+            sessionService.start();
+        } catch (InvalidPuzzleConfigException e) {
+            // TODO display errors
+            return exercise(exercise);
+        }
+
         var view = getSessionView(exercise);
         var modelAndView = new ModelAndView(view);
 
-        modelAndView.addObject("numberOfCompletedPuzzles", 5);
-
-        modelAndView.addObject("targetNumberOfPuzzles", 100);
-
-        // var guessingPianoKeyboardViewModel = buildPianoKeyboardViewModel(AUDIO_PERFECT_PITCH_NOTES_GUESSING);
-        // modelAndView.addObject("guessingPianoKeyboardModel", guessingPianoKeyboardViewModel);
-
-        modelAndView.addObject("exerciseName", exerciseName);
-        modelAndView.addObject("exerciseType", exerciseType);
+        var puzzleViewFiller = DI.get(PuzzleViewFiller.class);
+        puzzleViewFiller.fill(exercise, modelAndView);
 
         return modelAndView;
     }

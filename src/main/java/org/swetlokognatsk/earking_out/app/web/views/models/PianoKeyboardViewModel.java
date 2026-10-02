@@ -9,5 +9,6 @@ import lombok.Data;
 public class PianoKeyboardViewModel {
 
     public final PianoKeyboardId id;
+    public final String htmlClass;
     public final PianoKeyViewModel[] pianoKeys;
 }

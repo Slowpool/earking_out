@@ -18,7 +18,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.Pi
 @Lazy
 @AllArgsConstructor
 @ConditionalOnExpression(SpringApp.IS_WEB_BUILD)
-public class AudioPerfectPitchViewModelFiller {
+public class AudioPerfectPitchConfigViewFiller {
 
     private final PuzzleConfigRepository puzzleConfigRepository;
     private final PianoKeyboardViewModelsBuilder pianoKeyboardsBuilder;
