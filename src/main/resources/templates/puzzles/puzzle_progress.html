@@ -1,6 +1,12 @@
 puzzle_progress.html
 <div>
-    <span th:text="|${numberOfCompletedPuzzles} of ${targetNumberOfPuzzles} are completed|"></span>
-    </br>
-    progress bar
+    <div>
+        <span id="number-of-completed-puzzles" th:text="${numberOfCompletedPuzzles}"></span>
+        of
+        <span id="target-number-of-puzzles" th:text="${targetNumberOfPuzzles}"></span>
+        are completed
+    </div>
+    <div>
+        progress bar
+    </div>
 </div>

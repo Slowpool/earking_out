@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class PuzzleConfigPianoKeyboardActionRequest {
+public class PianoKeyboardActionRequest {
 
     public final PianoKeyboardId pianoKeyboardId;
     public final PianoKeyNumber pianoKeyNumber;

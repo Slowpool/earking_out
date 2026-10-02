@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.swetlokognatsk.earking_out.app.web.models.requests.PuzzleConfigPianoKeyboardActionRequest;
+import org.swetlokognatsk.earking_out.app.web.models.requests.PianoKeyboardActionRequest;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyPressingResponse;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyReleasingResponse;
+import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzlePianoKeyPressingResponse;
+import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzlePianoKeyReleasingResponse;
+import org.swetlokognatsk.earking_out.app.web.services.PuzzlePianoKeyPressingResponseBuilder;
+import org.swetlokognatsk.earking_out.app.web.services.PuzzlePianoKeyReleasingResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.services.SimplePuzzleConfigPropertiesCaster;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
@@ -62,7 +66,7 @@ public class ApiController {
         return "puzzles/configs/perfect_pitch/audio_perfect_pitch_puzzle_config";
     }
 
-    @PostMapping("/session/start/{exerciseName}/{exerciseType}")
+    @PostMapping("/session/{exerciseName}/{exerciseType}/start")
     public ModelAndView startSession(final Exercise exercise) {
         var sessionService = DI.get(SessionService.class);
         try {
@@ -86,7 +90,7 @@ public class ApiController {
         return "puzzles/perfect_pitch/audio_perfect_pitch_puzzle";
     }
 
-    @GetMapping("/session/finish/{exerciseName}/{exerciseType}")
+    @GetMapping("/session/{exerciseName}/{exerciseType}/finish")
     public ModelAndView finishSession(@PathVariable final String exerciseName, @PathVariable final String exerciseType, final Exercise exercise) {
         var view = getStatsSessionView(exercise);
         var modelAndView = new ModelAndView(view);
@@ -108,15 +112,16 @@ public class ApiController {
     // TODO the difference between @RequestParam/RequestBody? why not Map<String,String>?
     @PatchMapping("/puzzle/config/{exerciseName}/{exerciseType}/update/{propertyName}")
     public ResponseEntity<?> updatePuzzleConfigProperty(final Exercise exercise, @PathVariable final String propertyName, @RequestParam final MultiValueMap<String, String> body) {
-        var puzzleConfigService = DI.get(PuzzleConfigService.class);
         var simplePuzzleConfigPropertiesCaster = DI.get(SimplePuzzleConfigPropertiesCaster.class);
         var newValueList = body.get(propertyName);
         var newValue = newValueList == null || newValueList.isEmpty()
                 ? null
                 : newValueList.getFirst();
+
         try {
             var castedNewValue = simplePuzzleConfigPropertiesCaster.cast(exercise, propertyName, newValue);
-            puzzleConfigService.updateProperty(exercise, propertyName, castedNewValue);
+            DI.get(PuzzleConfigService.class)
+                    .updateProperty(exercise, propertyName, castedNewValue);
             return ResponseEntity.ok().body(null);
         } catch (IllegalArgumentException e) {
             // TODO add detailed info
@@ -127,26 +132,59 @@ public class ApiController {
     // TODO create new PianoKey view model, with only variable piano key data (isPressed, isSelected), without color and octaveScopedKeyNumber
     // TODO should ResponseEntity<?> remain or should it return PuzzleConfigPianoKeyPressingResult
     @PostMapping("/puzzle/config/{exerciseName}/{exerciseType}/piano-keyboard/press-key")
-    public ResponseEntity<PuzzleConfigPianoKeyPressingResponse> pressPuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PuzzleConfigPianoKeyboardActionRequest body) {
-        var pianoKeyboardService = DI.get(PianoKeyboardService.class);
-        pianoKeyboardService.pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
+    public ResponseEntity<PuzzleConfigPianoKeyPressingResponse> pressPuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
+        DI.get(PianoKeyboardService.class)
+                .pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
 
-        var pianoKeyboardBuilder = DI.get(PianoKeyboardViewModelsBuilder.class);
-        var pianoKeyboardViewModel = pianoKeyboardBuilder.build(body.pianoKeyboardId);
+        var pianoKeyboardViewModel = DI.get(PianoKeyboardViewModelsBuilder.class)
+                .build(body.pianoKeyboardId);
         var response = new PuzzleConfigPianoKeyPressingResponse(pianoKeyboardViewModel);
 
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/puzzle/config/{exerciseName}/{exerciseType}/piano-keyboard/release-key")
-    public ResponseEntity<PuzzleConfigPianoKeyReleasingResponse> releasePuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PuzzleConfigPianoKeyboardActionRequest body) {
+    public ResponseEntity<PuzzleConfigPianoKeyReleasingResponse> releasePuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
+        DI.get(PianoKeyboardService.class)
+                .releasePianoKey(body.pianoKeyboardId);
+
+        var pianoKeyboardViewModel = DI.get(PianoKeyboardViewModelsBuilder.class)
+                .build(body.pianoKeyboardId);
+        var response = new PuzzleConfigPianoKeyReleasingResponse(pianoKeyboardViewModel);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // // TODO this endpoint is for other types of input, at least in perfect pitch user can also input plain text as guess.
+    // @PostMapping("/session/{exerciseName}/{exerciseType}/guess")
+    // public ResponseEntity<PuzzleConfigPianoKeyReleasingResponse> guess(final Exercise exercise, @RequestBody final PuzzleConfigPianoKeyboardActionRequest body) {
+    //     var pianoKeyboardService = DI.get(PianoKeyboardService.class);
+    //     pianoKeyboardService.releasePianoKey(body.pianoKeyboardId);
+
+    //     var pianoKeyboardBuilder = DI.get(PianoKeyboardViewModelsBuilder.class);
+    //     var pianoKeyboardViewModel = pianoKeyboardBuilder.build(body.pianoKeyboardId);
+    //     var response = new PuzzleConfigPianoKeyReleasingResponse(pianoKeyboardViewModel);
+
+    //     return ResponseEntity.ok(response);
+    // }
+
+    @PostMapping("/puzzle/{exerciseName}/{exerciseType}/piano-keyboard/press-key")
+    public ResponseEntity<? extends PuzzlePianoKeyPressingResponse> pressPuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
+        DI.get(PianoKeyboardService.class)
+                .pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
+
+        var response = DI.get(PuzzlePianoKeyPressingResponseBuilder.class)
+                .build(exercise);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/puzzle/{exerciseName}/{exerciseType}/piano-keyboard/release-key")
+    public ResponseEntity<? extends PuzzlePianoKeyReleasingResponse> releasePuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
         var pianoKeyboardService = DI.get(PianoKeyboardService.class);
         pianoKeyboardService.releasePianoKey(body.pianoKeyboardId);
 
-        var pianoKeyboardBuilder = DI.get(PianoKeyboardViewModelsBuilder.class);
-        var pianoKeyboardViewModel = pianoKeyboardBuilder.build(body.pianoKeyboardId);
-        var response = new PuzzleConfigPianoKeyReleasingResponse(pianoKeyboardViewModel);
-
+        var response = DI.get(PuzzlePianoKeyReleasingResponseBuilder.class)
+                .build(exercise);
         return ResponseEntity.ok(response);
     }
 }

@@ -2,8 +2,17 @@
 const WHITE = 'WHITE';
 const BLACK = 'BLACK';
 
+const SESSION_COMPLETED = 'COMPLETED';
+
+const PUZZLE_CONFIG_CONTEXT = 'PUZZLE_CONFIG_CONTEXT';
+const PUZZLE_CONTEXT = 'PUZZLE_CONTEXT';
+
+const PRESS = 'PRESS';
+const RELEASE = 'RELEASE';
+
 var pressedPianoKey = null;
 var playingAudios = {};
+var sessionState = null;
 
 document.addEventListener('mousedown', function (e) {
     var pianoKey = e.target.closest('.piano-key')
@@ -11,70 +20,72 @@ document.addEventListener('mousedown', function (e) {
         return;
     }
 
-    pressedPianoKey = pianoKey;
     // TODO remove it. added in experimenting purposes
     playPianoKeySound(pianoKey.getAttribute('data-keyNumber'));
 
     var pianoKeyboard = pianoKey.closest('.piano-keyboard.puzzle-config');
     if (pianoKeyboard) {
-        const pianoKeyboardId = pianoKeyboard.getAttribute("data-pianoKeyboardId")
-        const keyNumber = pianoKey.getAttribute('data-keyNumber');
+        if (pressedPianoKey) {
+            sendPianoKeyAction(RELEASE, PUZZLE_CONFIG_CONTEXT, pianoKeyboard, pressedPianoKey, null);
+        }
+        pressedPianoKey = pianoKey;
 
-        ajax('POST', '/api/v1/puzzle/config/perfect-pitch/audio/piano-keyboard/press-key',
-            {
-                body: {
-                    pianoKeyboardId: pianoKeyboardId,
-                    pianoKeyNumber: keyNumber
-                },
-                handler: function (response) {
-                    // TODO display errors
-                    console.log(`response: ${JSON.stringify(response)}`);
-                    updatePianoKeyboardState(pianoKeyboard, response.pianoKeyboard);
-                }
-            }
-        );
+        sendPianoKeyAction(PRESS, PUZZLE_CONFIG_CONTEXT, pianoKeyboard, pianoKey, null);
         return;
     }
 
-    // TODO looking for other piano keyboard types
+    pianoKeyboard = pianoKey.closest('.piano-keyboard.perfect-pitch-guessing');
+    if (pianoKeyboard) {
+        if (pressedPianoKey) {
+            sendPianoKeyAction(RELEASE, PUZZLE_CONTEXT, pianoKeyboard, pressedPianoKey, null);
+        }
+        pressedPianoKey = pianoKey;
+
+        sendPianoKeyAction(PRESS, PUZZLE_CONTEXT, pianoKeyboard, pianoKey, function (response) {
+            sessionState = response.sessionState;
+            if (sessionState == SESSION_COMPLETED) {
+                // TODO
+                alert("display session stats");
+                return;
+            }
+            if (response.guessIsSuccessful) {
+                updateCompletedPuzzlesNumber(response.numberOfCompletedPuzzles)
+            }
+        });
+        return;
+    }
 });
 
 document.addEventListener('mouseup', function (e) {
-    if (pressedPianoKey) {
-        var pianoKey = pressedPianoKey;
-    }
-    else {
+    if (!pressedPianoKey) {
         return;
-        
     }
+
+    var pianoKey = pressedPianoKey;
+    pressedPianoKey = null;
 
     var pianoKeyboard = pianoKey.closest('.piano-keyboard.puzzle-config');
     if (pianoKeyboard) {
-        const pianoKeyboardId = pianoKeyboard.getAttribute("data-pianoKeyboardId")
-        const keyNumber = pianoKey.getAttribute('data-keyNumber');
-
-        ajax('POST', '/api/v1/puzzle/config/perfect-pitch/audio/piano-keyboard/release-key',
-            {
-                body: {
-                    pianoKeyboardId: pianoKeyboardId,
-                    pianoKeyNumber: keyNumber
-                },
-                handler: function (response) {
-                    // TODO display errors
-                    console.log(`response: ${JSON.stringify(response)}`);
-                    updatePianoKeyboardState(pianoKeyboard, response.pianoKeyboard);
-                }
-            }
-        );
+        sendPianoKeyAction(RELEASE, PUZZLE_CONFIG_CONTEXT, pianoKeyboard, pianoKey, null);
         return;
     }
 
-    // TODO looking for other piano keyboard types
+    pianoKeyboard = pianoKey.closest('.piano-keyboard.perfect-pitch-guessing');
+    if (pianoKeyboard) {
+        if (sessionState == SESSION_COMPLETED) {
+            // if session is completed, no new events can be thrown, including piano key releasing. so, dodging the piano key releasing on ui level
+            alert('dodging the piano key release');
+            return;
+        }
+
+        sendPianoKeyAction(RELEASE, PUZZLE_CONTEXT, pianoKeyboard, pianoKey, null);
+        return;
+    }
 });
 
-function ajax(method, url, options = {}) {
+function ajax(method, url, options = {}, async = true) {
     const xhr = new XMLHttpRequest();
-    xhr.open(method.toUpperCase(), url, true);
+    xhr.open(method.toUpperCase(), url, async);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Accept', 'application/json');
 
@@ -134,4 +145,35 @@ function stopAllSounds() {
     // it may seem awkward that it stops only one sound, but it's because in future several sounds played the same moment feature will be added, probably with setting allowing to on/off this behavior
     playingAudios[0].pause();
     playingAudios[0].currentTime = 0;
+}
+
+function updateCompletedPuzzlesNumber(newCompletedPuzzlesNumber) {
+    var numberOfPuzzlesElement = document.querySelector("#number-of-completed-puzzles");
+    numberOfPuzzlesElement.textContent = newCompletedPuzzlesNumber;
+}
+
+function sendPianoKeyAction(action, pianoKeyboardContext, pianoKeyboard, pianoKey, callback) {
+    const pianoKeyboardId = pianoKeyboard.getAttribute("data-pianoKeyboardId")
+    const keyNumber = pianoKey.getAttribute('data-keyNumber');
+
+    var uri = pianoKeyboardContext == PUZZLE_CONFIG_CONTEXT
+        ? `/api/v1/puzzle/config/perfect-pitch/audio/piano-keyboard/${action.toLowerCase()}-key`
+        : `/api/v1/puzzle/perfect-pitch/audio/piano-keyboard/${action.toLowerCase()}-key`;
+
+    ajax('POST', uri,
+        {
+            body: {
+                pianoKeyboardId: pianoKeyboardId,
+                pianoKeyNumber: keyNumber
+            },
+            handler: function (response) {
+                console.log(`response: ${JSON.stringify(response)}`);
+                updatePianoKeyboardState(pianoKeyboard, response.pianoKeyboard);
+
+                if (callback) {
+                    callback(response);
+                }
+            }
+        }, action != PRESS
+    );
 }
