@@ -1,9 +1,11 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise.unknownExercise;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,12 +28,14 @@ import org.swetlokognatsk.earking_out.app.web.services.SimplePuzzleConfigPropert
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleViewFiller;
+import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
@@ -175,9 +179,38 @@ public class ApiController {
         DI.get(PianoKeyboardService.class)
                 .pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
 
+        persistQueuedEventLogs(sessionId);
         var response = DI.get(PuzzlePianoKeyPressingResponseBuilder.class)
                 .build(exercise, sessionId);
         return ResponseEntity.ok(response);
+    }
+
+    // TODO now this is a temporary hack that executes all globally queued tasks. why to do it? events a logged asynchronously, and if user finishes the session before all events are logged, stats will be based on partial event logs and consequently they will be incorrect. debugging i figured out it's still imperfect, - there's still a possibility of wrong stats, but it's much lower
+    private void persistQueuedEventLogs(final SessionId sessionId) {
+        var sessionDto = DI.get(SessionRepositoryDelegator.class)
+                .getSessionAggregateDTO(sessionId);
+
+        if (sessionDto.state == SessionStates.COMPLETED || sessionDto.state == SessionStates.ABORTED) {
+            executeAllTasksSynchronously();
+        }
+    }
+
+    private void executeAllTasksSynchronously() {
+        var taskExecutor = DI.get(ThreadPoolTaskExecutor.class);
+
+        var remainedTasks = new LinkedList<Runnable>();
+        taskExecutor.getThreadPoolExecutor()
+                .getQueue()
+                .drainTo(remainedTasks);
+
+        for (var task : remainedTasks) {
+            try {
+                task.run();
+            } catch (Throwable e) {
+                // TODO log
+                System.out.println("failed to execute task: %s".formatted(e.getMessage()));
+            }
+        }
     }
 
     // why no sessionId? because either the session is open, either it's closed and ui must not send any release commands after session is closed. such a convention.

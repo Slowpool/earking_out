@@ -9,7 +9,7 @@
         </tr>
     </thead>
     <tr th:each="noteStats : ${stats.notesStats}">
-        <td th:text="${noteStats.note}"></td>
+        <td th:text="${noteStats.note.value}"></td>
         <td th:text="${noteStats.numberOfAppearances}"></td>
         <td th:text="${noteStats.numberOfAllGuesses}"></td>
         <td th:text="${noteStats.numberOfPerfectGuesses}"></td>

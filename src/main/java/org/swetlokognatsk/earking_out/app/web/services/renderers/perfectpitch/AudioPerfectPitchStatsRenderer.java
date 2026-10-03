@@ -44,17 +44,6 @@ public class AudioPerfectPitchStatsRenderer {
         return renderTemplate("/stats/session/perfect_pitch/audio_perfect_pitch_session_stats", model);
     }
 
-    private String renderExtendedStatsBlock(final PerfectPitchSessionStats<AudioPerfectPitchExercise> stats) {
-        // if stats recording is disabled, there will be no stats
-        if (stats.notesStats.length == 0) {
-            return "";
-        }
-
-        var variables = new HashMap<String, Object>();
-        variables.put("stats", stats);
-        return renderTemplate("/stats/session/perfect_pitch/extended_audio_perfect_pitch_session_stats.html", variables);
-    }
-
     // TODO ofc put it out of current class
     private final String renderTemplate(final String template, final HashMap<String, Object> variables) {
         var context = new Context(Locale.getDefault(), variables);
