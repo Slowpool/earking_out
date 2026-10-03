@@ -12,12 +12,12 @@ public record SessionId(UUID id) implements Serializable {
         Objects.requireNonNull(id);
     }
 
-    public static SessionId random() {
-        return new SessionId(UUID.randomUUID());
+    public SessionId(final String value) {
+        this(UUID.fromString(value));
     }
 
-    public static SessionId fromString(final String value) {
-        return new SessionId(UUID.fromString(value));
+    public static SessionId random() {
+        return new SessionId(UUID.randomUUID());
     }
 
     public String toString() {

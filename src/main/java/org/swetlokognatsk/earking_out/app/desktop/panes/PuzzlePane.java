@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.app.desktop.panes;
 
 import org.swetlokognatsk.earking_out.app.desktop.events.exercises.ExerciseFinishedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.TextHelper;
+import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -29,13 +30,16 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
     protected final Label puzzleProgressLabel;
     protected final VBox puzzlesProgress;
 
+    protected final SessionRepositoryDelegator sessionRepository;
+
     protected abstract Pane buildInnerPuzzlePane(final PCDTO puzzleConfigDto);
 
-    public PuzzlePane(final SessionId sessionId, final PCDTO puzzleConfigDto, final double width, final double height, final SS sessionService) {
+    public PuzzlePane(final SessionId sessionId, final PCDTO puzzleConfigDto, final double width, final double height, final SS sessionService, final SessionRepositoryDelegator sessionRepository) {
         this.sessionId = sessionId;
         this.exercise = puzzleConfigDto.exercise;
         this.targetNumberOfPuzzles = puzzleConfigDto.targetNumberOfPuzzles;
         this.sessionService = sessionService;
+        this.sessionRepository = sessionRepository;
 
         setWidth(width);
         setHeight(height);

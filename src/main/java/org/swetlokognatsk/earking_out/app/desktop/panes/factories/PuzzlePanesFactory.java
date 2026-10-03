@@ -14,13 +14,9 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 public final class PuzzlePanesFactory {
 
     private final SessionRepositoryDelegator sessionRepository;
-    private final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister;
-    private final PianoKeyboardService pianoKeyboardService;
 
-    public PuzzlePanesFactory(final SessionRepositoryDelegator sessionRepository, final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister, final PianoKeyboardService pianoKeyboardService) {
+    public PuzzlePanesFactory(final SessionRepositoryDelegator sessionRepository) {
         this.sessionRepository = sessionRepository;
-        this.pianoKeyboardHandlersRegister = pianoKeyboardHandlersRegister;
-        this.pianoKeyboardService = pianoKeyboardService;
     }
 
     public PuzzlePane<?, ?, ?> create(final SessionId sessionId, final double width, final double height) {
@@ -33,7 +29,7 @@ public final class PuzzlePanesFactory {
         };
 
         var puzzlePane = switch (exercise) {
-        case AudioPerfectPitchExercise e -> new AudioPerfectPitchPane(sessionId, (AudioPerfectPitchConfigDTO) puzzleConfigDto, width, height, (AudioPerfectPitchSessionService) service, pianoKeyboardHandlersRegister, pianoKeyboardService);
+        case AudioPerfectPitchExercise e -> new AudioPerfectPitchPane(sessionId, (AudioPerfectPitchConfigDTO) puzzleConfigDto, width, height, (AudioPerfectPitchSessionService) service, DI.get(PianoKeyboardHandlersRegister.class), DI.get(PianoKeyboardService.class), DI.get(SessionRepositoryDelegator.class));
         default -> throw new RuntimeException("unkown exercise: " + exercise);
         };
 

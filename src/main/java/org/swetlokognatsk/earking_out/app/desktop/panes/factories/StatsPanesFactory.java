@@ -22,7 +22,7 @@ public final class StatsPanesFactory {
     }
 
     public SessionStatsPane<?, ?, ?> create(final SessionId sessionId) {
-        var sessionDto = SessionAggregateDTOAssembler.getSessionAggregateDTO(sessionId);
+        var sessionDto = sessionRepository.getSessionAggregateDTO(sessionId);
         var exercise = sessionDto.puzzleConfigDto.exercise;
         var sessionStatsPane = switch (exercise) {
         case AudioPerfectPitchExercise e -> new PerfectPitchStatsPane<AudioPerfectPitchExercise, AudioPerfectPitchSessionAggregateDTO>((AudioPerfectPitchSessionAggregateDTO) sessionDto, DI.get(PerfectPitchSessionStatsService.class));

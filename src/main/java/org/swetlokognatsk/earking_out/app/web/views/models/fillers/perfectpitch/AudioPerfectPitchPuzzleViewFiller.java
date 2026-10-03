@@ -24,6 +24,9 @@ public class AudioPerfectPitchPuzzleViewFiller {
 
     public void fill(final ModelAndView modelAndView) {
         var session = sessionRepository.getActiveSession();
+
+        modelAndView.addObject("sessionId", session.getId());
+
         modelAndView.addObject("numberOfCompletedPuzzles", session.getStats().puzzlesCompleted);
 
         modelAndView.addObject("targetNumberOfPuzzles", session.getPuzzleConfig().targetNumberOfPuzzles);

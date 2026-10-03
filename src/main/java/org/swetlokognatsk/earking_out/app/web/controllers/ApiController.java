@@ -59,9 +59,8 @@ public class ApiController {
 
         var view = getExerciseView(exercise);
         var modelAndView = new ModelAndView(view);
-
-        var puzzleConfigViewFiller = DI.get(PuzzleConfigViewFiller.class);
-        puzzleConfigViewFiller.fill(exercise, modelAndView);
+        DI.get(PuzzleConfigViewFiller.class)
+                .fill(exercise, modelAndView);
 
         return modelAndView;
     }
@@ -83,9 +82,8 @@ public class ApiController {
 
         var view = getSessionView(exercise);
         var modelAndView = new ModelAndView(view);
-
-        var puzzleViewFiller = DI.get(PuzzleViewFiller.class);
-        puzzleViewFiller.fill(exercise, modelAndView);
+        DI.get(PuzzleViewFiller.class)
+                .fill(exercise, modelAndView);
 
         return modelAndView;
     }
@@ -114,6 +112,7 @@ public class ApiController {
         return "stats/session/perfect_pitch/audio_perfect_pitch_session_stats";
     }
 
+    // TODO use Map<String,String>, grasp the difference between them
     // TODO the difference between @RequestParam/RequestBody? why not Map<String,String>?
     @PatchMapping("/puzzle/config/{exerciseName}/{exerciseType}/update/{propertyName}")
     public ResponseEntity<?> updatePuzzleConfigProperty(final Exercise exercise, @PathVariable final String propertyName, @RequestParam final MultiValueMap<String, String> body) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.sound.WebAudioPerfectPitchHintDemonstrator;
@@ -19,19 +20,21 @@ import lombok.AllArgsConstructor;
 public class AudioPerfectPitchPianoKeyPressingResponseBuilder {
 
     private final PianoKeyboardViewModelsBuilder pianoKeyboardViewModelsBuilder;
-    private final AudioPerfectPitchSessionRepository sessionRepository;
+    private final SessionRepositoryDelegator sessionRepository;
 
     public AudioPerfectPitchPianoKeyPressingResponse build(final SessionId sessionId) {
+        var session = (AudioPerfectPitchSessionAggregateDTO) sessionRepository.getSessionAggregateDTO(sessionId);
+
+        var puzzlesCompleted = session.stats.puzzlesCompleted;
+        var prevGuessIsSuccessful = session.prevGuessIsSuccessful;
+
         // well, i'm not sure it should be hardcoded, but i can't made up cases when another piano keyboard id may be used here
         var pianoKeyboard = pianoKeyboardViewModelsBuilder.build(AUDIO_PERFECT_PITCH_NOTES_GUESSING);
 
-        var session = sessionRepository.getSessionDto(sessionId);
-
-        var prevGuessIsSuccessful = session.getPrevGuessIsSuccessful();
         var newHint = prevGuessIsSuccessful ? DI.get(WebAudioPerfectPitchHintDemonstrator.class)
                 .getHintUrl()
                 : null;
 
-        return new AudioPerfectPitchPianoKeyPressingResponse(session.getPuzzlesCompleted(), prevGuessIsSuccessful, session.getState(), pianoKeyboard, newHint);
+        return new AudioPerfectPitchPianoKeyPressingResponse(puzzlesCompleted, prevGuessIsSuccessful, session.state, pianoKeyboard, newHint);
     }
 }

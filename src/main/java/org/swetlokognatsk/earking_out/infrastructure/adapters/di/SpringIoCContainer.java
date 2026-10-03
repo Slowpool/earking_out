@@ -142,7 +142,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(AudioPerfectPitchSessionService.class, () -> new AudioPerfectPitchSessionService(get(PuzzleConfigRepository.class), get(AudioPerfectPitchSessionRepository.class), get(SessionAggregatesFactory.class), get(FinalizedAudioPerfectPitchConfigValidator.class)));
 
-        ctx.registerBean(SessionRepositoryDelegator.class);
+        ctx.registerBean(SessionRepositoryDelegator.class, () -> new SessionRepositoryDelegator());
 
         ctx.registerBean(InMemoryAudioPerfectPitchSessionRepository.class, () -> new InMemoryAudioPerfectPitchSessionRepository(get(SessionAggregatesFactory.class)));
 
@@ -217,7 +217,7 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(SpringPianoKeySoundFilesResolver.class);
 
         // javafx beans
-        ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(get(SessionRepositoryDelegator.class), get(PianoKeyboardHandlersRegister.class), get(PianoKeyboardService.class)));
+        ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(get(SessionRepositoryDelegator.class)));
 
         ctx.registerBean(StatsPanesFactory.class, () -> new StatsPanesFactory(get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class)));
 

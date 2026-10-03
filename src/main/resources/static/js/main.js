@@ -26,32 +26,37 @@ document.addEventListener('mousedown', function (e) {
     var pianoKeyboard = pianoKey.closest('.piano-keyboard.puzzle-config');
     if (pianoKeyboard) {
         if (pressedPianoKey) {
-            sendPianoKeyAction(RELEASE, PUZZLE_CONFIG_CONTEXT, pianoKeyboard, pressedPianoKey, null);
+            sendPianoKeyAction(RELEASE, PUZZLE_CONFIG_CONTEXT, pianoKeyboard, pressedPianoKey);
         }
         pressedPianoKey = pianoKey;
 
-        sendPianoKeyAction(PRESS, PUZZLE_CONFIG_CONTEXT, pianoKeyboard, pianoKey, null);
+        sendPianoKeyAction(PRESS, PUZZLE_CONFIG_CONTEXT, pianoKeyboard, pianoKey);
         return;
     }
 
     pianoKeyboard = pianoKey.closest('.piano-keyboard.perfect-pitch-guessing');
     if (pianoKeyboard) {
         if (pressedPianoKey) {
-            sendPianoKeyAction(RELEASE, PUZZLE_CONTEXT, pianoKeyboard, pressedPianoKey, null);
+            sendPianoKeyAction(RELEASE, PUZZLE_CONTEXT, pianoKeyboard, pressedPianoKey);
         }
         pressedPianoKey = pianoKey;
 
-        sendPianoKeyAction(PRESS, PUZZLE_CONTEXT, pianoKeyboard, pianoKey, function (response) {
-            sessionState = response.sessionState;
-            if (sessionState == SESSION_COMPLETED) {
-                // TODO
-                alert("display session stats");
-                return;
-            }
-            if (response.guessIsSuccessful) {
-                updateCompletedPuzzlesNumber(response.numberOfCompletedPuzzles);
-                updateHint(response.newHint);
-            }
+        let sessionId = document.querySelector("#sessionId")
+            .getAttribute("data-sessionId");
+        sendPianoKeyAction(PRESS, PUZZLE_CONTEXT, pianoKeyboard, pianoKey, {
+            callback: function (response) {
+                sessionState = response.sessionState;
+                if (sessionState == SESSION_COMPLETED) {
+                    // TODO
+                    alert("display session stats");
+                    return;
+                }
+                if (response.guessIsSuccessful) {
+                    updateCompletedPuzzlesNumber(response.numberOfCompletedPuzzles);
+                    updateHint(response.newHint);
+                }
+            },
+            queryString: `?sessionId=${sessionId}`
         });
         return;
     }
@@ -67,7 +72,7 @@ document.addEventListener('mouseup', function (e) {
 
     var pianoKeyboard = pianoKey.closest('.piano-keyboard.puzzle-config');
     if (pianoKeyboard) {
-        sendPianoKeyAction(RELEASE, PUZZLE_CONFIG_CONTEXT, pianoKeyboard, pianoKey, null);
+        sendPianoKeyAction(RELEASE, PUZZLE_CONFIG_CONTEXT, pianoKeyboard, pianoKey);
         return;
     }
 
@@ -79,7 +84,7 @@ document.addEventListener('mouseup', function (e) {
             return;
         }
 
-        sendPianoKeyAction(RELEASE, PUZZLE_CONTEXT, pianoKeyboard, pianoKey, null);
+        sendPianoKeyAction(RELEASE, PUZZLE_CONTEXT, pianoKeyboard, pianoKey);
         return;
     }
 });
@@ -166,13 +171,13 @@ function updateHint(newHint) {
     hintElement.setAttribute("src", newHint);
 }
 
-function sendPianoKeyAction(action, pianoKeyboardContext, pianoKeyboard, pianoKey, callback) {
+function sendPianoKeyAction(action, pianoKeyboardContext, pianoKeyboard, pianoKey, { callback = null, queryString = '' } = {}) {
     const pianoKeyboardId = pianoKeyboard.getAttribute("data-pianoKeyboardId")
     const keyNumber = pianoKey.getAttribute('data-keyNumber');
 
     var uri = pianoKeyboardContext == PUZZLE_CONFIG_CONTEXT
-        ? `/api/v1/puzzle/config/perfect-pitch/audio/piano-keyboard/${action.toLowerCase()}-key`
-        : `/api/v1/puzzle/perfect-pitch/audio/piano-keyboard/${action.toLowerCase()}-key`;
+        ? `/api/v1/puzzle/config/perfect-pitch/audio/piano-keyboard/${action.toLowerCase()}-key${queryString}`
+        : `/api/v1/puzzle/perfect-pitch/audio/piano-keyboard/${action.toLowerCase()}-key${queryString}`;
 
     ajax('POST', uri,
         {
