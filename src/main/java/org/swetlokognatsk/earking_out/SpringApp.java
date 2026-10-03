@@ -9,15 +9,20 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.DesktopUser;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 
 @SpringBootApplication
 public class SpringApp {
 
     public static Build build;
 
+    public static final String IS_DESKTOP_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).DESKTOP";
+    public static final String IS_WEB_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).WEB";
+
     @Bean
     @Primary
-    @ConditionalOnExpression("T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).DESKTOP")
+    @ConditionalOnExpression(IS_DESKTOP_BUILD)
     DataSource dataSource(final Environment env) {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty("spring.datasource.driver-class-name"));
@@ -44,4 +49,10 @@ public class SpringApp {
         return executor;
     }
 
+    // TODO add user logic on web, yet it is a dev latch
+    @Bean
+    // @ConditionalOnExpression(IS_DESKTOP_BUILD)
+    User getUser() {
+        return new DesktopUser();
+    }
 }

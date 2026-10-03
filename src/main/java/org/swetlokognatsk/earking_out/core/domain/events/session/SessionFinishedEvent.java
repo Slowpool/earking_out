@@ -1,20 +1,17 @@
 package org.swetlokognatsk.earking_out.core.domain.events.session;
 
 import java.time.LocalDateTime;
-import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 
-// TODO SessionFinishedEvent
-public final class SessionFinishedEvent extends DomainEvent {
+public final class SessionFinishedEvent extends SessionEvent {
     private static final long serialVersionUID = 1L;
 
-    public final SessionId sessionId;
     public final boolean isAborted;
 
-    public SessionFinishedEvent(final LocalDateTime timestamp, final SessionId sessionId, final boolean isAborted) {
-        super(timestamp);
-
-        this.sessionId = sessionId;
+    public SessionFinishedEvent(final UserId userId, final LocalDateTime timestamp, final SessionId sessionId, final boolean isAborted) {
+        super(userId, timestamp, sessionId);
+        
         this.isAborted = isAborted;
     }
 }

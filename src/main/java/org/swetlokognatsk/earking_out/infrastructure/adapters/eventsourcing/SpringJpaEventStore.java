@@ -9,8 +9,12 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventSourcingEventId;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.events.EventVersionsRegistry;
+
 import jakarta.persistence.EntityManager;
 
 public class SpringJpaEventStore implements EventStore {
@@ -18,11 +22,13 @@ public class SpringJpaEventStore implements EventStore {
     private final EntityManager entityManager;
     private final TransactionTemplate transactionTemplate;
     private final DomainEventJsonSerializer domainEventJsonSerializer;
+    private final UserId userId;
 
-    public SpringJpaEventStore(final EntityManager entityManager, final PlatformTransactionManager transactionManager, final DomainEventJsonSerializer domainEventJsonSerializer) {
+    public SpringJpaEventStore(final EntityManager entityManager, final PlatformTransactionManager transactionManager, final DomainEventJsonSerializer domainEventJsonSerializer, final User user) {
         this.entityManager = entityManager;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
         this.domainEventJsonSerializer = domainEventJsonSerializer;
+        this.userId = user.id;
     }
 
     public void append(final EventStream<?> eventStream) {
@@ -40,8 +46,9 @@ public class SpringJpaEventStore implements EventStore {
         var payload = domainEventJsonSerializer.serializeDomainEvent(event);
         var eventId = EventSourcingEventId.random()
                 .toString();
+        var version = EventVersionsRegistry.getVersion(event.getClass());
 
-        return new EventSourcingEventEntity(eventId, streamId, getEventType(event), generateCreatedOn(), payload);
+        return new EventSourcingEventEntity(eventId, streamId, userId.id(), getEventType(event), generateCreatedOn(), payload, version);
     }
 
     private void persist(final EventSourcingEventEntity eventEntity) {
@@ -58,15 +65,21 @@ public class SpringJpaEventStore implements EventStore {
     }
 
     // TODO do it in more elegant way
-    private static String generateCreatedOn() {
-        return LocalDateTime.now()
-                .format(DateTimeFormatter.ISO_DATE_TIME);
+    private static LocalDateTime generateCreatedOn() {
+        return LocalDateTime.now();
     }
 
     public <ID> EventStream<ID> getAllEvents(final ID id) {
-        var jpql = "SELECT event FROM EventSourcingEventEntity event WHERE event.streamId = :streamId";
+        var jpql = """
+                SELECT event
+                FROM EventSourcingEventEntity event
+                WHERE event.streamId = :streamId
+                    AND event.userId = :userId
+                """;
         var eventEntities = entityManager.createQuery(jpql, EventSourcingEventEntity.class)
                 .setParameter("streamId", id.toString())
+                // TODO write integration test
+                .setParameter("userId", userId.id())
                 .getResultList();
         var domainEvents = mapEventEntitiesToDomainEvents(eventEntities)
                 .toArray(DomainEvent[]::new);
@@ -75,7 +88,7 @@ public class SpringJpaEventStore implements EventStore {
 
     private List<DomainEvent> mapEventEntitiesToDomainEvents(final List<EventSourcingEventEntity> eventEntities) {
         return eventEntities.stream()
-        // TODO ideally it should somehow mark that there was exception, but continue processing and return all possible events
+                // TODO ideally it should somehow mark that there was exception, but continue processing and return all possible events
                 .map(this::mapEventEntityToDomainEvent)
                 .toList();
     }
@@ -85,8 +98,7 @@ public class SpringJpaEventStore implements EventStore {
             var eventClass = (Class<? extends DomainEvent>) Class.forName(eventEntity.getType());
             var serializedEvent = eventEntity.getPayload();
             return domainEventJsonSerializer.deserializeDomainEvent(serializedEvent, eventClass);
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             // TODO temporary unchecked exception hack
             throw new RuntimeException(e);
         }

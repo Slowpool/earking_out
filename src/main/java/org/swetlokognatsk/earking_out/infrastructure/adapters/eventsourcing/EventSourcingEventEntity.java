@@ -1,6 +1,10 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
 
 import static java.util.Objects.requireNonNull;
+
+import java.time.LocalDateTime;
+
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,13 +18,18 @@ public class EventSourcingEventEntity {
     // TODO use UUID instead
     private String streamId;
 
+    // TODO use UUID instead
+    private int userId;
+
     private String type;
 
     // TODO use LocalDateTime instead
     @Column(name = "created_on")
-    private String createdOn;
+    private LocalDateTime createdOn;
 
     private String payload;
+
+    private int version;
 
     public String getId() {
         return id;
@@ -30,11 +39,15 @@ public class EventSourcingEventEntity {
         return streamId;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
     public String getType() {
         return type;
     }
 
-    public String getCreatedOn() {
+    public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
@@ -42,15 +55,21 @@ public class EventSourcingEventEntity {
         return payload;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
     public EventSourcingEventEntity() {
 
     }
 
-    public EventSourcingEventEntity(final String id, final String streamId, final String type, final String createdOn, final String payload) {
+    public EventSourcingEventEntity(final String id, final String streamId, final int userId, final String type, final LocalDateTime createdOn, final String payload, final int version) {
         this.id = requireNonNull(id);
         this.streamId = requireNonNull(streamId);
+        this.userId = requireNonNull(userId);
         this.type = requireNonNull(type);
         this.createdOn = requireNonNull(createdOn);
         this.payload = requireNonNull(payload);
+        this.version = requireNonNull(version);
     }
 }

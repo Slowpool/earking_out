@@ -1,0 +1,111 @@
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 100;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.exercise-item {
+    position: relative;
+    padding: 12px 16px;
+    cursor: pointer;
+}
+.exercise-types {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: #f1f1f1;
+    min-width: 120px;
+}
+.exercise-item:hover .exercise-types {
+    display: block;
+}
+.exercise-types a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+.exercise-types a:hover {
+    background-color: #ddd;
+}
+
+.piano-keyboard {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 49 / 6.36; 
+    box-sizing: border-box;
+}
+
+.white-keys-layer, 
+.black-keys-layer {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    display: grid;
+    /* 49 white keys * 3 tracks per key = 147 total grid tracks */
+    grid-template-columns: repeat(147, 1fr); 
+    box-sizing: border-box;
+}
+
+.black-keys-layer {
+    z-index: 2;
+    pointer-events: none; 
+}
+
+.piano-key.WHITE {
+    grid-column: span 3;
+    height: 100%;
+    background: linear-gradient(to bottom, #fff 0%, #d0d0d0 100%);
+    border: 1px solid black;
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 6px;
+    /* TODO maybe some miiiinor selecting? */
+    /* cursor: pointer; */
+    box-sizing: border-box;
+    z-index: 1;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+}
+
+.piano-key.BLACK {
+    position: relative;
+    top: -1px;
+    grid-column: span 2;
+    /* 9cm / 15cm propotion */
+    height: 60%; 
+    background: linear-gradient(to bottom, #333 0%, #050505 100%);
+    border-bottom: 2px solid #444;
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 4px;
+    box-sizing: border-box;
+    pointer-events: auto; 
+    margin-left: -50%; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+}
+/* TODO finish reviewing */
+.piano-key[data-isSelected="true"].WHITE {
+    background: #00b4d8;
+    border-bottom-width: 1px;
+    transform: translateY(2px);
+}
+.piano-key[data-isSelected="true"].BLACK {
+    background: #0014a9;
+    border-bottom-width: 1px;
+    transform: translateY(1px);
+}

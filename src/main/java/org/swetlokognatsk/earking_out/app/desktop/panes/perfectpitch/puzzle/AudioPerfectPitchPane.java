@@ -1,35 +1,29 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
-import org.swetlokognatsk.earking_out.DebugUtils;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.PopupRequestEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
+import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
-import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
-
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
 
 public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPitchExercise, AudioPerfectPitchConfigDTO, AudioPerfectPitchSessionService> {
 
@@ -50,12 +44,11 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
         return pane;
     }
 
-    public AudioPerfectPitchPane(final SessionId sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height, final AudioPerfectPitchSessionService sessionService, final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister, final PianoKeyboardService pianoKeyboardService) {
-        super(sessionId, puzzleConfigDto, width, height, sessionService, pianoKeyboardService);
-        inputMode = puzzleConfigDto.inputMode;
+    public AudioPerfectPitchPane(final SessionId sessionId, final AudioPerfectPitchConfigDTO puzzleConfigDto, final double width, final double height, final AudioPerfectPitchSessionService sessionService, final PianoKeyboardHandlersRegister pianoKeyboardHandlersRegister, final PianoKeyboardService pianoKeyboardService, final SessionRepositoryDelegator sessionRepository) {
+        super(sessionId, puzzleConfigDto, width, height, sessionService, pianoKeyboardService, sessionRepository);
+        this.inputMode = puzzleConfigDto.inputMode;
         this.pianoKeyboardHandlersRegister = pianoKeyboardHandlersRegister;
-
-        guessingComponent = (Region) innerPuzzlePane.getChildren().get(1);
+        this.guessingComponent = (Region) innerPuzzlePane.getChildren().get(1);
     }
 
     protected Button buildHintReplayButton() {
@@ -81,7 +74,7 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
 
         var pianoKeyboard = PianoKeyboardsFactory.createPerfectPitchNotesGuessing(pianoKeyboardWidth, pianoKeyboardHeight);
         pianoKeyboard.addEventHandler(PianoKeyPressedEvent.PIANO_KEY_PRESSED, this::handlePianoKeyPressing);
-        pianoKeyboard.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, this::releasePianoKey);
+        pianoKeyboard.addEventHandler(PianoKeyReleasedEvent.PIANO_KEY_RELEASED, this::handlePianoKeyReleasing);
 
         return pianoKeyboard;
     }
@@ -105,10 +98,10 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     }
 
     private AudioPerfectPitchSessionAggregateDTO getCurrentSessionDTO() {
-        return (AudioPerfectPitchSessionAggregateDTO) SessionAggregateDTOAssembler.getSessionAggregateDTO(sessionId);
+        return (AudioPerfectPitchSessionAggregateDTO) sessionRepository.getSessionAggregateDTO(sessionId);
     }
 
-    public void releasePianoKey(final PianoKeyReleasedEvent e) {
+    public void handlePianoKeyReleasing(final PianoKeyReleasedEvent e) {
         var session = getCurrentSessionDTO();
         // in case the last piano key pressing was successful and it was the last puzzle, the session closes, so it's not allowed to edit piano keyboard state any more. ui will just show the stats page. guessing piano keyboard state will be reset on the starting of the following session. summarizing, without this state check it'll cause `NoActiveSessionException`
         if (session.state != SessionStates.IN_PROGRESS) {

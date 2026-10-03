@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.core.ports.di;
 
 import java.util.function.Function;
-
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -84,7 +83,15 @@ public final class DI implements ApplicationContextAware {
         }
     }
 
-    public static <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory) {
-        iocContainer.register(someClass, depFactory);
+    public static <T> void register(final Class<T> someClass, final Function<Object[], T> depFactory) throws IllegalStateException {
+        switch (mode) {
+        case APP_MODE:
+            throw new IllegalStateException("dependencies cannot be registered in app mode");
+        case TEST_MODE:
+            iocContainer.register(someClass, depFactory);
+            break;
+        default:
+            throw new RuntimeException("unknown environment: " + mode);
+        }
     }
 }

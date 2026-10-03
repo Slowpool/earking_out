@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs.PuzzleC
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 
+@Deprecated
 abstract class PerfectPitchConfigUpdated<E extends PerfectPitchExercise, PC extends PerfectPitchConfigAggregate<E>> extends PuzzleConfigUpdated<E, PC> {
 
     public PerfectPitchConfigUpdated(final LocalDateTime timestamp, final E exercise, final PC newConfig) {

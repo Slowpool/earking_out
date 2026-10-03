@@ -1,0 +1,40 @@
+puzzle_configs/audio_perfect_pitch.html
+<h1>
+    Audio perfect pitch config
+</h1>
+</br>
+<div>
+    <div>
+        number of puzzles:
+        <input type="number" th:name="${targetNumberOfPuzzlesProp}" min="0" th:value="${targetNumberOfPuzzles}" th:hx-patch="|/api/v1/puzzle/config/perfect-pitch/audio/update/${targetNumberOfPuzzlesProp}|" hx-trigger="keyup changed delay:500ms" hx-swap="none">
+    </div>
+    <div>
+        stats recording:
+        <input type="checkbox" th:name="${statsRecordingProp}" th:checked="${statsRecording}" th:hx-patch="|/api/v1/puzzle/config/perfect-pitch/audio/update/${statsRecordingProp}|" hx-trigger="change" hx-swap="none">
+    </div>
+    <div>
+        notes
+        <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${notesPickerPianoKeyboardModel})}"></div>
+    </div>
+    <div>
+        root note
+        <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${rootNotePickerPianoKeyboardModel}, showPianoKeyboard=${inputMode.name() == 'KEYBOARD_AS_PIANO'})}"></div>
+        <!-- inputMode == 'KEYBOARD_AS_PIANO' -->
+    </div>
+    <div>
+        input mode:
+        <select id="perfect-pitch-input-mode" th:name="${inputModeProp}" th:hx-patch="|/api/v1/puzzle/config/perfect-pitch/audio/update/${inputModeProp}|" hx-trigger="change" hx-swap="none">
+            <option
+                th:each="mode : ${inputModes}"
+                th:value="${mode.name()}"
+                th:text="${mode.name()}"
+                th:selected="${inputMode == mode}"
+            ></option>
+        </select>
+    </div>
+    <div>
+        guessing piano is soundless:
+        <input type="checkbox" th:name="${guessingPianoIsSoundlessProp}" th:checked="${guessingPianoIsSoundless}" th:hx-patch="|/api/v1/puzzle/config/perfect-pitch/audio/update/${guessingPianoIsSoundlessProp}|" hx-trigger="change" hx-swap="none">
+    </div>
+    <button type="submit" hx-trigger="click" hx-post="/api/v1/session/perfect-pitch/audio/start" hx-target="#main-content">Start</button>
+</div>

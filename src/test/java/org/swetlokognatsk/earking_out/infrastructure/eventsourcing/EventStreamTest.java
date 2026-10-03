@@ -2,7 +2,10 @@ package org.swetlokognatsk.earking_out.infrastructure.eventsourcing;
 
 import org.junit.*;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
+import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;

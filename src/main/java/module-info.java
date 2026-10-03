@@ -26,8 +26,11 @@ module org.swetlokognatsk {
     requires jakarta.persistence;
     requires java.instrument;
     requires org.hibernate.orm.core;
+    requires lombok;
+    requires thymeleaf;
+    requires thymeleaf.spring6;
 
-    // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them in learning/training purposes. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
+    // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them for learning/training. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     exports org.swetlokognatsk.earking_out.core.ports.piano;
@@ -54,6 +57,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats;
     exports org.swetlokognatsk.earking_out.app.desktop.services;
     exports org.swetlokognatsk.earking_out.app.web;
+    exports org.swetlokognatsk.earking_out.app.web.controllers;
     exports org.swetlokognatsk.earking_out.core.domain.events.exercises;
     exports org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs;
     exports org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs.perfectpitch;
@@ -115,6 +119,12 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.serialization;
+    exports org.swetlokognatsk.earking_out.core.domain.model.identity;
+    exports org.swetlokognatsk.earking_out.app.web.views.models;
+    exports org.swetlokognatsk.earking_out.app.web.views.models.fillers;
+    exports org.swetlokognatsk.earking_out.app.web.services;
+    exports org.swetlokognatsk.earking_out.app.web.models.responses;
+    exports org.swetlokognatsk.earking_out.app.web.models.requests;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;

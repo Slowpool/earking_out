@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
@@ -11,15 +13,18 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
+// this is definitely not for production
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
-    private final Map<Exercise, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
+    private final Map<PuzzleConfigId, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
     private final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver;
     private final PuzzleConfigDTOAssembler dtoAssembler;
+    private final UserId userId;
 
-    public InMemoryPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigDTOAssembler dtoAssembler) {
+    public InMemoryPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigDTOAssembler dtoAssembler, final User user) {
         this.puzzleConfigAggregatesFactoryResolver = puzzleConfigAggregatesFactoryResolver;
         this.dtoAssembler = dtoAssembler;
+        this.userId = user.id;
 
         seedConfigs();
     }
@@ -30,7 +35,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
         for (var exercise : exercises) {
             var factory = createFactory(exercise);
             puzzleConfigAggregate = factory.createDefault();
-            aggregates.put(exercise, puzzleConfigAggregate);
+            innerSave(puzzleConfigAggregate);
         }
     }
 
@@ -39,7 +44,7 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
-        var puzzleConfigAggregate = aggregates.get(exercise);
+        var puzzleConfigAggregate = innerGet(exercise);
         if (puzzleConfigAggregate == null) {
             throw new IllegalArgumentException("unknown exercise: " + exercise);
         }
@@ -57,12 +62,25 @@ public final class InMemoryPuzzleConfigRepository implements PuzzleConfigReposit
 
     public void genericSave(PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
-        aggregates.put(puzzleConfigAggregate.getId(), puzzleConfigAggregate);
+        innerSave(puzzleConfigAggregate);
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
         var puzzleConfig = genericGet(exercise);
         var dto = dtoAssembler.assemble(puzzleConfig);
         return (PCDTO) dto;
+    }
+
+    private <E extends Exercise> PuzzleConfigAggregate<E> innerGet(final E exercise) {
+        return (PuzzleConfigAggregate<E>) aggregates.get(buildKey(exercise));
+    }
+
+    private void innerSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
+        var key = buildKey(puzzleConfigAggregate.getId());
+        aggregates.put(key, puzzleConfigAggregate);
+    }
+
+    private PuzzleConfigId buildKey(final Exercise exercise) {
+        return new PuzzleConfigId(exercise.toString(), userId.id());
     }
 }

@@ -7,5 +7,6 @@ public interface IoCContainer {
 
     void refreshDependencies();
 
-    <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory);
+    <T> void register(Class<T> someClass, Function<Object[], T> depFactory) throws IllegalStateException;
+    <T> void register(Class<T> someClass, T object) throws IllegalStateException;
 }

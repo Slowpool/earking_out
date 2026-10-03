@@ -66,4 +66,12 @@ public class PerfectPitchNoteStatsTest {
         new PerfectPitchNoteStats(ANY_NOTE, 3, 2, VALID_PERFECT_GUESSES);
         new PerfectPitchNoteStats(ANY_NOTE, 9, 8, VALID_PERFECT_GUESSES);
     }
+
+    @Test
+    public void zeroPerfectGuessesRatio() {
+        var stats = new PerfectPitchNoteStats(ANY_NOTE, 0, 0, 0);
+
+        assertEquals(0.0, stats.perfectGuessesRatio, 0.0);
+        assertFalse(Double.isNaN(stats.perfectGuessesRatio));
+    }
 }

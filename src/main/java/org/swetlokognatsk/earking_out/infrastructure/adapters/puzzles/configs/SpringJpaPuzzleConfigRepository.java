@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
@@ -15,10 +17,12 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
 
     private final EntityManager entityManager;
     private final TransactionTemplate transactionTemplate;
+    private final UserId userId;
 
-    public SpringJpaPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository, final EntityManager entityManager, final PlatformTransactionManager transactionManager) {
+    public SpringJpaPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository, final EntityManager entityManager, final PlatformTransactionManager transactionManager, final User user) {
         this.entityManager = entityManager;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
+        this.userId = user.id;
         super(puzzleConfigAggregatesFactoryResolver, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
     }
 
@@ -30,7 +34,7 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
         transactionTemplate.execute(status -> {
             var puzzleConfigEntity = findByExercise(puzzleConfigAggregate.getId());
             if (puzzleConfigEntity == null) {
-                puzzleConfigEntity = new PuzzleConfigEntity(stringedExercise, serializedPuzzleConfig);
+                puzzleConfigEntity = new PuzzleConfigEntity(userId.id(), stringedExercise, serializedPuzzleConfig);
             } else {
                 puzzleConfigEntity.setSerializedPuzzleConfig(serializedPuzzleConfig);
             }
@@ -51,7 +55,8 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
 
     private final PuzzleConfigEntity findByExercise(final Exercise exercise) {
         var exerciseId = exercise.toString();
-        var puzzleConfig = entityManager.find(PuzzleConfigEntity.class, exerciseId);
+        var id = new PuzzleConfigId(exerciseId, userId.id());
+        var puzzleConfig = entityManager.find(PuzzleConfigEntity.class, id);
         return puzzleConfig;
     }
 

@@ -22,3 +22,5 @@ target/
 /src/test/java/org/swetlokognatsk/earking_out/learning_tests
 
 *.back
+
+.jqwik-database

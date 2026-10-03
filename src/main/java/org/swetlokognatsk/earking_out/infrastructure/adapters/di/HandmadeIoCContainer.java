@@ -2,8 +2,8 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.di;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
-
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
@@ -24,6 +24,10 @@ import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDeleg
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.DesktopUser;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
@@ -38,11 +42,13 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.VisualPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesParsingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
+import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoSoundPolicyService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.EditableAudioPerfectPitchConfigValidator;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.FinalizedAudioPerfectPitchConfigValidator;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch.PerfectPitchSessionStatsAggregator;
@@ -84,7 +90,10 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpit
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBuilder;
 
+@Deprecated(forRemoval = true)
 public final class HandmadeIoCContainer implements IoCContainer {
+
+    private static final User TEST_USER = new DesktopUser();
 
     private Map<Class<?>, ?> singletons;
     private Map<Class<?>, Function<Object[], ?>> dynamicDependencies = new HashMap<>();
@@ -101,6 +110,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
     private static InMemoryEventStore inMemoryEventStore;
     private static JacksonJsonSerializer jacksonDomainEventJsonSerializer;
     private static PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
+    private static User user = TEST_USER;
 
     // // TODO remove or finish
     // private <O extends Object> O getSingleton(Class<O> someClass, Object[] args) {
@@ -160,13 +170,13 @@ public final class HandmadeIoCContainer implements IoCContainer {
         } else if (someClass.equals(PuzzleConfigAggregatesFactoryResolver.class)) {
             dep = new PuzzleConfigAggregatesFactoryResolver();
         } else if (someClass.equals(AudioPerfectPitchConfigAggregatesFactory.class)) {
-            dep = new AudioPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class));
+            dep = new AudioPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class), get(User.class));
         } else if (someClass.equals(VisualPerfectPitchConfigAggregatesFactory.class)) {
-            dep = new VisualPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class));
+            dep = new VisualPerfectPitchConfigAggregatesFactory(get(ObjectCloner.class), get(User.class));
 
         } else if (someClass.equals(InMemoryPuzzleConfigRepository.class)) {
             if (inMemoryPuzzleConfigRepository == null) {
-                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigDTOAssembler.class));
+                inMemoryPuzzleConfigRepository = new InMemoryPuzzleConfigRepository(get(PuzzleConfigAggregatesFactoryResolver.class), get(PuzzleConfigDTOAssembler.class), get(User.class));
             }
             dep = inMemoryPuzzleConfigRepository;
 
@@ -213,7 +223,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             dep = new SessionAggregatesFactory(get(ObjectCloner.class), get(PuzzleConfigRepository.class), get(PianoKeyboardRepository.class), get(PuzzleConfigDTOAssembler.class), get(PuzzlesFactory.class));
 
         } else if (someClass.equals(PuzzlePanesFactory.class)) {
-            dep = new PuzzlePanesFactory(get(SessionRepositoryDelegator.class), get(PianoKeyboardHandlersRegister.class), get(PianoKeyboardService.class));
+            dep = new PuzzlePanesFactory(get(SessionRepositoryDelegator.class));
 
         } else if (someClass.equals(HintDemonstrator.class)) {
             dep = new HintDemonstratorDelegator();
@@ -262,7 +272,10 @@ public final class HandmadeIoCContainer implements IoCContainer {
 
         } else if (someClass.equals(DomainEventsFactory.class)) {
             if (domainEventsFactory == null) {
-                domainEventsFactory = new DomainEventsFactory();
+                var userId = new UserId(1);
+                var userUuid = new UserUuid(UUID.randomUUID());
+                var user = new User(userId, userUuid, "test");
+                domainEventsFactory = new DomainEventsFactory(user);
             }
             dep = domainEventsFactory;
 
@@ -297,7 +310,7 @@ public final class HandmadeIoCContainer implements IoCContainer {
             dep = greenrobotEventBus;
 
         } else if (someClass.equals(SoundPlayerOnPianoKeyPressedHandler.class)) {
-            dep = new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PianoKeyboardRepository.class), get(PuzzleConfigRepository.class));
+            dep = new SoundPlayerOnPianoKeyPressedHandler(get(PianoKeySoundsPlayer.class), get(PianoKeyboardRepository.class), get(PianoSoundPolicyService.class));
 
         } else if (someClass.equals(HintDemonstratingOnNewPuzzleCreatedHandler.class)) {
             dep = new HintDemonstratingOnNewPuzzleCreatedHandler(get(HintDemonstratorDelegator.class));
@@ -344,6 +357,12 @@ public final class HandmadeIoCContainer implements IoCContainer {
         } else if (someClass.equals(PerfectPitchSessionStatsAggregator.class)) {
             dep = new PerfectPitchSessionStatsAggregator<PerfectPitchExercise>();
 
+        } else if (someClass.equals(User.class)) {
+            dep = user;
+
+        } else if (someClass.equals(PianoSoundPolicyService.class)) {
+            dep = new PianoSoundPolicyService(get(PuzzleConfigRepository.class));
+
         } else {
             throw new IllegalArgumentException("DI dependency is not found: " + someClass.getName());
         }
@@ -365,7 +384,18 @@ public final class HandmadeIoCContainer implements IoCContainer {
         pianoKeyboardDtoAssembler = null;
     }
 
-    public <T> void register(final Class<T> someClass, final Function<Object[], ?> depFactory) {
+    public <T> void register(final Class<T> someClass, final Function<Object[], T> depFactory) {
         dynamicDependencies.put(someClass, depFactory);
+    }
+
+    // TODO refactoring
+    public <T> void register(final Class<T> someClass, final T dependency) {
+        switch (dependency) {
+        case User user:
+            HandmadeIoCContainer.user = user;
+            break;
+        default:
+            throw new IllegalArgumentException("unknown dependency");
+        }
     }
 }

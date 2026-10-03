@@ -9,6 +9,8 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinished
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
@@ -18,33 +20,39 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 
 public final class DomainEventsFactory {
 
+    private final UserId userId;
+
+    public DomainEventsFactory(final User user) {
+        userId = user.id;
+    }
+
     private LocalDateTime createTimestamp() {
         return LocalDateTime.now();
     }
 
     public PianoKeyPressedEvent createPianoKeyPressedEvent(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber pianoKeyNumber) {
         var timestamp = createTimestamp();
-        return new PianoKeyPressedEvent(timestamp, pianoKeyboardId, pianoKeyNumber);
+        return new PianoKeyPressedEvent(userId, timestamp, pianoKeyboardId, pianoKeyNumber);
     }
 
     public NewPuzzleCreatedEvent createNewPuzzleCreatedEvent(final SessionId sessionId, final Puzzle<?, ?> puzzle) {
         var timestamp = createTimestamp();
-        return new NewPuzzleCreatedEvent(timestamp, sessionId, puzzle);
+        return new NewPuzzleCreatedEvent(userId, timestamp, sessionId, puzzle);
     }
 
     public HintRepeatingRequestedEvent createHintRepeatingRequestedEvent(final SessionId sessionId, final Puzzle<?, ?> puzzle) {
         var timestamp = createTimestamp();
-        return new HintRepeatingRequestedEvent(timestamp, sessionId, puzzle);
+        return new HintRepeatingRequestedEvent(userId, timestamp, sessionId, puzzle);
     }
 
     public UserTriedToGuessPuzzleEvent createUserTriedToGuessPuzzleEvent(final SessionId sessionId, final int puzzleNumber, final Solution guess, final int attempt, final boolean success) {
         var timestamp = createTimestamp();
-        return new UserTriedToGuessPuzzleEvent(timestamp, sessionId, puzzleNumber, guess, attempt, success);
+        return new UserTriedToGuessPuzzleEvent(userId, timestamp, sessionId, puzzleNumber, guess, attempt, success);
     }
 
     public SessionStartedEvent createSessionStartedEvent(final SessionId sessionId, final PuzzleConfigDTO<?> puzzleConfig) {
         var timestamp = createTimestamp();
-        return new SessionStartedEvent(timestamp, sessionId, puzzleConfig);
+        return new SessionStartedEvent(userId, timestamp, sessionId, puzzleConfig);
     }
 
     public SessionFinishedEvent createSessionFinishedEvent(final SessionId sessionId) {
@@ -53,11 +61,11 @@ public final class DomainEventsFactory {
 
     public SessionFinishedEvent createSessionFinishedEvent(final SessionId sessionId, final boolean isAborted) {
         var timestamp = createTimestamp();
-        return new SessionFinishedEvent(timestamp, sessionId, isAborted);
+        return new SessionFinishedEvent(userId, timestamp, sessionId, isAborted);
     }
 
     public AudioPerfectPitchExercisePickedEvent createAudioPerfectPitchExercisePickedEvent(final AudioPerfectPitchExercise exercise) {
         var timestamp = createTimestamp();
-        return new AudioPerfectPitchExercisePickedEvent(timestamp, exercise);
+        return new AudioPerfectPitchExercisePickedEvent(userId, timestamp, exercise);
     }
 }

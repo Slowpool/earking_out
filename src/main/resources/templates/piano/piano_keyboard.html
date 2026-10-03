@@ -1,0 +1,39 @@
+piano_keyboard.html
+<!-- TODO how the hidden works? it seems weeeeeird -->
+<div th:id="|piano-keyboard-${pianoKeyboardModel.id}|" th:attr="hidden=${showPianoKeyboard ?: true} ? null : 'hidden'" th:data-pianoKeyboardId="${pianoKeyboardModel.id}" th:class="|piano-keyboard ${pianoKeyboardModel.htmlClass}|" th:data-areKeySoundsEnabled="${pianoKeyboardModel.areKeySoundsEnabled}">
+    <div class="white-keys-layer">
+        <button
+            th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"
+            th:if="${#strings.toString(pianoKey.color) == 'WHITE'}"
+            th:class="|piano-key ${pianoKey.color}|"
+            th:data-keyNumber="${pianoKey.keyNumber.value}"
+            th:data-isPressed="${pianoKey.isPressed}"
+            th:data-isSelected="${pianoKey.isSelected}"
+            ></button>
+    </div>
+    <div class="black-keys-layer">
+        <!-- TODO th:with can be simplified by passing some constants from backend -->
+        <button
+            th:each="pianoKey : ${pianoKeyboardModel.pianoKeys}"
+            th:if="${#strings.toString(pianoKey.color) == 'BLACK'}"
+            th:with="
+                indexInOctave=${(pianoKey.keyNumber.value - 4) % 12},
+                octaveNumber=${(pianoKey.keyNumber.value - 4) / 12},
+                whiteKeysInOctave=${
+                    indexInOctave == 1  ? 1 : 
+                    (indexInOctave == 3  ? 2 : 
+                    (indexInOctave == 6  ? 4 : 
+                    (indexInOctave == 8  ? 5 : 
+                    (indexInOctave == 10 ? 6 : 0))))
+                },
+                totalWhiteToLeft=${(octaveNumber * 7) + whiteKeysInOctave},
+                gridStart=${(totalWhiteToLeft * 3) + 1}
+            "
+            th:style="|grid-column-start: ${gridStart};|"
+            th:class="|piano-key ${pianoKey.color}|"
+            th:data-keyNumber="${pianoKey.keyNumber.value}"
+            th:data-isPressed="${pianoKey.isPressed}"
+            th:data-isSelected="${pianoKey.isSelected}"
+        ></button>
+    </div>
+</div>

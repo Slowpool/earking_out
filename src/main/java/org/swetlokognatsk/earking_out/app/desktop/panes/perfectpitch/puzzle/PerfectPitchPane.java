@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle;
 
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
+import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.PerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -13,8 +14,8 @@ public abstract class PerfectPitchPane<E extends PerfectPitchExercise, PCDTO ext
 
     protected final PianoKeyboardService pianoKeyboardService;
 
-    public PerfectPitchPane(final SessionId sessionId, final PCDTO config, final double width, final double height, final SS sessionService, final PianoKeyboardService pianoKeyboardService ) {
-        super(sessionId, config, width, height, sessionService);
+    public PerfectPitchPane(final SessionId sessionId, final PCDTO config, final double width, final double height, final SS sessionService, final PianoKeyboardService pianoKeyboardService, final SessionRepositoryDelegator sessionRepository) {
+        super(sessionId, config, width, height, sessionService, sessionRepository);
         this.pianoKeyboardService = pianoKeyboardService;
     }
 }
