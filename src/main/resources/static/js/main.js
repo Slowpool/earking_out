@@ -18,6 +18,10 @@ var playingAudios = {};
 var sessionState = null;
 
 document.addEventListener('mousedown', function (e) {
+    if (!isLMB(e.button)) {
+        return;
+    }
+
     var pianoKey = e.target.closest('.piano-key')
     if (pianoKey === null) {
         return;
@@ -64,6 +68,10 @@ document.addEventListener('mousedown', function (e) {
 });
 
 document.addEventListener('mouseup', function (e) {
+    if (!isLMB(e.button)) {
+        return;
+    }
+    
     if (!pressedPianoKey) {
         return;
     }
@@ -89,7 +97,7 @@ document.addEventListener('mouseup', function (e) {
     }
 });
 
-htmx.on('htmx:afterRequest', function(evt) {
+htmx.on('htmx:afterRequest', function (evt) {
     let sourceElement = evt.detail.elt;
     if (sourceElement && (sourceElement.getAttribute('id') === 'perfect-pitch-input-mode')) {
         let selectedElement = sourceElement.options[sourceElement.selectedIndex];
@@ -220,4 +228,9 @@ function sendPianoKeyAction(action, pianoKeyboardContext, pianoKeyboard, pianoKe
 function setAsMainContent(html) {
     document.querySelector("#main-content")
         .innerHTML = html;
+}
+
+// LMB - Left Mouse Button
+function isLMB(mouseButton) {
+    return mouseButton === 0;
 }
