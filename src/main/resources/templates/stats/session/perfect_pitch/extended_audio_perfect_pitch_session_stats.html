@@ -1,18 +1,21 @@
-<table>
+<table th:if="${not #arrays.isEmpty(stats.notesStats)}">
     <thead>
         <tr>
-            <td>note name</td>
-            <td>appearances</td>
-            <td>guesses</td>
-            <td>perfect guesses</td>
-            <td>perfect guesses ratio</td>
+            <th>note name</th>
+            <th>appearances</th>
+            <th>guesses</th>
+            <th>perfect guesses</th>
+            <th>perfect guesses ratio</th>
         </tr>
     </thead>
-    <tr th:each="noteStats : ${stats.notesStats}">
-        <td th:text="${noteStats.note.value}"></td>
-        <td th:text="${noteStats.numberOfAppearances}"></td>
-        <td th:text="${noteStats.numberOfAllGuesses}"></td>
-        <td th:text="${noteStats.numberOfPerfectGuesses}"></td>
-        <td th:text="${noteStats.perfectGuessesRatio}"></td>
-    </tr>
+    <tbody>
+        <tr th:each="noteStats : ${stats.notesStats}">
+            <td th:text="${noteStats.note.value}"></td>
+            <td th:text="${noteStats.numberOfAppearances}"></td>
+            <td th:text="${noteStats.numberOfAllGuesses}"></td>
+            <td th:text="${noteStats.numberOfPerfectGuesses}"></td>
+            <td th:text="${#numbers.formatPercent(noteStats.perfectGuessesRatio, 1, 2)}"></td>
+        </tr>
+    </tbody>
 </table>
+<div th:if="${#arrays.isEmpty(stats.notesStats)}">Enable stats recording to see detailed stats</div>
