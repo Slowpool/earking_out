@@ -22,7 +22,7 @@ public abstract class ExtendedSessionStatsService<E extends Exercise, ESS extend
     }
 
     public final ESS getAggregatedStats(final SessionId sessionId) {
-        var domainEvents = eventStore.getAllEvents(sessionId);;
+        var domainEvents = eventStore.getAllEvents(sessionId);
         return statsAggregator.aggregate(domainEvents);
     }
 }

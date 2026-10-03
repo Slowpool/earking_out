@@ -47,11 +47,9 @@ document.addEventListener('mousedown', function (e) {
             callback: function (response) {
                 sessionState = response.sessionState;
                 if (sessionState == SESSION_COMPLETED) {
-                    // TODO
-                    alert("display session stats");
-                    return;
+                    setAsMainContent(response.sessionStatsHtml);
                 }
-                if (response.guessIsSuccessful) {
+                else if (response.guessIsSuccessful) {
                     updateCompletedPuzzlesNumber(response.numberOfCompletedPuzzles);
                     updateHint(response.newHint);
                 }
@@ -80,7 +78,6 @@ document.addEventListener('mouseup', function (e) {
     if (pianoKeyboard) {
         if (sessionState == SESSION_COMPLETED) {
             // if session is completed, no new events can be thrown, including piano key releasing. so, dodging the piano key releasing on ui level
-            alert('dodging the piano key release');
             return;
         }
 
@@ -195,4 +192,9 @@ function sendPianoKeyAction(action, pianoKeyboardContext, pianoKeyboard, pianoKe
             }
         }, action != PRESS
     );
+}
+
+function setAsMainContent(html) {
+    document.querySelector("#main-content")
+        .innerHTML = html;
 }

@@ -93,16 +93,13 @@ public class ApiController {
         return "puzzles/perfect_pitch/audio_perfect_pitch_puzzle";
     }
 
-    @GetMapping("/session/{exerciseName}/{exerciseType}/finish")
-    public ModelAndView finishSession(@PathVariable final String exerciseName, @PathVariable final String exerciseType, final Exercise exercise) {
+    @PostMapping("/session/{exerciseName}/{exerciseType}/abort")
+    public ModelAndView abortSession(final Exercise exercise) {
         var view = getStatsSessionView(exercise);
         var modelAndView = new ModelAndView(view);
         modelAndView.addObject("puzzlesCompletedPerfectly", 5);
         modelAndView.addObject("numberOfCompletedPuzzles", 50);
         modelAndView.addObject("perfectlyCompletedPuzzlesRate", 0.1);
-
-        modelAndView.addObject("exerciseName", exerciseName);
-        modelAndView.addObject("exerciseType", exerciseType);
 
         return modelAndView;
     }

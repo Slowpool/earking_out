@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.app.web.services;
 
 import org.swetlokognatsk.earking_out.app.web.models.responses.AudioPerfectPitchPianoKeyPressingResponse;
+import org.swetlokognatsk.earking_out.app.web.services.renderers.perfectpitch.AudioPerfectPitchStatsRenderer;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING;
 import org.springframework.context.annotation.Lazy;
@@ -35,6 +36,10 @@ public class AudioPerfectPitchPianoKeyPressingResponseBuilder {
                 .getHintUrl()
                 : null;
 
-        return new AudioPerfectPitchPianoKeyPressingResponse(puzzlesCompleted, prevGuessIsSuccessful, session.state, pianoKeyboard, newHint);
+        var sessionStatsHtml = session.state == SessionStates.COMPLETED
+                ? DI.get(AudioPerfectPitchStatsRenderer.class)
+                        .renderPage(session)
+                : null;
+        return new AudioPerfectPitchPianoKeyPressingResponse(puzzlesCompleted, prevGuessIsSuccessful, session.state, pianoKeyboard, newHint, sessionStatsHtml);
     }
 }
