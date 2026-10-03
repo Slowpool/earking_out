@@ -16,10 +16,10 @@ puzzle_configs/audio_perfect_pitch.html
         notes
         <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${notesPickerPianoKeyboardModel})}"></div>
     </div>
-    <!-- TODO display it conditionally, if input mode is KEYBOARD_AS_PIANO -->
     <div>
         root note
-        <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${rootNotePickerPianoKeyboardModel})}"></div>
+        <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${rootNotePickerPianoKeyboardModel}, showPianoKeyboard=${inputMode.name() == 'KEYBOARD_AS_PIANO'})}"></div>
+        <!-- inputMode == 'KEYBOARD_AS_PIANO' -->
     </div>
     <div>
         input mode:
