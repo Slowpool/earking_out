@@ -39,18 +39,20 @@ public class AudioPerfectPitchStatsRenderer {
         model.put("perfectlyCompletedPuzzlesRate", session.stats.getPerfectlyCompletedPuzzlesRate());
 
         var stats = statsService.getAggregatedStats(session.sessionId);
-        var extendedStatsBlock = renderExtendedStatsBlock(stats);
-        model.put("extendedStatsBlock", extendedStatsBlock);
+        model.put("stats", stats);
 
         return renderTemplate("/stats/session/perfect_pitch/audio_perfect_pitch_session_stats", model);
     }
 
-    private String renderExtendedStatsBlock(final PerfectPitchSessionStats stats) {
+    private String renderExtendedStatsBlock(final PerfectPitchSessionStats<AudioPerfectPitchExercise> stats) {
+        // if stats recording is disabled, there will be no stats
         if (stats.notesStats.length == 0) {
             return "";
         }
-        // TODO
-        return "extended stats";
+
+        var variables = new HashMap<String, Object>();
+        variables.put("stats", stats);
+        return renderTemplate("/stats/session/perfect_pitch/extended_audio_perfect_pitch_session_stats.html", variables);
     }
 
     // TODO ofc put it out of current class

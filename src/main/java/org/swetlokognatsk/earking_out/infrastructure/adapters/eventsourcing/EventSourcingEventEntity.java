@@ -1,6 +1,9 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
 
 import static java.util.Objects.requireNonNull;
+
+import java.time.LocalDateTime;
+
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import jakarta.persistence.*;
 
@@ -22,7 +25,7 @@ public class EventSourcingEventEntity {
 
     // TODO use LocalDateTime instead
     @Column(name = "created_on")
-    private String createdOn;
+    private LocalDateTime createdOn;
 
     private String payload;
 
@@ -44,7 +47,7 @@ public class EventSourcingEventEntity {
         return type;
     }
 
-    public String getCreatedOn() {
+    public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
@@ -60,7 +63,7 @@ public class EventSourcingEventEntity {
 
     }
 
-    public EventSourcingEventEntity(final String id, final String streamId, final int userId, final String type, final String createdOn, final String payload, final int version) {
+    public EventSourcingEventEntity(final String id, final String streamId, final int userId, final String type, final LocalDateTime createdOn, final String payload, final int version) {
         this.id = requireNonNull(id);
         this.streamId = requireNonNull(streamId);
         this.userId = requireNonNull(userId);

@@ -1,0 +1,18 @@
+<table>
+    <thead>
+        <tr>
+            <td>note name</td>
+            <td>appearances</td>
+            <td>guesses</td>
+            <td>perfect guesses</td>
+            <td>perfect guesses ratio</td>
+        </tr>
+    </thead>
+    <tr th:each="noteStats : ${stats.notesStats}">
+        <td th:text="${noteStats.note}"></td>
+        <td th:text="${noteStats.numberOfAppearances}"></td>
+        <td th:text="${noteStats.numberOfAllGuesses}"></td>
+        <td th:text="${noteStats.numberOfPerfectGuesses}"></td>
+        <td th:text="${noteStats.perfectGuessesRatio}"></td>
+    </tr>
+</table>

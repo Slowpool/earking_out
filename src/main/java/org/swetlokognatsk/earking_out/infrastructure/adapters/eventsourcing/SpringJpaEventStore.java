@@ -65,9 +65,8 @@ public class SpringJpaEventStore implements EventStore {
     }
 
     // TODO do it in more elegant way
-    private static String generateCreatedOn() {
-        return LocalDateTime.now()
-                .format(DateTimeFormatter.ISO_DATE_TIME);
+    private static LocalDateTime generateCreatedOn() {
+        return LocalDateTime.now();
     }
 
     public <ID> EventStream<ID> getAllEvents(final ID id) {

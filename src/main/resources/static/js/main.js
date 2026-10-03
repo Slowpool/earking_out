@@ -16,7 +16,7 @@ var sessionState = null;
 
 document.addEventListener('mousedown', function (e) {
     var pianoKey = e.target.closest('.piano-key')
-    if (pianoKey == null) {
+    if (pianoKey === null) {
         return;
     }
 
