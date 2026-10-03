@@ -78,12 +78,11 @@ public abstract class PuzzlePane<E extends Exercise, PCDTO extends PuzzleConfigD
 
     protected Button buildAbortButton() {
         var abortButton = new Button("finish");
-        abortButton.setOnAction(this::abortExercise);
+        abortButton.setOnAction(this::abortSession);
         return abortButton;
     }
 
-    // TODO rename to abortSession
-    protected void abortExercise(final ActionEvent e) {
+    protected void abortSession(final ActionEvent e) {
         sessionService.abort(sessionId);
         fireExerciseFinishedEvent();
     }

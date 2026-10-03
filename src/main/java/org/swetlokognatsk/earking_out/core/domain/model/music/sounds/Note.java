@@ -9,6 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
+// TODO apply the same in-memory optimization as for PianoKeyNumber
 public record Note(NoteNames noteName, Accidentals accidental, Octaves octave) implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise.unknownExercise;
+import static org.springframework.http.ResponseEntity.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzlePianoKeyRel
 import org.swetlokognatsk.earking_out.app.web.services.PuzzlePianoKeyPressingResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.services.PuzzlePianoKeyReleasingResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.services.SimplePuzzleConfigPropertiesCaster;
+import org.swetlokognatsk.earking_out.app.web.services.renderers.perfectpitch.AudioPerfectPitchStatsRenderer;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleViewFiller;
@@ -127,10 +129,10 @@ public class ApiController {
             var castedNewValue = simplePuzzleConfigPropertiesCaster.cast(exercise, propertyName, newValue);
             DI.get(PuzzleConfigService.class)
                     .updateProperty(exercise, propertyName, castedNewValue);
-            return ResponseEntity.ok().body(null);
+            return ok().body(null);
         } catch (IllegalArgumentException e) {
             // TODO add detailed info
-            return ResponseEntity.badRequest().body("bad request");
+            return badRequest().body("bad request");
         }
     }
 
@@ -145,7 +147,7 @@ public class ApiController {
                 .build(body.pianoKeyboardId);
         var response = new PuzzleConfigPianoKeyPressingResponse(pianoKeyboardViewModel);
 
-        return ResponseEntity.ok(response);
+        return ok(response);
     }
 
     @PostMapping("/puzzle/config/{exerciseName}/{exerciseType}/piano-keyboard/release-key")
@@ -157,7 +159,7 @@ public class ApiController {
                 .build(body.pianoKeyboardId);
         var response = new PuzzleConfigPianoKeyReleasingResponse(pianoKeyboardViewModel);
 
-        return ResponseEntity.ok(response);
+        return ok(response);
     }
 
     // // TODO this endpoint is for other types of input, at least in perfect pitch user can also input plain text as guess.
@@ -170,7 +172,7 @@ public class ApiController {
     //     var pianoKeyboardViewModel = pianoKeyboardBuilder.build(body.pianoKeyboardId);
     //     var response = new PuzzleConfigPianoKeyReleasingResponse(pianoKeyboardViewModel);
 
-    //     return ResponseEntity.ok(response);
+    //     return ok(response);
     // }
 
     // why to receive sessionId only on pressing? to prevent from case when the guess was last and we obtain the updated session info via getActiveSession(), which fails in that case. schematically: frontend---press key-->backend---update domain state-->responseBuilder-->update domain state via `getActiveSession()`, but wait, it'll throw exception beause it just was finished! well, then, let's get session by it's id - no exception, good!
@@ -182,7 +184,7 @@ public class ApiController {
         persistQueuedEventLogs(sessionId);
         var response = DI.get(PuzzlePianoKeyPressingResponseBuilder.class)
                 .build(exercise, sessionId);
-        return ResponseEntity.ok(response);
+        return ok(response);
     }
 
     // TODO now this is a temporary hack that executes all globally queued tasks. why to do it? events a logged asynchronously, and if user finishes the session before all events are logged, stats will be based on partial event logs and consequently they will be incorrect. debugging i figured out it's still imperfect, - there's still a possibility of wrong stats, but it's much lower
@@ -221,13 +223,13 @@ public class ApiController {
 
         var response = DI.get(PuzzlePianoKeyReleasingResponseBuilder.class)
                 .build(exercise);
-        return ResponseEntity.ok(response);
+        return ok(response);
     }
 
     @PostMapping("/puzzle/{exerciseName}/{exerciseType}/hear-hint-again")
     public ResponseEntity<?> hearHintAgain(final Exercise exercise) {
         if (exerciseDoesNotSupportHintReplaying(exercise)) {
-            return ResponseEntity.badRequest()
+            return badRequest()
                     .body("this exercise does not support hint replaying");
         }
 
@@ -239,10 +241,22 @@ public class ApiController {
         default:
             throw new RuntimeException(unknownExercise(exercise));
         }
-        return ResponseEntity.ok().body(null);
+        return ok().body(null);
     }
 
     private static boolean exerciseDoesNotSupportHintReplaying(final Exercise exercise) {
         return exercise.type != ExerciseTypes.AUDIO;
     }
+
+    @PostMapping("/session/{exerciseName}/{exerciseType}/abort/{sessionId}")
+    public ResponseEntity<?> abortSession(final Exercise exercise, @PathVariable SessionId sessionId) {
+        DI.get(SessionService.class)
+                .abort(sessionId);
+
+        var body = DI.get(AudioPerfectPitchStatsRenderer.class)
+                .renderPage(sessionId);
+
+        return ok(body);
+    }
+
 }
