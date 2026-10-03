@@ -10,6 +10,9 @@ const PUZZLE_CONTEXT = 'PUZZLE_CONTEXT';
 const PRESS = 'PRESS';
 const RELEASE = 'RELEASE';
 
+const NOTES_AS_TEXT_MODE = 'NOTES_AS_TEXT';
+const KEYBOARD_AS_PIANO_MODE = 'KEYBOARD_AS_PIANO';
+
 var pressedPianoKey = null;
 var playingAudios = {};
 var sessionState = null;
@@ -83,6 +86,26 @@ document.addEventListener('mouseup', function (e) {
 
         sendPianoKeyAction(RELEASE, PUZZLE_CONTEXT, pianoKeyboard, pianoKey);
         return;
+    }
+});
+
+htmx.on('htmx:afterRequest', function(evt) {
+    let sourceElement = evt.detail.elt;
+    if (sourceElement && (sourceElement.getAttribute('id') === 'perfect-pitch-input-mode')) {
+        let selectedElement = sourceElement.options[sourceElement.selectedIndex];
+        if (selectedElement && (selectedElement.getAttribute('value') === KEYBOARD_AS_PIANO_MODE)) {
+            var shouldHideRootNotePiano = false;
+        }
+        else {
+            var shouldHideRootNotePiano = true;
+        }
+        let rootNotePiano = document.querySelector("#piano-keyboard-AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER");
+        if (shouldHideRootNotePiano) {
+            rootNotePiano.setAttribute('hidden', true);
+        }
+        else {
+            rootNotePiano.removeAttribute('hidden');
+        }
     }
 });
 

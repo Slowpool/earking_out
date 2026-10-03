@@ -23,7 +23,7 @@ puzzle_configs/audio_perfect_pitch.html
     </div>
     <div>
         input mode:
-        <select th:name="${inputModeProp}" th:hx-patch="|/api/v1/puzzle/config/perfect-pitch/audio/update/${inputModeProp}|" hx-trigger="change" hx-swap="none">
+        <select id="perfect-pitch-input-mode" th:name="${inputModeProp}" th:hx-patch="|/api/v1/puzzle/config/perfect-pitch/audio/update/${inputModeProp}|" hx-trigger="change" hx-swap="none">
             <option
                 th:each="mode : ${inputModes}"
                 th:value="${mode.name()}"
