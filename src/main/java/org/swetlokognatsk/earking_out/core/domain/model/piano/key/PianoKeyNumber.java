@@ -42,6 +42,7 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
         LAST_NOTE_NUMBER = PianoKeyNumber.valueOf(BYTE_LAST_NOTE_NUMBER);
     }
 
+    // for piano key 4 it will return 1
     private byte calculateOctaveScopedKeyNumber() {
         return (byte) ((value - SHIFT - 1) % KEYS_IN_OCTAVE + 1);
     }
@@ -50,8 +51,7 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
         return octaveScopedKeyNumber;
     }
 
-    // TODO add ref to valueOf()
-    /** Use valueOf() if you wanna some PianoKeyNumber. It optimizes the memory */
+    /** Use {@link #valueOf()} if you wanna some PianoKeyNumber. It optimizes the memory */
     private PianoKeyNumber(final byte value) {
         validate(value);
         this.value = (byte) value;
@@ -133,7 +133,7 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
         return subtract(1);
     }
 
-    public static void forEachKey(Consumer<PianoKeyNumber> action) {
+    public static void forEachKey(final Consumer<PianoKeyNumber> action) {
         PianoKeyNumber keyNumber;
         for (var byteKeyNumber = FIRST_NOTE_NUMBER.value; byteKeyNumber < LAST_NOTE_NUMBER.value + 1; byteKeyNumber++) {
             keyNumber = PianoKeyNumber.valueOf(byteKeyNumber);

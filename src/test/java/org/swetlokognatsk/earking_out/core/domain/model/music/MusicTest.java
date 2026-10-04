@@ -12,7 +12,7 @@ public class MusicTest {
 
     @Test
     public void createNote() {
-        var note = new Note(NoteNames.C, Accidentals.SHARP, Octaves.FIRST);
+        var note = Note.valueOf(NoteNames.C, Accidentals.SHARP, Octaves.FIRST);
 
         int shift = 3;
         int selectedNote = 1;

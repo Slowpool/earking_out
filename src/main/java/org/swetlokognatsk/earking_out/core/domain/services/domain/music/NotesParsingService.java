@@ -40,7 +40,7 @@ public final class NotesParsingService {
             throw new InvalidTextNoteException(textNote);
         }
 
-        return new Note(noteName, accidental, octave);
+        return Note.valueOf(noteName, accidental, octave);
     }
 
     private Accidentals parseAccidental(final String textNote) throws InvalidTextNoteException {

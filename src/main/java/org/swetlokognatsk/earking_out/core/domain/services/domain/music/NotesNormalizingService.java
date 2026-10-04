@@ -16,7 +16,7 @@ public final class NotesNormalizingService {
     public PianoKeyNumber normalize(final Note note) {
         // TODO theoretically overflow is possible below. refactoring via FIRST_NOTE_NUMBER
         byte value = SHIFT;
-        value += getOctavesShift(note.octave());
+        value += getOctavesShift(note.octave);
         value += normalizeInOctave(note);
         return PianoKeyNumber.valueOf(value);
     }
@@ -29,8 +29,8 @@ public final class NotesNormalizingService {
      * @return
      */
     public byte normalizeInOctave(final Note note) {
-        byte octaveScopedNoteValue = note.noteName().octaveScopedKeyNumber;
-        byte accidentalShift = Accidentals.getShift(note.accidental());
+        byte octaveScopedNoteValue = note.noteName.octaveScopedKeyNumber;
+        byte accidentalShift = Accidentals.getShift(note.accidental);
         return (byte) (octaveScopedNoteValue + accidentalShift);
     }
 
