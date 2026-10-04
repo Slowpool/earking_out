@@ -13,6 +13,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import lombok.AllArgsConstructor;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.*;
+import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode.*;
 
 @Component
 @Lazy
@@ -39,7 +40,7 @@ public class AudioPerfectPitchConfigViewFiller {
         var rootNotePickerPianoKeyboardModel = pianoKeyboardsBuilder.build(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         modelAndView.addObject("rootNotePickerPianoKeyboardModel", rootNotePickerPianoKeyboardModel);
 
-        modelAndView.addObject("inputModes", PerfectPitchInputMode.values());
+        modelAndView.addObject("inputModes", new PerfectPitchInputMode[] { PIANO_ON_SCREEN, NOTES_AS_TEXT });
         modelAndView.addObject("inputModeProp", PerfectPitchConfigAggregate.INPUT_MODE_PROP);
         modelAndView.addObject("inputMode", puzzleConfigDto.inputMode);
 

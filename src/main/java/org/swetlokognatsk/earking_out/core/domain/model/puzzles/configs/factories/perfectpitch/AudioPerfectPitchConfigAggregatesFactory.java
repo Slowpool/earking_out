@@ -6,7 +6,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
-
 import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 
@@ -25,7 +24,7 @@ public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfig
     // }
 
     public AudioPerfectPitchConfigAggregate createDefault() {
-        return create(10, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false);
+        return create(10, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.PIANO_ON_SCREEN, false);
     }
 
     public AudioPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {

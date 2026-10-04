@@ -71,7 +71,7 @@ document.addEventListener('mouseup', function (e) {
     if (!isLMB(e.button)) {
         return;
     }
-    
+
     if (!pressedPianoKey) {
         return;
     }
