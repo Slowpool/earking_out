@@ -48,7 +48,8 @@ public class SpringJpaEventStore implements EventStore {
                 .toString();
         var version = EventVersionsRegistry.getVersion(event.getClass());
 
-        return new EventSourcingEventEntity(eventId, streamId, userId.id(), getEventType(event), generateCreatedOn(), payload, version);
+        // TODO temporarily fix. migrate column type to jsonb in psql and order by json's payload.timestamp field instead, return programmatically generated date here
+        return new EventSourcingEventEntity(eventId, streamId, userId.id(), getEventType(event), /*generateCreatedOn()*/event.timestamp, payload, version);
     }
 
     private void persist(final EventSourcingEventEntity eventEntity) {
@@ -75,6 +76,7 @@ public class SpringJpaEventStore implements EventStore {
                 FROM EventSourcingEventEntity event
                 WHERE event.streamId = :streamId
                     AND event.userId = :userId
+                ORDER BY event.createdOn ASC
                 """;
         var eventEntities = entityManager.createQuery(jpql, EventSourcingEventEntity.class)
                 .setParameter("streamId", id.toString())
