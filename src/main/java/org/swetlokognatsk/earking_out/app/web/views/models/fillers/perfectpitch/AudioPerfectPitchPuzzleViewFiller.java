@@ -29,7 +29,10 @@ public class AudioPerfectPitchPuzzleViewFiller {
 
         modelAndView.addObject("numberOfCompletedPuzzles", session.getStats().puzzlesCompleted);
 
-        modelAndView.addObject("targetNumberOfPuzzles", session.getPuzzleConfig().targetNumberOfPuzzles);
+        var puzzleConfig = session.getPuzzleConfig();
+        modelAndView.addObject("targetNumberOfPuzzles", puzzleConfig.targetNumberOfPuzzles);
+
+        modelAndView.addObject("inputMode", puzzleConfig.inputMode);
 
         var hint = DI.get(WebAudioPerfectPitchHintDemonstrator.class)
                 .getHintUrl();

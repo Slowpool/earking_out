@@ -18,9 +18,10 @@ public record Note(NoteNames noteName, Accidentals accidental, Octaves octave) i
         Objects.requireNonNull(octave);
     }
 
+    // technically, low-level-module-depends-on-high-level-module violation. pragmatically, convenience method
     public PianoKeyNumber normalize() {
-        var noteNormalizer = DI.get(NotesNormalizingService.class);
-        return noteNormalizer.normalize(this);
+        return DI.get(NotesNormalizingService.class)
+                .normalize(this);
     }
 
     public Note withOctave(Octaves octave) {

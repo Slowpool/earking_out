@@ -122,9 +122,17 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.model.identity;
     exports org.swetlokognatsk.earking_out.app.web.views.models;
     exports org.swetlokognatsk.earking_out.app.web.views.models.fillers;
-    exports org.swetlokognatsk.earking_out.app.web.services;
     exports org.swetlokognatsk.earking_out.app.web.models.responses;
+    exports org.swetlokognatsk.earking_out.app.web.models.responses.perfectpitch;
     exports org.swetlokognatsk.earking_out.app.web.models.requests;
+    exports org.swetlokognatsk.earking_out.app.web.models.requests.perfectpitch;
+    // these services are not classic business-logic-services. they are more spring web supoprting infrastructure logic, like the extension of controllers
+    exports org.swetlokognatsk.earking_out.app.web.services;
+    exports org.swetlokognatsk.earking_out.app.web.services.responsebuilders;
+    exports org.swetlokognatsk.earking_out.app.web.services.responsebuilders.perfectpitch;
+    exports org.swetlokognatsk.earking_out.app.web.services.perfectpitch;
+    exports org.swetlokognatsk.earking_out.app.web.services.renderers;
+    exports org.swetlokognatsk.earking_out.app.web.services.renderers.perfectpitch;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;

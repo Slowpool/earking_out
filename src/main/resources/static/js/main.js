@@ -13,6 +13,8 @@ const RELEASE = 'RELEASE';
 const NOTES_AS_TEXT_MODE = 'NOTES_AS_TEXT';
 const KEYBOARD_AS_PIANO_MODE = 'KEYBOARD_AS_PIANO';
 
+const MAIN_CONTENT = '#main-content';
+
 var pressedPianoKey = null;
 var playingAudios = {};
 var sessionState = null;
@@ -48,18 +50,10 @@ document.addEventListener('mousedown', function (e) {
         }
         pressedPianoKey = pianoKey;
 
-        let sessionId = document.querySelector("#sessionId")
-            .getAttribute("data-sessionId");
+        let sessionId = findSessionId();
         sendPianoKeyAction(PRESS, PUZZLE_CONTEXT, pianoKeyboard, pianoKey, {
             callback: function (response) {
-                sessionState = response.sessionState;
-                if (sessionState == SESSION_COMPLETED) {
-                    setAsMainContent(response.sessionStatsHtml);
-                }
-                else if (response.guessIsSuccessful) {
-                    updateCompletedPuzzlesNumber(response.numberOfCompletedPuzzles);
-                    updateHint(response.newHint);
-                }
+                updatePuzzleAfterGuess(response.guessResult);
             },
             queryString: `?sessionId=${sessionId}`
         });
@@ -96,6 +90,29 @@ document.addEventListener('mouseup', function (e) {
         return;
     }
 });
+
+document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') {
+        return;
+    }
+
+    let target = e.target;
+    if (target.getAttribute('id') !== 'perfect-pitch-guessing-textbox') {
+        return;
+    }
+
+    let sessionId = findSessionId();
+    ajax('POST', `/api/v1/puzzle/perfect-pitch/audio/guess?sessionId=${sessionId}`, {
+        body: {
+            note: target.value.toUpperCase()
+        },
+        handler: function (response) {
+            updatePuzzleAfterGuess(response);
+            target.value = '';
+        }
+    })
+});
+
 
 htmx.on('htmx:afterRequest', function (evt) {
     let sourceElement = evt.detail.elt;
@@ -226,11 +243,29 @@ function sendPianoKeyAction(action, pianoKeyboardContext, pianoKeyboard, pianoKe
 }
 
 function setAsMainContent(html) {
-    document.querySelector("#main-content")
-        .innerHTML = html;
+    let mainContent = document.querySelector(MAIN_CONTENT);
+    mainContent.innerHTML = html;
+
+    htmx.process(mainContent);
 }
 
 // LMB - Left Mouse Button
 function isLMB(mouseButton) {
     return mouseButton === 0;
+}
+
+function updatePuzzleAfterGuess(guessResult) {
+    sessionState = guessResult.sessionState;
+    if (sessionState == SESSION_COMPLETED) {
+        setAsMainContent(guessResult.sessionStatsHtml);
+    }
+    else if (guessResult.guessIsSuccessful) {
+        updateCompletedPuzzlesNumber(guessResult.numberOfCompletedPuzzles);
+        updateHint(guessResult.newHint);
+    }
+}
+
+function findSessionId() {
+    return document.querySelector("#sessionId")
+        .getAttribute("data-sessionId");
 }

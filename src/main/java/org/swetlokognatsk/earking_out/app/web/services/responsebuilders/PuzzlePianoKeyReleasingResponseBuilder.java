@@ -1,7 +1,8 @@
-package org.swetlokognatsk.earking_out.app.web.services;
+package org.swetlokognatsk.earking_out.app.web.services.responsebuilders;
 
 import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzlePianoKeyReleasingResponse;
+import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.perfectpitch.AudioPerfectPitchPianoKeyReleasingResponseBuilder;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;

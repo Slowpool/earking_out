@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.web.services;
 
+import org.swetlokognatsk.earking_out.app.web.services.perfectpitch.AudioPerfectPitchConfigPropertiesCaster;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;

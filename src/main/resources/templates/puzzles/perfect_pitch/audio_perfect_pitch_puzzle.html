@@ -1,4 +1,4 @@
-puzzles/audio_perfect_pitch.html
+puzzles/perfect_pitch/audio_perfect_pitch_puzzle.html
 <h1>
     Audio perfect pitch
 </h1>
@@ -11,6 +11,12 @@ puzzles/audio_perfect_pitch.html
     hx-swap="none"
     hx-on:click="let audio = document.getElementById('audio-perfect-pitch-hint-player'); audio.currentTime = 0; audio.play();"
 >hear again</button>
-<div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${guessingPianoKeyboardModel})}">guessing piano keyboard</div>
+<div th:if="${inputMode.name() == 'PIANO_ON_SCREEN'}">
+    <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${guessingPianoKeyboardModel})}"></div>
+</div>
+<div th:if="${inputMode.name() == 'NOTES_AS_TEXT'}">
+    <label for="perfect-pitch-guessing-textbox">Enter your guess:</label>
+    <input id="perfect-pitch-guessing-textbox" type="text" placeholder="C#1"/>
+</div>
 <div th:replace="~{puzzles/finish_button(exerciseName='perfect-pitch', exerciseType='audio')}"></div>
 <audio id="audio-perfect-pitch-hint-player" autoplay th:src="${hint}"></audio>

@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.app.web.services;
+package org.swetlokognatsk.earking_out.app.web.services.perfectpitch;
 
 import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;

@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise.unknownExercise;
+import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 import static org.springframework.http.ResponseEntity.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,14 +20,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.swetlokognatsk.earking_out.app.web.models.requests.PianoKeyboardActionRequest;
+import org.swetlokognatsk.earking_out.app.web.models.requests.perfectpitch.AudioPerfectPitchGuessRequest;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyPressingResponse;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyReleasingResponse;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzlePianoKeyPressingResponse;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzlePianoKeyReleasingResponse;
-import org.swetlokognatsk.earking_out.app.web.services.PuzzlePianoKeyPressingResponseBuilder;
-import org.swetlokognatsk.earking_out.app.web.services.PuzzlePianoKeyReleasingResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.services.SimplePuzzleConfigPropertiesCaster;
 import org.swetlokognatsk.earking_out.app.web.services.renderers.perfectpitch.AudioPerfectPitchStatsRenderer;
+import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.PuzzleGuessingResponseBuilder;
+import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.PuzzlePianoKeyPressingResponseBuilder;
+import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.PuzzlePianoKeyReleasingResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleViewFiller;
@@ -34,10 +37,10 @@ import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDeleg
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
@@ -45,8 +48,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionSe
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 // TODO all code here is yet a draft, for experiments
 /**
@@ -162,28 +163,16 @@ public class ApiController {
         return ok(response);
     }
 
-    // // TODO this endpoint is for other types of input, at least in perfect pitch user can also input plain text as guess.
-    // @PostMapping("/session/{exerciseName}/{exerciseType}/guess")
-    // public ResponseEntity<PuzzleConfigPianoKeyReleasingResponse> guess(final Exercise exercise, @RequestBody final PuzzleConfigPianoKeyboardActionRequest body) {
-    //     var pianoKeyboardService = DI.get(PianoKeyboardService.class);
-    //     pianoKeyboardService.releasePianoKey(body.pianoKeyboardId);
-
-    //     var pianoKeyboardBuilder = DI.get(PianoKeyboardViewModelsBuilder.class);
-    //     var pianoKeyboardViewModel = pianoKeyboardBuilder.build(body.pianoKeyboardId);
-    //     var response = new PuzzleConfigPianoKeyReleasingResponse(pianoKeyboardViewModel);
-
-    //     return ok(response);
-    // }
-
     // why to receive sessionId only on pressing? to prevent from case when the guess was last and we obtain the updated session info via getActiveSession(), which fails in that case. schematically: frontend---press key-->backend---update domain state-->responseBuilder-->update domain state via `getActiveSession()`, but wait, it'll throw exception beause it just was finished! well, then, let's get session by it's id - no exception, good!
     @PostMapping("/puzzle/{exerciseName}/{exerciseType}/piano-keyboard/press-key")
-    public ResponseEntity<? extends PuzzlePianoKeyPressingResponse> pressPuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body, @RequestParam final SessionId sessionId) {
+    public ResponseEntity<? extends PuzzlePianoKeyPressingResponse> pressPuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body, @RequestParam(required = true) final SessionId sessionId) {
         DI.get(PianoKeyboardService.class)
                 .pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
 
         persistQueuedEventLogs(sessionId);
         var response = DI.get(PuzzlePianoKeyPressingResponseBuilder.class)
                 .build(exercise, sessionId);
+
         return ok(response);
     }
 
@@ -259,4 +248,23 @@ public class ApiController {
         return ok(body);
     }
 
+    @PostMapping("/puzzle/perfect-pitch/audio/guess")
+    public ResponseEntity<?> guess(@RequestBody final AudioPerfectPitchGuessRequest body, @RequestParam(required = true) final SessionId sessionId) {
+        try {
+            DI.get(AudioPerfectPitchSessionService.class)
+                    .guessViaTextNote(body.note());
+        } catch (InvalidTextNoteException e) {
+            // TODO InvalidTextNoteException
+            return badRequest().body("InvalidTextNoteException");
+        } catch (OutOfRangeTextNoteException e) {
+            // TODO OutOfRangeTextNoteException
+            return badRequest().body("OutOfRangeTextNoteException");
+        }
+
+        persistQueuedEventLogs(sessionId);
+        var response = DI.get(PuzzleGuessingResponseBuilder.class)
+                .build(AUDIO_PERFECT_PITCH_EXERCISE, sessionId);
+
+        return ok(response);
+    }
 }
