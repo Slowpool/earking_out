@@ -5,18 +5,21 @@
     </br>
     </br>
     <div th:replace="~{puzzles/puzzle_progress}"></div>
-    <button
-        id="audio-perfect-pitch-request-hint"
-        hx-post="/api/v1/puzzle/perfect-pitch/audio/hear-hint-again"
-        hx-trigger="click"
-        hx-swap="none"
-        hx-on:click="let audio = document.getElementById('audio-perfect-pitch-hint-player'); audio.currentTime = 0; audio.play();"
-    >hear again</button>
-    <div th:if="${inputMode.name() == 'PIANO_ON_SCREEN'}">
+    <div class="puzzle-block centered">
+        <button
+            id="audio-perfect-pitch-request-hint"
+            class="action-button"
+            hx-post="/api/v1/puzzle/perfect-pitch/audio/hear-hint-again"
+            hx-trigger="click"
+            hx-swap="none"
+            hx-on:click="let audio = document.getElementById('audio-perfect-pitch-hint-player'); audio.currentTime = 0; audio.play();"
+        >Hear again</button>
+    </div>
+    <div th:if="${inputMode.name() == 'PIANO_ON_SCREEN'}" class="puzzle-block">
         <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${guessingPianoKeyboardModel})}"></div>
     </div>
-    <div th:if="${inputMode.name() == 'NOTES_AS_TEXT'}">
-        <label for="perfect-pitch-guessing-textbox">Enter your guess:</label>
+    <div th:if="${inputMode.name() == 'NOTES_AS_TEXT'}" class="puzzle-block centered">
+        <label for="perfect-pitch-guessing-textbox">Enter your guess:&nbsp;</label>
         <input id="perfect-pitch-guessing-textbox" type="text" placeholder="C#1"/>
     </div>
     <div th:replace="~{puzzles/finish_button(exerciseName='perfect-pitch', exerciseType='audio')}"></div>

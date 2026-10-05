@@ -145,8 +145,7 @@ a {
     background: #00b4d8;
     border-radius: 4px;
     color: #000000;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding-block: 2px;
     padding-inline: 8px;
 }
 
@@ -167,7 +166,8 @@ a {
 }
 
 .puzzle-config-property,
-.puzzle-config-piano-keyboard-property {
+.puzzle-config-piano-keyboard-property,
+.puzzle-block {
     margin-block: 10px;
 }
 
@@ -179,4 +179,21 @@ a {
 #puzzle-progress {
     width: 100%;
     height: 35px;
+}
+
+.action-button {
+    background: #00b4d8;
+    border-radius: 4px;
+    border: 3px black;
+    padding-block: 4px;
+    padding-inline: 8px;
+    cursor: pointer;
+}
+
+.action-button.finish {
+    margin-top: 30vh;
+}
+
+#perfect-pitch-guessing-textbox {
+    width: 3%;
 }
