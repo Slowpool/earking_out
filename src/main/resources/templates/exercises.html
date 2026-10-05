@@ -3,9 +3,18 @@
         <button class="dropdown-btn">Exercises</button>
         <div class="dropdown-content">
             <div class="exercise-row">
-                <span class="exercise-name">Perfect Pitch</span>
-                <div class="exercise-types">
-                    <button class="exercise-type-btn" hx-get="/api/v1/exercise/perfect-pitch/audio" hx-trigger="click" hx-target="#main-content">Audio</button>
+                <span class="exercise-name">
+                    <label>Perfect Pitch</label>
+                </span>
+                <div class="exercise-type">
+                    <button
+                        class="exercise-type-btn"
+                        hx-get="/api/v1/exercise/perfect-pitch/audio"
+                        hx-trigger="click"
+                        hx-target="#main-content"
+                    >
+                        Audio
+                    </button>
                     <button class="exercise-type-btn">Visual (coming soon...)</button>
                 </div>
             </div>

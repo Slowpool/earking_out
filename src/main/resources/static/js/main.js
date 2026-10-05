@@ -124,7 +124,7 @@ htmx.on('htmx:afterRequest', function (evt) {
         else {
             var shouldHideRootNotePiano = true;
         }
-        let rootNotePiano = document.querySelector("#piano-keyboard-AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER");
+        let rootNotePiano = document.querySelector("#audio-perfect-pitch-root-note");
         if (shouldHideRootNotePiano) {
             rootNotePiano.setAttribute('hidden', true);
         }
