@@ -7,8 +7,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 /**
- * Note normalizing - mapping the note to key number. For example, notes C#1
- * and Db1 actually have the same key number (and the sound accordingly) - that's
+ * Note normalizing - mapping the note to key number. For example, notes C#1 and
+ * Db1 actually have the same key number (and the sound accordingly) - that's
  * 5th key number
  */
 public final class NotesNormalizingService {
@@ -18,7 +18,13 @@ public final class NotesNormalizingService {
         byte value = SHIFT;
         value += getOctavesShift(note.octave);
         value += normalizeInOctave(note);
-        return PianoKeyNumber.valueOf(value);
+        PianoKeyNumber result;
+        try {
+            result = PianoKeyNumber.valueOf(value);
+        } catch (IllegalArgumentException e) {
+            result = null;
+        }
+        return result;
     }
 
     /**

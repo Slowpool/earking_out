@@ -1,7 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music.sounds;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import static java.util.Objects.requireNonNull;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
@@ -28,14 +31,16 @@ public final class Note extends ValueObject implements Serializable {
     static {
         var innerStorage = new HashSet<Note>();
 
+        var accidentals = new ArrayList<>(Arrays.asList(Accidentals.values()));
+        accidentals.add(null);
         for (var noteName : NoteNames.values()) {
-            for (var accidental : Accidentals.values()) {
+            for (var accidental : accidentals) {
                 for (var octave : Octaves.values()) {
                     innerStorage.add(new Note(noteName, accidental, octave));
                 }
             }
         }
-        removeOneKeyAsideBorderNotes(innerStorage);
+        // removeOneKeyAsideBorderNotes(innerStorage);
 
         Note.innerStorage = innerStorage;
     }
@@ -56,17 +61,21 @@ public final class Note extends ValueObject implements Serializable {
         // yep, pretty not optimized, but we know that premature optimization is bad idea
         return innerStorage.stream()
                 .filter((Note note) -> note.noteName.equals(noteName)
-                        && note.accidental.equals(accidental)
+                        && Objects.equals(note.accidental, accidental)
                         && note.octave.equals(octave))
                 .findFirst()
                 .orElseThrow();
     }
 
-    public static Note[] denormalize(final PianoKeyNumber pianoKeyNumber) {
+    public static Note[] denormalize(final PianoKeyNumber pianoKeyNumber, final boolean excludeNaturalAccidental) {
         return innerStorage.stream()
-                .filter((Note note) -> note.normalize()
-                        .equals(pianoKeyNumber))
+                .filter((Note note) -> Objects.equals(note.normalize(), pianoKeyNumber) &&
+                        !(excludeNaturalAccidental && Objects.equals(note.accidental, Accidentals.NATURAL)))
                 .toArray(Note[]::new);
+    }
+
+    public static Note[] denormalize(final PianoKeyNumber pianoKeyNumber) {
+        return denormalize(pianoKeyNumber, false);
     }
 
     public static Note[] getAll() {

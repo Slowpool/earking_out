@@ -24,8 +24,8 @@ public class NotePBTTest {
     }
 
     @Property
-    public void pianoKeyNumber(@ForAll("getAllPianoKeyNumbers") final PianoKeyNumber pianoKeyNumber) {
-        var notes = Note.denormalize(pianoKeyNumber);
+    public void pianoKeyNumberWithoutNatural(@ForAll("getAllPianoKeyNumbers") final PianoKeyNumber pianoKeyNumber) {
+        var notes = Note.denormalize(pianoKeyNumber, true);
 
         var expectedNumberOfNotes = getExpectedNumberOfNotes(pianoKeyNumber);
         assertEquals(expectedNumberOfNotes, notes.length);
@@ -33,7 +33,6 @@ public class NotePBTTest {
             var normalizedNote = notes[i].normalize();
             assertTrue(normalizedNote.equals(pianoKeyNumber));
         }
-
         if (expectedNumberOfNotes == 2) {
             assertFalse(notes[0].equals(notes[1]));
         }

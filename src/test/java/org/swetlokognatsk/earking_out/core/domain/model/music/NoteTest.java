@@ -59,7 +59,7 @@ public final class NoteTest {
 
     /**
      * Tests traverse all combinations of all notes/accidentals/octaves used in app,
-     * though there's edge cases like C1b - the combination of
+     * though there's edge cases like Cb1 - the combination of
      * note/accidental/octave is permissible, though normalized value of this note
      * is 3 - there's no PianoKeyNumber in app with such a note. btw from the point
      * of view of domain, note 3 exists.

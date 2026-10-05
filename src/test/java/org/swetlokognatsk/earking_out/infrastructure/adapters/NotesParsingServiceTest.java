@@ -85,7 +85,7 @@ public class NotesParsingServiceTest {
     public void noteNamesAreParsedCorrectly() {
         parseEachNoteAndAssert((String textNote, Note parsedNote, Integer i) -> {
             var expectedNoteName = EXPECTED_TEXT_NOTES_NOTE_NAMES[i];
-            assertEquals(expectedNoteName, parsedNote.noteName());
+            assertEquals(expectedNoteName, parsedNote.noteName);
         });
     }
 
@@ -93,7 +93,7 @@ public class NotesParsingServiceTest {
     public void accidentalsAreParsedCorrectly() {
         parseEachNoteAndAssert((String textNote, Note parsedNote, Integer i) -> {
             var expectedAccidental = EXPECTED_TEXT_NOTES_ACCIDENTALS[i];
-            assertEquals(expectedAccidental, parsedNote.accidental());
+            assertEquals(expectedAccidental, parsedNote.accidental);
         });
     }
 
@@ -101,7 +101,7 @@ public class NotesParsingServiceTest {
     public void octavesAreParsedCorrectly() {
         parseEachNoteAndAssert((String textNote, Note parsedNote, Integer i) -> {
             var expectedOctave = EXPECTED_TEXT_NOTES_OCTAVES[i];
-            assertEquals(expectedOctave, parsedNote.octave());
+            assertEquals(expectedOctave, parsedNote.octave);
         });
     }
 
