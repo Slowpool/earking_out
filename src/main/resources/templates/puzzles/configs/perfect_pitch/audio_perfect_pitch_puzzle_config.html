@@ -29,6 +29,7 @@
                 hx-trigger="change"
                 hx-swap="none"
             >
+            <span class="hint" title="You can disable stats recording if you want to experiment or feel weak and you don't want your training session to ruin the global stats">ⓘ</span>
         </div>
         <div class="puzzle-config-piano-keyboard-property">
             <label class="centered" for="piano-keyboard-AUDIO_PERFECT_PITCH_NOTES_PICKER">Notes:</label>
@@ -57,6 +58,7 @@
                     th:selected="${inputMode == mode}"
                 ></option>
             </select>
+            <span class="hint" title="Piano on the screen - you will see a piano similar on the above one to make guess. Notes as text - you will have to type the note manually in scientific pitch notation">ⓘ</span>
         </div>
         <div class="puzzle-config-property">
             <label for="audio-perfect-pitch-guessing-piano-is-soundless">Guessing piano is soundless:&nbsp;</label>
@@ -69,6 +71,7 @@
                 hx-trigger="change"
                 hx-swap="none"
             >
+            <span class="hint" title="It's more comfortable to make guesses when piano sounds are disabled. Try to guess with enabled sounds and you will understand.">ⓘ</span>
         </div>
         <div class="centered">
             <button

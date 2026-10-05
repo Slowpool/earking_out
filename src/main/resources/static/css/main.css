@@ -223,3 +223,9 @@ a {
     border: 1px solid black;
     padding: 4px;
 }
+
+.hint {
+    cursor: help;
+    width: min-content;
+    margin-inline: 6px;
+}
