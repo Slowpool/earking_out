@@ -6,8 +6,10 @@ button,
 span,
 label,
 select,
-option {
+option,
+a {
     font-size: 18px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .dropdown-content {
