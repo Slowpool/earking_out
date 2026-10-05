@@ -40,7 +40,7 @@ public final class PerfectPitchSessionStatsAggregatorTest {
     }
 
     private void assertNoteEquals(final Note expectedNote, final PerfectPitchNoteStats noteStats) {
-        assertEquals(expectedNote, noteStats.note);
+        assertEquals(expectedNote, noteStats.keyNumber);
     }
 
     private void assertNumberOfAppearancesEquals(final int expectedNumberOfAppearances, final PerfectPitchNoteStats noteStats) {

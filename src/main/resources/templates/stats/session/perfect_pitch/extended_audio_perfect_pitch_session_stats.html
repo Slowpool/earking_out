@@ -1,7 +1,7 @@
 <table th:if="${not #arrays.isEmpty(stats.notesStats)}">
     <thead>
         <tr>
-            <th>note name</th>
+            <th>note(s)</th>
             <th>appearances</th>
             <th>guesses</th>
             <th>perfect guesses</th>
@@ -9,8 +9,8 @@
         </tr>
     </thead>
     <tbody>
-        <tr th:each="noteStats : ${stats.notesStats}">
-            <td th:text="${noteStats.note.value}"></td>
+        <tr th:each="noteStats : ${stats.notesStats}" th:with="notes=${T(org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note).denormalize(noteStats.keyNumber, true)}">
+            <td><span th:each="note : ${notes}" th:text="|${note.noteName.name()}${note.accidental?.character ?: ''}${note.octave.number} |"></span></td>
             <td th:text="${noteStats.numberOfAppearances}"></td>
             <td th:text="${noteStats.numberOfAllGuesses}"></td>
             <td th:text="${noteStats.numberOfPerfectGuesses}"></td>

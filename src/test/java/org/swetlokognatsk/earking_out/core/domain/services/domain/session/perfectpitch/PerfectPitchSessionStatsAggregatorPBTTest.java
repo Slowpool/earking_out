@@ -53,7 +53,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
     // ensuring that the set of stats notes is subset of possible solutions
     private void assertAllNotesExistInPossibleSolutions(final PerfectPitchSessionStats<?> stats, final List<PianoKeyNumber> possibleSolutions) {
         var statsNotes = Arrays.stream(stats.notesStats)
-                .map(noteStats -> noteStats.note)
+                .map(noteStats -> noteStats.keyNumber)
                 .toList();
         for (var note : statsNotes) {
             assertTrue(possibleSolutions.contains(note));
@@ -62,29 +62,29 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
 
     private void assertNumberOfNoteApperancesEqual(final DomainEvent[] domainEvents, final PerfectPitchSessionStats<?> stats) {
         for (var noteStats : stats.notesStats) {
-            var expectedNumberOfAppearances = gatherNumberOfNoteAppearances(domainEvents, noteStats.note);
+            var expectedNumberOfAppearances = gatherNumberOfNoteAppearances(domainEvents, noteStats.keyNumber);
             assertEquals(expectedNumberOfAppearances, noteStats.numberOfAppearances);
         }
     }
 
     private void assertNumberOfAllGuessesEqual(final DomainEvent[] domainEvents, final PerfectPitchSessionStats<?> stats) {
         for (var noteStats : stats.notesStats) {
-            var expectedNumberOfAllGuesses = gatherNumberOfAllGuesses(domainEvents, noteStats.note);
+            var expectedNumberOfAllGuesses = gatherNumberOfAllGuesses(domainEvents, noteStats.keyNumber);
             assertEquals(expectedNumberOfAllGuesses, noteStats.numberOfAllGuesses);
         }
     }
 
     private void assertNumberOfPerfectGuessesEqual(final DomainEvent[] domainEvents, final PerfectPitchSessionStats<?> stats) {
         for (var noteStats : stats.notesStats) {
-            var expectedNumberOfPerfectGuesses = gatherNumberOfPerfectGuesses(domainEvents, noteStats.note);
+            var expectedNumberOfPerfectGuesses = gatherNumberOfPerfectGuesses(domainEvents, noteStats.keyNumber);
             assertEquals(expectedNumberOfPerfectGuesses, noteStats.numberOfPerfectGuesses);
         }
     }
 
     private void assertPerfectGuessesRatioEqual(final DomainEvent[] domainEvents, final PerfectPitchSessionStats<?> stats) {
         for (var noteStats : stats.notesStats) {
-            var expectedNumberOfPerfectGuesses = gatherNumberOfPerfectGuesses(domainEvents, noteStats.note);
-            var expectedNumberOfAllGuesses = gatherNumberOfAllGuesses(domainEvents, noteStats.note);
+            var expectedNumberOfPerfectGuesses = gatherNumberOfPerfectGuesses(domainEvents, noteStats.keyNumber);
+            var expectedNumberOfAllGuesses = gatherNumberOfAllGuesses(domainEvents, noteStats.keyNumber);
             var expectedPerfectGuessesRatio = expectedNumberOfAllGuesses == 0.0
                     ? 0.0
                     : ((double) expectedNumberOfPerfectGuesses) / expectedNumberOfAllGuesses;
@@ -184,7 +184,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
         var stats = aggregate(domainEvents);
 
         var distinctNotesStream = Arrays.stream(stats.notesStats)
-                .map(noteStats -> noteStats.note)
+                .map(noteStats -> noteStats.keyNumber)
                 .distinct();
         assertEquals(stats.notesStats.length, distinctNotesStream.count());
     }

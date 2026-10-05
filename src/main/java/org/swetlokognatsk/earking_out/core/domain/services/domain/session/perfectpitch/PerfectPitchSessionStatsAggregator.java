@@ -61,7 +61,7 @@ public final class PerfectPitchSessionStatsAggregator<E extends PerfectPitchExer
         if (isPerfectGuess(guessEvent)) {
             newNumberOfPerfectGuesses += 1;
         }
-        return new PerfectPitchNoteStats(noteStats.note, noteStats.numberOfAppearances, noteStats.numberOfAllGuesses + 1, newNumberOfPerfectGuesses);
+        return new PerfectPitchNoteStats(noteStats.keyNumber, noteStats.numberOfAppearances, noteStats.numberOfAllGuesses + 1, newNumberOfPerfectGuesses);
     }
 
     private void applyNewPuzzleEvent(final Map<PianoKeyNumber, PerfectPitchNoteStats> notesStats, final NewPuzzleCreatedEvent newPuzzleEvent) {
@@ -74,7 +74,7 @@ public final class PerfectPitchSessionStatsAggregator<E extends PerfectPitchExer
     }
 
     private PerfectPitchNoteStats withNewPuzzleEvent(final PerfectPitchNoteStats noteStats, final NewPuzzleCreatedEvent newPuzzleEvent) {
-        return new PerfectPitchNoteStats(noteStats.note, noteStats.numberOfAppearances + 1, noteStats.numberOfAllGuesses, noteStats.numberOfPerfectGuesses);
+        return new PerfectPitchNoteStats(noteStats.keyNumber, noteStats.numberOfAppearances + 1, noteStats.numberOfAllGuesses, noteStats.numberOfPerfectGuesses);
     }
 
     private PerfectPitchNoteStats getOrCreateNoteStats(final Map<PianoKeyNumber, PerfectPitchNoteStats> notesStats, final PianoKeyNumber note) {

@@ -43,7 +43,7 @@ public final class PerfectPitchStatsPane<E extends PerfectPitchExercise, SADTO e
         var noteColumn = new TableColumn<PerfectPitchNoteStats, String>("Note");
         noteColumn.setCellValueFactory(cellData -> {
             var keyNumber = cellData.getValue()
-                .note
+                .keyNumber
                 .value;
             return new SimpleObjectProperty<>(String.valueOf(keyNumber));
         });

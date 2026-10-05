@@ -7,14 +7,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 
 public final class PerfectPitchNoteStats extends ValueObject {
 
-    public final PianoKeyNumber note;
+    public final PianoKeyNumber keyNumber;
     public final int numberOfAppearances;
     public final int numberOfAllGuesses;
     public final int numberOfPerfectGuesses;
     public final double perfectGuessesRatio;
 
-    public PerfectPitchNoteStats(final PianoKeyNumber note, final int numberOfAppearances, final int numberOfAllGuesses, final int numberOfPerfectGuesses) {
-        this.note = Objects.requireNonNull(note);
+    public PerfectPitchNoteStats(final PianoKeyNumber keyNumber, final int numberOfAppearances, final int numberOfAllGuesses, final int numberOfPerfectGuesses) {
+        this.keyNumber = Objects.requireNonNull(keyNumber);
 
         validateNumberOfAppearances(numberOfAppearances);
         this.numberOfAppearances = numberOfAppearances;
@@ -26,6 +26,10 @@ public final class PerfectPitchNoteStats extends ValueObject {
         this.numberOfPerfectGuesses = numberOfPerfectGuesses;
 
         this.perfectGuessesRatio = calcPerfectGuessesRatio(numberOfPerfectGuesses, numberOfAllGuesses);
+    }
+
+    public PerfectPitchNoteStats(final PianoKeyNumber keyNumber) {
+        this(keyNumber, 0, 0, 0);
     }
 
     private void validateNumberOfAppearances(final int numberOfAppearances) {
@@ -70,7 +74,4 @@ public final class PerfectPitchNoteStats extends ValueObject {
                 : ((double) numberOfPerfectGuesses) / numberOfAllGuesses;
     }
 
-    public PerfectPitchNoteStats(final PianoKeyNumber note) {
-        this(note, 0, 0, 0);
-    }
 }
