@@ -209,6 +209,9 @@ function stopAllSounds() {
 function updateCompletedPuzzlesNumber(newCompletedPuzzlesNumber) {
     var numberOfPuzzlesElement = document.querySelector("#number-of-completed-puzzles");
     numberOfPuzzlesElement.textContent = newCompletedPuzzlesNumber;
+
+    var puzzleProgressBar = document.querySelector("#puzzle-progress");
+    puzzleProgressBar.setAttribute("value", newCompletedPuzzlesNumber);
 }
 
 function updateHint(newHint) {

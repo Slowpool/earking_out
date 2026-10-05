@@ -175,3 +175,8 @@ a {
     width: 0.87vw;
     height: auto;
 }
+
+#puzzle-progress {
+    width: 100%;
+    height: 35px;
+}
