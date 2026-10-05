@@ -6,16 +6,17 @@
         <link rel="stylesheet" href="/css/main.css">
     </head>
     <body>
-        <header>
-            <div th:replace="~{exercises :: exercises-nav}">
-
-            </div>
+        <header id="main-header">
+            <nav class="nav-item">
+                <a id="home-link" href="/">Earking out</a>
+            </nav>
+            <div th:replace="~{exercises}"></div>
         </header>
-        
         <main id="main-content" layout:fragment="content">
             <p>Placeholder content</p>
         </main>
-    
-        <footer>footer</footer>
+        <footer>
+            <a href="https://github.com/Slowpool/earking_out">Github</a>
+        </footer>
     </body>
 </html>

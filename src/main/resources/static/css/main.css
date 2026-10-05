@@ -2,14 +2,16 @@
     position: relative;
     display: inline-block;
 }
+
 .dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 100;
 }
+
 .dropdown:hover .dropdown-content {
     display: block;
 }
@@ -19,6 +21,7 @@
     padding: 12px 16px;
     cursor: pointer;
 }
+
 .exercise-types {
     display: none;
     position: absolute;
@@ -27,15 +30,18 @@
     background-color: #f1f1f1;
     min-width: 120px;
 }
+
 .exercise-item:hover .exercise-types {
     display: block;
 }
+
 .exercise-types a {
     display: block;
     padding: 10px;
     text-decoration: none;
     color: black;
 }
+
 .exercise-types a:hover {
     background-color: #ddd;
 }
@@ -43,11 +49,11 @@
 .piano-keyboard {
     position: relative;
     width: 100%;
-    aspect-ratio: 49 / 6.36; 
+    aspect-ratio: 49 / 6.36;
     box-sizing: border-box;
 }
 
-.white-keys-layer, 
+.white-keys-layer,
 .black-keys-layer {
     position: absolute;
     top: 10px;
@@ -56,13 +62,13 @@
     bottom: 10px;
     display: grid;
     /* 49 white keys * 3 tracks per key = 147 total grid tracks */
-    grid-template-columns: repeat(147, 1fr); 
+    grid-template-columns: repeat(147, 1fr);
     box-sizing: border-box;
 }
 
 .black-keys-layer {
     z-index: 2;
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 .piano-key.WHITE {
@@ -78,7 +84,7 @@
     /* cursor: pointer; */
     box-sizing: border-box;
     z-index: 1;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
 .piano-key.BLACK {
@@ -86,7 +92,7 @@
     top: -1px;
     grid-column: span 2;
     /* 9cm / 15cm propotion */
-    height: 60%; 
+    height: 60%;
     background: linear-gradient(to bottom, #333 0%, #050505 100%);
     border-bottom: 2px solid #444;
     border-radius: 4px;
@@ -94,18 +100,58 @@
     align-items: flex-end;
     padding-bottom: 4px;
     box-sizing: border-box;
-    pointer-events: auto; 
-    margin-left: -50%; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    pointer-events: auto;
+    margin-left: -50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
+
 /* TODO finish reviewing */
 .piano-key[data-isSelected="true"].WHITE {
     background: #00b4d8;
     border-bottom-width: 1px;
     transform: translateY(2px);
 }
+
 .piano-key[data-isSelected="true"].BLACK {
     background: #0014a9;
     border-bottom-width: 1px;
     transform: translateY(1px);
+}
+
+#main-header {
+    display: flex;
+    gap: 10px;
+}
+
+#home-link {
+    text-decoration: none;
+    color: #000000;
+    background: #00b4d8;
+    border-radius: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-inline: 8px;
+}
+
+a {
+    color: #0014a9;
+}
+
+.nav-item {
+    background: #00b4d8;
+    border-radius: 4px;
+    color: #000000;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-inline: 8px;
+}
+
+.dropdown-btn {
+    height: 100%;
+    width: 100%;
+    border: 0px;
+    background: #00b4d8;
+    color: #000000;
+    padding-bottom: 2px;
+    padding-inline: 8px;
 }

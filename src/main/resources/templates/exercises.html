@@ -1,15 +1,15 @@
-<nav th:fragment="exercises-nav" class="exercises-menu">
+<nav class="nav-item exercises-menu">
     <div class="dropdown">
         <button class="dropdown-btn">Exercises</button>
         <div class="dropdown-content">
-            <div class="exercise-item">
+            <div class="exercise-item nav-item">
                 <span class="exercise-name">Perfect Pitch</span>
                 <div class="exercise-types">
-                    <button hx-get="/api/v1/exercise/perfect-pitch/audio" hx-trigger="click" hx-target="#main-content">Audio</a>
-                    <button hx-get="/api/v1/exercise/perfect-pitch/visual" hx-trigger="click" hx-target="#main-content">Visual</a>
+                    <button class="exercise-item" hx-get="/api/v1/exercise/perfect-pitch/audio" hx-trigger="click" hx-target="#main-content">Audio</button>
+                    <button class="exercise-item">Visual (coming soon...)</button>
                 </div>
             </div>
-            <div class="exercise-item">
+            <div class="exercise-item nav-item">
                 <span class="exercise-name">Coming soon...</span>
             </div>
         </div>
