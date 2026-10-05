@@ -1,14 +1,7 @@
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 100;
 }
 
@@ -16,34 +9,47 @@
     display: block;
 }
 
-.exercise-item {
+.exercise-row {
     position: relative;
     padding: 12px 16px;
     cursor: pointer;
+    background-color: #00b4d8;
+    border-radius: 4px;
 }
 
 .exercise-types {
     display: none;
     position: absolute;
     left: 100%;
+    height: 200%;
     top: 0;
-    background-color: #f1f1f1;
-    min-width: 120px;
+    min-width: max-content;
+    border-radius: 4px;
 }
 
-.exercise-item:hover .exercise-types {
+.exercise-row:hover .exercise-types {
     display: block;
+    border: 2px #00b4d8;
 }
 
-.exercise-types a {
+.exercise-type-btn {
     display: block;
-    padding: 10px;
-    text-decoration: none;
-    color: black;
+    width: 100%;
+    height: 50%;
+    white-space: nowrap;
+    text-align: left;
+    background: #00b4d8;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
-.exercise-types a:hover {
-    background-color: #ddd;
+.exercise-type-btn:last-child {
+    margin-bottom: 0;
+}
+
+.exercise-type-btn:hover {
+    background-color: #0097d8;
 }
 
 .piano-keyboard {
@@ -61,7 +67,6 @@
     right: 10px;
     bottom: 10px;
     display: grid;
-    /* 49 white keys * 3 tracks per key = 147 total grid tracks */
     grid-template-columns: repeat(147, 1fr);
     box-sizing: border-box;
 }
@@ -80,8 +85,6 @@
     display: flex;
     align-items: flex-end;
     padding-bottom: 6px;
-    /* TODO maybe some miiiinor selecting? */
-    /* cursor: pointer; */
     box-sizing: border-box;
     z-index: 1;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
@@ -91,7 +94,6 @@
     position: relative;
     top: -1px;
     grid-column: span 2;
-    /* 9cm / 15cm propotion */
     height: 60%;
     background: linear-gradient(to bottom, #333 0%, #050505 100%);
     border-bottom: 2px solid #444;
@@ -105,7 +107,6 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
-/* TODO finish reviewing */
 .piano-key[data-isSelected="true"].WHITE {
     background: #00b4d8;
     border-bottom-width: 1px;
