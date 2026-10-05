@@ -2,6 +2,14 @@ html {
     font-size: 18px;
 }
 
+button,
+span,
+label,
+select,
+option {
+    font-size: 18px;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;
@@ -167,7 +175,8 @@ a {
 
 .puzzle-config-property,
 .puzzle-config-piano-keyboard-property,
-.puzzle-block {
+.puzzle-block,
+.stats-block {
     margin-block: 10px;
 }
 
@@ -196,4 +205,17 @@ a {
 
 #perfect-pitch-guessing-textbox {
     width: 3%;
+}
+
+#audio-perfect-pitch-stats-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid black;
+    border-radius: 6px;
+}
+
+#audio-perfect-pitch-stats-table th,
+#audio-perfect-pitch-stats-table td {
+    border: 1px solid black;
+    padding: 4px;
 }

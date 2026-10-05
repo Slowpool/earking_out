@@ -1,21 +1,25 @@
-<table th:if="${not #arrays.isEmpty(stats.notesStats)}">
-    <thead>
-        <tr>
-            <th>note(s)</th>
-            <th>appearances</th>
-            <th>guesses</th>
-            <th>perfect guesses</th>
-            <th>perfect guesses ratio</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="noteStats : ${stats.notesStats}" th:with="notes=${T(org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note).denormalize(noteStats.keyNumber, true)}">
-            <td><span th:each="note : ${notes}" th:text="|${note.noteName.name()}${note.accidental?.character ?: ''}${note.octave.number} |"></span></td>
-            <td th:text="${noteStats.numberOfAppearances}"></td>
-            <td th:text="${noteStats.numberOfAllGuesses}"></td>
-            <td th:text="${noteStats.numberOfPerfectGuesses}"></td>
-            <td th:text="${#numbers.formatPercent(noteStats.perfectGuessesRatio, 1, 2)}"></td>
-        </tr>
-    </tbody>
-</table>
-<div th:if="${#arrays.isEmpty(stats.notesStats)}">Enable stats recording to see detailed stats</div>
+<div class="stats-block centered">
+    <table id="audio-perfect-pitch-stats-table" th:if="${not #arrays.isEmpty(stats.notesStats)}">
+        <thead>
+            <tr>
+                <th>Note(s)</th>
+                <th>Appearances</th>
+                <th>Guesses</th>
+                <th>Perfect guesses</th>
+                <th>Perfect guesses ratio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="noteStats : ${stats.notesStats}" th:with="notes=${T(org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note).denormalize(noteStats.keyNumber, true)}">
+                <td>
+                    <span th:each="note : ${notes}" th:text="|${note.noteName.name()}${note.accidental?.character ?: ''}${note.octave.number} |"></span>
+                </td>
+                <td th:text="${noteStats.numberOfAppearances}"></td>
+                <td th:text="${noteStats.numberOfAllGuesses}"></td>
+                <td th:text="${noteStats.numberOfPerfectGuesses}"></td>
+                <td th:text="${#numbers.formatPercent(noteStats.perfectGuessesRatio, 1, 2)}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div th:if="${#arrays.isEmpty(stats.notesStats)}" class="stats-block centered">Enable stats recording to see detailed stats next time</div>
+</div>
