@@ -15,7 +15,6 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKe
 
 // TODO think about naming. builder is not quite descripting word
 @Component
-@Lazy
 @AllArgsConstructor
 public class PianoKeyboardViewModelsBuilder {
 

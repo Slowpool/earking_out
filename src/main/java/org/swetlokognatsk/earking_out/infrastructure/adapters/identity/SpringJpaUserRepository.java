@@ -12,7 +12,6 @@ import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 
 @Repository
-@Lazy
 @AllArgsConstructor
 public class SpringJpaUserRepository implements UserRepository {
 

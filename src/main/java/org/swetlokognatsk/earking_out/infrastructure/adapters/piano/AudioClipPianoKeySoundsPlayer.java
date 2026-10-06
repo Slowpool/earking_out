@@ -13,6 +13,7 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.sounds.AudioClipSoundPlayer;
 import org.swetlokognatsk.earking_out.infrastructure.sounds.PianoKeySoundFilesBuilder;
 
+// TODO @DesktopComponent
 public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer, Serializable {
     private transient Map<PianoKeyNumber, AudioClipSoundPlayer> soundPlayers;
 

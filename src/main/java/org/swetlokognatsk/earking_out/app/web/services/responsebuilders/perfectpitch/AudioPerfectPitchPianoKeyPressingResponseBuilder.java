@@ -9,7 +9,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import lombok.AllArgsConstructor;
 
 @Component
-@Lazy
 @AllArgsConstructor
 public class AudioPerfectPitchPianoKeyPressingResponseBuilder {
 

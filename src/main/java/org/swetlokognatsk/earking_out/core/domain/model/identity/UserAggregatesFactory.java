@@ -1,10 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.model.identity;
 
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregatesFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 
+@Service
 public class UserAggregatesFactory extends AggregatesFactory<UserAggregate> {
 
     public UserAggregatesFactory(final ObjectCloner cloner) {

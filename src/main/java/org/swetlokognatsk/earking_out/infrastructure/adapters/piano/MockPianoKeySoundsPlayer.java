@@ -1,10 +1,12 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.piano;
 
 import java.io.Serializable;
-
+import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 
+// TODO @WebComponent
+@Component
 public class MockPianoKeySoundsPlayer implements PianoKeySoundsPlayer, Serializable {
     public boolean playIsPressed = false;
     public boolean stopIsPressed = false;

@@ -13,7 +13,6 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrator
 import lombok.AllArgsConstructor;
 
 @Component
-@Lazy
 @AllArgsConstructor
 public class AudioPerfectPitchGuessResponseBuilder {
 

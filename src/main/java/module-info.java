@@ -147,4 +147,5 @@ module org.swetlokognatsk {
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
     opens org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
     opens org.swetlokognatsk.earking_out.app.web.configs;
+    opens org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch;
 }

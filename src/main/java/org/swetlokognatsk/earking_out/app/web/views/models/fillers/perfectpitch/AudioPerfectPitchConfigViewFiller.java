@@ -16,7 +16,6 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.Pi
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode.*;
 
 @Component
-@Lazy
 @AllArgsConstructor
 @ConditionalOnExpression(SpringApp.IS_WEB_BUILD)
 public class AudioPerfectPitchConfigViewFiller {

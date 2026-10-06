@@ -76,7 +76,6 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.AudioClipPia
 import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.SpringPianoKeySoundFilesResolver;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.SQLitePuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.SpringJpaPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.serialization.JacksonJsonSerializer;
@@ -94,25 +93,6 @@ public final class SpringIoCContainer implements IoCContainer {
     public void setContext(final ApplicationContext context) {
         this.context = context;
         this.ctx = (GenericApplicationContext) context;
-
-        initBeans();
-    }
-
-    private void initBeans() {
-        initSharedBeans();
-        switch (SpringApp.build) {
-        case DESKTOP:
-            initDesktopBeans();
-            break;
-        case WEB:
-            initWebBeans();
-            break;
-        default:
-            throw new RuntimeException("unknown build: %s".formatted(SpringApp.build));
-        }
-    }
-
-    private void initSharedBeans() {
     }
 
     private void initDesktopBeans() {

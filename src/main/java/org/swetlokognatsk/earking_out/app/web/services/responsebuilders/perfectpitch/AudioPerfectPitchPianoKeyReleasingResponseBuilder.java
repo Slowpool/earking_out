@@ -9,7 +9,6 @@ import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewMode
 import lombok.AllArgsConstructor;
 
 @Component
-@Lazy
 @AllArgsConstructor
 public class AudioPerfectPitchPianoKeyReleasingResponseBuilder {
     private final PianoKeyboardViewModelsBuilder pianoKeyboardViewModelsBuilder;

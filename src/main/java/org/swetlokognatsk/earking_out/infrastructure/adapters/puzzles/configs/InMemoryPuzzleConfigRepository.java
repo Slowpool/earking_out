@@ -18,7 +18,7 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
 // this is definitely not for production
 @Repository
-public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
+public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     private final Map<PuzzleConfigId, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
     private final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver;

@@ -12,7 +12,7 @@ import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.AggregateRepository;
 
 @Repository
-public final class InMemoryPianoKeyboardRepository extends AggregateRepository implements PianoKeyboardRepository {
+public class InMemoryPianoKeyboardRepository extends AggregateRepository implements PianoKeyboardRepository {
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();
     protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;

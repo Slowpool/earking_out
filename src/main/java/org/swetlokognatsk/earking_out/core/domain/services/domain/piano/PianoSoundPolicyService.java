@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Service
-@Lazy
 public class PianoSoundPolicyService {
     private final PuzzleConfigRepository puzzleConfigRepository;
 
