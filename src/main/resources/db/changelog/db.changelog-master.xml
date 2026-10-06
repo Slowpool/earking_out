@@ -20,4 +20,6 @@
 
     <include file="1790691368_add_user_id_to_puzzle_configs_primary_key.xml" relativeToChangelogFile="true" />
 
+    <include file="1791275520_add_oauth_identity_table.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

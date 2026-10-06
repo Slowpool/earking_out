@@ -1,0 +1,62 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="9" author="slowpool">
+        <createTable tableName="oauth_provider">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="provider" type="varchar(64)">
+                <constraints unique="true" nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="oauth_identity">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="provider_id" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="provider_user_id" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="picture_url" type="text">
+            </column>
+            <column name="connected_at" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+            constraintName="oauth_identity_provider_to_oauth_provider"
+            baseTableName="oauth_identity"
+            baseColumnNames="provider_id"
+            referencedTableName="oauth_provider"
+            referencedColumnNames="id"
+            onDelete="RESTRICT"
+            onUpdate="CASCADE"
+        />
+
+        <addForeignKeyConstraint
+            constraintName="oauth_identity_user_id_to_users"
+            baseTableName="oauth_identity"
+            baseColumnNames="user_id"
+            referencedTableName="users"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            onUpdate="CASCADE"
+        />
+
+        <addUniqueConstraint
+            constraintName="oauth_identity_provider_id_and_user_id_uq"
+            tableName="oauth_identity"
+            columnNames="provider_id,provider_user_id"
+        />
+    </changeSet>
+
+</databaseChangeLog>
