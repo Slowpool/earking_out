@@ -10,8 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
-@Component
-@Lazy
 @AllArgsConstructor
 public class GuestUserInterceptor implements HandlerInterceptor {
 

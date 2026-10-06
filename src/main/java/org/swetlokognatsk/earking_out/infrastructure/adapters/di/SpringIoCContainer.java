@@ -13,6 +13,7 @@ import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersR
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.StatsPanesFactory;
+import org.swetlokognatsk.earking_out.app.web.GuestUserInterceptor;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
@@ -29,6 +30,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnP
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.DesktopUser;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
@@ -235,6 +237,10 @@ public final class SpringIoCContainer implements IoCContainer {
 
         ctx.registerBean(PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator.class, () -> new PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator(get(PianoKeySoundsPlayer.class)));
 
+        ctx.registerBean(UserAggregatesFactory.class);
+
+        ctx.registerBean(UserService.class);
+
     }
 
     private void initWebBeans() {
@@ -243,6 +249,7 @@ public final class SpringIoCContainer implements IoCContainer {
         ctx.registerBean(SpringPianoKeySoundFilesResolver.class);
 
         // TODO register user somehow. take it's identity from session cookie
+        ctx.registerBean(GuestUserInterceptor.class);
     }
 
     public <T> T get(Class<T> someClass, Object... args) {

@@ -5,7 +5,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import lombok.AllArgsConstructor;
 
-@Service
 @AllArgsConstructor
 public class UserService {
 

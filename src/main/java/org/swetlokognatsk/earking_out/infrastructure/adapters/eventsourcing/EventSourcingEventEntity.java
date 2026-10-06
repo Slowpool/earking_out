@@ -70,6 +70,6 @@ public class EventSourcingEventEntity {
         this.type = requireNonNull(type);
         this.createdOn = requireNonNull(createdOn);
         this.payload = requireNonNull(payload);
-        this.version = requireNonNull(version);
+        this.version = version;
     }
 }
