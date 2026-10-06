@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
@@ -12,6 +13,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedE
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
 
+@Component
 public final class SpringEventPublisher implements EventPublisher {
     private ApplicationEventPublisher eventPublisher;
 

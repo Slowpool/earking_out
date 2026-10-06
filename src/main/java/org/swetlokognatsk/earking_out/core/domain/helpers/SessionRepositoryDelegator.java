@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.helpers;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
@@ -10,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfe
 
 // TODO this class is actually awkward workaround of session repositories polymorphism
 // TODO it should not be here
+@Service
 public final class SessionRepositoryDelegator {
     // TODO think about it
     private SessionRepository<?>[] repositories = new SessionRepository[] { DI.get(AudioPerfectPitchSessionRepository.class) };

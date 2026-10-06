@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
-import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -9,6 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 
+@Service
 public final class PianoKeyboardService {
 
     private final PianoKeyboardRepository repository;

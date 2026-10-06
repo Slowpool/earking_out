@@ -1,10 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeysFactory;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 
+@Service
 public final class PianoKeyboardAggregatesFactory extends AggregatesFactory<PianoKeyboardAggregate> {
 
     private final PianoKeysFactory pianoKeysFactory;

@@ -6,9 +6,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
-
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 
+@Service
 public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<VisualPerfectPitchConfigAggregate> {
 
     public VisualPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner, final User user) {

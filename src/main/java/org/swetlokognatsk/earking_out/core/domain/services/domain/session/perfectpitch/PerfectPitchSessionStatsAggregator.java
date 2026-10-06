@@ -1,10 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch;
 
-import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
@@ -18,6 +16,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.Per
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.PerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.session.ExtendedSessionStatsAggregator;
 
+@Service
 public final class PerfectPitchSessionStatsAggregator<E extends PerfectPitchExercise> extends ExtendedSessionStatsAggregator<E, PerfectPitchSessionStats<E>> {
 
     private PerfectPitchPuzzle<?, ?> currentPuzzle;

@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
@@ -7,6 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
+@Service
 public final class LogEventOnNewPuzzleCreatedHandler extends LoggingToEventStoreHandler<NewPuzzleCreatedEvent> {
 
     public LogEventOnNewPuzzleCreatedHandler(final EventStore eventStore, final PuzzleConfigRepository puzzleConfigRepository) {

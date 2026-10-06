@@ -6,7 +6,9 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler extends DomainEventHandler<AudioPerfectPitchExercisePickedEvent> {
 
     private final PianoKeyboardRepository pianoKeyboardRepository;

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import org.springframework.stereotype.Repository;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
@@ -14,9 +15,10 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 
 /**
-    awkward ad-hoc implementation to just make sure the business logic works
-*/
+ * awkward ad-hoc implementation to just make sure the business logic works
+ */
 @Deprecated
+@Repository
 public final class SQLitePuzzleConfigRepository extends PersistentPuzzleConfigRepository {
 
     public static final String fullDbPath = "/Java/earking_out/earking_out.db";

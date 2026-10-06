@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.events;
 
 import java.time.LocalDateTime;
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
@@ -18,6 +19,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 
+@Service
 public final class DomainEventsFactory {
 
     private final UserId userId;

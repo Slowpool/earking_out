@@ -1,9 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session.factories;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -14,12 +14,12 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesParsingService;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
+@Service
 public final class SessionAggregatesFactory extends AggregatesFactory<SessionAggregate<?, ?, ?, ?>> {
     private final PuzzleConfigRepository puzzleConfigRepository;
     private final PianoKeyboardRepository pianoKeyboardRepository;

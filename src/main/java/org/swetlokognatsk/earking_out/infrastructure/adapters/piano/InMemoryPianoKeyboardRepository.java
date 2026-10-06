@@ -1,20 +1,17 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.piano;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang3.ArrayUtils;
-import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.springframework.stereotype.Repository;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardSoundMode;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.AggregateRepository;
 
+@Repository
 public final class InMemoryPianoKeyboardRepository extends AggregateRepository implements PianoKeyboardRepository {
 
     protected final Map<PianoKeyboardId, PianoKeyboardAggregate> pianoKeyboardAggregates = new HashMap<>();

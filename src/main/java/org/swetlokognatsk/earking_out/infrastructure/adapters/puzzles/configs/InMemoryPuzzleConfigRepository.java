@@ -2,6 +2,9 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
@@ -14,6 +17,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
 // this is definitely not for production
+@Repository
 public final class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     private final Map<PuzzleConfigId, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 

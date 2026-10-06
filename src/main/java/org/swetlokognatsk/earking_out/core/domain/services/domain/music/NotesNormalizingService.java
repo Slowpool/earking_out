@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.music;
 
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -11,6 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
  * Db1 actually have the same key number (and the sound accordingly) - that's
  * 5th key number
  */
+@Service
 public final class NotesNormalizingService {
 
     public PianoKeyNumber normalize(final Note note) {

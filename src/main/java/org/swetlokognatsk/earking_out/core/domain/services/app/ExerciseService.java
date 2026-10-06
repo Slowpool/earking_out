@@ -1,10 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
 
+@Service
 public final class ExerciseService {
 
     private final DomainEventsFactory domainEventsFactory;

@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
@@ -7,6 +8,7 @@ import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.EndHintDemo
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.AudioPerfectPitchHintDemonstrator;
 
+@Service
 public final class HintDemonstratorDelegator implements HintDemonstrator<Solution> {
 
     public void demonstrateHint(final Solution solution) {

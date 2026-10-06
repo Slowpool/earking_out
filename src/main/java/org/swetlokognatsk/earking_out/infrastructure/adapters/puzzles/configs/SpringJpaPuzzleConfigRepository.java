@@ -7,12 +7,14 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import jakarta.persistence.EntityManager;
 
+@Repository
+@Primary
 public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepository {
 
     private final EntityManager entityManager;

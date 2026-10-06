@@ -2,12 +2,13 @@ package org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.conf
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
 // TODO make a manager-wrapper to separate the puzzleConfigRepository logic and assembling logic
+@Component
 public final class PuzzleConfigDTOAssembler {
     private static final Map<Exercise, EndPuzzleConfigDTOAssembler<?, ?, ?>> endDtoAssemblers = new HashMap<>();
 
