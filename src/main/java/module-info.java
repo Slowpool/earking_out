@@ -29,6 +29,8 @@ module org.swetlokognatsk {
     requires lombok;
     requires thymeleaf;
     requires thymeleaf.spring6;
+    requires spring.session.core;
+    requires org.apache.tomcat.embed.core;
 
     // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them for learning/training. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
@@ -133,6 +135,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.app.web.services.perfectpitch;
     exports org.swetlokognatsk.earking_out.app.web.services.renderers;
     exports org.swetlokognatsk.earking_out.app.web.services.renderers.perfectpitch;
+    exports org.swetlokognatsk.earking_out.app.web.configs;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;
@@ -142,4 +145,5 @@ module org.swetlokognatsk {
     opens org.swetlokognatsk.earking_out.app.web;
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
     opens org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
+    opens org.swetlokognatsk.earking_out.app.web.configs;
 }
