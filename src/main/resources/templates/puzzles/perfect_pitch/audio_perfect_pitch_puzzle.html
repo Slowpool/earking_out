@@ -22,6 +22,9 @@
         <label for="perfect-pitch-guessing-textbox">Enter your guess:&nbsp;</label>
         <input id="perfect-pitch-guessing-textbox" type="text" placeholder="C#1"/>
     </div>
+    <div class="puzzle-block centered">
+        <div th:replace="~{notification_box}"></div>
+    </div>
     <div th:replace="~{puzzles/finish_button(exerciseName='perfect-pitch', exerciseType='audio')}"></div>
     <audio id="audio-perfect-pitch-hint-player" autoplay th:src="${hint}"></audio>
 </div>

@@ -102,13 +102,25 @@ document.addEventListener('keydown', function (e) {
     }
 
     let sessionId = findSessionId();
+    let guess = normalizeNoteFormat(target.value);
+    if (!validateNote(guess)) {
+        showMessage(guess ? `\`${target.value}\` is invalid or out of range note` : `Invalid note`);
+        return;
+    }
+
     ajax('POST', `/api/v1/puzzle/perfect-pitch/audio/guess?sessionId=${sessionId}`, {
         body: {
-            note: target.value.toUpperCase()
+            note: guess
         },
         handler: function (response) {
             updatePuzzleAfterGuess(response);
             target.value = '';
+            if (!sessionState == SESSION_COMPLETED && response.guessIsSuccessful) {
+                clearMessage();
+            }
+            else {
+                showMessage(guess ? `${guess} is wrong` : `Wrong guess`);
+            }
         }
     })
 });
@@ -271,4 +283,33 @@ function updatePuzzleAfterGuess(guessResult) {
 function findSessionId() {
     return document.querySelector("#sessionId")
         .getAttribute("data-sessionId");
+}
+
+function clearMessage() {
+    showMessage('');
+}
+
+function showMessage(message) {
+    var messageBox = document.querySelector('.notification-box');
+    if (messageBox) {
+        messageBox.textContent = message;
+    }
+}
+
+// eB4 => Eb4
+// Eb4 => Eb4
+function normalizeNoteFormat(note) {
+    if (!note) {
+        return '';
+    }
+
+    return note.charAt(0)
+        .toUpperCase()
+        + note.slice(1)
+            .toLowerCase();
+}
+
+function validateNote(note) {
+    let regexp = /^[A-G][b#]?[1-7]$/;
+    return regexp.test(note);
 }
