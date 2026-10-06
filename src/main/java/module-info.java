@@ -136,6 +136,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.app.web.services.renderers;
     exports org.swetlokognatsk.earking_out.app.web.services.renderers.perfectpitch;
     exports org.swetlokognatsk.earking_out.app.web.configs;
+    exports org.swetlokognatsk.earking_out.core.domain.services.app.identity;
 
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
     opens org.swetlokognatsk.earking_out.learning_tests;

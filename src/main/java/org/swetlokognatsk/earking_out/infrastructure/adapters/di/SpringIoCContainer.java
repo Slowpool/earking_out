@@ -42,6 +42,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigServi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.EndSessionAggregateDTOAssemblersFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.identity.UserService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.PerfectPitchSessionStatsService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
