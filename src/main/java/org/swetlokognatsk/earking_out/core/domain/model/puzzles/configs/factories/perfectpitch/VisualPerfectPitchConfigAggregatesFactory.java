@@ -5,15 +5,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.VisualPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import org.springframework.stereotype.Service;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 
 @Service
 public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<VisualPerfectPitchConfigAggregate> {
 
-    public VisualPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner, final User user) {
-        super(cloner, user);
+    public VisualPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner, final UserResolver userResolver) {
+        super(cloner, userResolver);
     }
 
     public VisualPerfectPitchConfigAggregate createDefault() {
@@ -21,6 +21,6 @@ public final class VisualPerfectPitchConfigAggregatesFactory extends PuzzleConfi
     }
 
     public VisualPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {
-        return new VisualPerfectPitchConfigAggregate(userId, VISUAL_PERFECT_PITCH_EXERCISE, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
+        return new VisualPerfectPitchConfigAggregate(userResolver.getCurrentUserId(), VISUAL_PERFECT_PITCH_EXERCISE, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
     }
 }

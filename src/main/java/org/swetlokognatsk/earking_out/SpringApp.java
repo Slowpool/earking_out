@@ -10,7 +10,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.DesktopUser;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 
 @SpringBootApplication
 public class SpringApp {
@@ -49,10 +48,10 @@ public class SpringApp {
         return executor;
     }
 
-    // TODO add user logic on web, yet it is a dev latch
-    @Bean
-    // @ConditionalOnExpression(IS_DESKTOP_BUILD)
-    User getUser() {
-        return new DesktopUser();
-    }
+    // // TODO add user logic on web, yet it is a dev latch
+    // @Bean
+    // // @ConditionalOnExpression(IS_DESKTOP_BUILD)
+    // User getUser() {
+    //     return new DesktopUser();
+    // }
 }

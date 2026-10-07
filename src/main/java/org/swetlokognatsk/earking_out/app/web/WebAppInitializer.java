@@ -24,8 +24,6 @@ public class WebAppInitializer implements CommandLineRunner {
             initDI(ctx);
             DomainEventHandlers.registerDomainEventHandlers();
         }
-        DI.get(PuzzleConfigRepository.class)
-                .actualizeCache();
     }
 
     public static void initDI(final ApplicationContext context) {

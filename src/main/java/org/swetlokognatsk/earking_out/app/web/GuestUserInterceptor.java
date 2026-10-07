@@ -8,12 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import static org.swetlokognatsk.earking_out.app.web.SessionAttributes.USER_ID;
 
 @WebComponent
 @AllArgsConstructor
 public class GuestUserInterceptor implements HandlerInterceptor {
-
-    public static final String USER_ID = "USER_ID";
 
     private final UserService userService;
 

@@ -2,34 +2,32 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
-import org.swetlokognatsk.earking_out.DebugUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 @Repository
+@Getter(AccessLevel.PRIVATE)
 public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     private final Map<PuzzleConfigId, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
     private final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver;
     private final PuzzleConfigDTOAssembler dtoAssembler;
-    private final UserId userId;
+    private final UserResolver userResolver;
 
-    public InMemoryPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigDTOAssembler dtoAssembler, final User user) {
+    public InMemoryPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigDTOAssembler dtoAssembler, final UserResolver userResolver) {
         this.puzzleConfigAggregatesFactoryResolver = puzzleConfigAggregatesFactoryResolver;
         this.dtoAssembler = dtoAssembler;
-        this.userId = user.id;
+        this.userResolver = userResolver;
 
         // TODO it should be used only in tests as i remember
         // seedConfigs();
@@ -46,7 +44,8 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     }
 
     private <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>>> PCAF createFactory(final E exercise) {
-        return puzzleConfigAggregatesFactoryResolver.resolveFactory(exercise);
+        return getPuzzleConfigAggregatesFactoryResolver()
+                .resolveFactory(exercise);
     }
 
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
@@ -73,20 +72,30 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
         var puzzleConfig = genericGet(exercise);
-        var dto = dtoAssembler.assemble(puzzleConfig);
+        var dto = getDtoAssembler()
+                .assemble(puzzleConfig);
         return (PCDTO) dto;
     }
 
     private <E extends Exercise> PuzzleConfigAggregate<E> innerGet(final E exercise) {
-        return (PuzzleConfigAggregate<E>) aggregates.get(buildKey(exercise));
+        return (PuzzleConfigAggregate<E>) getAggregates()
+                .get(buildKey(exercise));
     }
 
     private void innerSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var key = buildKey(puzzleConfigAggregate.getId());
-        aggregates.put(key, puzzleConfigAggregate);
+        getAggregates()
+                .put(key, puzzleConfigAggregate);
     }
 
     private PuzzleConfigId buildKey(final Exercise exercise) {
-        return new PuzzleConfigId(exercise.toString(), userId.id());
+        var userId = getUserResolver()
+                .getCurrentUserId()
+                .id();
+        return new PuzzleConfigId(exercise.toString(), userId);
+    }
+
+    public void actualizeCache() {
+        // no impl because it's caching repo itself        
     }
 }

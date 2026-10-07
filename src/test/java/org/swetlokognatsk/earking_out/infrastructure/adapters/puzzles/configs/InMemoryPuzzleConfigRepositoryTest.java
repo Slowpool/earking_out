@@ -3,7 +3,6 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -18,8 +17,9 @@ import java.util.UUID;
 public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
     private InMemoryPuzzleConfigRepository repository;
-    private final static User USER_A = new User(new UserId(1), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000001")), "a");
-    private final static User USER_B = new User(new UserId(2), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000002")), "b");
+    // TODO delete it?
+    // private final static User USER_A = new User(new UserId(1), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000001")), "a");
+    // private final static User USER_B = new User(new UserId(2), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000002")), "b");
 
     protected AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>> getRepository() {
         return repository;

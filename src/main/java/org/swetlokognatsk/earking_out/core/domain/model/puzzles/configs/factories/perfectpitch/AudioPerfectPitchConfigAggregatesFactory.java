@@ -5,20 +5,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
-
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 
 @Service
-// TODO use it
-// @Scope(WebApplicationContext.SCOPE_SESSION)
 public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<AudioPerfectPitchConfigAggregate> {
 
-    public AudioPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner, final User user) {
-        super(cloner, user);
+    public AudioPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner, final UserResolver userResolver) {
+        super(cloner, userResolver);
     }
 
     public AudioPerfectPitchConfigAggregate createDefault() {
@@ -26,6 +21,6 @@ public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfig
     }
 
     public AudioPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {
-        return new AudioPerfectPitchConfigAggregate(userId, AUDIO_PERFECT_PITCH_EXERCISE, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
+        return new AudioPerfectPitchConfigAggregate(userResolver.getCurrentUserId(), AUDIO_PERFECT_PITCH_EXERCISE, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
     }
 }

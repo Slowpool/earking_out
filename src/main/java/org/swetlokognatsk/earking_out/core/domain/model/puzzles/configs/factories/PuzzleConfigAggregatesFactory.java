@@ -1,19 +1,19 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 
 public abstract class PuzzleConfigAggregatesFactory<PCA extends PuzzleConfigAggregate<?>> extends AggregatesFactory<PCA> {
 
-    protected final UserId userId;
+    protected final UserResolver userResolver;
 
-    public PuzzleConfigAggregatesFactory(final ObjectCloner cloner, final User user) {
+    public PuzzleConfigAggregatesFactory(final ObjectCloner cloner, final UserResolver userResolver) {
         super(cloner);
 
-        this.userId = user.id;
+        this.userResolver = userResolver;
     }
 
     public abstract PCA createDefault();

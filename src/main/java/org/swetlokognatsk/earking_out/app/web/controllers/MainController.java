@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import jakarta.servlet.http.Cookie;
 import org.springframework.session.MapSession;
+import static org.swetlokognatsk.earking_out.app.web.SessionAttributes.USER_ID;
 
 @Controller
 @AllArgsConstructor
@@ -18,8 +19,7 @@ public class MainController {
 
     @GetMapping("/")
     public String home(HttpSession session) {
-        // TODO decouple user_id
-        var userId = session.getAttribute(GuestUserInterceptor.USER_ID);
+        var userId = session.getAttribute(USER_ID);
 
         return "main";
     }

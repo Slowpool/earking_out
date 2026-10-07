@@ -10,7 +10,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Repository
 @AllArgsConstructor
@@ -18,7 +20,9 @@ public class SpringJpaUserRepository implements UserRepository {
 
     private static final String NAME_TEMPLATE = "%s%d";
 
+    @Getter(AccessLevel.PRIVATE)
     private final UserAggregatesFactory userAggregatesFactory;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -45,7 +49,8 @@ public class SpringJpaUserRepository implements UserRepository {
     private UserAggregate mapUserEntityToAggregate(final UserEntity userEntity) {
         var userId = new UserId(userEntity.getId());
         var userUuid = new UserUuid(userEntity.getUuid());
-        return userAggregatesFactory.create(userId, userUuid, userEntity.getName());
+        return getUserAggregatesFactory()
+                .create(userId, userUuid, userEntity.getName());
     }
 
     @Transactional
