@@ -12,6 +12,8 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleConfigNotFoundException;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 
@@ -33,16 +35,6 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
         // seedConfigs();
     }
 
-    private void seedConfigs() {
-        var exercises = ExercisesFactory.getAll();
-        PuzzleConfigAggregate<?> puzzleConfigAggregate;
-        for (var exercise : exercises) {
-            var factory = createFactory(exercise);
-            puzzleConfigAggregate = factory.createDefault();
-            innerSave(puzzleConfigAggregate);
-        }
-    }
-
     private <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>>> PCAF createFactory(final E exercise) {
         return getPuzzleConfigAggregatesFactoryResolver()
                 .resolveFactory(exercise);
@@ -51,7 +43,7 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
         var puzzleConfigAggregate = innerGet(exercise);
         if (puzzleConfigAggregate == null) {
-            throw new IllegalArgumentException("unknown exercise: " + exercise);
+            throw new PuzzleConfigNotFoundException("puzzle config is not found for exercise: " + exercise);
         }
 
         puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
@@ -65,9 +57,9 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
         return (PCA) puzzleConfigAggregateCopy;
     }
 
-    public void genericSave(PuzzleConfigAggregate<?> puzzleConfigAggregate) {
+    public void save(PuzzleConfigAggregate<Exercise> puzzleConfigAggregate) {
         puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
-        innerSave(puzzleConfigAggregate);
+        saveImpl(puzzleConfigAggregate);
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
@@ -82,7 +74,7 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
                 .get(buildKey(exercise));
     }
 
-    private void innerSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
+    private void saveImpl(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var key = buildKey(puzzleConfigAggregate.getId());
         getAggregates()
                 .put(key, puzzleConfigAggregate);

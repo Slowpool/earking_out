@@ -8,6 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.AggregateRepository;
 import lombok.AccessLevel;
@@ -21,10 +22,9 @@ public class InMemoryPianoKeyboardRepository extends AggregateRepository impleme
     private final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
     private final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
 
-    public InMemoryPianoKeyboardRepository(final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory, final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler) {
+    public InMemoryPianoKeyboardRepository(final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory, final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler, final UserResolver userResolver) {
         this.pianoKeyboardAggregatesFactory = pianoKeyboardAggregatesFactory;
         this.pianoKeyboardDtoAssembler = pianoKeyboardDtoAssembler;
-        initPianoKeyboards();
     }
 
     private void initPianoKeyboards() {

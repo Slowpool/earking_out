@@ -14,6 +14,7 @@ import jakarta.persistence.EntityManager;
 import lombok.Getter;
 import lombok.AccessLevel;
 
+// TODO integration tests. definitely
 @Repository
 @Primary
 @Getter(AccessLevel.PRIVATE)
@@ -30,7 +31,7 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
         super(puzzleConfigAggregatesFactoryResolver, puzzleConfigJsonSerializer, dtoAssembler, cacheRepository);
     }
 
-    public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
+    public void saveImpl(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
         var serializedPuzzleConfig = getPuzzleConfigJsonSerializer()
                 .serializePuzzleConfig(puzzleConfigAggregate);
         var stringedExercise = puzzleConfigAggregate.getId()

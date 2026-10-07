@@ -83,7 +83,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
         PianoKeyNumber newNormalizedRootNote = PianoKeyNumber.valueOf(9);
         aggregate.updateProperty(AudioPerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP, newNormalizedRootNote);
-        repository.genericSave(aggregate);
+        repository.save(aggregate);
 
         aggregate = getPerfectPitchConfigAggregate();
         assertEquals(newNormalizedRootNote, aggregate.getNormalizedRootNote());

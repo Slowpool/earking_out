@@ -258,13 +258,13 @@ class DomainEventsTimelineBuilder {
     private void setPossibleSolutionsToConfig(final List<PianoKeyNumber> possibleSolutions) {
         var puzzleConfig = puzzleConfigRepository.genericGet(AUDIO_PERFECT_PITCH_EXERCISE);
         puzzleConfig.updateProperty(PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP, possibleSolutions.toArray(PianoKeyNumber[]::new));
-        puzzleConfigRepository.genericSave(puzzleConfig);
+        puzzleConfigRepository.saveImpl(puzzleConfig);
     }
 
     private void setMaxNumberOfPuzzles() {
         var puzzleConfig = puzzleConfigRepository.genericGet(AUDIO_PERFECT_PITCH_EXERCISE);
         puzzleConfig.updateProperty(PerfectPitchConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP, Integer.MAX_VALUE);
-        puzzleConfigRepository.genericSave(puzzleConfig);
+        puzzleConfigRepository.saveImpl(puzzleConfig);
     }
 
     private void makeGuess(final AudioPerfectPitchSessionAggregate sessionAggregate, final Boolean mustBeSuccessful) {
