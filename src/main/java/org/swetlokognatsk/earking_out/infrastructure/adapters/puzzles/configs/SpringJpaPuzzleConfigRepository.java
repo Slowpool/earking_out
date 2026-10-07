@@ -12,9 +12,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import jakarta.persistence.EntityManager;
+import lombok.Getter;
+import lombok.AccessLevel;
 
 @Repository
 @Primary
+@Getter(AccessLevel.PRIVATE)
 public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepository {
 
     private final EntityManager entityManager;
@@ -29,21 +32,24 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
     }
 
     public void genericSave(final PuzzleConfigAggregate<?> puzzleConfigAggregate) {
-        var serializedPuzzleConfig = puzzleConfigJsonSerializer.serializePuzzleConfig(puzzleConfigAggregate);
+        var serializedPuzzleConfig = getPuzzleConfigJsonSerializer()
+                .serializePuzzleConfig(puzzleConfigAggregate);
         var stringedExercise = puzzleConfigAggregate.getId()
                 .toString();
 
-        transactionTemplate.execute(status -> {
-            var puzzleConfigEntity = findByExercise(puzzleConfigAggregate.getId());
-            if (puzzleConfigEntity == null) {
-                puzzleConfigEntity = new PuzzleConfigEntity(userId.id(), stringedExercise, serializedPuzzleConfig);
-            } else {
-                puzzleConfigEntity.setSerializedPuzzleConfig(serializedPuzzleConfig);
-            }
+        getTransactionTemplate()
+                .execute(status -> {
+                    var puzzleConfigEntity = findByExercise(puzzleConfigAggregate.getId());
+                    if (puzzleConfigEntity == null) {
+                        puzzleConfigEntity = new PuzzleConfigEntity(userId.id(), stringedExercise, serializedPuzzleConfig);
+                    } else {
+                        puzzleConfigEntity.setSerializedPuzzleConfig(serializedPuzzleConfig);
+                    }
 
-            entityManager.persist(puzzleConfigEntity);
-            return null;
-        });
+                    getEntityManager()
+                            .persist(puzzleConfigEntity);
+                    return null;
+                });
     }
 
     protected String getOrCreatePuzzleConfigJson(final Exercise exercise) {
@@ -58,7 +64,8 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
     private final PuzzleConfigEntity findByExercise(final Exercise exercise) {
         var exerciseId = exercise.toString();
         var id = new PuzzleConfigId(exerciseId, userId.id());
-        var puzzleConfig = entityManager.find(PuzzleConfigEntity.class, id);
+        var puzzleConfig = getEntityManager()
+                .find(PuzzleConfigEntity.class, id);
         return puzzleConfig;
     }
 

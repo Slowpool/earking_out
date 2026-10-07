@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.identity;
 
-import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,15 +17,18 @@ public class UserEntity {
     @Id
     // TODO explore these strategies
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UserId id;
-    private UserUuid uuid;
+    private int id;
+
+    @JdbcTypeCode(SqlTypes.UUID)
+    private UUID uuid;
+
     private String name;
 
-    public UserId getId() {
+    public int getId() {
         return id;
     }
 
-    public UserUuid getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
@@ -43,11 +48,12 @@ public class UserEntity {
     }
 
     public UserEntity(final String name) {
-        this.uuid = UserUuid.random();
+        this.uuid = UserUuid.random()
+                .uuid();
         this.name = name;
     }
 
-    public UserEntity(final UserId id, final UserUuid uuid, final String name) {
+    public UserEntity(final int id, final UUID uuid, final String name) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;

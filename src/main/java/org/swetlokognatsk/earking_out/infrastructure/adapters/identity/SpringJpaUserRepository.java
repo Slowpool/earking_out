@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,7 +16,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SpringJpaUserRepository implements UserRepository {
 
-    private static final String NAME_TEMPLATE = "%s_%d";
+    private static final String NAME_TEMPLATE = "%s%d";
 
     private final UserAggregatesFactory userAggregatesFactory;
     @PersistenceContext
@@ -42,7 +43,9 @@ public class SpringJpaUserRepository implements UserRepository {
     }
 
     private UserAggregate mapUserEntityToAggregate(final UserEntity userEntity) {
-        return userAggregatesFactory.create(userEntity.getId(), userEntity.getUuid(), userEntity.getName());
+        var userId = new UserId(userEntity.getId());
+        var userUuid = new UserUuid(userEntity.getUuid());
+        return userAggregatesFactory.create(userId, userUuid, userEntity.getName());
     }
 
     @Transactional

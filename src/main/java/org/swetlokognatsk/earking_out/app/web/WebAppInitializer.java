@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.Build;
 import org.swetlokognatsk.earking_out.SpringApp;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
+import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 @Component
@@ -23,6 +24,8 @@ public class WebAppInitializer implements CommandLineRunner {
             initDI(ctx);
             DomainEventHandlers.registerDomainEventHandlers();
         }
+        DI.get(PuzzleConfigRepository.class)
+                .actualizeCache();
     }
 
     public static void initDI(final ApplicationContext context) {

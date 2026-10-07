@@ -1,16 +1,15 @@
 package org.swetlokognatsk.earking_out.app.web;
 
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.identity.UserService;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
-@Component
+@WebComponent
 @AllArgsConstructor
 public class GuestUserInterceptor implements HandlerInterceptor {
 

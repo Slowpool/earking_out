@@ -20,4 +20,5 @@ public interface PuzzleConfigRepository extends AggregateRootRepository<Exercise
 
     <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise);
 
+    void actualizeCache();
 }

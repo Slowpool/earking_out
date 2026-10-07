@@ -13,7 +13,7 @@
             "name": "WebApp",
             "request": "launch",
             "mainClass": "org.swetlokognatsk/org.swetlokognatsk.earking_out.WebEntryPoint",
-            "vmArgs": "-Dspring.profiles.active=web"
+            "vmArgs": "-Dspring.profiles.active=web --add-reads org.swetlokognatsk=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang=spring.core"
         },
         {
             "type": "java",

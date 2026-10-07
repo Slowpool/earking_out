@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories;
 
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -10,6 +11,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 @Service
+@DependsOn({
+        "audioPerfectPitchConfigAggregatesFactory", "visualPerfectPitchConfigAggregatesFactory"
+})
 public final class PuzzleConfigAggregatesFactoryResolver {
 
     public PuzzleConfigAggregatesFactoryResolver() {

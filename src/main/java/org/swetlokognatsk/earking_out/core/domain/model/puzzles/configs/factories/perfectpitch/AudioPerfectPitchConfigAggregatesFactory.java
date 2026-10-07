@@ -6,23 +6,20 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
+
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 
 @Service
+// TODO use it
+// @Scope(WebApplicationContext.SCOPE_SESSION)
 public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<AudioPerfectPitchConfigAggregate> {
-    // protected final PianoKeyboardRepository pianoKeyboardRepository;
-    // // composition
-    // protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
 
     public AudioPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner, final User user) {
         super(cloner, user);
     }
-
-    // // TODO why i specified pianoKeyboardRepository here?
-    // public AudioPerfectPitchConfigAggregatesFactory(final PianoKeyboardRepository pianoKeyboardRepository) {
-    //     this.pianoKeyboardRepository = pianoKeyboardRepository;
-    // }
 
     public AudioPerfectPitchConfigAggregate createDefault() {
         return create(10, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.PIANO_ON_SCREEN, false);

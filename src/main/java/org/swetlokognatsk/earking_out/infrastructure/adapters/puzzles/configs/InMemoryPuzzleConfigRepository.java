@@ -2,9 +2,11 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+import org.swetlokognatsk.earking_out.DebugUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
@@ -16,7 +18,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 
-// this is definitely not for production
 @Repository
 public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     private final Map<PuzzleConfigId, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
@@ -30,7 +31,8 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
         this.dtoAssembler = dtoAssembler;
         this.userId = user.id;
 
-        seedConfigs();
+        // TODO it should be used only in tests as i remember
+        // seedConfigs();
     }
 
     private void seedConfigs() {

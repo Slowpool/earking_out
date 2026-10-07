@@ -13,10 +13,10 @@ import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfe
 // TODO it should not be here
 @Service
 public final class SessionRepositoryDelegator {
-    // TODO think about it
-    private SessionRepository<?>[] repositories = new SessionRepository[] { DI.get(AudioPerfectPitchSessionRepository.class) };
+    private final SessionRepository<?>[] repositories;
 
-    public SessionRepositoryDelegator() {
+    public SessionRepositoryDelegator(final AudioPerfectPitchSessionRepository audioPerfectPitchSessionRepository) {
+        repositories = new SessionRepository[] { audioPerfectPitchSessionRepository };
     }
 
     public SessionAggregate<?, ?, ?, ?> get(final SessionId sessionId) {
