@@ -2,9 +2,14 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generator
 
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import java.util.Objects;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+import org.swetlokognatsk.earking_out.SpringProfiles;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.TestComponent;
 
+@TestComponent
 public final class FakeAudioPerfectPitchSolutionGenerator implements AudioPerfectPitchSolutionGenerator {
     public static AudioPerfectPitchSolution fakeSolution;
 

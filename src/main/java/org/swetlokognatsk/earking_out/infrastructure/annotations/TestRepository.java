@@ -10,8 +10,8 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Repository
-@Profile(SpringProfiles.DESKTOP)
-public @interface DesktopRepository {
+@Profile(SpringProfiles.TEST)
+public @interface TestRepository {
     @AliasFor(annotation = Repository.class)
     String value() default "";
 }

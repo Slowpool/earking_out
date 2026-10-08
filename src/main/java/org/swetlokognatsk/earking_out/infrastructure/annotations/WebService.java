@@ -1,15 +1,17 @@
 package org.swetlokognatsk.earking_out.infrastructure.annotations;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Service;
-import static org.swetlokognatsk.earking_out.SpringApp.*;
+import org.swetlokognatsk.earking_out.SpringProfiles;
 import java.lang.annotation.*;
 
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Retention(RetentionPolicy.RUNTIME)
 @Service
-@ConditionalOnExpression(IS_WEB_BUILD)
+@Profile(SpringProfiles.WEB)
 public @interface WebService {
-
+    @AliasFor(annotation = Service.class)
+    String value() default "";
 }
