@@ -14,6 +14,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOf
 @Service
 public final class NotesParsingService {
 
+    // TODO eliminate sharp and flat duplication. somehow take it from Accidentals
     private static final String SHARP = "#";
     private static final String FLAT = "b";
 

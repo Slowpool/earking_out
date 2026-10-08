@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
 import java.util.concurrent.Executor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
@@ -16,6 +17,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGues
 import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
 
 @Component
+@Primary
 public final class SpringEventBus implements EventBus {
 
     private final ConfigurableApplicationContext ctx;

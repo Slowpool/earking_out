@@ -1,21 +1,16 @@
 package org.swetlokognatsk.earking_out.app.web.views.models.fillers.perfectpitch;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
-import org.swetlokognatsk.earking_out.SpringApp;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
-import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.sound.WebAudioPerfectPitchHintDemonstrator;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
 import lombok.AllArgsConstructor;
 
-@Component
+@WebComponent
 @AllArgsConstructor
-@ConditionalOnExpression(SpringApp.IS_WEB_BUILD)
 public class AudioPerfectPitchPuzzleViewFiller {
 
     private final PianoKeyboardViewModelsBuilder pianoKeyboardsBuilder;

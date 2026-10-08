@@ -11,13 +11,14 @@ import org.swetlokognatsk.earking_out.SpringApp;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
+
 import lombok.AllArgsConstructor;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode.*;
 
-@Component
+@WebComponent 
 @AllArgsConstructor
-@ConditionalOnExpression(SpringApp.IS_WEB_BUILD)
 public class AudioPerfectPitchConfigViewFiller {
 
     private final PuzzleConfigRepository puzzleConfigRepository;

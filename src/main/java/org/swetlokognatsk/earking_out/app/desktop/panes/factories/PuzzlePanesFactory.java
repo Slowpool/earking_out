@@ -10,14 +10,14 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardServ
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.DesktopService;
+import lombok.AllArgsConstructor;
 
+@DesktopService
+@AllArgsConstructor
 public final class PuzzlePanesFactory {
 
     private final SessionRepositoryDelegator sessionRepository;
-
-    public PuzzlePanesFactory(final SessionRepositoryDelegator sessionRepository) {
-        this.sessionRepository = sessionRepository;
-    }
 
     public PuzzlePane<?, ?, ?> create(final SessionId sessionId, final double width, final double height) {
         var session = sessionRepository.get(sessionId);

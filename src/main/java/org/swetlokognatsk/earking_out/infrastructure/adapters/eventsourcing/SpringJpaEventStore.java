@@ -3,9 +3,11 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
+import static org.swetlokognatsk.earking_out.SpringProfiles.*;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventSourcingEventId;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
@@ -19,6 +21,7 @@ import lombok.Getter;
 
 @Repository
 @Primary
+@Profile({ DESKTOP, WEB })
 @Getter(AccessLevel.PRIVATE)
 public class SpringJpaEventStore implements EventStore {
 

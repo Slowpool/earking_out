@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
+import static org.swetlokognatsk.earking_out.SpringProfiles.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
@@ -7,6 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -17,6 +19,7 @@ import lombok.AccessLevel;
 // TODO integration tests. definitely
 @Repository
 @Primary
+@Profile({ DESKTOP, WEB })
 @Getter(AccessLevel.PRIVATE)
 public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepository {
 
@@ -24,6 +27,7 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
     private final TransactionTemplate transactionTemplate;
     private final UserResolver userResolver;
 
+    // TODO use @Transactional
     public SpringJpaPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository, final EntityManager entityManager, final PlatformTransactionManager transactionManager, final UserResolver userResolver) {
         this.entityManager = entityManager;
         this.transactionTemplate = new TransactionTemplate(transactionManager);

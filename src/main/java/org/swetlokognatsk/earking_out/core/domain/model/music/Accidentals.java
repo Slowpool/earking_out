@@ -2,7 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.music;
 
 public enum Accidentals {
     SHARP((byte) 1, "#"), FLAT((byte) -1, "b"), NATURAL((byte) 0, "");
-
+    
     public final byte shift;
     public final String character;
 

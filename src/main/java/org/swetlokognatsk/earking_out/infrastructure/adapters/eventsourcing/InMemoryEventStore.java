@@ -2,11 +2,12 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.TestComponent;
 
+@TestComponent
 public class InMemoryEventStore implements EventStore {
 
     private final Set<EventStream<?>> eventStreams = new HashSet<>();;
@@ -22,4 +23,9 @@ public class InMemoryEventStore implements EventStore {
     public void append(final EventStream<?> eventStream) {
         eventStreams.add(eventStream);
     }
+
+    public <ID> EventStream<ID> getAllEvents(final ID id) {
+        return null;
+    }
+
 }

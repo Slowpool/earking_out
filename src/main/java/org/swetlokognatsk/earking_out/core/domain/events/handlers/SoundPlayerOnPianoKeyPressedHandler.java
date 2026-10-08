@@ -5,7 +5,6 @@ import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyP
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoSoundPolicyService;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -13,7 +12,6 @@ import lombok.AllArgsConstructor;
 public final class SoundPlayerOnPianoKeyPressedHandler extends DomainEventHandler<PianoKeyPressedEvent> {
 
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
-    private final PianoKeyboardRepository pianoKeyboardRepository;
     private final PianoSoundPolicyService pianoSoundPolicyService;
 
     public void handle(final PianoKeyPressedEvent event) {

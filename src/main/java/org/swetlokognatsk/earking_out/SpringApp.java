@@ -1,15 +1,9 @@
 package org.swetlokognatsk.earking_out;
 
 import java.util.concurrent.Executor;
-import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.DesktopUser;
 
 @SpringBootApplication
 public class SpringApp {
@@ -18,16 +12,6 @@ public class SpringApp {
 
     public static final String IS_DESKTOP_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).DESKTOP";
     public static final String IS_WEB_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).WEB";
-
-    @Bean
-    @Primary
-    @ConditionalOnExpression(IS_DESKTOP_BUILD)
-    DataSource dataSource(final Environment env) {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env.getProperty("spring.datasource.driver-class-name"));
-        dataSource.setUrl(env.getProperty("spring.datasource.url"));
-        return dataSource;
-    }
 
     @Bean
     Executor getTaskExecutor() {
@@ -47,11 +31,4 @@ public class SpringApp {
 
         return executor;
     }
-
-    // // TODO add user logic on web, yet it is a dev latch
-    // @Bean
-    // // @ConditionalOnExpression(IS_DESKTOP_BUILD)
-    // User getUser() {
-    //     return new DesktopUser();
-    // }
 }

@@ -2,21 +2,18 @@ package org.swetlokognatsk.earking_out.app.web;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.Build;
 import org.swetlokognatsk.earking_out.SpringApp;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
+import lombok.AllArgsConstructor;
 
-@Component
+@WebComponent
+@AllArgsConstructor
 public class WebAppInitializer implements CommandLineRunner {
 
     private final ApplicationContext ctx;
-
-    public WebAppInitializer(final ApplicationContext ctx) {
-        this.ctx = ctx;
-    }
 
     public void run(final String... args) throws Exception {
         // TODO pretty sure some more elegant solution exists via @Component @ConditionalOn or kinda

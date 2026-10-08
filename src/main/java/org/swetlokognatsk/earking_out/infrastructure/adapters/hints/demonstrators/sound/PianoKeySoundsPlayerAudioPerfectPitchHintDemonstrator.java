@@ -3,7 +3,9 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrato
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.sound.AudioPerfectPitchHintDemonstrator;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.DesktopComponent;
 
+@DesktopComponent
 public final class PianoKeySoundsPlayerAudioPerfectPitchHintDemonstrator implements AudioPerfectPitchHintDemonstrator {
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
 
