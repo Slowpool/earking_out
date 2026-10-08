@@ -1,9 +1,11 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.LAST_NOTE_NUMBER;
 import java.util.List;
+
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
@@ -13,6 +15,7 @@ import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
 
+@SpringBootTest
 public class NotePBTTest {
 
     // because they are minority

@@ -1,9 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -15,6 +16,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
  * {@link org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTOAssemblerTest}
  * class description for explanation.
  */
+@SpringBootTest
 public final class PianoKeyDTOAssemblerTest {
     private final PianoKeysFactory pianoKeysFactory;
 

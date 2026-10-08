@@ -1,9 +1,10 @@
 package org.swetlokognatsk.earking_out.infrastructure.eventsourcing;
 
-import org.junit.*;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.LinkedList;
 import java.util.UUID;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
@@ -11,6 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
+@SpringBootTest
 public final class EventStreamTest {
 
     @Test

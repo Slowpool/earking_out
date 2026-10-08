@@ -1,24 +1,26 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import java.util.Objects;
-import org.junit.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.MockPianoKeySoundsPlayer;
 
+@SpringBootTest
 public final class PianoKeyTest {
     private static PianoKeysFactory pianoKeysFactory;
     private static PianoKeyNumber ANY_PIANO_KEY_NUMBER = FIRST_NOTE_NUMBER;
 
     private MockPianoKeySoundsPlayer mockSoundPlayer;
 
-    @BeforeClass
+    @BeforeAll
     public static void initializeCdommonContext() {
         pianoKeysFactory = DI.get(PianoKeysFactory.class);
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         // TODO mockito?
         mockSoundPlayer = new MockPianoKeySoundsPlayer();

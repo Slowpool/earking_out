@@ -1,10 +1,11 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelper.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -21,6 +22,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
+@SpringBootTest
 public final class AudioPerfectPitchSessionAggregateTest {
     private SessionAggregatesFactory sessionAggregatesFactory;
 
@@ -33,7 +35,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     private static final String WRONG_TEXT_NOTE_SOLUTION_2 = "D1";
     private static final String OUT_OF_RANGE_TEXT_NOTE = "C#9";
 
-    @Before
+    @BeforeEach
     public void setup() {
         DI.refreshDependencies();
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);

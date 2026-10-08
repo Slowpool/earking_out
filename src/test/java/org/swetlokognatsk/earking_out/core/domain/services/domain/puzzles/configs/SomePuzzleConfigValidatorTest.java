@@ -1,8 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
-import org.junit.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
@@ -10,12 +11,13 @@ import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import static org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.TestPuzzleConfigValidatorHelper.*;
 
+@SpringBootTest
 public final class SomePuzzleConfigValidatorTest {
 
     private static final boolean ANY_STATS_RECORDING = false;
     private PuzzleConfigValidator<SomePuzzleConfigAggregate> validator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.validator = new PuzzleConfigValidator<SomePuzzleConfigAggregate>() {
         };

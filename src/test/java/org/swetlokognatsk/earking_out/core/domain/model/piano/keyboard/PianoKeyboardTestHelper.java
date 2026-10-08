@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;

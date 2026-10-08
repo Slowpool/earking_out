@@ -1,7 +1,8 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.session;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
@@ -9,13 +10,14 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
+@SpringBootTest
 public final class InMemorySessionRepositoryTest {
 
     private InMemorySessionRepository<AudioPerfectPitchSessionAggregate> repository;
     private SessionAggregatesFactory sessionAggregatesFactory;
     private SessionId seededSessionId;
 
-    @Before
+    @BeforeEach
     public void setup() {
         // TODO is there another way to test exactly InMemorySesisonRepository abstract class?
         repository = DI.get(InMemoryAudioPerfectPitchSessionRepository.class);

@@ -1,9 +1,8 @@
 package org.swetlokognatsk.earking_out.app.desktop.helpers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 public final class PianoKeysHelperTest {

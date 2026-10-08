@@ -1,8 +1,9 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters;
 
 import org.apache.commons.lang3.function.TriConsumer;
-import org.junit.*;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.*;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
@@ -17,6 +18,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.Octaves.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@SpringBootTest
 public class NotesParsingServiceTest {
 
     private static final NotesParsingService noteParser = DI.get(NotesParsingService.class);

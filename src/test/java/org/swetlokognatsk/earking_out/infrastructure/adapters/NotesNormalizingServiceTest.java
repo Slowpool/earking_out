@@ -1,8 +1,10 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters;
 
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteTest;
@@ -11,12 +13,13 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
+@SpringBootTest
 public final class NotesNormalizingServiceTest {
     static NotesNormalizingService noteNormalizer;
     static Note[] notes = NoteTest.notes;
     static PianoKeyNumber[] normalizedValues = NoteTest.normalizedValues;
 
-    @BeforeClass
+    @BeforeAll
     public static void setup() {
         noteNormalizer = getNoteNormalizer();
     }

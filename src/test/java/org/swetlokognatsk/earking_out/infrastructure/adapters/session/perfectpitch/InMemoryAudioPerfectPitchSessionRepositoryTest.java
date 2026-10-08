@@ -1,10 +1,11 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -18,6 +19,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpit
 import org.swetlokognatsk.earking_out.infrastructure.adapters.InMemoryRepositoryTest;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.TestSessionRepositoryHelper;
 
+@SpringBootTest 
 public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepositoryTest<SessionId, AudioPerfectPitchSessionAggregate, InMemoryAudioPerfectPitchSessionRepository> {
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
@@ -25,7 +27,7 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
     private InMemoryAudioPerfectPitchSessionRepository repository;
     private SessionId seededSessionId;
 
-    @Before
+    @BeforeEach
     public void setup() {
         DI.refreshDependencies();
         repository = DI.get(InMemoryAudioPerfectPitchSessionRepository.class);

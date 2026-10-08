@@ -1,12 +1,14 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
+@SpringBootTest
 public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
@@ -116,8 +118,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
         try {
             pianoKeyboard.restoreSelectedKey(ANY_ANOTHER_PIANO_KEY_NUMBER);
             fail();
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
         }
     }
 }

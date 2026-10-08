@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
@@ -8,7 +9,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.services.domain.base.validators.Error;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.TestPuzzleConfigValidatorHelper.*;
-
 import java.util.List;
 
 public abstract class PuzzleConfigValidatorTest<E extends Exercise, PCA extends PuzzleConfigAggregate<E>, PCAF extends PuzzleConfigAggregatesFactory<PCA>, VC extends PuzzleConfigValidator<PCA>> {
@@ -24,7 +24,7 @@ public abstract class PuzzleConfigValidatorTest<E extends Exercise, PCA extends 
         aggregatesFactory = (PCAF) DI.get(PuzzleConfigAggregatesFactoryResolver.class).resolveFactory(getExercise());
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         validator = (VC) DI.get(getValidatorClass());
     }

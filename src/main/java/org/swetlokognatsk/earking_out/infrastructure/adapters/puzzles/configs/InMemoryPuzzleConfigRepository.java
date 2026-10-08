@@ -13,7 +13,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleConfigNotFoundException;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 

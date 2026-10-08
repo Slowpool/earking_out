@@ -1,10 +1,10 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.piano;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.apache.commons.lang3.ArrayUtils;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -44,7 +44,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
         assertTrue(ArrayUtils.contains(suspect.getSelectedKeyNumbers(), someRootNote));
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         DI.refreshDependencies();
         repository = DI.get(InMemoryPianoKeyboardRepository.class);

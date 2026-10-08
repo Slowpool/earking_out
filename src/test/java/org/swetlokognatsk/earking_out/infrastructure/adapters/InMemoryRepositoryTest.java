@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
 import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRepository;
 

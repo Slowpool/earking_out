@@ -1,9 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelper.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -18,6 +19,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
+@SpringBootTest
 public final class SessionAggregateTest {
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(((AudioPerfectPitchSolution) SOLUTION).keyNumber.increment());
@@ -27,7 +29,7 @@ public final class SessionAggregateTest {
     private SessionAggregatesFactory sessionAggregatesFactory;
     private PuzzleConfigRepository puzzleConfigRepository;
 
-    @Before
+    @BeforeEach
     public void setup() {
         DI.refreshDependencies();
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);

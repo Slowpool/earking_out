@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
@@ -15,7 +15,7 @@ abstract class PianoKeyboardTest {
     protected static final PianoKeyNumber ANY_ANOTHER_PIANO_KEY_NUMBER = LAST_NOTE_NUMBER;
     protected static final PianoKeyNumber[] SOME_PIANO_KEYS = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, ANY_ANOTHER_PIANO_KEY_NUMBER };
 
-    @Before
+    @BeforeEach
     public void before() {
         DI.refreshDependencies();
         pianoKeyboard = createPianoKeyboard();

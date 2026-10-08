@@ -24,11 +24,20 @@ public final class DI implements ApplicationContextAware {
     public void setApplicationContext(final ApplicationContext context) throws BeansException {
     }
 
-    public static void setContext(final ApplicationContext context) throws BeansException {
+    public static void setContext(final ApplicationContext context, final boolean replace) throws BeansException {
         if (iocContainer != null) {
-            throw new RuntimeException("ioc container is already initialized");
+            if (replace) {
+                iocContainer = null;
+            } else {
+                throw new RuntimeException("ioc container is already initialized");
+            }
         }
-        ((SpringIoCContainer) getIocContainer()).setContext(context);
+        ((SpringIoCContainer) getIocContainer())
+                .setContext(context);
+    }
+
+    public static void setContext(final ApplicationContext context) throws BeansException {
+        setContext(context, false);
     }
 
     private DI() {

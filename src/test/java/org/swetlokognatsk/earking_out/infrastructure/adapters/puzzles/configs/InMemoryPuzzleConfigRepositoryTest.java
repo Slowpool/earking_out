@@ -1,7 +1,8 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
@@ -14,6 +15,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.InMemoryRepository
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import java.util.UUID;
 
+@SpringBootTest
 public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
     private InMemoryPuzzleConfigRepository repository;
@@ -39,7 +41,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
         assertEquals(sourceAggregate.getTargetNumberOfPuzzles() + 1, editedAggregate.getTargetNumberOfPuzzles());
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         DI.refreshDependencies();
         repository = DI.get(InMemoryPuzzleConfigRepository.class);

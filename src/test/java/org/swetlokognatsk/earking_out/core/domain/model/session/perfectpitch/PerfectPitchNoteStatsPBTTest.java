@@ -1,10 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import net.jqwik.api.*;
 
+@SpringBootTest
 public class PerfectPitchNoteStatsPBTTest {
     private static final PianoKeyNumber ANY_NOTE = FIRST_NOTE_NUMBER;
 

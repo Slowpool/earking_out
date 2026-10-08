@@ -1,7 +1,8 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.serialization;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseNames;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -10,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.PerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.VisualPerfectPitchSolution;
 
+@SpringBootTest
 public class SolutionDeserializerTest extends DeserializerBaseTest<Solution, SolutionDeserializer> {
     private static final String AUDIO_PERFECT_PITCH_SOLUTION = """
             {

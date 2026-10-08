@@ -1,8 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfectpitch;
 
-import static org.junit.Assert.*;
-import org.junit.*;
-import org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
@@ -25,6 +26,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
 @Deprecated
+@SpringBootTest
 public final class PerfectPitchSessionStatsAggregatorTest {
 
     private PerfectPitchSessionStatsAggregator<?> statsAggregator = DI.get(PerfectPitchSessionStatsAggregator.class);

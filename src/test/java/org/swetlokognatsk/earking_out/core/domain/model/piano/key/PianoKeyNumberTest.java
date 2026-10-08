@@ -1,10 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
+@SpringBootTest
 // TODO generalize this test for all value object tests
 public final class PianoKeyNumberTest {
 

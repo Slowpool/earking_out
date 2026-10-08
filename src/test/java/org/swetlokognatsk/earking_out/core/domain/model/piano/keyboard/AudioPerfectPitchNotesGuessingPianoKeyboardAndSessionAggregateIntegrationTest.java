@@ -1,7 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -21,6 +22,7 @@ import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfe
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
+@SpringBootTest
 public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregateIntegrationTest {
 
     private static final PianoKeyNumber ANY_PIANO_KEY = FIRST_NOTE_NUMBER;
@@ -106,7 +108,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         puzzleConfigRepository.save(puzzleConfig);
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         DI.refreshDependencies();
         DomainEventHandlers.registerDomainEventHandlers();
