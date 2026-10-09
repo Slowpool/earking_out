@@ -8,7 +8,6 @@ public final class AudioPerfectPitchPianoKeyPressingResponse extends PuzzlePiano
 
     public final GuessResponse guessResult;
 
-    // TODO is it possible to simplify it using lombok?
     public AudioPerfectPitchPianoKeyPressingResponse(final PianoKeyboardViewModel pianoKeyboard, final GuessResponse guessResult) {
         super(pianoKeyboard);
         this.guessResult = guessResult;

@@ -13,15 +13,15 @@ import lombok.AllArgsConstructor;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.PIANO_KEYS_NUMBER;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
 
-// TODO think about naming. builder is not quite descripting word
 @Component
 @AllArgsConstructor
-public class PianoKeyboardViewModelsBuilder {
+public class PianoKeyboardViewModelsProjector {
 
     private final PianoKeyboardRepository pianoKeyboardRepository;
     private final PianoKeyColorService colorService;
     private final PianoSoundPolicyService pianoSoundPolicyService;
 
+    // TODO rename to project
     public PianoKeyboardViewModel build(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeys = buildPianoKeyViewModels(pianoKeyboardId);
         var areKeySoundsEnabled = pianoSoundPolicyService.shouldPlaySound(pianoKeyboardId);

@@ -185,6 +185,11 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
 
         var stats = aggregate(domainEvents);
 
+        // // TODO squash all tests in one
+        // assertAll(
+        //         () -> {
+        //         });
+
         var distinctNotesStream = Arrays.stream(stats.notesStats)
                 .map(noteStats -> noteStats.keyNumber)
                 .distinct();

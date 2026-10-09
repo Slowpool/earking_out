@@ -4,6 +4,8 @@ import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,13 +17,16 @@ import jakarta.persistence.Table;
 public class UserEntity {
 
     @Id
-    // TODO explore these strategies
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @JdbcTypeCode(SqlTypes.UUID)
+    @Column(nullable = false)
+    // TODO use this from jakarta.validation. package: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+    // @NotNull
     private UUID uuid;
-
+    
+    @Column(nullable = false)
     private String name;
 
     public int getId() {

@@ -5,16 +5,16 @@ import org.springframework.stereotype.Component;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING;
 
 import org.swetlokognatsk.earking_out.app.web.models.responses.perfectpitch.AudioPerfectPitchPianoKeyReleasingResponse;
-import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
+import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsProjector;
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
 public class AudioPerfectPitchPianoKeyReleasingResponseBuilder {
-    private final PianoKeyboardViewModelsBuilder pianoKeyboardViewModelsBuilder;
+    private final PianoKeyboardViewModelsProjector pianoKeyboardViewModelsProjector;
 
     public AudioPerfectPitchPianoKeyReleasingResponse build() {
-        var pianoKeyboard = pianoKeyboardViewModelsBuilder.build(AUDIO_PERFECT_PITCH_NOTES_GUESSING);
+        var pianoKeyboard = pianoKeyboardViewModelsProjector.build(AUDIO_PERFECT_PITCH_NOTES_GUESSING);
         return new AudioPerfectPitchPianoKeyReleasingResponse(pianoKeyboard);
     }
 }

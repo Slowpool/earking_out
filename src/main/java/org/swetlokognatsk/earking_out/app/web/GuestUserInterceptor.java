@@ -32,6 +32,5 @@ public class GuestUserInterceptor implements HandlerInterceptor {
     private void createAndAttachGuestUser(final HttpSession session) {
         var userId = userService.createGuestUser();
         session.setAttribute(USER_ID, userId);
-        // TODO sessionRepository.save(session)?
     }
 }

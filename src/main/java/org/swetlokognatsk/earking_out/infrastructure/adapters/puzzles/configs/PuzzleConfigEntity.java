@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "puzzle_configs")
-@IdClass (PuzzleConfigId.class)
+@IdClass(PuzzleConfigId.class)
 public class PuzzleConfigEntity {
 
     @Id
@@ -14,10 +14,10 @@ public class PuzzleConfigEntity {
     private String exercise;
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private int userId;
 
-    @Column(name = "serialized_config")
+    @Column(name = "serialized_config", nullable = false)
     private String serializedConfig;
 
     public final String getExercise() {

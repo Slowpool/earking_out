@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 import org.swetlokognatsk.earking_out.SpringApp;
-import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
+import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsProjector;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
@@ -22,7 +22,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.p
 public class AudioPerfectPitchConfigViewFiller {
 
     private final PuzzleConfigRepository puzzleConfigRepository;
-    private final PianoKeyboardViewModelsBuilder pianoKeyboardsBuilder;
+    private final PianoKeyboardViewModelsProjector pianoKeyboardsProjector;
 
     public void fill(final ModelAndView modelAndView) {
         var puzzleConfigDto = (AudioPerfectPitchConfigDTO) puzzleConfigRepository.getPuzzleConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE);
@@ -33,11 +33,11 @@ public class AudioPerfectPitchConfigViewFiller {
         modelAndView.addObject("statsRecordingProp", PerfectPitchConfigAggregate.STATS_RECORDING_PROP);
         modelAndView.addObject("statsRecording", puzzleConfigDto.statsRecording);
 
-        var notesPickerPianoKeyboardModel = pianoKeyboardsBuilder.build(AUDIO_PERFECT_PITCH_NOTES_PICKER);
+        var notesPickerPianoKeyboardModel = pianoKeyboardsProjector.build(AUDIO_PERFECT_PITCH_NOTES_PICKER);
         modelAndView.addObject("notesPickerPianoKeyboardModel", notesPickerPianoKeyboardModel);
 
         // TODO pass it conditionally, if input mode is KEYBOARD_AS_PIANO
-        var rootNotePickerPianoKeyboardModel = pianoKeyboardsBuilder.build(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
+        var rootNotePickerPianoKeyboardModel = pianoKeyboardsProjector.build(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         modelAndView.addObject("rootNotePickerPianoKeyboardModel", rootNotePickerPianoKeyboardModel);
 
         modelAndView.addObject("inputModes", new PerfectPitchInputMode[] { PIANO_ON_SCREEN, NOTES_AS_TEXT });

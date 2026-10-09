@@ -30,7 +30,7 @@ import org.swetlokognatsk.earking_out.app.web.services.renderers.perfectpitch.Au
 import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.PuzzleGuessingResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.PuzzlePianoKeyPressingResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.PuzzlePianoKeyReleasingResponseBuilder;
-import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsBuilder;
+import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsProjector;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleViewFiller;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
@@ -116,15 +116,10 @@ public class ApiController {
         return "stats/session/perfect_pitch/audio_perfect_pitch_session_stats";
     }
 
-    // TODO use Map<String,String>, grasp the difference between them
-    // TODO the difference between @RequestParam/RequestBody? why not Map<String,String>?
     @PatchMapping("/puzzle/config/{exerciseName}/{exerciseType}/update/{propertyName}")
-    public ResponseEntity<?> updatePuzzleConfigProperty(final Exercise exercise, @PathVariable final String propertyName, @RequestParam final MultiValueMap<String, String> body) {
+    public ResponseEntity<?> updatePuzzleConfigProperty(final Exercise exercise, @PathVariable final String propertyName, @RequestParam final Map<String, String> body) {
         var simplePuzzleConfigPropertiesCaster = DI.get(SimplePuzzleConfigPropertiesCaster.class);
-        var newValueList = body.get(propertyName);
-        var newValue = newValueList == null || newValueList.isEmpty()
-                ? null
-                : newValueList.getFirst();
+        var newValue = body.get(propertyName);
 
         try {
             var castedNewValue = simplePuzzleConfigPropertiesCaster.cast(exercise, propertyName, newValue);
@@ -138,13 +133,12 @@ public class ApiController {
     }
 
     // TODO create new PianoKey view model, with only variable piano key data (isPressed, isSelected), without color and octaveScopedKeyNumber
-    // TODO should ResponseEntity<?> remain or should it return PuzzleConfigPianoKeyPressingResult
     @PostMapping("/puzzle/config/{exerciseName}/{exerciseType}/piano-keyboard/press-key")
     public ResponseEntity<PuzzleConfigPianoKeyPressingResponse> pressPuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
         DI.get(PianoKeyboardService.class)
                 .pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
 
-        var pianoKeyboardViewModel = DI.get(PianoKeyboardViewModelsBuilder.class)
+        var pianoKeyboardViewModel = DI.get(PianoKeyboardViewModelsProjector.class)
                 .build(body.pianoKeyboardId);
         var response = new PuzzleConfigPianoKeyPressingResponse(pianoKeyboardViewModel);
 
@@ -156,7 +150,7 @@ public class ApiController {
         DI.get(PianoKeyboardService.class)
                 .releasePianoKey(body.pianoKeyboardId);
 
-        var pianoKeyboardViewModel = DI.get(PianoKeyboardViewModelsBuilder.class)
+        var pianoKeyboardViewModel = DI.get(PianoKeyboardViewModelsProjector.class)
                 .build(body.pianoKeyboardId);
         var response = new PuzzleConfigPianoKeyReleasingResponse(pianoKeyboardViewModel);
 

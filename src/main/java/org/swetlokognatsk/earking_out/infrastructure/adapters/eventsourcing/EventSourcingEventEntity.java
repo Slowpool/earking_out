@@ -1,10 +1,7 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.eventsourcing;
 
 import static java.util.Objects.requireNonNull;
-
 import java.time.LocalDateTime;
-
-import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,19 +13,24 @@ public class EventSourcingEventEntity {
     private String id;
 
     // TODO use UUID instead
+    @Column(nullable = false)
     private String streamId;
 
     // TODO use UUID instead
+    @Column(nullable = false)
     private int userId;
 
+    @Column(nullable = false)
     private String type;
 
     // TODO use LocalDateTime instead
-    @Column(name = "created_on")
+    @Column(name = "created_on", nullable = false)
     private LocalDateTime createdOn;
 
+    @Column(nullable = false)
     private String payload;
 
+    @Column(nullable = false)
     private int version;
 
     public String getId() {
