@@ -1,23 +1,18 @@
 package org.swetlokognatsk.earking_out.app.web.views.models.fillers.perfectpitch;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
-import org.swetlokognatsk.earking_out.SpringApp;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsProjector;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
-
 import lombok.AllArgsConstructor;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode.*;
 
-@WebComponent 
+@WebComponent
 @AllArgsConstructor
 public class AudioPerfectPitchConfigViewFiller {
 
@@ -36,7 +31,6 @@ public class AudioPerfectPitchConfigViewFiller {
         var notesPickerPianoKeyboardModel = pianoKeyboardsProjector.build(AUDIO_PERFECT_PITCH_NOTES_PICKER);
         modelAndView.addObject("notesPickerPianoKeyboardModel", notesPickerPianoKeyboardModel);
 
-        // TODO pass it conditionally, if input mode is KEYBOARD_AS_PIANO
         var rootNotePickerPianoKeyboardModel = pianoKeyboardsProjector.build(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         modelAndView.addObject("rootNotePickerPianoKeyboardModel", rootNotePickerPianoKeyboardModel);
 
