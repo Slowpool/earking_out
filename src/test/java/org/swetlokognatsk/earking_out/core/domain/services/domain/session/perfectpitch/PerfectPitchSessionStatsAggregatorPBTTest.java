@@ -22,7 +22,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.DetermenisticRandomAudioPerfectPitchSolutionGenerator;
-
 import net.jqwik.api.AfterFailureMode;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
@@ -152,7 +151,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
         return guessEvent.attempt == 1;
     }
 
-    @BeforeTry 
+    @BeforeTry
     public void setup(@Autowired ApplicationContext springContext) {
         DI.setContext(springContext, true);
         DI.register(AudioPerfectPitchSolutionGenerator.class, DetermenisticRandomAudioPerfectPitchSolutionGenerator.class);
@@ -195,65 +194,45 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
     }
 
     @Property
-    public void allNotesAreDistinct(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
+    public void allProperties(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
         var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
 
         var stats = aggregate(domainEvents);
 
-        // // TODO squash all tests in one
-        // assertAll(
-        //         () -> {
-        //         });
+        assertAll(
+                () -> assertAllNotesAreDistinct(stats),
+                () -> assertAllNotesAreFromPossibleSolutions(stats, possibleSolutions, guesses),
+                () -> assertNumberOfNoteAppearances(stats, domainEvents),
+                () -> assertNumberOfEachNoteAllGuesses(stats, domainEvents),
+                () -> assertNumberOfNotePerfectGuesses(stats, domainEvents),
+                () -> assertPerfectGuessesRatio(stats, domainEvents));
+    }
 
+    public void assertAllNotesAreDistinct(final PerfectPitchSessionStats<?> stats) {
         var distinctNotesStream = Arrays.stream(stats.notesStats)
                 .map(noteStats -> noteStats.keyNumber)
                 .distinct();
         assertEquals(stats.notesStats.length, distinctNotesStream.count());
     }
 
-    @Property//(seed = "-8737834682191197373", whenFixedSeed = FixedSeedMode.ALLOW, shrinking = ShrinkingMode.OFF, afterFailure = AfterFailureMode.RANDOM_SEED)
-    public void allNotesAreFromPossibleSolutions(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
-        var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
-
-        var stats = aggregate(domainEvents);
-
+    public void assertAllNotesAreFromPossibleSolutions(final PerfectPitchSessionStats<?> stats, final List<PianoKeyNumber> possibleSolutions, final List<Boolean> guesses) {
         assertTrue(stats.notesStats.length <= possibleSolutions.size());
         assertAllNotesExistInPossibleSolutions(stats, possibleSolutions);
     }
 
-    @Property
-    public void numberOfNoteAppearances(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
-        var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
-
-        var stats = aggregate(domainEvents);
-
+    public void assertNumberOfNoteAppearances(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
         assertNumberOfNoteApperancesEqual(domainEvents, stats);
     }
 
-    @Property
-    public void numberOfEachNoteAllGuesses(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
-        var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
-
-        var stats = aggregate(domainEvents);
-
+    public void assertNumberOfEachNoteAllGuesses(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
         assertNumberOfAllGuessesEqual(domainEvents, stats);
     }
 
-    @Property
-    public void numberOfNotePerfectGuesses(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
-        var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
-
-        var stats = aggregate(domainEvents);
-
+    public void assertNumberOfNotePerfectGuesses(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
         assertNumberOfPerfectGuessesEqual(domainEvents, stats);
     }
 
-    @Property
-    public void perfectGuessesRatio(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
-        var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
-
-        var stats = aggregate(domainEvents);
-
+    public void assertPerfectGuessesRatio(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
         assertPerfectGuessesRatioEqual(domainEvents, stats);
     }
 
