@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.infrastructure;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
@@ -15,11 +16,11 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring.Spri
 import lombok.RequiredArgsConstructor;
 
 @SpringBootTest
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
+@RequiredArgsConstructor
 public class SpringBootSelfTest {
 
     private final ApplicationContext ctx;
-    private final Environment env;
+    private @Value("${app.eventbus}") String selectedEventBus;
 
     @Test
     public void profileIsTest() {
@@ -29,9 +30,9 @@ public class SpringBootSelfTest {
     }
 
     @Test
-    public void eventBusExist() {
+    public void eventBusExists() {
         EventBus eventBus = null;
-        switch (env.getProperty("app.eventbus")) {
+        switch (selectedEventBus) {
         case EventBuses.GREENROBOT:
             eventBus = ((GenericApplicationContext) ctx).getBean(GreenrobotEventBus.class);
             break;
