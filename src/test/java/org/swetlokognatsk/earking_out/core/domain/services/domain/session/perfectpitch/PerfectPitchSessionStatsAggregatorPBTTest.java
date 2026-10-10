@@ -3,7 +3,12 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfe
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Assertions.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
+import org.swetlokognatsk.earking_out.SpringProfiles;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
@@ -11,6 +16,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGues
 import static org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
@@ -28,18 +34,23 @@ import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
 import net.jqwik.api.lifecycle.BeforeProperty;
+import net.jqwik.api.lifecycle.PropertyLifecycleContext;
+import net.jqwik.spring.JqwikSpringLifecycleSupport;
+import net.jqwik.spring.JqwikSpringSupport;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-@EOSpringBootTest
+@JqwikSpringSupport
+@SpringBootTest
+// @Profile(SpringProfiles.TEST)
 public final class PerfectPitchSessionStatsAggregatorPBTTest {
 
     private static final SessionId ANY_SESSION_ID = SessionId.random();
 
-    private PerfectPitchSessionStatsAggregator<?> statsAggregator = DI.get(PerfectPitchSessionStatsAggregator.class);
+    private PerfectPitchSessionStatsAggregator<?> statsAggregator;
 
     DomainEvent[] buildDomainEventsTimeline(final List<PianoKeyNumber> possibleSolutions, final List<Boolean> guesses) {
         var domainEventsBuilder = new DomainEventsTimelineBuilder();
@@ -145,8 +156,14 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
     }
 
     @BeforeProperty
-    public void setup() {
-        DI.register(AudioPerfectPitchSolutionGenerator.class, (args -> new RandomAudioPerfectPitchSolutionGenerator((AudioPerfectPitchConfigDTO) args[0])));
+    public void setup(@Autowired ApplicationContext springContext) {
+        DI.setContext(springContext, true);
+
+        DI.register(AudioPerfectPitchSolutionGenerator.class, RandomAudioPerfectPitchSolutionGenerator.class);
+        statsAggregator = DI.get(PerfectPitchSessionStatsAggregator.class);
+
+        DI.get(PuzzleConfigTestHelper.class)
+                .configureSomeValidPuzzleConfig();
     }
 
     @Provide

@@ -2,8 +2,10 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.di;
 
 import java.util.function.Function;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import org.swetlokognatsk.earking_out.SpringProfiles;
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.ConfigPanesFactory;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PuzzlePanesFactory;
@@ -27,6 +29,7 @@ public final class SpringIoCContainer implements IoCContainer {
 
     public ApplicationContext context;
     public GenericApplicationContext ctx;
+    private final String profile = System.getProperty("spring.profiles.active");
 
     public void setContext(final ApplicationContext context) {
         this.context = context;
@@ -93,12 +96,26 @@ public final class SpringIoCContainer implements IoCContainer {
         throw new IllegalStateException("this container does not support dependencies refreshing");
     }
 
-    public <T> void register(final Class<T> someClass, final Function<Object[], T> depFactory) throws IllegalStateException {
-        throw new IllegalStateException("this container does not support dynamic dependencies registering");
+    public <T> void register(final Class<T> interfaceClass, final Class<? extends T> implementationClass) throws IllegalStateException {
+        if (!profile.equals(SpringProfiles.TEST)) {
+            throw new IllegalStateException("this container does not support dynamic dependencies registering");
+        }
+
+        var oldBeanNames = ctx.getBeanNamesForType(interfaceClass);
+        if (oldBeanNames.length > 0) {
+            for (var oldBeanName : oldBeanNames) {
+                ctx.removeBeanDefinition(oldBeanName);
+            }
+        }
+        ctx.registerBean(implementationClass);
     }
 
-    public <T> void register(final Class<T> someClass, T dependency) throws IllegalStateException {
-        throw new IllegalStateException("this container does not support dynamic dependencies registering");
+    public <T> void register(Class<T> interfaceClass, T object) throws IllegalStateException {
+        if (!profile.equals(SpringProfiles.TEST)) {
+            throw new IllegalStateException("this container does not support dynamic dependencies registering");
+        }
+
+        ctx.registerBean(interfaceClass, () -> object);
     }
 
 }

@@ -52,7 +52,11 @@ public final class DI implements ApplicationContextAware {
         // TODO how to do it in spring? how it is supposed to be done in spring?
     }
 
-    public static <T> void register(final Class<T> someClass, final Function<Object[], T> depFactory) throws IllegalStateException {
-        iocContainer.register(someClass, depFactory);
+    public static <T> void register(final Class<T> interfaceClass, final Class<? extends T> implementationClass) throws IllegalStateException {
+        iocContainer.register(interfaceClass, implementationClass);
+    }
+
+    public static <T> void register(Class<T> interfaceClass, T object) throws IllegalStateException {
+        iocContainer.register(interfaceClass, object);
     }
 }
