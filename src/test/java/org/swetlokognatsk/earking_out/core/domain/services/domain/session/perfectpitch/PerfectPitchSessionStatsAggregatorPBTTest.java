@@ -3,12 +3,11 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfe
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Profile;
-import org.swetlokognatsk.earking_out.EOSpringBootTest;
-import org.swetlokognatsk.earking_out.SpringProfiles;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
@@ -17,25 +16,23 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames.*
 import static org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note.*;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.PerfectPitchSessionStats;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.RandomAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.DetermenisticRandomAudioPerfectPitchSolutionGenerator;
+
+import net.jqwik.api.AfterFailureMode;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
+import net.jqwik.api.FixedSeedMode;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
+import net.jqwik.api.ShrinkingMode;
 import net.jqwik.api.lifecycle.BeforeProperty;
-import net.jqwik.api.lifecycle.PropertyLifecycleContext;
-import net.jqwik.spring.JqwikSpringLifecycleSupport;
+import net.jqwik.api.lifecycle.BeforeTry;
 import net.jqwik.spring.JqwikSpringSupport;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
@@ -45,16 +42,16 @@ import java.util.List;
 
 @JqwikSpringSupport
 @SpringBootTest
-// @Profile(SpringProfiles.TEST)
+@Execution(ExecutionMode.SAME_THREAD)
 public final class PerfectPitchSessionStatsAggregatorPBTTest {
 
     private static final SessionId ANY_SESSION_ID = SessionId.random();
 
     private PerfectPitchSessionStatsAggregator<?> statsAggregator;
+    private DomainEventsTimelineBuilder domainEventsTimelineBuilder;
 
     DomainEvent[] buildDomainEventsTimeline(final List<PianoKeyNumber> possibleSolutions, final List<Boolean> guesses) {
-        var domainEventsBuilder = new DomainEventsTimelineBuilder();
-        return domainEventsBuilder.build(possibleSolutions, guesses);
+        return domainEventsTimelineBuilder.build(possibleSolutions, guesses);
     }
 
     PerfectPitchSessionStats<?> aggregate(final DomainEvent[] domainEvents) {
@@ -155,12 +152,13 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
         return guessEvent.attempt == 1;
     }
 
-    @BeforeProperty
+    @BeforeTry 
     public void setup(@Autowired ApplicationContext springContext) {
         DI.setContext(springContext, true);
+        DI.register(AudioPerfectPitchSolutionGenerator.class, DetermenisticRandomAudioPerfectPitchSolutionGenerator.class);
 
-        DI.register(AudioPerfectPitchSolutionGenerator.class, RandomAudioPerfectPitchSolutionGenerator.class);
         statsAggregator = DI.get(PerfectPitchSessionStatsAggregator.class);
+        domainEventsTimelineBuilder = DI.get(DomainEventsTimelineBuilder.class);
 
         DI.get(PuzzleConfigTestHelper.class)
                 .configureSomeValidPuzzleConfig();
@@ -213,7 +211,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
         assertEquals(stats.notesStats.length, distinctNotesStream.count());
     }
 
-    @Property
+    @Property//(seed = "-8737834682191197373", whenFixedSeed = FixedSeedMode.ALLOW, shrinking = ShrinkingMode.OFF, afterFailure = AfterFailureMode.RANDOM_SEED)
     public void allNotesAreFromPossibleSolutions(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
         var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
 
@@ -259,57 +257,4 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
         assertPerfectGuessesRatioEqual(domainEvents, stats);
     }
 
-}
-
-class DomainEventsTimelineBuilder {
-    private final SessionAggregatesFactory sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
-    private final PuzzleConfigRepository puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
-
-    DomainEvent[] build(final List<PianoKeyNumber> possibleSolutions, final List<Boolean> guesses) {
-        setPossibleSolutionsToConfig(possibleSolutions);
-        // to avoid premature ending of session. upper boundary does not matter, session.abort() can be done at any moment, and it does not affect the stats
-        setMaxNumberOfPuzzles();
-        AudioPerfectPitchSessionAggregate sessionAggregate = sessionAggregatesFactory.create(AUDIO_PERFECT_PITCH_EXERCISE);
-
-        for (var guess : guesses) {
-            makeGuess(sessionAggregate, guess);
-        }
-
-        return sessionAggregate.flushEvents()
-                .toArray(DomainEvent[]::new);
-    }
-
-    private void setPossibleSolutionsToConfig(final List<PianoKeyNumber> possibleSolutions) {
-        var puzzleConfig = puzzleConfigRepository.getPuzzleConfig(AUDIO_PERFECT_PITCH_EXERCISE);
-        puzzleConfig.updateProperty(PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP, possibleSolutions.toArray(PianoKeyNumber[]::new));
-        puzzleConfigRepository.save(puzzleConfig);
-    }
-
-    private void setMaxNumberOfPuzzles() {
-        var puzzleConfig = puzzleConfigRepository.getPuzzleConfig(AUDIO_PERFECT_PITCH_EXERCISE);
-        puzzleConfig.updateProperty(PerfectPitchConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP, Integer.MAX_VALUE);
-        puzzleConfigRepository.save(puzzleConfig);
-    }
-
-    private void makeGuess(final AudioPerfectPitchSessionAggregate sessionAggregate, final Boolean mustBeSuccessful) {
-        var solution = getSolution(sessionAggregate);
-        if (mustBeSuccessful.booleanValue()) {
-            sessionAggregate.guess(solution);
-        } else {
-            var wrongSolution = getAnotherSolutionThan(solution);
-            sessionAggregate.guess(wrongSolution);
-        }
-    }
-
-    private AudioPerfectPitchSolution getSolution(final AudioPerfectPitchSessionAggregate sessionAggregate) {
-        return sessionAggregate.getPuzzle().solution;
-    }
-
-    private AudioPerfectPitchSolution getAnotherSolutionThan(final AudioPerfectPitchSolution solution) {
-        var anotherKeyNumber = solution.equals(new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER))
-                // one of them must be wrong
-                ? LAST_NOTE_NUMBER
-                : FIRST_NOTE_NUMBER;
-        return new AudioPerfectPitchSolution(anotherKeyNumber);
-    }
 }
