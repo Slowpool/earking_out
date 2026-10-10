@@ -199,6 +199,14 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
 
         var stats = aggregate(domainEvents);
 
+        // the first version (one method - one assert rougly):
+        // * was with separated @Property methods for each assert
+        // * that was more friendly for debugging
+        // * the same data is generated n times where n is number of properties
+        // this version:
+        // * is faster (13 seconds vs 22)
+        // * test results are less demonstrative in ide (either the whole test fails either succeds)
+        // * each data set is generated once
         assertAll(
                 () -> assertAllNotesAreDistinct(stats),
                 () -> assertAllNotesAreFromPossibleSolutions(stats, possibleSolutions, guesses),
