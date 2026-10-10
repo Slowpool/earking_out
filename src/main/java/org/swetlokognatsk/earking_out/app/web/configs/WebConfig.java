@@ -2,15 +2,18 @@ package org.swetlokognatsk.earking_out.app.web.configs;
 
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import static org.swetlokognatsk.earking_out.SpringProfiles.WEB;
 import org.swetlokognatsk.earking_out.app.web.ExerciseArgumentResolver;
 import org.swetlokognatsk.earking_out.app.web.GuestUserInterceptor;
 import lombok.AllArgsConstructor;
 
 @Configuration
+@Profile(WEB)
 @AllArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 

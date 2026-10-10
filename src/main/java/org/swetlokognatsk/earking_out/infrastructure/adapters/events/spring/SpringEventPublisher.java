@@ -1,8 +1,11 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import static org.swetlokognatsk.earking_out.SpringProfiles.*;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
@@ -12,8 +15,11 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinished
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.events.EventBuses;
 
 @Component
+// TODO remove @Profile, also modifying the greenrobot event bus
+@ConditionalOnProperty(name = "app.eventbus", havingValue = EventBuses.SPRING)
 public final class SpringEventPublisher implements EventPublisher {
     private ApplicationEventPublisher eventPublisher;
 

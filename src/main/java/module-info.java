@@ -143,6 +143,7 @@ module org.swetlokognatsk {
     opens org.swetlokognatsk.earking_out;
     opens org.swetlokognatsk.earking_out.app.desktop;
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
+    opens org.swetlokognatsk.earking_out.infrastructure;
     opens org.swetlokognatsk.earking_out.core.ports.piano;
     opens org.swetlokognatsk.earking_out.core.ports.hints.demonstrators;
     opens org.swetlokognatsk.earking_out.core.domain.events;

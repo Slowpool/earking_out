@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
 
 import java.util.concurrent.Executor;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Primary;
@@ -15,9 +17,10 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinished
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.events.EventBuses;
 
 @Component
-@Primary
+@ConditionalOnProperty(name = "app.eventbus", havingValue = EventBuses.SPRING)
 public final class SpringEventBus implements EventBus {
 
     private final ConfigurableApplicationContext ctx;

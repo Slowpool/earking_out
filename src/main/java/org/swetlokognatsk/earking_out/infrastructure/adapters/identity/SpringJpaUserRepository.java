@@ -1,8 +1,9 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.identity;
 
-import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import static org.swetlokognatsk.earking_out.SpringProfiles.*;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Repository
+@Profile({ DESKTOP, WEB })
 @AllArgsConstructor
 public class SpringJpaUserRepository implements UserRepository {
 
