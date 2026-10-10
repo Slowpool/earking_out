@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.infrastructure.eventsourcing;
 
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,7 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class EventStreamTest {
 
     @Test

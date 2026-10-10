@@ -1,17 +1,21 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.apache.catalina.core.ApplicationContext;
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
+import org.springframework.core.env.Environment;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-@SpringBootTest
+@EOSpringBootTest
 public class MusicTest {
-
+    
     @Test
     public void createNote() {
         var note = Note.valueOf(NoteNames.C, Accidentals.SHARP, Octaves.FIRST);

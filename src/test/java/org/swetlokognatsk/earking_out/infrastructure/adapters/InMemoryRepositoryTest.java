@@ -2,10 +2,12 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.ports.base.AggregateRepository;
+import org.swetlokognatsk.earking_out.core.ports.base.PolymorphicAggregateRepository;
+import org.swetlokognatsk.earking_out.core.ports.base.TypedAggregateRepository;
 
-public abstract class InMemoryRepositoryTest<ID, A extends Aggregate<ID>, AR extends AggregateRepository<ID, A>> {
+public abstract class InMemoryRepositoryTest<ID, A extends AggregateRoot<ID>, AR extends AggregateRepository> {
 
     protected abstract A getSomeAggregate();
 
@@ -21,9 +23,23 @@ public abstract class InMemoryRepositoryTest<ID, A extends Aggregate<ID>, AR ext
         assertNotEquals(aggregate1, aggregate2);
     }
 
+    private void saveToRepository(final A aggregate) {
+        var repository = getRepository();
+        switch (repository) {
+        case TypedAggregateRepository typedRepository:
+            typedRepository.save(aggregate);
+            break;
+        case PolymorphicAggregateRepository polymorphicRepository:
+            polymorphicRepository.save(aggregate);
+            break;
+        default:
+            throw new RuntimeException("unknown repository");
+        }
+    }
+
     public void ensureGetMethodGivesCopyAfterSave() {
         var aggregate1 = getSomeAggregate();
-        getRepository().save(aggregate1);
+        saveToRepository(aggregate1);
         var aggregate2 = getSomeAggregate();
         assertNotEquals(aggregate1, aggregate2);
     }
@@ -38,7 +54,7 @@ public abstract class InMemoryRepositoryTest<ID, A extends Aggregate<ID>, AR ext
     public void ensureSaveMethodPersistsCopy() {
         var suspect = getSomeAggregate();
 
-        getRepository().save(suspect);
+        saveToRepository(suspect);
         makeMinorChange(suspect);
 
         var freshman = getSomeAggregate();

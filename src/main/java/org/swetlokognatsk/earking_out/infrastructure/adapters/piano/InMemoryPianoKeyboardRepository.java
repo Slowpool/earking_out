@@ -57,6 +57,7 @@ public class InMemoryPianoKeyboardRepository extends AggregateRepository impleme
     // TODO generalize the whole set/get logic into `InMemoryAggregateRepository` abstract class
     public final void save(final PianoKeyboardAggregate pianoKeyboardAggregate) {
         var pianoKeyboardId = pianoKeyboardAggregate.getPianoKeyboardId();
+        // TODO no. now it works differently
         // ensuring it exists (keyboards are initialized in initKeyboards(). further no new keyboards can be created)
         getPianoKeyboardAggregate(pianoKeyboardId);
 

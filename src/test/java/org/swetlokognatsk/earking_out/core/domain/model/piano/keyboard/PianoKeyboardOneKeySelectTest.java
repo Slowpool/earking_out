@@ -2,12 +2,12 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {

@@ -5,13 +5,13 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class PerfectPitchConfigAggregateTest {
 
     @Test
@@ -43,7 +43,7 @@ public final class PerfectPitchConfigAggregateTest {
 
     private PerfectPitchConfigAggregate<?> getPerfectPitchAggregate() {
         var repository = DI.get(PuzzleConfigRepository.class);
-        var aggregate = repository.get(AUDIO_PERFECT_PITCH_EXERCISE);
+        var aggregate = repository.getPuzzleConfig(AUDIO_PERFECT_PITCH_EXERCISE);
         return (PerfectPitchConfigAggregate<?>) aggregate;
     }
 }

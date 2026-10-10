@@ -2,11 +2,11 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factori
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class PuzzleConfigAggregatesFactoryResolverTest {
 
     @Test

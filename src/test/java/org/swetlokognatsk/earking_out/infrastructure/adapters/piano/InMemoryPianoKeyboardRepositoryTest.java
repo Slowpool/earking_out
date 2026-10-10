@@ -6,7 +6,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKe
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
@@ -16,7 +16,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.InMemoryPian
 import org.swetlokognatsk.earking_out.infrastructure.adapters.InMemoryRepositoryTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, InMemoryPianoKeyboardRepository> {
     private InMemoryPianoKeyboardRepository repository;
 

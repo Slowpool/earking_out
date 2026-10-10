@@ -9,16 +9,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.PianoKey
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.TestComponent;
+import lombok.AllArgsConstructor;
 
 // TODO review the domain layer to make sure it does not contain a concepts the domain expert wouldn't understand
+@TestComponent
+@AllArgsConstructor
 public final class PuzzleTestHelper {
     private final PuzzleConfigRepository puzzleConfigRepository;
     private final PuzzlesFactory puzzlesFactory;
-
-    public PuzzleTestHelper(final PuzzleConfigRepository puzzleConfigRepository) {
-        this.puzzleConfigRepository = puzzleConfigRepository;
-        this.puzzlesFactory = DI.get(PuzzlesFactory.class);
-    }
 
     public <E extends Exercise, P extends Puzzle<E, ?>> P createPuzzle(final E exercise) {
         return (P) puzzlesFactory.create(exercise);

@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.confi
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.LAST_NOTE_NUMBER;
@@ -18,7 +18,7 @@ import static org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class EditableAudioPerfectPitchConfigValidatorTest extends PuzzleConfigValidatorTest<AudioPerfectPitchExercise, AudioPerfectPitchConfigAggregate, AudioPerfectPitchConfigAggregatesFactory, EditableAudioPerfectPitchConfigValidator> {
 
     protected AudioPerfectPitchExercise getExercise() {

@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfe
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Assertions.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class PerfectPitchSessionStatsAggregatorPBTTest {
 
     private static final SessionId ANY_SESSION_ID = SessionId.random();
@@ -263,13 +263,13 @@ class DomainEventsTimelineBuilder {
     }
 
     private void setPossibleSolutionsToConfig(final List<PianoKeyNumber> possibleSolutions) {
-        var puzzleConfig = puzzleConfigRepository.genericGet(AUDIO_PERFECT_PITCH_EXERCISE);
+        var puzzleConfig = puzzleConfigRepository.getPuzzleConfig(AUDIO_PERFECT_PITCH_EXERCISE);
         puzzleConfig.updateProperty(PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP, possibleSolutions.toArray(PianoKeyNumber[]::new));
         puzzleConfigRepository.save(puzzleConfig);
     }
 
     private void setMaxNumberOfPuzzles() {
-        var puzzleConfig = puzzleConfigRepository.genericGet(AUDIO_PERFECT_PITCH_EXERCISE);
+        var puzzleConfig = puzzleConfigRepository.getPuzzleConfig(AUDIO_PERFECT_PITCH_EXERCISE);
         puzzleConfig.updateProperty(PerfectPitchConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP, Integer.MAX_VALUE);
         puzzleConfigRepository.save(puzzleConfig);
     }

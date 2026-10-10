@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboa
 import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
@@ -19,7 +19,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
  * mapping works fine. using extra pairs (third, fourth and further) for mapping
  * itself is redundant.
  */
-@SpringBootTest
+@EOSpringBootTest
 public final class PianoKeyboardDTOAssemblerTest {
     private final PianoKeyboardAggregatesFactory pianoKeyboardFactory;
     private final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;

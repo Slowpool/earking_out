@@ -9,8 +9,8 @@ public class ContextInjectorExtension implements BeforeEachCallback {
 
     public void beforeEach(ExtensionContext context) throws Exception {
         var springContext = SpringExtension.getApplicationContext(context);
-
-        DI.setContext(springContext);
+        
+        DI.setContext(springContext, true);
     }
 
 }

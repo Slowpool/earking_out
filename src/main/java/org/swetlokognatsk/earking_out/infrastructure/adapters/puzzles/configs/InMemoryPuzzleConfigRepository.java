@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -39,7 +40,9 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
                 .resolveFactory(exercise);
     }
 
-    public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
+    // SUPRISE! THE ORDER OF `E extends ...`, `PCA extends ...` MATTERS!
+    @SuppressWarnings("unchecked")
+    public <E extends Exercise, PCA extends AggregateRoot<E>> PCA get(E exercise) {
         var puzzleConfigAggregate = innerGet(exercise);
         if (puzzleConfigAggregate == null) {
             throw new PuzzleConfigNotFoundException("puzzle config is not found for exercise: " + exercise);
@@ -50,19 +53,24 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
         return (PCA) puzzleConfigAggregate;
     }
 
+    @SuppressWarnings("unchecked")
+    public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA getPuzzleConfig(E exercise) {
+        return (PCA) get(exercise);
+    }
+
     private <PCA extends PuzzleConfigAggregate<?>> PCA createDeepCopy(final PCA puzzleConfigAggregate) {
         var puzzleConfigAggregateFactory = (PuzzleConfigAggregatesFactory<PCA>) createFactory(puzzleConfigAggregate.getId());
         PCA puzzleConfigAggregateCopy = puzzleConfigAggregateFactory.createDeepCopy(puzzleConfigAggregate);
         return (PCA) puzzleConfigAggregateCopy;
     }
 
-    public void save(PuzzleConfigAggregate<Exercise> puzzleConfigAggregate) {
+    public <PCA extends PuzzleConfigAggregate<? extends Exercise>> void save(PCA puzzleConfigAggregate) {
         puzzleConfigAggregate = createDeepCopy(puzzleConfigAggregate);
         saveImpl(puzzleConfigAggregate);
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
-        var puzzleConfig = genericGet(exercise);
+        var puzzleConfig = getPuzzleConfig(exercise);
         var dto = getDtoAssembler()
                 .assemble(puzzleConfig);
         return (PCDTO) dto;

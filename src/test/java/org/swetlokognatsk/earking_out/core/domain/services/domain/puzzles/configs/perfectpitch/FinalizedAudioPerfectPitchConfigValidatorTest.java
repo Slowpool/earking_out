@@ -8,14 +8,14 @@ import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.p
 import static org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.TestPuzzleConfigValidatorHelper.assertThesePropertiesLedToErrors;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.PuzzleConfigValidatorTest;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class FinalizedAudioPerfectPitchConfigValidatorTest extends PuzzleConfigValidatorTest<AudioPerfectPitchExercise, AudioPerfectPitchConfigAggregate, AudioPerfectPitchConfigAggregatesFactory, FinalizedAudioPerfectPitchConfigValidator> {
 
     protected AudioPerfectPitchExercise getExercise() {

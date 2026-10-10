@@ -2,29 +2,30 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
-import org.swetlokognatsk.earking_out.core.ports.base.AggregateRootRepository;
+import org.swetlokognatsk.earking_out.core.ports.base.PolymorphicAggregateRepository;
+import org.swetlokognatsk.earking_out.core.ports.base.TypedAggregateRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.InMemoryRepositoryTest;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import java.util.UUID;
 
-@SpringBootTest
-public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
+@EOSpringBootTest
+public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
     private InMemoryPuzzleConfigRepository repository;
     // TODO delete it?
     // private final static User USER_A = new User(new UserId(1), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000001")), "a");
     // private final static User USER_B = new User(new UserId(2), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000002")), "b");
 
-    protected AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>> getRepository() {
-        return repository;
+    protected PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>> getRepository() {
+        return (PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>>) (PolymorphicAggregateRepository<?, ?>) repository;
     }
 
     protected PuzzleConfigAggregate<Exercise> getSomeAggregate() {
@@ -93,8 +94,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     private AudioPerfectPitchConfigAggregate getPerfectPitchConfigAggregate() {
         var exercise = AUDIO_PERFECT_PITCH_EXERCISE;
-        AudioPerfectPitchConfigAggregate aggregate = repository.genericGet(exercise);
-        return aggregate;
+        return repository.getPuzzleConfig(exercise);
     }
 
     protected PuzzleConfigAggregate<?> getSomePuzzleConfigAggregate() {

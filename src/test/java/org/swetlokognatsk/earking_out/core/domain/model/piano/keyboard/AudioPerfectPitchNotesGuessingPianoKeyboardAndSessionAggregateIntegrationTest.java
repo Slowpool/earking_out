@@ -2,12 +2,14 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
@@ -22,7 +24,7 @@ import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfe
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregateIntegrationTest {
 
     private static final PianoKeyNumber ANY_PIANO_KEY = FIRST_NOTE_NUMBER;
@@ -37,6 +39,8 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     private AudioPerfectPitchSessionService sessionService;
     private AudioPerfectPitchSessionRepository sessionRepository;
     private PuzzleConfigRepository puzzleConfigRepository;
+    private PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
+    private PuzzleConfigTestHelper puzzleConfigTestHelper;
 
     private void pressSomePianoKeyboardKey() {
         pressPianoKey(ANY_PIANO_KEY);
@@ -74,7 +78,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     private void updateNormalizedNotesForPuzzle(final PianoKeyNumber[] newNormalizedNotes) {
-        var puzzleConfig = puzzleConfigRepository.get(exercise);
+        var puzzleConfig = puzzleConfigRepository.getPuzzleConfig(exercise);
         puzzleConfig.updateProperty(PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP, newNormalizedNotes);
         puzzleConfigRepository.save(puzzleConfig);
     }
@@ -100,25 +104,30 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         sessionService.abort(sessionId);
     }
 
-    private void configureSomeValidPuzzleConfig() {
-        var puzzleConfig = puzzleConfigRepository.get(exercise);
-        // TODO use common SOME_PIANO_KEYS
-        var somePianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, LAST_NOTE_NUMBER };
-        puzzleConfig.updateProperty(PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP, somePianoKeys);
-        puzzleConfigRepository.save(puzzleConfig);
+    private void createPianoKeyboards() {
+        PianoKeyboardAggregate pianoKeyboard;
+        for (var pianoKeyboardId : PianoKeyboardId.values()) {
+            pianoKeyboard = pianoKeyboardAggregatesFactory
+                    .create(pianoKeyboardId);
+            pianoKeyboardRepository.save(pianoKeyboard);
+        }
     }
 
     @BeforeEach
     public void setup() {
         DI.refreshDependencies();
         DomainEventHandlers.registerDomainEventHandlers();
+
         pianoKeyboardService = DI.get(PianoKeyboardService.class);
         pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
         sessionService = DI.get(AudioPerfectPitchSessionService.class);
         sessionRepository = DI.get(AudioPerfectPitchSessionRepository.class);
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
+        puzzleConfigTestHelper = DI.get(PuzzleConfigTestHelper.class);
+        pianoKeyboardAggregatesFactory = DI.get(PianoKeyboardAggregatesFactory.class);
 
-        configureSomeValidPuzzleConfig();
+        puzzleConfigTestHelper.configureSomeValidPuzzleConfig();
+        createPianoKeyboards();
     }
 
     @Test

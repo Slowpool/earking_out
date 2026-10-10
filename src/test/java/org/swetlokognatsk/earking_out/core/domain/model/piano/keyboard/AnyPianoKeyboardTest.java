@@ -3,14 +3,14 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
     private static final PianoKeyNumber ANY_NOTE_NUMBER = FIRST_NOTE_NUMBER;
 

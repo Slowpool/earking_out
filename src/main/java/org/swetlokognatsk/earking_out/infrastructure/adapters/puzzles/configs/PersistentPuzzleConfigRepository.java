@@ -39,13 +39,13 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
 
     public final void actualizeCache() {
         for (var exercise : ExercisesFactory.getAll()) {
-            var aggregate = genericGet(exercise);
+            var aggregate = get(exercise);
             getCacheRepository()
                     .save(aggregate);
         }
     }
 
-    public final <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
+    public final <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA get(final E exercise) {
         try {
             return getCached(exercise);
         } catch (PuzzleConfigNotFoundException e) {
@@ -59,7 +59,7 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
 
     private <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA getCached(final E exercise) {
         return getCacheRepository()
-                .genericGet(exercise);
+                .get(exercise);
     }
 
     private void saveToCache(final PuzzleConfigAggregate<Exercise> puzzleConfig) {
@@ -74,15 +74,15 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
-        var puzzleConfig = genericGet(exercise);
+        var puzzleConfig = get(exercise);
         return getDtoAssembler()
                 .assemble(puzzleConfig);
     }
 
-    /** Use {@link #genericGet(E exercise)} instead */
+    /** Use {@link #get(E exercise)} instead */
     @Deprecated
     public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {
-        return genericGet(exercise);
+        return get(exercise);
     }
 
     public void save(final PuzzleConfigAggregate<Exercise> aggregate) {

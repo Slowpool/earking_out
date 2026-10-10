@@ -5,7 +5,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKe
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.LAST_NOTE_NUMBER;
 import java.util.List;
 
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
@@ -15,7 +15,7 @@ import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
 
-@SpringBootTest
+@EOSpringBootTest
 public class NotePBTTest {
 
     // because they are minority

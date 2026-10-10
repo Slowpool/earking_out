@@ -8,6 +8,7 @@
     "java.test.config": [
         {
             "name": "test-profile",
+            
             "vmArgs": [
                 "-Dspring.profiles.active=test",
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.app=ALL-UNNAMED",

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteTest;
@@ -13,7 +13,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class NotesNormalizingServiceTest {
     static NotesNormalizingService noteNormalizer;
     static Note[] notes = NoteTest.notes;

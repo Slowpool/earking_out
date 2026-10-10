@@ -5,10 +5,10 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {

@@ -4,7 +4,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelp
 import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -19,7 +19,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
-@SpringBootTest
+@EOSpringBootTest
 public final class SessionAggregateTest {
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(((AudioPerfectPitchSolution) SOLUTION).keyNumber.increment());
@@ -72,7 +72,7 @@ public final class SessionAggregateTest {
     }
 
     private void updateTargetNumberOfPuzzlesOfSomeSession(int targetNumberOfPuzzles) {
-        var puzzleConfig = puzzleConfigRepository.get(AUDIO_PERFECT_PITCH_EXERCISE);
+        var puzzleConfig = puzzleConfigRepository.getPuzzleConfig(AUDIO_PERFECT_PITCH_EXERCISE);
         puzzleConfig.updateProperty(PuzzleConfigAggregate.TARGET_NUMBER_OF_PUZZLES_PROP, targetNumberOfPuzzles);
         puzzleConfigRepository.save(puzzleConfig);
     }

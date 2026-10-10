@@ -4,21 +4,27 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
-@SpringBootTest
+@EOSpringBootTest
 public class AudioPerfectPitchPuzzleTest {
     private PuzzleTestHelper puzzleHelper;
+    private PuzzleConfigTestHelper puzzleConfigHelper;
 
     @BeforeEach
     public void setup() {
         DI.refreshDependencies();
-        puzzleHelper = new PuzzleTestHelper(DI.get(PuzzleConfigRepository.class));
+
+        puzzleHelper = DI.get(PuzzleTestHelper.class);
+        puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
+
+        puzzleConfigHelper.configureSomeValidPuzzleConfig();
     }
 
     @Test

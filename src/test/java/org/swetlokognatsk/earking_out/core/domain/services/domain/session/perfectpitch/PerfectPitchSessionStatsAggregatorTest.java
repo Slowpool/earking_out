@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.session.perfe
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Assertions.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEventsFactory;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
@@ -26,7 +26,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
 @Deprecated
-@SpringBootTest
+@EOSpringBootTest
 public final class PerfectPitchSessionStatsAggregatorTest {
 
     private PerfectPitchSessionStatsAggregator<?> statsAggregator = DI.get(PerfectPitchSessionStatsAggregator.class);

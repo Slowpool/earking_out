@@ -23,7 +23,7 @@ public final class PuzzleConfigService {
     }
 
     public void updateProperty(final Exercise exercise, final String property, final Object value) {
-        var puzzleConfigAggregate = repository.get(exercise);
+        var puzzleConfigAggregate = repository.getPuzzleConfig(exercise);
         try {
             puzzleConfigAggregate.updateProperty(property, value);
             repository.save(puzzleConfigAggregate);
@@ -69,7 +69,7 @@ public final class PuzzleConfigService {
     }
 
     private <E extends Exercise> PuzzleConfigAggregate<E> getPuzzleConfigAggregate(final E exercise) {
-        var puzzleConfigAggregate = repository.get(exercise);
-        return (PuzzleConfigAggregate<E>) puzzleConfigAggregate;
+        var puzzleConfigAggregate = repository.getPuzzleConfig(exercise);
+        return puzzleConfigAggregate;
     }
 }
