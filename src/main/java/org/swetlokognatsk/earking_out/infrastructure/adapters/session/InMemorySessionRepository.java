@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.session;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
@@ -25,11 +27,11 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
         this.sessionAggregatesFactory = sessionAggregatesFactory;
     }
 
-    public SA get(final SessionId id) {
+    public SA get(final SessionId id) throws AggregateNotFoundException {
         var sessionAggregate = (SA) getSessionAggregates()
                 .get(id);
         if (sessionAggregate == null) {
-            throw new IllegalArgumentException("session not found. id: " + id);
+            throw new AggregateNotFoundException("session not found. id: " + id);
         }
         var sessionAggregateCopy = getSessionAggregatesFactory()
                 .createDeepCopy(sessionAggregate);

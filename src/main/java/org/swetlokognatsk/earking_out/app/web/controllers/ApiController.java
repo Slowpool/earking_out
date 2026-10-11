@@ -34,6 +34,7 @@ import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewMode
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleViewFiller;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -44,6 +45,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOf
 import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
@@ -172,8 +174,13 @@ public class ApiController {
 
     // TODO now this is a temporary hack that executes all globally queued tasks. why to do it? events a logged asynchronously, and if user finishes the session before all events are logged, stats will be based on partial event logs and consequently they will be incorrect. debugging i figured out it's still imperfect, - there's still a possibility of wrong stats, but it's much lower
     private void persistQueuedEventLogs(final SessionId sessionId) {
-        var sessionDto = DI.get(SessionRepositoryDelegator.class)
-                .getSessionAggregateDTO(sessionId);
+        SessionAggregateDTO<?, ?, ?, ?> sessionDto;
+        try {
+            sessionDto = DI.get(SessionRepositoryDelegator.class)
+                    .getSessionAggregateDTO(sessionId);
+        } catch (AggregateNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         if (sessionDto.state == SessionStates.COMPLETED || sessionDto.state == SessionStates.ABORTED) {
             executeAllTasksSynchronously();

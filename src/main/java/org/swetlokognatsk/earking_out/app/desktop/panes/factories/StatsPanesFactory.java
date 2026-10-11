@@ -3,8 +3,10 @@ package org.swetlokognatsk.earking_out.app.desktop.panes.factories;
 import org.swetlokognatsk.earking_out.app.desktop.panes.SessionStatsPane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.stats.PerfectPitchStatsPane;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.PerfectPitchSessionStatsService;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -19,7 +21,12 @@ public final class StatsPanesFactory {
     private final SessionRepositoryDelegator sessionRepository;
 
     public SessionStatsPane<?, ?, ?> create(final SessionId sessionId) {
-        var sessionDto = sessionRepository.getSessionAggregateDTO(sessionId);
+        SessionAggregateDTO<?, ?, ?, ?> sessionDto;
+        try {
+            sessionDto = sessionRepository.getSessionAggregateDTO(sessionId);
+        } catch (AggregateNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         var exercise = sessionDto.puzzleConfigDto.exercise;
         var sessionStatsPane = switch (exercise) {
         case AudioPerfectPitchExercise e -> new PerfectPitchStatsPane<AudioPerfectPitchExercise, AudioPerfectPitchSessionAggregateDTO>((AudioPerfectPitchSessionAggregateDTO) sessionDto, DI.get(PerfectPitchSessionStatsService.class));

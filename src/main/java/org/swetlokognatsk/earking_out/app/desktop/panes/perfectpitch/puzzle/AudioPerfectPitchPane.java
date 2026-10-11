@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedE
 import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersRegister;
 import org.swetlokognatsk.earking_out.app.desktop.panes.factories.PianoKeyboardsFactory;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -98,7 +99,11 @@ public final class AudioPerfectPitchPane extends PerfectPitchPane<AudioPerfectPi
     }
 
     private AudioPerfectPitchSessionAggregateDTO getCurrentSessionDTO() {
-        return (AudioPerfectPitchSessionAggregateDTO) sessionRepository.getSessionAggregateDTO(sessionId);
+        try {
+            return (AudioPerfectPitchSessionAggregateDTO) sessionRepository.getSessionAggregateDTO(sessionId);
+        } catch (AggregateNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void handlePianoKeyReleasing(final PianoKeyReleasedEvent e) {
