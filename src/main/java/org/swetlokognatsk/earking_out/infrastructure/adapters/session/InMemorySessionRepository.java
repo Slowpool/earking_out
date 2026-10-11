@@ -8,9 +8,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.AggregateRepository;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter(AccessLevel.PRIVATE)
 public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?, ?, ?>> extends AggregateRepository implements SessionRepository<SA> {
     private final Map<SessionId, SessionAggregate<?, ?, ?, ?>> sessionAggregates = new HashMap<>();
+
+    @Setter(AccessLevel.PRIVATE)
     private SessionId activeSessionId;
 
     private final SessionAggregatesFactory sessionAggregatesFactory;
@@ -19,20 +25,24 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
         this.sessionAggregatesFactory = sessionAggregatesFactory;
     }
 
-    public final SA get(final SessionId id) {
-        var sessionAggregate = (SA) sessionAggregates.get(id);
+    public SA get(final SessionId id) {
+        var sessionAggregate = (SA) getSessionAggregates()
+                .get(id);
         if (sessionAggregate == null) {
             throw new IllegalArgumentException("session not found. id: " + id);
         }
-        var sessionAggregateCopy = sessionAggregatesFactory.createDeepCopy(sessionAggregate);
+        var sessionAggregateCopy = getSessionAggregatesFactory()
+                .createDeepCopy(sessionAggregate);
         return (SA) sessionAggregateCopy;
     }
 
     public void save(SA sessionAggregate) {
         var events = sessionAggregate.flushEvents();
 
-        sessionAggregate = (SA) sessionAggregatesFactory.createDeepCopy(sessionAggregate);
-        sessionAggregates.put(sessionAggregate.getId(), sessionAggregate);
+        sessionAggregate = (SA) getSessionAggregatesFactory()
+                .createDeepCopy(sessionAggregate);
+        getSessionAggregates()
+                .put(sessionAggregate.getId(), sessionAggregate);
 
         rememberAsActiveSession(sessionAggregate);
 
@@ -41,15 +51,18 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
 
     private void rememberAsActiveSession(final SA sessionAggregate) {
         // last saved session is active
-        activeSessionId = sessionAggregate.getState().equals(SessionStates.IN_PROGRESS) ? sessionAggregate.getId() : null;
+        var activeSessionId = sessionAggregate.getState()
+                .equals(SessionStates.IN_PROGRESS)
+                        ? sessionAggregate.getId()
+                        : null;
+        setActiveSessionId(activeSessionId);
     }
 
-    public final SA getActiveSession() {
-        if (activeSessionId == null) {
+    public SA getActiveSession() {
+        if (getActiveSessionId() == null) {
             throw new IllegalStateException("there's no active session");
         }
         var activeSessionCopy = (SA) get(activeSessionId);
         return activeSessionCopy;
     }
-
 }

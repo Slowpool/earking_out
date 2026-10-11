@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.session;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
@@ -16,14 +17,19 @@ public final class InMemorySessionRepositoryTest {
     private InMemorySessionRepository<AudioPerfectPitchSessionAggregate> repository;
     private SessionAggregatesFactory sessionAggregatesFactory;
     private SessionId seededSessionId;
+    private SessionRepositoryTestHelper sessionRepositoryHelper;
+    private PuzzleConfigTestHelper puzzleConfigHelper;
 
     @BeforeEach
     public void setup() {
         // TODO is there another way to test exactly InMemorySesisonRepository abstract class?
         repository = DI.get(InMemoryAudioPerfectPitchSessionRepository.class);
-        seededSessionId = TestSessionRepositoryHelper.seedTestSession(repository);
-
+        sessionRepositoryHelper = DI.get(SessionRepositoryTestHelper.class);
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
+        puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
+
+        puzzleConfigHelper.configureSomeValidPuzzleConfig();
+        seededSessionId = sessionRepositoryHelper.seedTestSession(repository);
     }
 
     @Test

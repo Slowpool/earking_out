@@ -6,12 +6,17 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.Aud
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.TestComponent;
+import lombok.AllArgsConstructor;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
-public final class TestSessionRepositoryHelper {
+@TestComponent
+@AllArgsConstructor
+public class SessionRepositoryTestHelper {
 
-    public static <SR extends SessionRepository<?>> SessionId seedTestSession(final SR repository) {
-        var sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
+    private final SessionAggregatesFactory sessionAggregatesFactory;
+
+    public <SR extends SessionRepository<?>> SessionId seedTestSession(final SR repository) {
         SessionId sessionId;
         // TODO can it be more elegant?
         switch (repository) {
