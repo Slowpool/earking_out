@@ -5,11 +5,15 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKe
 import org.junit.jupiter.api.*;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.OwnedPianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.*;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 
+// TODO perfect case to apply PBT
 /**
  * idea: to test the dto assembling itself, we need only 2 pairs of aggregate
  * and corresponding dto. both aggregates' fields must be different, so that
@@ -21,24 +25,34 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
  */
 @EOSpringBootTest
 public final class PianoKeyboardDTOAssemblerTest {
-    private final PianoKeyboardAggregatesFactory pianoKeyboardFactory;
-    private final PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
+    private PianoKeyboardAggregatesFactory pianoKeyboardFactory;
+    private PianoKeyboardDtoAssembler pianoKeyboardDtoAssembler;
+    private UserResolver userResolver;
 
-    private final PianoKeyboardAggregate pianoKeyboard1;
-    private final PianoKeyboardDTO dto1;
+    private PianoKeyboardAggregate pianoKeyboard1;
+    private PianoKeyboardDTO dto1;
 
-    private final PianoKeyboardAggregate pianoKeyboard2;
-    private final PianoKeyboardDTO dto2;
+    private PianoKeyboardAggregate pianoKeyboard2;
+    private PianoKeyboardDTO dto2;
 
-    public PianoKeyboardDTOAssemblerTest() {
+    private OwnedPianoKeyboardId buildOwnedPianoKeyboardId(final PianoKeyboardId pianoKeyboardId) {
+        var userId = userResolver.getCurrentUserId();
+        return new OwnedPianoKeyboardId(pianoKeyboardId, userId);
+    }
+
+    @BeforeEach
+    public void setup() {
         pianoKeyboardFactory = DI.get(PianoKeyboardAggregatesFactory.class);
         pianoKeyboardDtoAssembler = DI.get(PianoKeyboardDtoAssembler.class);
+        userResolver = DI.get(UserResolver.class);
 
         var selectedKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
-        pianoKeyboard1 = pianoKeyboardFactory.create(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER, selectedKeys);
+        var ownedPianoKeyboardId1 = buildOwnedPianoKeyboardId(AUDIO_PERFECT_PITCH_NOTES_PICKER);
+        pianoKeyboard1 = pianoKeyboardFactory.create(ownedPianoKeyboardId1, selectedKeys);
         dto1 = pianoKeyboardDtoAssembler.assemble(pianoKeyboard1);
 
-        pianoKeyboard2 = pianoKeyboardFactory.create(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
+        var ownedPianoKeyboardId2 = buildOwnedPianoKeyboardId(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
+        pianoKeyboard2 = pianoKeyboardFactory.create(ownedPianoKeyboardId2);
         pianoKeyboard2.pressKey(FIRST_NOTE_NUMBER.add(3));
         dto2 = pianoKeyboardDtoAssembler.assemble(pianoKeyboard2);
     }
