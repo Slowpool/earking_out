@@ -8,8 +8,8 @@ import org.swetlokognatsk.earking_out.core.ports.base.PolymorphicAggregateReposi
 
 public interface PuzzleConfigRepository extends PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<? extends Exercise>> {
     /**
-     * Use {@link #getPuzzleConfig() } instead to get typed puzlze config aggregate
-     * object
+     * Use {@link #getPuzzleConfig() } instead to get typed puzzle config aggregate
+     * object.
      */
     @Override
     @Deprecated(forRemoval = false)

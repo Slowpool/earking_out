@@ -18,15 +18,16 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
  */
 @EOSpringBootTest
 public final class PianoKeyDTOAssemblerTest {
-    private final PianoKeysFactory pianoKeysFactory;
+    private PianoKeysFactory pianoKeysFactory;
 
-    private final PianoKey pianoKey1;
-    private final PianoKeyDTO dto1;
+    private PianoKey pianoKey1;
+    private PianoKeyDTO dto1;
 
-    private final PianoKey pianoKey2;
-    private final PianoKeyDTO dto2;
+    private PianoKey pianoKey2;
+    private PianoKeyDTO dto2;
 
-    public PianoKeyDTOAssemblerTest() {
+    @BeforeEach
+    public void setup() {
         pianoKeysFactory = DI.get(PianoKeysFactory.class);
 
         pianoKey1 = pianoKeysFactory.create(FIRST_NOTE_NUMBER, PianoKeyMode.SELECT);

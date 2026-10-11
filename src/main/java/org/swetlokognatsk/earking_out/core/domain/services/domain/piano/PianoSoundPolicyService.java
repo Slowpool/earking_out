@@ -22,7 +22,7 @@ public class PianoSoundPolicyService {
         }
 
         var exercise = pianoKeyboardId.exercise;
-        PuzzleConfigAggregate<?> puzzleConfig = puzzleConfigRepository.get(exercise);
+        PuzzleConfigAggregate<?> puzzleConfig = puzzleConfigRepository.getPuzzleConfig(exercise);
 
         var shouldPlaySound = switch (puzzleConfig) {
         case AudioPerfectPitchConfigAggregate audioPerfectPitchPuzzleConfig -> !audioPerfectPitchPuzzleConfig.getSoundlessGuessingPiano();
