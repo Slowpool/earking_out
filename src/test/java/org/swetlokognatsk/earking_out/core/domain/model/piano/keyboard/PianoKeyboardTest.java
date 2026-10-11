@@ -3,11 +3,11 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
 abstract class PianoKeyboardTest {
+    protected PianoKeyboardTestHelper pianoKeyboardHelper;
+
     private final PianoKeyboardId pianoKeyboardIdWithTestedMode = getSomeSuitablePianoKeyboardId();
     protected PianoKeyboardAggregate pianoKeyboard;
 
@@ -18,16 +18,19 @@ abstract class PianoKeyboardTest {
     @BeforeEach
     public void before() {
         DI.refreshDependencies();
+
+        pianoKeyboardHelper = DI.get(PianoKeyboardTestHelper.class);
+
         pianoKeyboard = createPianoKeyboard();
     }
 
     protected abstract PianoKeyboardId getSomeSuitablePianoKeyboardId();
 
     protected PianoKeyboardAggregate createPianoKeyboard() {
-        return PianoKeyboardTestHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode);
+        return pianoKeyboardHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode);
     }
 
     protected PianoKeyboardAggregate createPianoKeyboard(final PianoKeyNumber[] selectedKeys) {
-        return PianoKeyboardTestHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode, selectedKeys);
+        return pianoKeyboardHelper.createPianoKeyboard(pianoKeyboardIdWithTestedMode, selectedKeys);
     }
 }

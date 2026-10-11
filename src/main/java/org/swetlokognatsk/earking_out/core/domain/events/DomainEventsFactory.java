@@ -12,6 +12,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGues
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.OwnedPianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -36,7 +37,7 @@ public final class DomainEventsFactory {
         return userResolver.getCurrentUserId();
     }
 
-    public PianoKeyPressedEvent createPianoKeyPressedEvent(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber pianoKeyNumber) {
+    public PianoKeyPressedEvent createPianoKeyPressedEvent(final OwnedPianoKeyboardId pianoKeyboardId, final PianoKeyNumber pianoKeyNumber) {
         var timestamp = createTimestamp();
         return new PianoKeyPressedEvent(getCurrentUserId(), timestamp, pianoKeyboardId, pianoKeyNumber);
     }

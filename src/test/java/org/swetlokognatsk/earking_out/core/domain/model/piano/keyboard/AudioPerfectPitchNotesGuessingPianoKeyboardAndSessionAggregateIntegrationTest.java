@@ -8,14 +8,11 @@ import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHan
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
-import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -23,7 +20,6 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
 @EOSpringBootTest
 @DirtiesContext
@@ -41,8 +37,8 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     private AudioPerfectPitchSessionService sessionService;
     private AudioPerfectPitchSessionRepository sessionRepository;
     private PuzzleConfigRepository puzzleConfigRepository;
-    private PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory;
     private PuzzleConfigTestHelper puzzleConfigTestHelper;
+    private PianoKeyboardTestHelper pianoKeyboardHelper;
 
     private void pressSomePianoKeyboardKey() {
         pressPianoKey(ANY_PIANO_KEY);
@@ -54,12 +50,12 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
 
     private void assertPianoKeyboardDoesNotHavePressedKeys() {
         var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
-        assertNoSelectedKeys(guessingPianoKeyboard);
+        pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
     }
 
     private void assertPianoKeyboardDoesNotHaveSelectedKeys() {
         var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
-        assertNoSelectedKeys(guessingPianoKeyboard);
+        pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
     }
 
     private void pressPianoKey(final PianoKeyNumber pianoKeyNumber) {
@@ -106,13 +102,15 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         sessionService.abort(sessionId);
     }
 
-    private void createPianoKeyboards() {
-        PianoKeyboardAggregate pianoKeyboard;
+    private void createAndSavePianoKeyboards() {
         for (var pianoKeyboardId : PianoKeyboardId.values()) {
-            pianoKeyboard = pianoKeyboardAggregatesFactory
-                    .create(pianoKeyboardId);
-            pianoKeyboardRepository.save(pianoKeyboard);
+            createAndSavePianoKeyboard(pianoKeyboardId);
         }
+    }
+
+    private void createAndSavePianoKeyboard(final PianoKeyboardId id) {
+        var pianoKeyboard = pianoKeyboardHelper.createPianoKeyboard(id);
+        pianoKeyboardRepository.save(pianoKeyboard);
     }
 
     @BeforeEach
@@ -126,10 +124,10 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         sessionRepository = DI.get(AudioPerfectPitchSessionRepository.class);
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         puzzleConfigTestHelper = DI.get(PuzzleConfigTestHelper.class);
-        pianoKeyboardAggregatesFactory = DI.get(PianoKeyboardAggregatesFactory.class);
+        pianoKeyboardHelper = DI.get(PianoKeyboardTestHelper.class);
 
         puzzleConfigTestHelper.configureSomeValidPuzzleConfig();
-        createPianoKeyboards();
+        createAndSavePianoKeyboards();
     }
 
     @Test

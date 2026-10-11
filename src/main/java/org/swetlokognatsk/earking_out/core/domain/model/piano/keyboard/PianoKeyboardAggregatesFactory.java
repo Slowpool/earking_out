@@ -16,11 +16,11 @@ public final class PianoKeyboardAggregatesFactory extends AggregatesFactory<Pian
         this.pianoKeysFactory = pianoKeysFactory;
     }
 
-    public PianoKeyboardAggregate create(final PianoKeyboardId id) {
+    public PianoKeyboardAggregate create(final OwnedPianoKeyboardId id) {
         return create(id, new PianoKeyNumber[0]);
     }
 
-    public PianoKeyboardAggregate create(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeys) {
+    public PianoKeyboardAggregate create(final OwnedPianoKeyboardId id, final PianoKeyNumber[] selectedKeys) {
         return new PianoKeyboardAggregate(id, selectedKeys, pianoKeysFactory);
     }
 }

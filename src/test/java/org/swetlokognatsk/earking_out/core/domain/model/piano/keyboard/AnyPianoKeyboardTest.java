@@ -14,6 +14,8 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.Pi
 public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
     private static final PianoKeyNumber ANY_NOTE_NUMBER = FIRST_NOTE_NUMBER;
 
+    private PianoKeyboardTestHelper pianoKeyboardHelper;
+
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
         return PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_GUESSING;
     }
@@ -38,6 +40,8 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
     @BeforeEach
     public void setup() {
         DI.refreshDependencies();
+
+        pianoKeyboardHelper = DI.get(PianoKeyboardTestHelper.class);
     }
 
     @Test
@@ -59,7 +63,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
 
         pianoKeyboard.resetState();
 
-        assertNoSelectedKeys(pianoKeyboard);
+        pianoKeyboardHelper.assertNoSelectedKeys(pianoKeyboard);
     }
 
     @Test
@@ -69,7 +73,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
 
         pianoKeyboard.resetState();
 
-        assertNoPressedKeys(pianoKeyboard);
+        pianoKeyboardHelper.assertNoPressedKeys(pianoKeyboard);
     }
 
     @Test
@@ -79,6 +83,6 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
 
         pianoKeyboard.resetState();
 
-        assertDoesNotHaveEvents(pianoKeyboard);
+        pianoKeyboardHelper.assertDoesNotHaveEvents(pianoKeyboard);
     }
 }
