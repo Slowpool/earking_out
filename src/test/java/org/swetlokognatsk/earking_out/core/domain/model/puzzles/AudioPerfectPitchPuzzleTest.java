@@ -31,6 +31,7 @@ public class AudioPerfectPitchPuzzleTest {
     // TODO it checks whether puzzle.create indeed creates the object of `Puzzle` type, that's it. is it ok to test such a thing or it is redundant?
     public void puzzleClassCorresponds() {
         var puzzle = puzzleHelper.createPuzzle(AUDIO_PERFECT_PITCH_EXERCISE);
+
         assertTrue(puzzle instanceof AudioPerfectPitchPuzzle);
     }
 
@@ -38,7 +39,9 @@ public class AudioPerfectPitchPuzzleTest {
     public void perfectPitchCorrectPuzzleGuess() {
         var solution = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
         var puzzle = puzzleHelper.createPuzzle(AUDIO_PERFECT_PITCH_EXERCISE, solution);
+
         boolean correctAnswer = puzzle.guess(solution);
+
         assertTrue(correctAnswer);
     }
 
@@ -46,9 +49,10 @@ public class AudioPerfectPitchPuzzleTest {
     public void perfectPitchWrongPuzzleGuess() {
         var solution = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
         var puzzle = puzzleHelper.createPuzzle(AUDIO_PERFECT_PITCH_EXERCISE, solution);
-
         var wrongSolution = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER.increment());
+
         boolean correctAnswer = puzzle.guess(wrongSolution);
+
         assertFalse(correctAnswer);
     }
 

@@ -8,6 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.ports.base.PolymorphicAggregateRepository;
 import org.swetlokognatsk.earking_out.core.ports.base.TypedAggregateRepository;
@@ -20,6 +21,7 @@ import java.util.UUID;
 public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
     private InMemoryPuzzleConfigRepository repository;
+    private PuzzleConfigTestHelper puzzleConfigHelper;
     // TODO delete it?
     // private final static User USER_A = new User(new UserId(1), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000001")), "a");
     // private final static User USER_B = new User(new UserId(2), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000002")), "b");
@@ -42,10 +44,23 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
         assertEquals(sourceAggregate.getTargetNumberOfPuzzles() + 1, editedAggregate.getTargetNumberOfPuzzles());
     }
 
+    private AudioPerfectPitchConfigAggregate getPerfectPitchConfigAggregate() {
+        var exercise = AUDIO_PERFECT_PITCH_EXERCISE;
+        return repository.getPuzzleConfig(exercise);
+    }
+
+    protected PuzzleConfigAggregate<?> getSomePuzzleConfigAggregate() {
+        return getPerfectPitchConfigAggregate();
+    }
+
     @BeforeEach
     public void setup() {
         DI.refreshDependencies();
+
         repository = DI.get(InMemoryPuzzleConfigRepository.class);
+        puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
+
+        puzzleConfigHelper.configureSomeValidPuzzleConfig();
     }
 
     @Test
@@ -90,15 +105,6 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
         aggregate = getPerfectPitchConfigAggregate();
         assertEquals(newNormalizedRootNote, aggregate.getNormalizedRootNote());
-    }
-
-    private AudioPerfectPitchConfigAggregate getPerfectPitchConfigAggregate() {
-        var exercise = AUDIO_PERFECT_PITCH_EXERCISE;
-        return repository.getPuzzleConfig(exercise);
-    }
-
-    protected PuzzleConfigAggregate<?> getSomePuzzleConfigAggregate() {
-        return getPerfectPitchConfigAggregate();
     }
 
     @Test
