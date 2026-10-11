@@ -4,16 +4,13 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 import static org.springframework.http.ResponseEntity.*;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +31,6 @@ import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewMode
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleConfigViewFiller;
 import org.swetlokognatsk.earking_out.app.web.views.models.fillers.PuzzleViewFiller;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
-import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -45,7 +41,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOf
 import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
@@ -174,13 +169,8 @@ public class ApiController {
 
     // TODO now this is a temporary hack that executes all globally queued tasks. why to do it? events a logged asynchronously, and if user finishes the session before all events are logged, stats will be based on partial event logs and consequently they will be incorrect. debugging i figured out it's still imperfect, - there's still a possibility of wrong stats, but it's much lower
     private void persistQueuedEventLogs(final SessionId sessionId) {
-        SessionAggregateDTO<?, ?, ?, ?> sessionDto;
-        try {
-            sessionDto = DI.get(SessionRepositoryDelegator.class)
-                    .getSessionAggregateDTO(sessionId);
-        } catch (AggregateNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        var sessionDto = DI.get(SessionRepositoryDelegator.class)
+                .getSessionAggregateDTO(sessionId);
 
         if (sessionDto.state == SessionStates.COMPLETED || sessionDto.state == SessionStates.ABORTED) {
             executeAllTasksSynchronously();

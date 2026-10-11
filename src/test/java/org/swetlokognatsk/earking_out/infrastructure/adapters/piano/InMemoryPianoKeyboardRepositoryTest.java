@@ -70,11 +70,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
 
         rootNotePicker.touchKey(FIRST_NOTE_NUMBER);
 
-        try {
-            rootNotePicker = repository.get(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
-        } catch (AggregateNotFoundException e) {
-            fail();
-        }
+        rootNotePicker = repository.get(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         assertArrayEquals(new PianoKeyNumber[0], rootNotePicker.getSelectedKeyNumbers());
     }
 
@@ -93,11 +89,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
         rootNotePicker.touchKey(someRootNote);
         repository.save(rootNotePicker);
 
-        try {
-            rootNotePicker = repository.get(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
-        } catch (AggregateNotFoundException e) {
-            fail();
-        }
+        rootNotePicker = repository.get(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         assertArrayEquals(new PianoKeyNumber[] { someRootNote }, rootNotePicker.getSelectedKeyNumbers());
     }
 

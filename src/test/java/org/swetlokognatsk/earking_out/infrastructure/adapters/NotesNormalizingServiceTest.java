@@ -1,9 +1,11 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
@@ -19,8 +21,12 @@ public final class NotesNormalizingServiceTest {
     static Note[] notes = NoteTest.notes;
     static PianoKeyNumber[] normalizedValues = NoteTest.normalizedValues;
 
-    @BeforeAll
-    public static void setup() {
+    @BeforeEach
+    public void setup() {
+        throw new RuntimeException("here i stopped");
+        // TODO WAIT WHAT! why do i do it if it already must be done in InjectionExtension? remove this everywhere
+        // DI.setContext(ctx);
+
         noteNormalizer = getNoteNormalizer();
     }
 

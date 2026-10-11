@@ -22,15 +22,11 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.DetermenisticRandomAudioPerfectPitchSolutionGenerator;
-import net.jqwik.api.AfterFailureMode;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
-import net.jqwik.api.FixedSeedMode;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
-import net.jqwik.api.ShrinkingMode;
-import net.jqwik.api.lifecycle.BeforeProperty;
 import net.jqwik.api.lifecycle.BeforeTry;
 import net.jqwik.spring.JqwikSpringSupport;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
@@ -41,7 +37,6 @@ import java.util.List;
 
 @JqwikSpringSupport
 @SpringBootTest
-@Execution(ExecutionMode.SAME_THREAD)
 public final class PerfectPitchSessionStatsAggregatorPBTTest {
 
     private static final SessionId ANY_SESSION_ID = SessionId.random();

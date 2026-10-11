@@ -4,10 +4,8 @@ import org.swetlokognatsk.earking_out.app.desktop.helpers.PianoKeyboardHandlersR
 import org.swetlokognatsk.earking_out.app.desktop.panes.PuzzlePane;
 import org.swetlokognatsk.earking_out.app.desktop.panes.perfectpitch.puzzle.AudioPerfectPitchPane;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
-import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise.unknownExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
@@ -22,13 +20,9 @@ public final class PuzzlePanesFactory {
 
     private final SessionRepositoryDelegator sessionRepository;
 
+    // TODO clean this switch case mess??
     public PuzzlePane<?, ?, ?> create(final SessionId sessionId, final double width, final double height) {
-        SessionAggregate<?, ?, ?, ?> session;
-        try {
-            session = sessionRepository.get(sessionId);
-        } catch (AggregateNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        var session = sessionRepository.get(sessionId);
         var puzzleConfigDto = session.getPuzzleConfig();
         var exercise = puzzleConfigDto.exercise;
         var service = switch (exercise) {

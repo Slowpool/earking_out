@@ -1,6 +1,5 @@
 package org.swetlokognatsk.earking_out.core.ports.piano;
 
-import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.OwnedPianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
@@ -8,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboar
 import org.swetlokognatsk.earking_out.core.ports.base.TypedAggregateRepository;
 
 public interface PianoKeyboardRepository extends TypedAggregateRepository<OwnedPianoKeyboardId, PianoKeyboardAggregate> {
-    PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId) throws AggregateNotFoundException;
+    PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId);
 
     /**
      * If aggregate is not found, it must be created, saved and then returned. So,
@@ -16,7 +15,7 @@ public interface PianoKeyboardRepository extends TypedAggregateRepository<OwnedP
      */
     PianoKeyboardAggregate getInevitably(PianoKeyboardId pianoKeyboardId);
 
-    PianoKeyboardDTO getPianoKeyboardDTO(PianoKeyboardId pianoKeyboardId) throws AggregateNotFoundException;
+    PianoKeyboardDTO getPianoKeyboardDTO(PianoKeyboardId pianoKeyboardId);
 
     PianoKeyboardDTO getPianoKeyboardDTOInevitably(PianoKeyboardId pianoKeyboardId);
 

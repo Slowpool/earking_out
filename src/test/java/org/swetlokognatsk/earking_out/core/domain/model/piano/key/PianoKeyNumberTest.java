@@ -6,7 +6,6 @@ import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
-@EOSpringBootTest
 // TODO generalize this test for all value object tests
 public final class PianoKeyNumberTest {
 

@@ -11,7 +11,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import static org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.TestPuzzleConfigValidatorHelper.*;
 
-@EOSpringBootTest
 public final class SomePuzzleConfigValidatorTest {
 
     private static final boolean ANY_STATS_RECORDING = false;
@@ -19,7 +18,7 @@ public final class SomePuzzleConfigValidatorTest {
 
     @BeforeEach
     public void setup() {
-        this.validator = new PuzzleConfigValidator<SomePuzzleConfigAggregate>() {
+        validator = new PuzzleConfigValidator<SomePuzzleConfigAggregate>() {
         };
     }
 

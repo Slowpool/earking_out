@@ -50,21 +50,14 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     private void assertPianoKeyboardDoesNotHavePressedKeys() {
-        try {
-            var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
-            pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
-        } catch (AggregateNotFoundException e) {
-            fail();
-        }
+        var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
+        pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
+
     }
 
     private void assertPianoKeyboardDoesNotHaveSelectedKeys() {
-        try {
-            var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
-            pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
-        } catch (AggregateNotFoundException e) {
-            fail();
-        }
+        var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
+        pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
     }
 
     private void pressPianoKey(final PianoKeyNumber pianoKeyNumber) {
@@ -103,14 +96,8 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         var activeSession = startSession();
         var activeSessionId = activeSession.getId();
         sessionService.abort(activeSessionId);
-        try {
-            var session = sessionRepository.get(activeSessionId);
-            return session;
-        }
-        catch (AggregateNotFoundException e) {
-            fail();
-            return null;
-        }
+        var session = sessionRepository.get(activeSessionId);
+        return session;
     }
 
     private void abortSession(final SessionId sessionId) {

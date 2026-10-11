@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
@@ -13,20 +15,19 @@ import java.util.List;
 
 public abstract class PuzzleConfigValidatorTest<E extends Exercise, PCA extends PuzzleConfigAggregate<E>, PCAF extends PuzzleConfigAggregatesFactory<PCA>, VC extends PuzzleConfigValidator<PCA>> {
 
-    protected final PCAF aggregatesFactory;
+    protected PCAF aggregatesFactory;
     protected VC validator;
 
     protected abstract E getExercise();
 
     protected abstract Class<VC> getValidatorClass();
 
-    public PuzzleConfigValidatorTest() {
-        aggregatesFactory = (PCAF) DI.get(PuzzleConfigAggregatesFactoryResolver.class).resolveFactory(getExercise());
-    }
-
     @BeforeEach
-    public void setup() {
-        validator = (VC) DI.get(getValidatorClass());
+    public void setup(@Autowired ApplicationContext ctx) {
+        DI.setContext(ctx, true);
+
+        aggregatesFactory = (PCAF) DI.get(PuzzleConfigAggregatesFactoryResolver.class).resolveFactory(getExercise());
+        validator = DI.get(getValidatorClass());
     }
 
     protected PCA createPuzzleConfig() {

@@ -26,6 +26,7 @@ public final class PianoKeyDTOAssemblerTest {
     private PianoKey pianoKey2;
     private PianoKeyDTO dto2;
 
+    // TODO WHAT! HOW IT WORKS!? 
     @BeforeEach
     public void setup() {
         pianoKeysFactory = DI.get(PianoKeysFactory.class);

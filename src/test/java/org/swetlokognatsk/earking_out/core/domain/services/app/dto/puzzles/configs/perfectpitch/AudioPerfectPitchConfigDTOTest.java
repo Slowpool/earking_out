@@ -8,13 +8,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
-@EOSpringBootTest
 public class AudioPerfectPitchConfigDTOTest {
 
     // TODO DRY violation
     protected static final PianoKeyNumber[] SOME_PIANO_KEYS = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, LAST_NOTE_NUMBER };
 
-    // TODO make it more readable (for fun)
+    // TODO make it more readable
     @Test
     public void positiveEquals() {
         var firstConfig = new AudioPerfectPitchConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE, 0, true, SOME_PIANO_KEYS, FIRST_NOTE_NUMBER, PerfectPitchInputMode.NOTES_AS_TEXT, true);

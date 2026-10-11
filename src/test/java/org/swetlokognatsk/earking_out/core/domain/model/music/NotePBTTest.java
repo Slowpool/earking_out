@@ -4,22 +4,44 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.LAST_NOTE_NUMBER;
 import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
+import net.jqwik.api.lifecycle.BeforeTry;
+import net.jqwik.spring.JqwikSpringSupport;
 
+@JqwikSpringSupport
 @EOSpringBootTest
 public class NotePBTTest {
 
     // because they are minority
     private static List<Integer> PIANO_KEYS_WITHOUT_WHITE_KEY_NEIGHBOURS = List.of(3, 8, 10);
+
+    // in app domain, if any piano key (except the corner ones) has a white piano key as a neighbour, then it has 2 ways to represent it as a note. otherwise - only one. double sharps and flats aren out of app domain.
+    private int getExpectedNumberOfNotes(final PianoKeyNumber pianoKeyNumber) {
+        if (pianoKeyNumber.equals(FIRST_NOTE_NUMBER)
+                || pianoKeyNumber.equals(LAST_NOTE_NUMBER)) {
+            return 1;
+        }
+
+        var octaveScopedNumber = pianoKeyNumber.octaveScopedKeyNumber;
+        return PIANO_KEYS_WITHOUT_WHITE_KEY_NEIGHBOURS.contains(Integer.valueOf(octaveScopedNumber))
+                ? 1
+                : 2;
+    }
+
+    @BeforeTry
+    public void setup(@Autowired ApplicationContext springContext) {
+        DI.setContext(springContext, true);
+    }
 
     @Provide
     private Arbitrary<PianoKeyNumber> getAllPianoKeyNumbers() {
@@ -39,18 +61,5 @@ public class NotePBTTest {
         if (expectedNumberOfNotes == 2) {
             assertFalse(notes[0].equals(notes[1]));
         }
-    }
-
-    // in app domain, if any piano key (except the corner ones) has a white piano key as a neighbour, then it has 2 ways to represent it as a note. otherwise - only one. double sharps and flats aren out of app domain.
-    private int getExpectedNumberOfNotes(final PianoKeyNumber pianoKeyNumber) {
-        if (pianoKeyNumber.equals(FIRST_NOTE_NUMBER)
-                || pianoKeyNumber.equals(LAST_NOTE_NUMBER)) {
-            return 1;
-        }
-
-        var octaveScopedNumber = pianoKeyNumber.octaveScopedKeyNumber;
-        return PIANO_KEYS_WITHOUT_WHITE_KEY_NEIGHBOURS.contains(Integer.valueOf(octaveScopedNumber))
-                ? 1
-                : 2;
     }
 }

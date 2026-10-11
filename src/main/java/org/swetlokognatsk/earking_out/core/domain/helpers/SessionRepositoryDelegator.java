@@ -19,8 +19,7 @@ public final class SessionRepositoryDelegator {
         repositories = new SessionRepository[] { audioPerfectPitchSessionRepository };
     }
 
-    // TODO now it throws `AggregateNotFoundException`, but everywhere the only thing the client code do is wrapping this exception with unchecked `RuntimeException`, which may indicate that `AggregateNotFoundException` is unchecked by nature
-    public SessionAggregate<?, ?, ?, ?> get(final SessionId sessionId) throws AggregateNotFoundException {
+    public SessionAggregate<?, ?, ?, ?> get(final SessionId sessionId) {
         for (var repository : repositories) {
             try {
                 return repository.get(sessionId);
@@ -30,7 +29,7 @@ public final class SessionRepositoryDelegator {
         throw new AggregateNotFoundException();
     }
 
-    public SessionAggregateDTO<?, ?, ?, ?> getSessionAggregateDTO(final SessionId sessionId) throws AggregateNotFoundException {
+    public SessionAggregateDTO<?, ?, ?, ?> getSessionAggregateDTO(final SessionId sessionId) {
         var sessionAggregate = get(sessionId);
 
         return SessionAggregateDTOAssembler.assemble(sessionAggregate);

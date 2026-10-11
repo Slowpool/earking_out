@@ -46,7 +46,7 @@ public class InMemoryPianoKeyboardRepository extends AggregateRepository impleme
         return new OwnedPianoKeyboardId(pianoKeyboardId, userResolver.getCurrentUserId());
     }
 
-    protected PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) throws AggregateNotFoundException {
+    protected PianoKeyboardAggregate getPianoKeyboardAggregate(final PianoKeyboardId pianoKeyboardId) {
         var ownedId = buildOwnedId(pianoKeyboardId);
         var pianoKeyboard = getPianoKeyboardAggregates()
                 .get(ownedId);
@@ -58,12 +58,12 @@ public class InMemoryPianoKeyboardRepository extends AggregateRepository impleme
         return pianoKeyboard;
     }
 
-    public PianoKeyboardAggregate get(final OwnedPianoKeyboardId ownedPianoKeyboardId) throws AggregateNotFoundException {
+    public PianoKeyboardAggregate get(final OwnedPianoKeyboardId ownedPianoKeyboardId) {
         // this behavior intentionally prohibits accessing other users' piano keyboards making it physically impossible
         return get(ownedPianoKeyboardId.pianoKeyboardId());
     }
 
-    public PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId) throws AggregateNotFoundException {
+    public PianoKeyboardAggregate get(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = getPianoKeyboardAggregate(pianoKeyboardId);
 
         var pianoKeyboardCopy = getPianoKeyboardAggregatesFactory()
@@ -102,7 +102,7 @@ public class InMemoryPianoKeyboardRepository extends AggregateRepository impleme
         publishEvents(events);
     }
 
-    public PianoKeyboardDTO getPianoKeyboardDTO(final PianoKeyboardId pianoKeyboardId) throws AggregateNotFoundException {
+    public PianoKeyboardDTO getPianoKeyboardDTO(final PianoKeyboardId pianoKeyboardId) {
         var pianoKeyboard = get(pianoKeyboardId);
         var dto = getPianoKeyboardDtoAssembler()
                 .assemble(pianoKeyboard);
