@@ -27,10 +27,6 @@ public final class PianoKeyboardAggregate extends AggregateRoot<OwnedPianoKeyboa
 
     private PianoKey pressedKey;
 
-    public final OwnedPianoKeyboardId getPianoKeyboardId() {
-        return getId();
-    }
-
     public final PianoKeyboardMode getMode() {
         return mode;
     }

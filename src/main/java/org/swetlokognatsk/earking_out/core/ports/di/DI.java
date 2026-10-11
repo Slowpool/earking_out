@@ -48,10 +48,6 @@ public final class DI implements ApplicationContextAware {
                 .get(someClass, args);
     }
 
-    public static void refreshDependencies() {
-        // TODO how to do it in spring? how it is supposed to be done in spring?
-    }
-
     public static <T> void register(final Class<T> interfaceClass, final Class<? extends T> implementationClass) throws IllegalStateException {
         iocContainer.register(interfaceClass, implementationClass);
     }

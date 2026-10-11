@@ -39,8 +39,6 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
 
     @BeforeEach
     public void setup() {
-        DI.refreshDependencies();
-
         pianoKeyboardHelper = DI.get(PianoKeyboardTestHelper.class);
     }
 

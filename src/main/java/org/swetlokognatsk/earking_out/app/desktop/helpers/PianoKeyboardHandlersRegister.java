@@ -3,10 +3,10 @@ package org.swetlokognatsk.earking_out.app.desktop.helpers;
 import org.swetlokognatsk.earking_out.app.desktop.components.PianoKeyboard;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.app.desktop.events.piano.PianoKeyReleasedEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import javafx.event.EventHandler;
 
@@ -72,7 +72,7 @@ public final class PianoKeyboardHandlersRegister {
         PianoKeyboardDTO pianoKeyboardView;
         try {
             pianoKeyboardView = pianoKeyboardRepository.getPianoKeyboardDTO(pianoKeyboard.id);
-        } catch (IllegalArgumentException e) {
+        } catch (AggregateNotFoundException e) {
             throw new RuntimeException("pianoKeyboard not found: " + pianoKeyboard);
         }
         pianoKeyboard.hydrateState(pianoKeyboardView);

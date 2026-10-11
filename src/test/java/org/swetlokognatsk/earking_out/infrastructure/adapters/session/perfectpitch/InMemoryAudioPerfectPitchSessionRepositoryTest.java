@@ -32,7 +32,6 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
 
     @BeforeEach
     public void setup() {
-        DI.refreshDependencies();
         repository = DI.get(InMemoryAudioPerfectPitchSessionRepository.class);
         sessionRepositoryHelper = DI.get(SessionRepositoryTestHelper.class);
 

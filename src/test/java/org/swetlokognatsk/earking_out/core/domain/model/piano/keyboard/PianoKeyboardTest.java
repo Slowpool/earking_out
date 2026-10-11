@@ -17,8 +17,6 @@ abstract class PianoKeyboardTest {
 
     @BeforeEach
     public void before() {
-        DI.refreshDependencies();
-
         pianoKeyboardHelper = DI.get(PianoKeyboardTestHelper.class);
 
         pianoKeyboard = createPianoKeyboard();

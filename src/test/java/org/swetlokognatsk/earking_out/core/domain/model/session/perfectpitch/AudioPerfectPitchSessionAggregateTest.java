@@ -39,8 +39,6 @@ public final class AudioPerfectPitchSessionAggregateTest {
 
     @BeforeEach
     public void setup() {
-        DI.refreshDependencies();
-
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
         puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
 

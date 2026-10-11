@@ -36,7 +36,7 @@ public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler ext
             return;
         }
 
-        var pianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER);
+        var pianoKeyboard = pianoKeyboardRepository.getInevitably(PianoKeyboardId.AUDIO_PERFECT_PITCH_NOTES_PICKER);
 
         pianoKeyboard.resetState();
         pianoKeyboard.restoreSelectedKeys(normalizedNotes);
@@ -50,7 +50,7 @@ public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler ext
             return;
         }
 
-        var pianoKeyboard = pianoKeyboardRepository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
+        var pianoKeyboard = pianoKeyboardRepository.getInevitably(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
 
         pianoKeyboard.resetState();
         pianoKeyboard.restoreSelectedKey(normalizedRootNote);

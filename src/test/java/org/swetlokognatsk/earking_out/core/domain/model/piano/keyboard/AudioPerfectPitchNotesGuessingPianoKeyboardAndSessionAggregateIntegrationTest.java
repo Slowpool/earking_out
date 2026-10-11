@@ -5,6 +5,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -49,13 +50,21 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     private void assertPianoKeyboardDoesNotHavePressedKeys() {
-        var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
-        pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
+        try {
+            var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
+            pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
+        } catch (AggregateNotFoundException e) {
+            fail();
+        }
     }
 
     private void assertPianoKeyboardDoesNotHaveSelectedKeys() {
-        var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
-        pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
+        try {
+            var guessingPianoKeyboard = pianoKeyboardRepository.get(pianoKeyboardId);
+            pianoKeyboardHelper.assertNoSelectedKeys(guessingPianoKeyboard);
+        } catch (AggregateNotFoundException e) {
+            fail();
+        }
     }
 
     private void pressPianoKey(final PianoKeyNumber pianoKeyNumber) {
@@ -94,8 +103,14 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         var activeSession = startSession();
         var activeSessionId = activeSession.getId();
         sessionService.abort(activeSessionId);
-        var session = sessionRepository.get(activeSessionId);
-        return session;
+        try {
+            var session = sessionRepository.get(activeSessionId);
+            return session;
+        }
+        catch (AggregateNotFoundException e) {
+            fail();
+            return null;
+        }
     }
 
     private void abortSession(final SessionId sessionId) {
@@ -115,7 +130,6 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
 
     @BeforeEach
     public void setup() {
-        DI.refreshDependencies();
         DomainEventHandlers.registerDomainEventHandlers();
 
         pianoKeyboardService = DI.get(PianoKeyboardService.class);

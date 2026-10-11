@@ -19,8 +19,6 @@ public class AudioPerfectPitchPuzzleTest {
 
     @BeforeEach
     public void setup() {
-        DI.refreshDependencies();
-
         puzzleHelper = DI.get(PuzzleTestHelper.class);
         puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
 

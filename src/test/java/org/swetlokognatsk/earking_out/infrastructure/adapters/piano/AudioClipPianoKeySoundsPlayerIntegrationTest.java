@@ -10,7 +10,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.AudioClipPia
 
 /**
  * Lightweight infrastructure test - just checks that files are in place and
- * there's no any exception during play, that's it.
+ * there's no any exception during playing, that's it.
  */
 @EOSpringBootTest
 public final class AudioClipPianoKeySoundsPlayerIntegrationTest {
@@ -22,7 +22,7 @@ public final class AudioClipPianoKeySoundsPlayerIntegrationTest {
         audioClipPianoKeySoundsPlayer = DI.get(AudioClipPianoKeySoundsPlayer.class);
     }
 
-    private static void playEachKey(final AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer) {
+    private void playEachKey(final AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer) {
         // if there's no exception, everything is fine enough
         PianoKeyNumber.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
             audioClipPianoKeySoundsPlayer.play(pianoKeyNumber);
@@ -37,7 +37,9 @@ public final class AudioClipPianoKeySoundsPlayerIntegrationTest {
     @Test
     public void serializationTest() {
         var cloner = DI.get(SerializationCloner.class);
+
         var soundsPlayerCopy = cloner.clone(audioClipPianoKeySoundsPlayer);
+
         playEachKey(soundsPlayerCopy);
     }
 }

@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
 import org.springframework.stereotype.Service;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
@@ -26,10 +27,13 @@ public final class PianoKeyboardService {
             ensureThereIsActiveSession(pianoKeyboardId.exercise);
         }
 
-        var pianoKeyboardAggregate = repository.get(pianoKeyboardId);
         try {
+            var pianoKeyboardAggregate = repository.get(pianoKeyboardId);
             pianoKeyboardAggregate.pressKey(pianoKeyNumber);
             repository.save(pianoKeyboardAggregate);
+        } catch (AggregateNotFoundException e) {
+            // TODO do something adequate
+            throw new RuntimeException("piano keyboard is not found");
         }
         // TODO just Exception?
         catch (Exception e) {
@@ -53,10 +57,13 @@ public final class PianoKeyboardService {
             ensureThereIsActiveSession(pianoKeyboardId.exercise);
         }
 
-        var pianoKeyboardAggregate = repository.get(pianoKeyboardId);
         try {
+            var pianoKeyboardAggregate = repository.get(pianoKeyboardId);
             pianoKeyboardAggregate.releaseKey();
             repository.save(pianoKeyboardAggregate);
+        } catch (AggregateNotFoundException e) {
+            // TODO do something adequate
+            throw new RuntimeException("piano keyboard is not found");
         }
         // TODO just Exception?
         catch (Exception e) {
@@ -65,7 +72,7 @@ public final class PianoKeyboardService {
     }
 
     public void resetPianoKeyboardState(final PianoKeyboardId pianoKeyboardId) {
-        var pianoKeyboardAggregate = repository.get(pianoKeyboardId);
+        var pianoKeyboardAggregate = repository.getInevitably(pianoKeyboardId);
         try {
             pianoKeyboardAggregate.resetState();
             repository.save(pianoKeyboardAggregate);

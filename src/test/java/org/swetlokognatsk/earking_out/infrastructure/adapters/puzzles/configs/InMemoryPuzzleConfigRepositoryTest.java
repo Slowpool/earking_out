@@ -57,8 +57,6 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
     @BeforeEach
     public void setup() {
-        DI.refreshDependencies();
-
         repository = DI.get(InMemoryPuzzleConfigRepository.class);
         puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
 

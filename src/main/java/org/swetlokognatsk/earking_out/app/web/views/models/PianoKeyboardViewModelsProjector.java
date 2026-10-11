@@ -37,7 +37,7 @@ public class PianoKeyboardViewModelsProjector {
     }
 
     private PianoKeyViewModel[] buildPianoKeyViewModels(final PianoKeyboardId pianoKeyboardId) {
-        var pianoKeyDtos = pianoKeyboardRepository.getPianoKeyboardDTO(pianoKeyboardId)
+        var pianoKeyDtos = pianoKeyboardRepository.getPianoKeyboardDTOInevitably(pianoKeyboardId)
                 .pianoKeys();
 
         final var pianoKeys = new ArrayList<PianoKeyViewModel>(PIANO_KEYS_NUMBER);

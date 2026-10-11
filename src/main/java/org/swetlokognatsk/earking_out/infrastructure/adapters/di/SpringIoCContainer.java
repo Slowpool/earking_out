@@ -36,6 +36,7 @@ public final class SpringIoCContainer implements IoCContainer {
         this.ctx = (GenericApplicationContext) context;
     }
 
+    @Deprecated(forRemoval = true)
     private void initDesktopBeans() {
         ctx.registerBean(AudioClipPianoKeySoundsPlayer.class);
 
@@ -90,10 +91,6 @@ public final class SpringIoCContainer implements IoCContainer {
             System.out.print("beans exception: " + e.getMessage());
             throw new RuntimeException("bean not found", e);
         }
-    }
-
-    public void refreshDependencies() {
-        throw new IllegalStateException("this container does not support dependencies refreshing");
     }
 
     public <T> void register(final Class<T> interfaceClass, final Class<? extends T> implementationClass) throws IllegalStateException {

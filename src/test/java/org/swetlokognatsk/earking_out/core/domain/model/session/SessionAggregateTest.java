@@ -35,8 +35,6 @@ public final class SessionAggregateTest {
 
     @BeforeEach
     public void setup() {
-        DI.refreshDependencies();
-        
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
         puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
