@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.session;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
+import org.springframework.test.annotation.DirtiesContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
@@ -12,6 +13,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpit
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 @EOSpringBootTest
+@DirtiesContext
 public final class InMemorySessionRepositoryTest {
 
     private InMemorySessionRepository<AudioPerfectPitchSessionAggregate> repository;

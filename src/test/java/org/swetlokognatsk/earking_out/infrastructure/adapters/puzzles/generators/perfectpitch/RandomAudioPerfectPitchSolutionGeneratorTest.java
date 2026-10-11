@@ -19,16 +19,17 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.SerializationCloner;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.identity.TestUserResolver;
+
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 @EOSpringBootTest
 public class RandomAudioPerfectPitchSolutionGeneratorTest {
-    private static int ITERATIONS_NUMBER = 100;
+    private static final int ITERATIONS_NUMBER = 100;
 
-    private static AudioPerfectPitchConfigAggregatesFactory configFactory = new PuzzleConfigAggregatesFactoryResolver()
-            .resolveFactory(AUDIO_PERFECT_PITCH_EXERCISE);
+    private AudioPerfectPitchConfigAggregatesFactory configFactory = new AudioPerfectPitchConfigAggregatesFactory(new SerializationCloner(), new TestUserResolver());
 
-    private static RandomAudioPerfectPitchSolutionGenerator createPuzzleGenerator(final PianoKeyNumber[] normalizedNotesForPuzzle) {
+    private RandomAudioPerfectPitchSolutionGenerator createPuzzleGenerator(final PianoKeyNumber[] normalizedNotesForPuzzle) {
         // TODO how to validate aggregate?
         // TODO can it be in invalid state at all?
         // firstly creating puzzleConfig for validation
@@ -40,7 +41,7 @@ public class RandomAudioPerfectPitchSolutionGeneratorTest {
         return generator;
     }
 
-    private static AudioPerfectPitchConfigAggregate createAnyPuzzleConfig(final PianoKeyNumber[] normalizedNotesForPuzzle) {
+    private AudioPerfectPitchConfigAggregate createAnyPuzzleConfig(final PianoKeyNumber[] normalizedNotesForPuzzle) {
         return configFactory.create(0, false, normalizedNotesForPuzzle, null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false);
     }
 

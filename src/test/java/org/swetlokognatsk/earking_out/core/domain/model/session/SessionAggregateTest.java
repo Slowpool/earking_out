@@ -4,10 +4,12 @@ import static org.swetlokognatsk.earking_out.core.domain.model.TestAggregateHelp
 import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.jupiter.api.*;
+import org.springframework.test.annotation.DirtiesContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.AudioPerfectPitchPuzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
@@ -20,6 +22,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 @EOSpringBootTest
+@DirtiesContext 
 public final class SessionAggregateTest {
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(((AudioPerfectPitchSolution) SOLUTION).keyNumber.increment());
@@ -28,12 +31,17 @@ public final class SessionAggregateTest {
     // TODO create aggregateRoot, use it everywhere
     private SessionAggregatesFactory sessionAggregatesFactory;
     private PuzzleConfigRepository puzzleConfigRepository;
+    private PuzzleConfigTestHelper puzzleConfigHelper;
 
     @BeforeEach
     public void setup() {
         DI.refreshDependencies();
+        
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
+        puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
+
+        puzzleConfigHelper.configureSomeValidPuzzleConfig();
     }
 
     public SessionAggregateTest() {

@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
+import org.springframework.test.annotation.DirtiesContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
@@ -18,6 +19,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 import java.util.UUID;
 
 @EOSpringBootTest
+@DirtiesContext
 public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
     private InMemoryPuzzleConfigRepository repository;

@@ -15,15 +15,11 @@ public final class PianoKeyTest {
 
     private MockPianoKeySoundsPlayer mockSoundPlayer;
 
-    @BeforeAll
-    public static void initializeCdommonContext() {
-        pianoKeysFactory = DI.get(PianoKeysFactory.class);
-    }
-
     @BeforeEach
     public void setup() {
         // TODO mockito?
         mockSoundPlayer = new MockPianoKeySoundsPlayer();
+        pianoKeysFactory = DI.get(PianoKeysFactory.class);
     }
 
     @Test

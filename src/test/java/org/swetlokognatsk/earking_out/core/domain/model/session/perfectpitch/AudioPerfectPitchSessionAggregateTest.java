@@ -11,6 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGues
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
@@ -25,6 +26,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 @EOSpringBootTest
 public final class AudioPerfectPitchSessionAggregateTest {
     private SessionAggregatesFactory sessionAggregatesFactory;
+    private PuzzleConfigTestHelper puzzleConfigHelper;
 
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER.increment());
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
@@ -38,7 +40,11 @@ public final class AudioPerfectPitchSessionAggregateTest {
     @BeforeEach
     public void setup() {
         DI.refreshDependencies();
+
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
+        puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
+
+        puzzleConfigHelper.configureSomeValidPuzzleConfig();
     }
 
     private AudioPerfectPitchExercise getExercise() {

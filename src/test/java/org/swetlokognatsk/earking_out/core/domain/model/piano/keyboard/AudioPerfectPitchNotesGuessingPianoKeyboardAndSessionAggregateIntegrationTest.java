@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
+import org.springframework.test.annotation.DirtiesContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
@@ -25,6 +26,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKe
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
 @EOSpringBootTest
+@DirtiesContext
 public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregateIntegrationTest {
 
     private static final PianoKeyNumber ANY_PIANO_KEY = FIRST_NOTE_NUMBER;
