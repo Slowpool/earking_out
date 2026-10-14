@@ -17,7 +17,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
     @Test
     public void initKeyboardWithoutKeys() {
-        assertNoSelectedKeys(pianoKeyboard);
+        pianoKeyboardHelper.assertNoSelectedKeys(pianoKeyboard);
     }
 
     @Test
@@ -25,7 +25,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
         var pianoKey = ANY_PIANO_KEY_NUMBER;
         pianoKeyboard = createPianoKeyboard(new PianoKeyNumber[] { pianoKey });
 
-        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
     }
 
     @Test
@@ -33,7 +33,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
         var selectedPianoKeys = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, ANY_PIANO_KEY_NUMBER.increment() };
         pianoKeyboard = createPianoKeyboard(selectedPianoKeys);
 
-        assertOnlyTheseKeysAreSelected(selectedPianoKeys, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyTheseKeysAreSelected(selectedPianoKeys, pianoKeyboard);
     }
 
     @Test
@@ -43,7 +43,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
 
         pianoKeyboard.releaseKey();
 
-        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
     }
 
     @Test
@@ -53,7 +53,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
         pianoKeyboard.touchKey(pianoKeys[0]);
         pianoKeyboard.touchKey(pianoKeys[1]);
 
-        assertOnlyTheseKeysAreSelected(pianoKeys, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyTheseKeysAreSelected(pianoKeys, pianoKeyboard);
     }
 
     @Test
@@ -63,7 +63,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
         pianoKeyboard.touchKey(pianoKey);
         pianoKeyboard.touchKey(pianoKey);
 
-        assertNoSelectedKeys(pianoKeyboard);
+        pianoKeyboardHelper.assertNoSelectedKeys(pianoKeyboard);
     }
 
     // TODO 11 tests are expected to be wrong
@@ -71,7 +71,7 @@ public final class PianoKeyboardSeveralKeysSelect extends PianoKeyboardTest {
     public void restoreSeveralSelectedKeys() {
         pianoKeyboard.restoreSelectedKeys(SOME_PIANO_KEYS);
 
-        assertOnlyTheseKeysAreSelected(SOME_PIANO_KEYS, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyTheseKeysAreSelected(SOME_PIANO_KEYS, pianoKeyboard);
     }
 
     @Test

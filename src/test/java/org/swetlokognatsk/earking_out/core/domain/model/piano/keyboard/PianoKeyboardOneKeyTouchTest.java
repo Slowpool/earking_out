@@ -17,7 +17,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
     @Test
     public void initWithoutSelectedKeys() {
-        assertNoSelectedKeys(pianoKeyboard);
+        pianoKeyboardHelper.assertNoSelectedKeys(pianoKeyboard);
     }
 
     @Test
@@ -44,7 +44,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     public void selectedKeysAfterOneKeyTouching() {
         pianoKeyboard.touchKey(ANY_PIANO_KEY_NUMBER);
 
-        assertNoSelectedKeys(pianoKeyboard);
+        pianoKeyboardHelper.assertNoSelectedKeys(pianoKeyboard);
     }
 
     @Test
@@ -53,7 +53,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
         pianoKeyboard.pressKey(pianoKey);
 
-        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
     }
 
     @Test
@@ -63,7 +63,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
 
         pianoKeyboard.releaseKey();
 
-        assertNoSelectedKeys(pianoKeyboard);
+        pianoKeyboardHelper.assertNoSelectedKeys(pianoKeyboard);
     }
 
     @Test
