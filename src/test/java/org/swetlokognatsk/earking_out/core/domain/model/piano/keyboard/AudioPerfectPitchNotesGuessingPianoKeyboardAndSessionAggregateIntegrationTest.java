@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
@@ -12,6 +13,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.NoActiveSessionException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
@@ -23,7 +25,7 @@ import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfe
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
 @EOSpringBootTest
-@DirtiesContext
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregateIntegrationTest {
 
     private static final PianoKeyNumber ANY_PIANO_KEY = FIRST_NOTE_NUMBER;
@@ -183,8 +185,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
             pressPianoKey(ANY_PIANO_KEY);
             fail();
             // TODO NoActiveSessionException
-        } catch (IllegalStateException e) {
-            int i = 0;
+        } catch (NoActiveSessionException e) {
         }
     }
 
@@ -195,7 +196,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         try {
             releasePianoKey();
             fail();
-        } catch (IllegalStateException e) {
+        } catch (NoActiveSessionException e) {
         }
     }
 
@@ -204,7 +205,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         try {
             pressPianoKey(ANY_PIANO_KEY);
             fail();
-        } catch (IllegalStateException e) {
+        } catch (NoActiveSessionException e) {
         }
     }
 
@@ -213,7 +214,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         try {
             releasePianoKey();
             fail();
-        } catch (IllegalStateException e) {
+        } catch (NoActiveSessionException e) {
         }
     }
 }

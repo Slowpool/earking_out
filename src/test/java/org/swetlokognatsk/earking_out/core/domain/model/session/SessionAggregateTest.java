@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.jupiter.api.*;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
@@ -22,7 +23,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 @EOSpringBootTest
-@DirtiesContext 
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public final class SessionAggregateTest {
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(((AudioPerfectPitchSolution) SOLUTION).keyNumber.increment());

@@ -6,6 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundEx
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
+import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.NoActiveSessionException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.AggregateRepository;
@@ -62,7 +63,7 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
 
     public SA getActiveSession() {
         if (getActiveSessionId() == null) {
-            throw new IllegalStateException("there's no active session");
+            throw new NoActiveSessionException("there's no active session");
         }
         var activeSessionCopy = (SA) get(activeSessionId);
         return activeSessionCopy;

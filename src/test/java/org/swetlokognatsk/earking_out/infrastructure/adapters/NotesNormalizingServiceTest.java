@@ -23,21 +23,7 @@ public final class NotesNormalizingServiceTest {
 
     @BeforeEach
     public void setup() {
-        throw new RuntimeException("here i stopped");
-        // TODO WAIT WHAT! why do i do it if it already must be done in InjectionExtension? remove this everywhere
-        // DI.setContext(ctx);
-
-        noteNormalizer = getNoteNormalizer();
-    }
-
-    static NotesNormalizingService getNoteNormalizer() {
-        return DI.get(NotesNormalizingService.class);
-    }
-
-    @Test
-    public void gettingNoteNormalizer() {
-        assertNotNull(getNoteNormalizer());
-        assertTrue(noteNormalizer instanceof NotesNormalizingService);
+        noteNormalizer = DI.get(NotesNormalizingService.class);
     }
 
     @Test
