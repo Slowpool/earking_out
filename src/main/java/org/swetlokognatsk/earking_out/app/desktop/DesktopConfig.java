@@ -15,7 +15,6 @@ public class DesktopConfig {
 
     @Bean
     @Primary
-    @Profile(DESKTOP)
     DataSource dataSource(final Environment env) {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty("spring.datasource.driver-class-name"));
