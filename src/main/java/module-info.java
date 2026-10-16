@@ -139,6 +139,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.services.app.identity;
     exports org.swetlokognatsk.earking_out.app.web.views.models.fillers.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.events.handlers;
+    exports org.swetlokognatsk.earking_out.core.ports.identity;
 
     opens org.swetlokognatsk.earking_out;
     opens org.swetlokognatsk.earking_out.app.desktop;

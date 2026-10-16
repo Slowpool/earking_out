@@ -16,6 +16,7 @@ public final class PianoKeyboardService {
     private final PianoKeyboardRepository repository;
     private final AudioPerfectPitchSessionRepository sessionRepository;
 
+    // TODO use SessionRepositoryDelegator instead
     public PianoKeyboardService(final PianoKeyboardRepository repository, final AudioPerfectPitchSessionRepository sessionRepository) {
         this.repository = repository;
         this.sessionRepository = sessionRepository;

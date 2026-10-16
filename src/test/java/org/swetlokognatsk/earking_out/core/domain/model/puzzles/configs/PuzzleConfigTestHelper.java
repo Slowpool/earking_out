@@ -15,11 +15,12 @@ public class PuzzleConfigTestHelper {
     private final AudioPerfectPitchConfigAggregatesFactory puzzleConfigsFactory;
     private final PuzzleConfigRepository puzzleConfigRepository;
 
-    public void configureSomeValidPuzzleConfig() {
+    public PuzzleConfigAggregate<?> configureSomeValidPuzzleConfig() {
         var puzzleConfig = puzzleConfigsFactory.createDefault();
         // TODO use common SOME_PIANO_KEYS
         var somePianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, LAST_NOTE_NUMBER };
         puzzleConfig.updateProperty(PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP, somePianoKeys);
         puzzleConfigRepository.save(puzzleConfig);
+        return puzzleConfig;
     }
 }

@@ -35,7 +35,7 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
         repository = DI.get(InMemoryAudioPerfectPitchSessionRepository.class);
         sessionRepositoryHelper = DI.get(SessionRepositoryTestHelper.class);
 
-        seededSessionId = sessionRepositoryHelper.seedTestSession(repository);
+        seededSessionId = sessionRepositoryHelper.startSession(repository);
     }
 
     protected AudioPerfectPitchSessionAggregate getSomeAggregate() {

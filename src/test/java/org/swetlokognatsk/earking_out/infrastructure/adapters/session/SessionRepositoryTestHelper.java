@@ -16,7 +16,7 @@ public class SessionRepositoryTestHelper {
 
     private final SessionAggregatesFactory sessionAggregatesFactory;
 
-    public <SR extends SessionRepository<?>> SessionId seedTestSession(final SR repository) {
+    public <SR extends SessionRepository<?>> SessionId startSession(final SR repository) {
         SessionId sessionId;
         // TODO can it be more elegant?
         switch (repository) {

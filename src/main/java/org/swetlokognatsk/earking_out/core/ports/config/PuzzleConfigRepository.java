@@ -23,7 +23,10 @@ public interface PuzzleConfigRepository extends PolymorphicAggregateRepository<E
      * both simultaneously. So, getPuzzleConfig should use get() under the hood with
      * cast
      */
-    <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA getPuzzleConfig(E exercise);
+    @SuppressWarnings("unchecked")
+    default <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA getPuzzleConfig(E exercise) {
+        return (PCA) get(exercise);
+    }
 
     <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise);
 

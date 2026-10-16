@@ -3,28 +3,53 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.session;
 import java.util.HashMap;
 import java.util.Map;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.NoActiveSessionException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.AggregateRepository;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter(AccessLevel.PRIVATE)
 public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?, ?, ?>> extends AggregateRepository implements SessionRepository<SA> {
-    private final Map<SessionId, SessionAggregate<?, ?, ?, ?>> sessionAggregates = new HashMap<>();
+    private final Map<UserId, Map<SessionId, SessionAggregate<?, ?, ?, ?>>> sessionAggregates = new HashMap<>();
 
-    @Setter(AccessLevel.PRIVATE)
-    private SessionId activeSessionId;
+    private final Map<UserId, SessionId> activeSessionIds = new HashMap<>();
 
+    @Getter(AccessLevel.PRIVATE)
     private final SessionAggregatesFactory sessionAggregatesFactory;
+    @Getter(AccessLevel.PRIVATE)
+    private final UserResolver userResolver;
 
-    public InMemorySessionRepository(final SessionAggregatesFactory sessionAggregatesFactory) {
+    private SessionId getActiveSessionId() {
+        return activeSessionIds.get(getCurrentUserId());
+    }
+
+    private void setActiveSessionId(final SessionId sessionId) {
+        activeSessionIds.put(getCurrentUserId(), sessionId);
+    }
+
+    private UserId getCurrentUserId() {
+        return userResolver.getCurrentUserId();
+    }
+
+    private Map<SessionId, SessionAggregate<?, ?, ?, ?>> getSessionAggregates() {
+        var ownedSessionAggregates = sessionAggregates.get(getCurrentUserId());
+        if (ownedSessionAggregates == null) {
+            ownedSessionAggregates = new HashMap<SessionId, SessionAggregate<?, ?, ?, ?>>();
+            sessionAggregates.put(getCurrentUserId(), ownedSessionAggregates);
+        }
+        return ownedSessionAggregates;
+    }
+
+    public InMemorySessionRepository(final SessionAggregatesFactory sessionAggregatesFactory, final UserResolver userResolver) {
         this.sessionAggregatesFactory = sessionAggregatesFactory;
+        this.userResolver = userResolver;
     }
 
     public SA get(final SessionId id) throws AggregateNotFoundException {
@@ -42,14 +67,17 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
     public void save(SA sessionAggregate) {
         var events = sessionAggregate.flushEvents();
 
-        sessionAggregate = (SA) getSessionAggregatesFactory()
-                .createDeepCopy(sessionAggregate);
-        getSessionAggregates()
-                .put(sessionAggregate.getId(), sessionAggregate);
-
+        innerSave(sessionAggregate);
         rememberAsActiveSession(sessionAggregate);
 
         publishEvents(events);
+    }
+
+    private void innerSave(final SA sessionAggregate) {
+        var sessionAggregateCopy = (SA) getSessionAggregatesFactory()
+                .createDeepCopy(sessionAggregate);
+        getSessionAggregates()
+                .put(sessionAggregateCopy.getId(), sessionAggregateCopy);
     }
 
     private void rememberAsActiveSession(final SA sessionAggregate) {
@@ -62,7 +90,8 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
     }
 
     public SA getActiveSession() {
-        if (getActiveSessionId() == null) {
+        var activeSessionId = getActiveSessionId();
+        if (activeSessionId == null) {
             throw new NoActiveSessionException("there's no active session");
         }
         var activeSessionCopy = (SA) get(activeSessionId);

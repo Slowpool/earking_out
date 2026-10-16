@@ -1,12 +1,11 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.asdf;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
@@ -15,7 +14,6 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleConfigNotFoundExc
 import lombok.AccessLevel;
 import lombok.Getter;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 @Getter(AccessLevel.PROTECTED)
 abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepository {
@@ -39,22 +37,23 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
 
     public final void actualizeCache() {
         for (var exercise : ExercisesFactory.getAll()) {
-            var aggregate = get(exercise);
+            var aggregate = getPuzzleConfig(exercise);
             getCacheRepository()
                     .save(aggregate);
         }
     }
 
-    public final <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA get(final E exercise) {
+    public <E extends Exercise, PCA extends AggregateRoot<E>> PCA get(E exercise) {
+        PuzzleConfigAggregate<?> puzzleConfig;
         try {
-            return getCached(exercise);
+            puzzleConfig = getCached(exercise);
         } catch (PuzzleConfigNotFoundException e) {
             var puzzleConfigJson = getOrCreatePuzzleConfigJson(exercise);
-            PCA puzzleConfig = mapJsonToAggregate(exercise, puzzleConfigJson);
+            puzzleConfig = mapJsonToAggregate(exercise, puzzleConfigJson);
             // yes, in case it was just created, it is already saved and that's the second save, but this is not as serious overhead to care about it right now.
-            saveToCache((PuzzleConfigAggregate<Exercise>) puzzleConfig);
-            return puzzleConfig;
+            saveToCache(puzzleConfig);
         }
+        return (PCA) puzzleConfig;
     }
 
     private <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA getCached(final E exercise) {
@@ -62,7 +61,7 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
                 .get(exercise);
     }
 
-    private void saveToCache(final PuzzleConfigAggregate<Exercise> puzzleConfig) {
+    private void saveToCache(final PuzzleConfigAggregate<?> puzzleConfig) {
         getCacheRepository()
                 .save(puzzleConfig);
     }
@@ -74,21 +73,15 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
-        var puzzleConfig = get(exercise);
+        var puzzleConfig = getPuzzleConfig(exercise);
         return getDtoAssembler()
                 .assemble(puzzleConfig);
     }
 
-    /** Use {@link #get(E exercise)} instead */
-    @Deprecated
-    public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {
-        return get(exercise);
-    }
-
-    public void save(final PuzzleConfigAggregate<Exercise> aggregate) {
+    public <PCA extends PuzzleConfigAggregate<? extends Exercise>> void save(PCA puzzleConfigAggregate) {
         // no consistency because in-memory value does not matter after power outage
-        saveImpl(aggregate);
-        saveToCache(aggregate);
+        saveImpl(puzzleConfigAggregate);
+        saveToCache(puzzleConfigAggregate);
     }
 
     protected final void createAndSaveDefaultConfig(final Exercise exercise) {
