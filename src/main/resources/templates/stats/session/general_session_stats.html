@@ -1,4 +1,7 @@
 <div>
-    general_session_stats.html
-    <div th:text="|${puzzlesCompletedPerfectly} of ${numberOfCompletedPuzzles} or ${#numbers.formatDecimal(perfectlyCompletedPuzzlesRate * 100, 1, 2)}% are guessed correctly|"></div>
+    <h2 class="centered">Statistics</h2>
+    <div class="stats-block centered">
+        <span th:text="|${puzzlesCompletedPerfectly} of ${numberOfCompletedPuzzles} or ${#numbers.formatDecimal(perfectlyCompletedPuzzlesRate * 100, 1, 2)}% are guessed correctly|"></span>
+        <span class="hint" title="The puzzle completed correctly is when you guess it from the first attempt">ⓘ</span>
+    </div>
 </div>

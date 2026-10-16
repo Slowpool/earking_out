@@ -1,31 +1,31 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.events.greenrobot;
 
 import org.greenrobot.eventbus.EventBus;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.AudioPerfectPitchGuessingOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.events.EventBuses;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.TestComponent;
 
 // TODO learning tests
+@Component
+@ConditionalOnProperty(name = "app.eventbus", havingValue = EventBuses.GREENROBOT)
+@Deprecated
 public final class GreenrobotEventBus implements org.swetlokognatsk.earking_out.core.ports.events.EventBus, EventPublisher {
-    private final EventBus innerEventBus;
-
-    // TODO should it be injected at all?
-    public GreenrobotEventBus(final EventBus eventBus) {
-        this.innerEventBus = eventBus;
-    }
+    private final EventBus innerEventBus = new EventBus();;
 
     public <DE extends DomainEvent> void subscribe(final Class<DE> eventClass, final DomainEventHandler<DE> domainEventHandler) {
         // TODO remove try catch (now it's only for tests. some event handlers are not created for greenrobot implementation yet)
         try {
             var handler = wrapDomainEventHandler(domainEventHandler);
             innerEventBus.register(handler);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
         }
     }
 

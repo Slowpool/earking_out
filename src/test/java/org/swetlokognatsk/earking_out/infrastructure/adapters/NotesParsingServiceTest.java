@@ -1,8 +1,9 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters;
 
 import org.apache.commons.lang3.function.TriConsumer;
-import org.junit.*;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.*;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
+import static org.junit.jupiter.api.Assertions.*;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
@@ -17,6 +18,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.Octaves.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@EOSpringBootTest
 public class NotesParsingServiceTest {
 
     private static final NotesParsingService noteParser = DI.get(NotesParsingService.class);
@@ -85,7 +87,7 @@ public class NotesParsingServiceTest {
     public void noteNamesAreParsedCorrectly() {
         parseEachNoteAndAssert((String textNote, Note parsedNote, Integer i) -> {
             var expectedNoteName = EXPECTED_TEXT_NOTES_NOTE_NAMES[i];
-            assertEquals(expectedNoteName, parsedNote.noteName());
+            assertEquals(expectedNoteName, parsedNote.noteName);
         });
     }
 
@@ -93,7 +95,7 @@ public class NotesParsingServiceTest {
     public void accidentalsAreParsedCorrectly() {
         parseEachNoteAndAssert((String textNote, Note parsedNote, Integer i) -> {
             var expectedAccidental = EXPECTED_TEXT_NOTES_ACCIDENTALS[i];
-            assertEquals(expectedAccidental, parsedNote.accidental());
+            assertEquals(expectedAccidental, parsedNote.accidental);
         });
     }
 
@@ -101,7 +103,7 @@ public class NotesParsingServiceTest {
     public void octavesAreParsedCorrectly() {
         parseEachNoteAndAssert((String textNote, Note parsedNote, Integer i) -> {
             var expectedOctave = EXPECTED_TEXT_NOTES_OCTAVES[i];
-            assertEquals(expectedOctave, parsedNote.octave());
+            assertEquals(expectedOctave, parsedNote.octave);
         });
     }
 

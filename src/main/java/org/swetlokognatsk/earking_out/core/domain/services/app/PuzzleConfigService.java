@@ -1,17 +1,18 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app;
 
 import java.util.Objects;
+import org.springframework.stereotype.Service;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDtoAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
+@Service
 public final class PuzzleConfigService {
 
     private final PuzzleConfigRepository repository;
@@ -23,7 +24,7 @@ public final class PuzzleConfigService {
     }
 
     public void updateProperty(final Exercise exercise, final String property, final Object value) {
-        var puzzleConfigAggregate = repository.get(exercise);
+        var puzzleConfigAggregate = repository.getPuzzleConfig(exercise);
         try {
             puzzleConfigAggregate.updateProperty(property, value);
             repository.save(puzzleConfigAggregate);
@@ -38,11 +39,14 @@ public final class PuzzleConfigService {
         var puzzleConfigAggregate = getPuzzleConfigAggregate(pianoKeyboardId.exercise);
 
         var propertyName = getPianoKeyboardPropertyName(pianoKeyboardId);
-        var pianoKeyboardDto = pianoKeyboardRepository.getPianoKeyboardDTO(pianoKeyboardId);
-        var propertyValue = getPianoKeyboardPropetyValue(propertyName, pianoKeyboardDto);
         try {
+            var pianoKeyboardDto = pianoKeyboardRepository.getPianoKeyboardDTO(pianoKeyboardId);
+            var propertyValue = mapPianoKeyboardToPropetyValue(pianoKeyboardDto, propertyName);
             puzzleConfigAggregate.updateProperty(propertyName, propertyValue);
             repository.save(puzzleConfigAggregate);
+        } catch (AggregateNotFoundException e) {
+            // TODO send feedback somehow
+            throw new RuntimeException("piano keyboard not found: " + pianoKeyboardId);
         }
         // TODO just Exception?
         catch (Exception e) {
@@ -59,7 +63,7 @@ public final class PuzzleConfigService {
     }
 
     // TODO add validation for root note on-change (not on exercise starting, though add the whole config validation should be added before exercise starting)
-    protected Object getPianoKeyboardPropetyValue(final String propertyName, final PianoKeyboardDTO pianoKeyboardDto) {
+    protected Object mapPianoKeyboardToPropetyValue(final PianoKeyboardDTO pianoKeyboardDto, final String propertyName) {
         var propertyValue = switch (propertyName) {
         case PerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP -> pianoKeyboardDto.selectedKeys()[0];
         case PerfectPitchConfigAggregate.NORMALIZED_NOTES_FOR_PUZZLE_PROP -> pianoKeyboardDto.selectedKeys();
@@ -69,7 +73,7 @@ public final class PuzzleConfigService {
     }
 
     private <E extends Exercise> PuzzleConfigAggregate<E> getPuzzleConfigAggregate(final E exercise) {
-        var puzzleConfigAggregate = repository.get(exercise);
-        return (PuzzleConfigAggregate<E>) puzzleConfigAggregate;
+        var puzzleConfigAggregate = repository.getPuzzleConfig(exercise);
+        return puzzleConfigAggregate;
     }
 }

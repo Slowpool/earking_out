@@ -1,9 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.base.validators.Error;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.base.validators.ValidationResult;
 

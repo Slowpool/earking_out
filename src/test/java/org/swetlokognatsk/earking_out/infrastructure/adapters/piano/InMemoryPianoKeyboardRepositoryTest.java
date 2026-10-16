@@ -1,27 +1,32 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.piano;
 
-import static org.junit.Assert.*;
-import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.apache.commons.lang3.ArrayUtils;
-import org.junit.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
+import org.junit.jupiter.api.*;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
+import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.OwnedPianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.InMemoryPianoKeyboardRepository;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.InMemoryRepositoryTest;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
-@SpringBootTest
-public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<PianoKeyboardId, PianoKeyboardAggregate, InMemoryPianoKeyboardRepository> {
+@EOSpringBootTest
+@DirtiesContext
+public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositoryTest<OwnedPianoKeyboardId, PianoKeyboardAggregate, InMemoryPianoKeyboardRepository> {
+    private static final PianoKeyNumber someRootNote = PianoKeyNumber.valueOf(50);
+
     private InMemoryPianoKeyboardRepository repository;
 
     protected PianoKeyboardAggregate getSomeAggregate() {
-        return repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
+        return repository.getInevitably(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
     }
 
     protected InMemoryPianoKeyboardRepository getRepository() {
@@ -31,8 +36,6 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
     protected void makeMinorChange(final PianoKeyboardAggregate aggregate) {
         aggregate.touchKey(someRootNote);
     }
-
-    private static final PianoKeyNumber someRootNote = PianoKeyNumber.valueOf(50);
 
     /**
      * @param freshman - this aggregate is just got from repo.
@@ -44,21 +47,30 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
         assertTrue(ArrayUtils.contains(suspect.getSelectedKeyNumbers(), someRootNote));
     }
 
-    @Before
+    private UserId getCurrentUserId() {
+        var userResolver = DI.get(UserResolver.class);
+        return userResolver.getCurrentUserId();
+    }
+
+    private UserId getUserIdThatIsDifferentFrom(final UserId userId) {
+        return new UserId(userId.id() + 1);
+    }
+
+    @BeforeEach
     public void setup() {
-        DI.refreshDependencies();
         repository = DI.get(InMemoryPianoKeyboardRepository.class);
     }
 
-    @Test
     @Deprecated
+    @Test
+    @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
     // actually it's a wrong approach to test it, because it does not cover the whole """immutability""". the correct approach here is to check references of objects from `get()` before and after save - they must be different so that modifying some aggregate's state it'd not be immediately saved in the memory even afore `save()` call due to having the same reference to the same object.
     public void changeAggregatePropertyWithoutSave() {
-        var rootNotePicker = repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
+        var rootNotePicker = repository.getInevitably(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
 
         rootNotePicker.touchKey(FIRST_NOTE_NUMBER);
 
-        rootNotePicker = repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
+        rootNotePicker = repository.get(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         assertArrayEquals(new PianoKeyNumber[0], rootNotePicker.getSelectedKeyNumbers());
     }
 
@@ -69,14 +81,15 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
      */
     @Test
     @Deprecated
+    @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
     public void changeAggregatePropertyWithSave() {
-        var rootNotePicker = repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
+        var rootNotePicker = repository.getInevitably(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         var someRootNote = FIRST_NOTE_NUMBER;
 
         rootNotePicker.touchKey(someRootNote);
         repository.save(rootNotePicker);
 
-        rootNotePicker = repository.get(PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
+        rootNotePicker = repository.get(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         assertArrayEquals(new PianoKeyNumber[] { someRootNote }, rootNotePicker.getSelectedKeyNumbers());
     }
 
@@ -93,5 +106,47 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
     @Test
     public void ensureSaveMethodPersistsCopyProxy() {
         ensureSaveMethodPersistsCopy();
+    }
+
+    @Test
+    @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+    public void getInevitablyCreatesWhenAggregateDoesNotExist() {
+        var pianoKeyboardId = AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
+        try {
+            repository.get(pianoKeyboardId);
+            fail();
+        } catch (AggregateNotFoundException e) {
+        }
+
+        var aggregate = repository.getInevitably(pianoKeyboardId);
+        assertNotNull(aggregate);
+
+        try {
+            repository.get(pianoKeyboardId);
+        } catch (AggregateNotFoundException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void tryGetPianoKeyboardOfAnotherUser() {
+        var pianoKeyboardId = AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
+        var currentUserId = getCurrentUserId();
+        var anotherUserId = getUserIdThatIsDifferentFrom(currentUserId);
+        var anotherOwnedId = new OwnedPianoKeyboardId(pianoKeyboardId, anotherUserId);
+        // create and save piano keyboard for current user in one command
+        repository.getInevitably(pianoKeyboardId);
+
+        PianoKeyboardAggregate stillOwnPianoKeyboard;
+        try {
+            stillOwnPianoKeyboard = repository.get(anotherOwnedId);
+        } catch (AggregateNotFoundException e) {
+            // does not matter whether another user's piano keyboard is not found or piano keyboard for current user was not saved, it's wrong behavior.
+            fail();
+            return;
+        }
+
+        assertEquals(currentUserId, stillOwnPianoKeyboard.getId().userId());
+
     }
 }

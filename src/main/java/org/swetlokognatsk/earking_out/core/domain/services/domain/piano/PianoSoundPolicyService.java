@@ -9,9 +9,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import lombok.AllArgsConstructor;
 
+// TODO test
 @AllArgsConstructor
 @Service
-@Lazy
 public class PianoSoundPolicyService {
     private final PuzzleConfigRepository puzzleConfigRepository;
 
@@ -22,7 +22,7 @@ public class PianoSoundPolicyService {
         }
 
         var exercise = pianoKeyboardId.exercise;
-        PuzzleConfigAggregate<?> puzzleConfig = puzzleConfigRepository.genericGet(exercise);
+        PuzzleConfigAggregate<?> puzzleConfig = puzzleConfigRepository.getPuzzleConfig(exercise);
 
         var shouldPlaySound = switch (puzzleConfig) {
         case AudioPerfectPitchConfigAggregate audioPerfectPitchPuzzleConfig -> !audioPerfectPitchPuzzleConfig.getSoundlessGuessingPiano();

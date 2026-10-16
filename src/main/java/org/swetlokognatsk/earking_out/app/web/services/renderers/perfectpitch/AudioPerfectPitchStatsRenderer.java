@@ -18,7 +18,6 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import lombok.AllArgsConstructor;
 
 @Component
-@Lazy
 @AllArgsConstructor
 public class AudioPerfectPitchStatsRenderer {
 

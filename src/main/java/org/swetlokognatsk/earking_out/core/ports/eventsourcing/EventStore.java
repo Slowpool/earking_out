@@ -7,6 +7,6 @@ import org.swetlokognatsk.earking_out.infrastructure.EventSavingException;
 public interface EventStore {
     // // TODO use it
     // void append(final EventStream<?> eventStream) throws EventSavingException;
-    void append(final EventStream<?> eventStream);
-    <ID> EventStream<ID> getAllEvents(final ID id);
+    void append(EventStream<?> eventStream);
+    <ID> EventStream<ID> getAllEvents(ID streamId);
 }

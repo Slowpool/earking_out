@@ -36,7 +36,7 @@ public abstract class SessionService<E extends Exercise, SA extends SessionAggre
     }
 
     private void validatePuzzleConfig() throws InvalidPuzzleConfigException {
-        var puzzleConfig = (PCA) puzzleConfigRepository.get(getExercise());
+        var puzzleConfig = (PCA) puzzleConfigRepository.getPuzzleConfig(getExercise());
 
         var validationResult = configValidator.validate(puzzleConfig);
         if (!validationResult.isValid()) {

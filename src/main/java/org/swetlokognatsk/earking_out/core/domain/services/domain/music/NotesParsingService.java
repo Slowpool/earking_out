@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.music;
 
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Octaves.*;
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
@@ -10,8 +11,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOf
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 
 // TODO refactoring
+@Service
 public final class NotesParsingService {
 
+    // TODO eliminate sharp and flat duplication. somehow take it from Accidentals
     private static final String SHARP = "#";
     private static final String FLAT = "b";
 
@@ -31,8 +34,7 @@ public final class NotesParsingService {
         Octaves octave;
         try {
             octave = parseOctave(textNote, giveAccidentalExistenceHint(accidental));
-        }
-        catch (OutOfRangeOctaveException e) {
+        } catch (OutOfRangeOctaveException e) {
             throw new OutOfRangeTextNoteException(textNoteName);
         }
 
@@ -40,7 +42,7 @@ public final class NotesParsingService {
             throw new InvalidTextNoteException(textNote);
         }
 
-        return new Note(noteName, accidental, octave);
+        return Note.valueOf(noteName, accidental, octave);
     }
 
     private Accidentals parseAccidental(final String textNote) throws InvalidTextNoteException {

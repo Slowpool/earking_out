@@ -1,11 +1,13 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
+@EOSpringBootTest
 public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     protected PianoKeyboardId getSomeSuitablePianoKeyboardId() {
@@ -14,7 +16,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
     @Test
     public void initKeyboardWithoutKeys() {
-        assertNoSelectedKeys(pianoKeyboard);
+        pianoKeyboardHelper.assertNoSelectedKeys(pianoKeyboard);
     }
 
     @Test
@@ -22,7 +24,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
         var presetKeys = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER };
         var pianoKeyboard = createPianoKeyboard(presetKeys);
 
-        assertOnlyTheseKeysAreSelected(presetKeys, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyTheseKeysAreSelected(presetKeys, pianoKeyboard);
     }
 
     @Test
@@ -41,7 +43,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
         pianoKeyboard.touchKey(keyNumber);
 
-        assertOnlyThisKeyIsSelected(keyNumber, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(keyNumber, pianoKeyboard);
     }
 
     @Test
@@ -53,7 +55,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
             pianoKeyboard.touchKey(keyNumber);
         }
 
-        assertOnlyThisKeyIsSelected(keyNumber, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(keyNumber, pianoKeyboard);
     }
 
     @Test
@@ -64,7 +66,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
             pianoKeyboard.touchKey(pianoKey);
         }
 
-        assertOnlyThisKeyIsSelected(pianoKeys[pianoKeys.length - 1], pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(pianoKeys[pianoKeys.length - 1], pianoKeyboard);
     }
 
     @Test
@@ -85,7 +87,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
         // action
         pianoKeyboard.releaseKey();
         // assert
-        assertOnlyThisKeyIsSelected(ANY_PIANO_KEY_NUMBER, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(ANY_PIANO_KEY_NUMBER, pianoKeyboard);
     }
 
     /**
@@ -101,7 +103,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
         pianoKeyboard.releaseKey();
 
-        assertOnlyThisKeyIsSelected(ANY_PIANO_KEY_NUMBER, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(ANY_PIANO_KEY_NUMBER, pianoKeyboard);
     }
 
     /**
@@ -118,7 +120,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
 
         pianoKeyboard.releaseKey();
 
-        assertOnlyThisKeyIsSelected(nextPianoKeyNumber, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(nextPianoKeyNumber, pianoKeyboard);
     }
 
     @Test
@@ -138,7 +140,7 @@ public final class PianoKeyboardOneKeySelectTest extends PianoKeyboardTest {
         var pianoKey = ANY_PIANO_KEY_NUMBER;
         pianoKeyboard.restoreSelectedKey(pianoKey);
 
-        assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
+        pianoKeyboardHelper.assertOnlyThisKeyIsSelected(pianoKey, pianoKeyboard);
     }
 
     @Test

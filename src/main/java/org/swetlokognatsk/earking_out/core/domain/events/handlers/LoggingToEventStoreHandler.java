@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
@@ -23,9 +24,13 @@ abstract class LoggingToEventStoreHandler<DE extends DomainEvent> extends Domain
         return loggingIsEnabled(puzzleConfigDto);
     }
 
+    protected final boolean loggingIsEnabled(final Exercise exercise, final UserId userId) {
+        var puzzleConfigDto = puzzleConfigRepository.getPuzzleConfigDTO(exercise, userId);
+        return loggingIsEnabled(puzzleConfigDto);
+    }
+
     protected final boolean loggingIsEnabled(final PuzzleConfigDTO<?> puzzleConfigDto) {
         return puzzleConfigDto.statsRecording;
     }
 
-    
 }

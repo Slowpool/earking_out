@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.exercises;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
 
 public final class ExerciseTest {
 

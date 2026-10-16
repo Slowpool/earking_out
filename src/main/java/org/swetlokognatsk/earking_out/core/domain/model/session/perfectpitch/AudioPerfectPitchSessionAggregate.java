@@ -36,7 +36,7 @@ public final class AudioPerfectPitchSessionAggregate extends PerfectPitchSession
 
     public void guessViaTextNote(final String textNote) throws InvalidTextNoteException, OutOfRangeTextNoteException {
         var note = notesParser.parse(textNote);
-        var pianoKeyNumber = notesNormalizer.normalize(note);
+        var pianoKeyNumber = note.normalize();
         guess(pianoKeyNumber);
     }
 

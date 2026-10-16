@@ -13,7 +13,9 @@ import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.config
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
+import org.springframework.stereotype.Service;
 
+@Service
 public final class AudioPerfectPitchSessionService extends SessionService<AudioPerfectPitchExercise, AudioPerfectPitchSessionAggregate, AudioPerfectPitchSessionRepository, AudioPerfectPitchConfigAggregate, FinalizedAudioPerfectPitchConfigValidator> {
 
     protected AudioPerfectPitchExercise getExercise() {

@@ -9,7 +9,7 @@
             CREATE TABLE puzzle_configs (
             exercise VARCHAR(200) NOT NULL,
             serialized_config TEXT NOT NULL,
-            user_id INTEGER REFERENCES users(id),
+            user_id INTEGER NOT NULL REFERENCES users(id),
             CONSTRAINT PK_PUZZLE_CONFIGS PRIMARY KEY (exercise,user_id)
             );
         </sql>

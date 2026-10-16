@@ -1,8 +1,11 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch;
 
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.LAST_NOTE_NUMBER;
@@ -17,12 +20,13 @@ import static org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate.*;
 
+@EOSpringBootTest
 public final class EditableAudioPerfectPitchConfigValidatorTest extends PuzzleConfigValidatorTest<AudioPerfectPitchExercise, AudioPerfectPitchConfigAggregate, AudioPerfectPitchConfigAggregatesFactory, EditableAudioPerfectPitchConfigValidator> {
 
     protected AudioPerfectPitchExercise getExercise() {
         return AUDIO_PERFECT_PITCH_EXERCISE;
     }
-    
+
     protected Class<EditableAudioPerfectPitchConfigValidator> getValidatorClass() {
         return EditableAudioPerfectPitchConfigValidator.class;
     }

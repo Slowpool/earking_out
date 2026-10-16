@@ -5,30 +5,22 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
+import org.springframework.stereotype.Service;
 
-import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
-
+@Service
 public final class AudioPerfectPitchConfigAggregatesFactory extends PuzzleConfigAggregatesFactory<AudioPerfectPitchConfigAggregate> {
-    // protected final PianoKeyboardRepository pianoKeyboardRepository;
-    // // composition
-    // protected final PianoKeyboardAggregatesFactory pianoKeyboardAggregatesFactory = new PianoKeyboardAggregatesFactory();
 
-    public AudioPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner, final User user) {
-        super(cloner, user);
+    public AudioPerfectPitchConfigAggregatesFactory(final ObjectCloner cloner, final UserResolver userResolver) {
+        super(cloner, userResolver);
     }
 
-    // // TODO why i specified pianoKeyboardRepository here?
-    // public AudioPerfectPitchConfigAggregatesFactory(final PianoKeyboardRepository pianoKeyboardRepository) {
-    //     this.pianoKeyboardRepository = pianoKeyboardRepository;
-    // }
-
     public AudioPerfectPitchConfigAggregate createDefault() {
-        return create(10, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.KEYBOARD_AS_PIANO, false);
+        return create(10, true, new PianoKeyNumber[0], null, PerfectPitchInputMode.PIANO_ON_SCREEN, false);
     }
 
     public AudioPerfectPitchConfigAggregate create(final int targetNumberOfPuzzles, final boolean statsRecording, final PianoKeyNumber[] normalizedNotesForPuzzle, final PianoKeyNumber normalizedRootNote, final PerfectPitchInputMode inputMode, final boolean soundlessGuessingPiano) {
-        return new AudioPerfectPitchConfigAggregate(userId, AUDIO_PERFECT_PITCH_EXERCISE, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
+        return new AudioPerfectPitchConfigAggregate(userResolver.getCurrentUserId(), AUDIO_PERFECT_PITCH_EXERCISE, targetNumberOfPuzzles, statsRecording, normalizedNotesForPuzzle, normalizedRootNote, inputMode, soundlessGuessingPiano);
     }
 }

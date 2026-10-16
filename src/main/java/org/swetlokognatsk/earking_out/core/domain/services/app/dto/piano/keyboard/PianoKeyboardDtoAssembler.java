@@ -1,10 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard;
 
+import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardAggregate;
-import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
-import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTOAssembler;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
+@Component
 public final class PianoKeyboardDtoAssembler {
 
     public PianoKeyboardDtoAssembler() {

@@ -1,7 +1,7 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.serialization;
 
 import java.lang.reflect.InvocationTargetException;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import tools.jackson.databind.module.SimpleModule;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.deser.std.StdDeserializer;
@@ -15,7 +15,7 @@ public abstract class DeserializerBaseTest<Type, Deserializer extends StdDeseria
 
     protected abstract Class<Type> getTestedDeserializerType();
 
-    @Before
+    @BeforeEach
     public void setup() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         var deserializer = getTestedDeserializerClass()
                 .getDeclaredConstructor(Class.class)

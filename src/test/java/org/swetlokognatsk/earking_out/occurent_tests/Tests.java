@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.occurent_tests;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.occurrent.application.service.blocking.generic.GenericApplicationService;
 import org.occurrent.eventstore.api.blocking.EventStore;
 import org.occurrent.eventstore.mongodb.nativedriver.EventStoreConfig;
@@ -12,7 +12,7 @@ import com.mongodb.client.MongoClients;
 import io.cloudevents.CloudEvent;
 import io.cloudevents.core.builder.CloudEventBuilder;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;

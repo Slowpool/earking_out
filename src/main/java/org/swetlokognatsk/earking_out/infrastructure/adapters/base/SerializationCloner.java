@@ -4,8 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 
+@Component
 public final class SerializationCloner implements ObjectCloner {
 
     public <T> T clone(final T object) {

@@ -1,8 +1,12 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters;
 
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Constants;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteTest;
@@ -11,24 +15,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 import org.swetlokognatsk.earking_out.core.domain.services.domain.music.NotesNormalizingService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
+@EOSpringBootTest
 public final class NotesNormalizingServiceTest {
     static NotesNormalizingService noteNormalizer;
     static Note[] notes = NoteTest.notes;
     static PianoKeyNumber[] normalizedValues = NoteTest.normalizedValues;
 
-    @BeforeClass
-    public static void setup() {
-        noteNormalizer = getNoteNormalizer();
-    }
-
-    static NotesNormalizingService getNoteNormalizer() {
-        return DI.get(NotesNormalizingService.class);
-    }
-
-    @Test
-    public void gettingNoteNormalizer() {
-        assertNotNull(getNoteNormalizer());
-        assertTrue(noteNormalizer instanceof NotesNormalizingService);
+    @BeforeEach
+    public void setup() {
+        noteNormalizer = DI.get(NotesNormalizingService.class);
     }
 
     @Test

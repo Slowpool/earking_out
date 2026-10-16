@@ -2,23 +2,31 @@ package org.swetlokognatsk.earking_out.core.domain.services.domain.music;
 
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Octaves;
 import org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
 /**
- * Note normalizing - mapping the note to key number. For example, notes C#1
- * and Db1 actually have the same key number (and the sound accordingly) - that's
+ * Note normalizing - mapping the note to key number. For example, notes C#1 and
+ * Db1 actually have the same key number (and the sound accordingly) - that's
  * 5th key number
  */
+@Service
 public final class NotesNormalizingService {
 
     public PianoKeyNumber normalize(final Note note) {
         // TODO theoretically overflow is possible below. refactoring via FIRST_NOTE_NUMBER
         byte value = SHIFT;
-        value += getOctavesShift(note.octave());
+        value += getOctavesShift(note.octave);
         value += normalizeInOctave(note);
-        return PianoKeyNumber.valueOf(value);
+        PianoKeyNumber result;
+        try {
+            result = PianoKeyNumber.valueOf(value);
+        } catch (IllegalArgumentException e) {
+            result = null;
+        }
+        return result;
     }
 
     /**
@@ -29,8 +37,8 @@ public final class NotesNormalizingService {
      * @return
      */
     public byte normalizeInOctave(final Note note) {
-        byte octaveScopedNoteValue = note.noteName().octaveScopedKeyNumber;
-        byte accidentalShift = Accidentals.getShift(note.accidental());
+        byte octaveScopedNoteValue = note.noteName.octaveScopedKeyNumber;
+        byte accidentalShift = Accidentals.getShift(note.accidental);
         return (byte) (octaveScopedNoteValue + accidentalShift);
     }
 

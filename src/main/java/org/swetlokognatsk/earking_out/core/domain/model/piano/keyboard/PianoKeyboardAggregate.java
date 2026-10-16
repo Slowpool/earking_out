@@ -7,7 +7,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
-import org.swetlokognatsk.earking_out.core.domain.model.base.Aggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKey;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyMode;
@@ -17,7 +18,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.Pia
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.key.PianoKeyDTOAssembler;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 
-public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId> {
+public final class PianoKeyboardAggregate extends AggregateRoot<OwnedPianoKeyboardId> {
     private static final long serialVersionUID = 1L;
 
     private final PianoKeyboardMode mode;
@@ -25,10 +26,6 @@ public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId>
     private final Set<PianoKeyNumber> selectedKeys = new HashSet<>();
 
     private PianoKey pressedKey;
-
-    public final PianoKeyboardId getPianoKeyboardId() {
-        return getId();
-    }
 
     public final PianoKeyboardMode getMode() {
         return mode;
@@ -69,12 +66,12 @@ public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId>
         return mode.isTouchMode();
     }
 
-    public PianoKeyboardAggregate(final PianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers, final PianoKeysFactory pianoKeysFactory) {
+    public PianoKeyboardAggregate(final OwnedPianoKeyboardId id, final PianoKeyNumber[] selectedKeyNumbers, final PianoKeysFactory pianoKeysFactory) {
         super(id);
 
         Objects.requireNonNull(selectedKeyNumbers);
 
-        mode = getModeById(id);
+        mode = getModeById(id.pianoKeyboardId());
         pianoKeys = buildPianoKeys(pianoKeysFactory, selectedKeyNumbers);
     }
 
@@ -147,7 +144,8 @@ public final class PianoKeyboardAggregate extends AggregateRoot<PianoKeyboardId>
 
         pressedKey = pianoKey;
 
-        var pianoKeyPressedEvent = getDomainEventsFactory().createPianoKeyPressedEvent(getId(), keyNumber);
+        var pianoKeyPressedEvent = getDomainEventsFactory()
+                .createPianoKeyPressedEvent(getId().pianoKeyboardId(), keyNumber);
         addEvent(pianoKeyPressedEvent);
     }
 

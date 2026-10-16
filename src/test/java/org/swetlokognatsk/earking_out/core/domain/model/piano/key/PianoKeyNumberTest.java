@@ -1,7 +1,8 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 

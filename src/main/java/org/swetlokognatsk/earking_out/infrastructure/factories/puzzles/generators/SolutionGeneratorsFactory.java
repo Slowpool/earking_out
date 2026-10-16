@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
@@ -8,6 +9,7 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.SolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.VisualPerfectPitchSolutionGenerator;
 
+@Service
 public final class SolutionGeneratorsFactory {
 
     public SolutionGeneratorsFactory() {

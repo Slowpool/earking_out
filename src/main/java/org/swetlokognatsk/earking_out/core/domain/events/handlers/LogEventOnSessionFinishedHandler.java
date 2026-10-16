@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
@@ -9,15 +10,15 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
 // TODO i forgot about tdd: create a single test for all of these `Log*Handler` classes
+@Service
 public final class LogEventOnSessionFinishedHandler extends LoggingSessionEventToEventStoreHandler<SessionFinishedEvent> {
 
     public LogEventOnSessionFinishedHandler(final EventStore eventStore, final PuzzleConfigRepository puzzleConfigRepository, final SessionRepositoryDelegator sessionRepositoryDelegator) {
         super(eventStore, puzzleConfigRepository, sessionRepositoryDelegator);
     }
 
-    // TODO add this event to aggregate
     public void handle(final SessionFinishedEvent event) {
-        if (loggingIsEnabled(event.sessionId)) {
+        if (loggingIsEnabled(event.sessionId, event.userId)) {
             var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
             eventStore.append(eventStream);
         }

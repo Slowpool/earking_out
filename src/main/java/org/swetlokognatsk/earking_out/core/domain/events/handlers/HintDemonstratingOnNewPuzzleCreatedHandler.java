@@ -1,14 +1,15 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
-import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
 
+@Service
 public final class HintDemonstratingOnNewPuzzleCreatedHandler extends DomainEventHandler<NewPuzzleCreatedEvent> {
 
-    private final HintDemonstrator<Solution> hintDemonstrator;
+    private final HintDemonstratorDelegator hintDemonstrator;
 
-    public HintDemonstratingOnNewPuzzleCreatedHandler(final HintDemonstrator<Solution> hintDemonstrator) {
+    public HintDemonstratingOnNewPuzzleCreatedHandler(final HintDemonstratorDelegator hintDemonstrator) {
         this.hintDemonstrator = hintDemonstrator;
     }
 

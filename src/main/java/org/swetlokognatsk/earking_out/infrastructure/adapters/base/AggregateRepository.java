@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.base;
 
 import java.util.List;
-
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.events.EventPublisher;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
@@ -10,6 +9,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 public abstract class AggregateRepository {
 
     protected final void publishEvents(final List<DomainEvent> events) {
+        // TODO pass it via constructor
         var eventPublisher = DI.get(EventPublisher.class);
         eventPublisher.publish(events);
     }

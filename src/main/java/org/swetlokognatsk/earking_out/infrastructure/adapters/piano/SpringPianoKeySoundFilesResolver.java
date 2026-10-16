@@ -5,12 +5,14 @@ import java.nio.file.Path;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundFilesResolver;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
 
-// TODO yet it's wild dev-only resources accessing. prod requires different sound player, because javafx works only with File, whereas fat .jar does not allow files manipulating.
-// p.s.: wrong. javafx audioclip works with `HTTP, HTTPS, FILE or JAR`
+@WebComponent
+@Primary
 public final class SpringPianoKeySoundFilesResolver implements PianoKeySoundFilesResolver, ApplicationContextAware {
 
     private static final Path RESOURCE_DIR = Path.of(System.getProperty("user.dir"), "src/main/resources");
@@ -29,8 +31,7 @@ public final class SpringPianoKeySoundFilesResolver implements PianoKeySoundFile
             var osAbsolutePath = RESOURCE_DIR.resolve(file.getAbsolutePath().substring(1));
             return new File(osAbsolutePath.toString());
         } catch (Throwable e) {
-            // TODO what do you with unknown exception?
-            int i = 0;
+            // TODO catch (Throwable e)
         }
         return null;
     }

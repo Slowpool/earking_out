@@ -1,28 +1,35 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
+import org.springframework.test.annotation.DirtiesContext;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.User;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.AudioPerfectPitchConfigAggregate;
-import org.swetlokognatsk.earking_out.core.ports.base.AggregateRootRepository;
+import org.swetlokognatsk.earking_out.core.ports.base.PolymorphicAggregateRepository;
+import org.swetlokognatsk.earking_out.core.ports.base.TypedAggregateRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.InMemoryRepositoryTest;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import java.util.UUID;
 
-public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
+@EOSpringBootTest
+@DirtiesContext
+public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepositoryTest<Exercise, PuzzleConfigAggregate<Exercise>, PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>>> {
 
     private InMemoryPuzzleConfigRepository repository;
-    private final static User USER_A = new User(new UserId(1), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000001")), "a");
-    private final static User USER_B = new User(new UserId(2), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000002")), "b");
+    private PuzzleConfigTestHelper puzzleConfigHelper;
+    // TODO delete it?
+    // private final static User USER_A = new User(new UserId(1), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000001")), "a");
+    // private final static User USER_B = new User(new UserId(2), new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000002")), "b");
 
-    protected AggregateRootRepository<Exercise, PuzzleConfigAggregate<Exercise>> getRepository() {
-        return repository;
+    protected PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>> getRepository() {
+        return (PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<Exercise>>) (PolymorphicAggregateRepository<?, ?>) repository;
     }
 
     protected PuzzleConfigAggregate<Exercise> getSomeAggregate() {
@@ -39,10 +46,21 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
         assertEquals(sourceAggregate.getTargetNumberOfPuzzles() + 1, editedAggregate.getTargetNumberOfPuzzles());
     }
 
-    @Before
+    private AudioPerfectPitchConfigAggregate getPerfectPitchConfigAggregate() {
+        var exercise = AUDIO_PERFECT_PITCH_EXERCISE;
+        return repository.getPuzzleConfig(exercise);
+    }
+
+    protected PuzzleConfigAggregate<?> getSomePuzzleConfigAggregate() {
+        return getPerfectPitchConfigAggregate();
+    }
+
+    @BeforeEach
     public void setup() {
-        DI.refreshDependencies();
         repository = DI.get(InMemoryPuzzleConfigRepository.class);
+        puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
+
+        puzzleConfigHelper.configureSomeValidPuzzleConfig();
     }
 
     @Test
@@ -83,20 +101,10 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
 
         PianoKeyNumber newNormalizedRootNote = PianoKeyNumber.valueOf(9);
         aggregate.updateProperty(AudioPerfectPitchConfigAggregate.NORMALIZED_ROOT_NOTE_PROP, newNormalizedRootNote);
-        repository.genericSave(aggregate);
+        repository.save(aggregate);
 
         aggregate = getPerfectPitchConfigAggregate();
         assertEquals(newNormalizedRootNote, aggregate.getNormalizedRootNote());
-    }
-
-    private AudioPerfectPitchConfigAggregate getPerfectPitchConfigAggregate() {
-        var exercise = AUDIO_PERFECT_PITCH_EXERCISE;
-        AudioPerfectPitchConfigAggregate aggregate = repository.genericGet(exercise);
-        return aggregate;
-    }
-
-    protected PuzzleConfigAggregate<?> getSomePuzzleConfigAggregate() {
-        return getPerfectPitchConfigAggregate();
     }
 
     @Test

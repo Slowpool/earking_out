@@ -1,5 +1,3 @@
-piano_keyboard.html
-<!-- TODO how the hidden works? it seems weeeeeird -->
 <div th:id="|piano-keyboard-${pianoKeyboardModel.id}|" th:attr="hidden=${showPianoKeyboard ?: true} ? null : 'hidden'" th:data-pianoKeyboardId="${pianoKeyboardModel.id}" th:class="|piano-keyboard ${pianoKeyboardModel.htmlClass}|" th:data-areKeySoundsEnabled="${pianoKeyboardModel.areKeySoundsEnabled}">
     <div class="white-keys-layer">
         <button

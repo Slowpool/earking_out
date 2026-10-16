@@ -13,6 +13,8 @@ const RELEASE = 'RELEASE';
 const NOTES_AS_TEXT_MODE = 'NOTES_AS_TEXT';
 const KEYBOARD_AS_PIANO_MODE = 'KEYBOARD_AS_PIANO';
 
+const MAIN_CONTENT = '#main-content';
+
 var pressedPianoKey = null;
 var playingAudios = {};
 var sessionState = null;
@@ -48,18 +50,10 @@ document.addEventListener('mousedown', function (e) {
         }
         pressedPianoKey = pianoKey;
 
-        let sessionId = document.querySelector("#sessionId")
-            .getAttribute("data-sessionId");
+        let sessionId = findSessionId();
         sendPianoKeyAction(PRESS, PUZZLE_CONTEXT, pianoKeyboard, pianoKey, {
             callback: function (response) {
-                sessionState = response.sessionState;
-                if (sessionState == SESSION_COMPLETED) {
-                    setAsMainContent(response.sessionStatsHtml);
-                }
-                else if (response.guessIsSuccessful) {
-                    updateCompletedPuzzlesNumber(response.numberOfCompletedPuzzles);
-                    updateHint(response.newHint);
-                }
+                updatePuzzleAfterGuess(response.guessResult);
             },
             queryString: `?sessionId=${sessionId}`
         });
@@ -71,7 +65,7 @@ document.addEventListener('mouseup', function (e) {
     if (!isLMB(e.button)) {
         return;
     }
-    
+
     if (!pressedPianoKey) {
         return;
     }
@@ -97,6 +91,41 @@ document.addEventListener('mouseup', function (e) {
     }
 });
 
+document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') {
+        return;
+    }
+
+    let target = e.target;
+    if (target.getAttribute('id') !== 'perfect-pitch-guessing-textbox') {
+        return;
+    }
+
+    let sessionId = findSessionId();
+    let guess = normalizeNoteFormat(target.value);
+    if (!validateNote(guess)) {
+        showMessage(guess ? `\`${target.value}\` is invalid or out of range note` : `Invalid note`);
+        return;
+    }
+
+    ajax('POST', `/api/v1/puzzle/perfect-pitch/audio/guess?sessionId=${sessionId}`, {
+        body: {
+            note: guess
+        },
+        handler: function (response) {
+            updatePuzzleAfterGuess(response);
+            target.value = '';
+            if (!sessionState == SESSION_COMPLETED && response.guessIsSuccessful) {
+                clearMessage();
+            }
+            else {
+                showMessage(guess ? `${guess} is wrong` : `Wrong guess`);
+            }
+        }
+    })
+});
+
+
 htmx.on('htmx:afterRequest', function (evt) {
     let sourceElement = evt.detail.elt;
     if (sourceElement && (sourceElement.getAttribute('id') === 'perfect-pitch-input-mode')) {
@@ -107,7 +136,7 @@ htmx.on('htmx:afterRequest', function (evt) {
         else {
             var shouldHideRootNotePiano = true;
         }
-        let rootNotePiano = document.querySelector("#piano-keyboard-AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER");
+        let rootNotePiano = document.querySelector("#audio-perfect-pitch-root-note");
         if (shouldHideRootNotePiano) {
             rootNotePiano.setAttribute('hidden', true);
         }
@@ -192,6 +221,9 @@ function stopAllSounds() {
 function updateCompletedPuzzlesNumber(newCompletedPuzzlesNumber) {
     var numberOfPuzzlesElement = document.querySelector("#number-of-completed-puzzles");
     numberOfPuzzlesElement.textContent = newCompletedPuzzlesNumber;
+
+    var puzzleProgressBar = document.querySelector("#puzzle-progress");
+    puzzleProgressBar.setAttribute("value", newCompletedPuzzlesNumber);
 }
 
 function updateHint(newHint) {
@@ -226,11 +258,58 @@ function sendPianoKeyAction(action, pianoKeyboardContext, pianoKeyboard, pianoKe
 }
 
 function setAsMainContent(html) {
-    document.querySelector("#main-content")
-        .innerHTML = html;
+    let mainContent = document.querySelector(MAIN_CONTENT);
+    mainContent.innerHTML = html;
+
+    htmx.process(mainContent);
 }
 
 // LMB - Left Mouse Button
 function isLMB(mouseButton) {
     return mouseButton === 0;
+}
+
+function updatePuzzleAfterGuess(guessResult) {
+    sessionState = guessResult.sessionState;
+    if (sessionState == SESSION_COMPLETED) {
+        setAsMainContent(guessResult.sessionStatsHtml);
+    }
+    else if (guessResult.guessIsSuccessful) {
+        updateCompletedPuzzlesNumber(guessResult.numberOfCompletedPuzzles);
+        updateHint(guessResult.newHint);
+    }
+}
+
+function findSessionId() {
+    return document.querySelector("#sessionId")
+        .getAttribute("data-sessionId");
+}
+
+function clearMessage() {
+    showMessage('');
+}
+
+function showMessage(message) {
+    var messageBox = document.querySelector('.notification-box');
+    if (messageBox) {
+        messageBox.textContent = message;
+    }
+}
+
+// eB4 => Eb4
+// Eb4 => Eb4
+function normalizeNoteFormat(note) {
+    if (!note) {
+        return '';
+    }
+
+    return note.charAt(0)
+        .toUpperCase()
+        + note.slice(1)
+            .toLowerCase();
+}
+
+function validateNote(note) {
+    let regexp = /^[A-G][b#]?[1-7]$/;
+    return regexp.test(note);
 }

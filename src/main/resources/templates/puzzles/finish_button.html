@@ -1,1 +1,8 @@
-<button th:hx-post="|/api/v1/session/${exerciseName}/${exerciseType}/abort/${sessionId}|" hx-trigger="click" hx-target="#main-content">finish</button>
+<div class="puzzle-block centered">
+    <button
+        class="action-button finish"
+        th:hx-post="|/api/v1/session/${exerciseName}/${exerciseType}/abort/${sessionId}|"
+        hx-trigger="click"
+        hx-target="#main-content"
+    >Finish</button>
+</div>

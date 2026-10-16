@@ -1,8 +1,10 @@
 package org.swetlokognatsk.earking_out.core.domain.services.domain.piano;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyColor;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 
+@Service
 public class PianoKeyColorService {
     public PianoKeyColor getColor(final PianoKeyNumber keyNumber) {
         var octaveScopedKeyNumber = keyNumber.getOctaveScopedKeyNumber();

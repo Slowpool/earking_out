@@ -1,8 +1,9 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchInputMode;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
@@ -12,7 +13,7 @@ public class AudioPerfectPitchConfigDTOTest {
     // TODO DRY violation
     protected static final PianoKeyNumber[] SOME_PIANO_KEYS = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, LAST_NOTE_NUMBER };
 
-    // TODO make it more readable (for fun)
+    // TODO make it more readable
     @Test
     public void positiveEquals() {
         var firstConfig = new AudioPerfectPitchConfigDTO(AUDIO_PERFECT_PITCH_EXERCISE, 0, true, SOME_PIANO_KEYS, FIRST_NOTE_NUMBER, PerfectPitchInputMode.NOTES_AS_TEXT, true);

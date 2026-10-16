@@ -1,6 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Array;
 

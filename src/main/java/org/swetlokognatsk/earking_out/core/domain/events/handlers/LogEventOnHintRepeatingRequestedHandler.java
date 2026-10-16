@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
@@ -7,6 +8,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
+@Service
 public final class LogEventOnHintRepeatingRequestedHandler extends LoggingToEventStoreHandler<HintRepeatingRequestedEvent> {
 
     public LogEventOnHintRepeatingRequestedHandler(final EventStore eventStore, final PuzzleConfigRepository puzzleConfigRepository) {
@@ -14,7 +16,7 @@ public final class LogEventOnHintRepeatingRequestedHandler extends LoggingToEven
     }
 
     public void handle(final HintRepeatingRequestedEvent event) {
-        if (loggingIsEnabled(event.puzzle.exercise)) {
+        if (loggingIsEnabled(event.puzzle.exercise, event.userId)) {
             var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
             eventStore.append(eventStream);
         }

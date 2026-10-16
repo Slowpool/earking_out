@@ -1,14 +1,15 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
-import org.swetlokognatsk.earking_out.core.ports.hints.demonstrators.HintDemonstrator;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
 
+@Service
 public final class HintDemonstratingOnHintRepeatingRequestedHandler extends DomainEventHandler<HintRepeatingRequestedEvent> {
 
-    private final HintDemonstrator<Solution> hintDemonstrator;
+    private final HintDemonstratorDelegator hintDemonstrator;
 
-    public HintDemonstratingOnHintRepeatingRequestedHandler(final HintDemonstrator<Solution> hintDemonstrator) {
+    public HintDemonstratingOnHintRepeatingRequestedHandler(final HintDemonstratorDelegator hintDemonstrator) {
         this.hintDemonstrator = hintDemonstrator;
     }
 

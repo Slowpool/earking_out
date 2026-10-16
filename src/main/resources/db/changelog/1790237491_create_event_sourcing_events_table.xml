@@ -4,8 +4,11 @@
 
     <changeSet id="2" author="slowpool">
         <createTable tableName="event_sourcing_events">
-            <column name="id" type="text">
+            <column name="id" type="uuid">
                 <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="stream_id" type="uuid">
+                <constraints nullable="false" />
             </column>
             <column name="type" type="text">
                 <constraints nullable="false" />

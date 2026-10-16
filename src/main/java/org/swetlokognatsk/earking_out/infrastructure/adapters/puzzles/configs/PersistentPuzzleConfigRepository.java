@@ -1,7 +1,9 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
@@ -9,8 +11,12 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleConfigNotFoundException;
+import lombok.AccessLevel;
+import lombok.Getter;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
+@Getter(AccessLevel.PROTECTED)
 abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepository {
 
     protected final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver;
@@ -20,29 +26,45 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
 
     protected abstract String getOrCreatePuzzleConfigJson(final Exercise exercise);
 
-    protected PuzzleConfigJsonSerializer getPuzzleConfigJsonSerializer() {
-        return puzzleConfigJsonSerializer;
-    }
+    protected abstract void saveImpl(final PuzzleConfigAggregate<?> aggregate);
 
     public PersistentPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
         this.puzzleConfigAggregatesFactoryResolver = puzzleConfigAggregatesFactoryResolver;
         this.puzzleConfigJsonSerializer = puzzleConfigJsonSerializer;
         this.dtoAssembler = dtoAssembler;
 
-        actualizeCache(cacheRepository);
         this.cacheRepository = cacheRepository;
     }
 
-    protected final void actualizeCache(final InMemoryPuzzleConfigRepository cacheRepository) {
+    public final void actualizeCache() {
         for (var exercise : ExercisesFactory.getAll()) {
-            var aggregate = genericGet(exercise);
-            cacheRepository.save(aggregate);
+            var aggregate = getPuzzleConfig(exercise);
+            getCacheRepository()
+                    .save(aggregate);
         }
     }
 
-    public final <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA genericGet(final E exercise) {
-        var puzzleConfigJson = getOrCreatePuzzleConfigJson(exercise);
-        return mapJsonToAggregate(exercise, puzzleConfigJson);
+    public <E extends Exercise, PCA extends AggregateRoot<E>> PCA get(E exercise) {
+        PuzzleConfigAggregate<?> puzzleConfig;
+        try {
+            puzzleConfig = getCached(exercise);
+        } catch (PuzzleConfigNotFoundException e) {
+            var puzzleConfigJson = getOrCreatePuzzleConfigJson(exercise);
+            puzzleConfig = mapJsonToAggregate(exercise, puzzleConfigJson);
+            // yes, in case it was just created, it is already saved and that's the second save, but this is not as serious overhead to care about it right now.
+            saveToCache(puzzleConfig);
+        }
+        return (PCA) puzzleConfig;
+    }
+
+    private <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA getCached(final E exercise) {
+        return getCacheRepository()
+                .get(exercise);
+    }
+
+    private void saveToCache(final PuzzleConfigAggregate<?> puzzleConfig) {
+        getCacheRepository()
+                .save(puzzleConfig);
     }
 
     private <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA mapJsonToAggregate(final E exercise, final String puzzleConfigJson) {
@@ -52,25 +74,22 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
-        var puzzleConfig = genericGet(exercise);
-        return dtoAssembler.assemble(puzzleConfig);
+        var puzzleConfig = getPuzzleConfig(exercise);
+        return getDtoAssembler()
+                .assemble(puzzleConfig);
     }
 
-    public PuzzleConfigAggregate<Exercise> get(final Exercise exercise) {
-        // puzzle configs are always loaded in constructor of `this`, so there's no need in asking for them from database
-        return cacheRepository.get(exercise);
-    }
-
-    public void save(final PuzzleConfigAggregate<Exercise> aggregate) {
+    public <PCA extends PuzzleConfigAggregate<? extends Exercise>> void save(PCA puzzleConfigAggregate) {
         // no consistency because in-memory value does not matter after power outage
-        genericSave(aggregate);
-        cacheRepository.save(aggregate);
+        saveImpl(puzzleConfigAggregate);
+        saveToCache(puzzleConfigAggregate);
     }
 
     protected final void createAndSaveDefaultConfig(final Exercise exercise) {
         // TODO crutch
-        AudioPerfectPitchConfigAggregatesFactory factory = puzzleConfigAggregatesFactoryResolver.resolveFactory(AUDIO_PERFECT_PITCH_EXERCISE);
-        var newPuzzleConfig = factory.createDefault();
-        genericSave(newPuzzleConfig);
+        AudioPerfectPitchConfigAggregatesFactory factory = getPuzzleConfigAggregatesFactoryResolver()
+                .resolveFactory(AUDIO_PERFECT_PITCH_EXERCISE);
+        PuzzleConfigAggregate<?> newPuzzleConfig = factory.createDefault();
+        save((PuzzleConfigAggregate<Exercise>) newPuzzleConfig);
     }
 }

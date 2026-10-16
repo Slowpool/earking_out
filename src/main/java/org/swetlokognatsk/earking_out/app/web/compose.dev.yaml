@@ -5,7 +5,7 @@ services:
     build:
       dockerfile: './Dockerfile'
     volumes:
-      # TODO is it ok?
+      # TODO is it ok? upd: no. use PROJECT_ROOT=/path/to/project env variable and then ${PROJECT_ROOT}
       - '../../../../../../../../target/classes:/app/BOOT-INF/classes:delegated'
       - '../../../../../../../../target/lib:/app/BOOT-INF/lib:delegated'
     environment:

@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.DebugUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -17,6 +18,7 @@ import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
 
 // TODO encapsulate factory inside di, so that instead his could be used: `DI.createPuzzle(new AudioPerfectPitchExercise())` or kinda
+@Service
 public final class PuzzlesFactory {
     private final SolutionGeneratorsFactory solutionGeneratorsFactory;
     private final PuzzleConfigRepository puzzleConfigRepository;

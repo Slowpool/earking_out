@@ -1,12 +1,12 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
+import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.piano.PianoKeyColorService;
-import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeySoundsPlayer;
 
+@Service
 public final class PianoKeysFactory {
     private final PianoKeyColorService pianoKeyColorService;
-    
+
     // TODO update constructors
     public PianoKeysFactory(final PianoKeyColorService pianoKeyColorService) {
         this.pianoKeyColorService = pianoKeyColorService;

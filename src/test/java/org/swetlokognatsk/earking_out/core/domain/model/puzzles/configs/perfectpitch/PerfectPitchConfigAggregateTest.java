@@ -1,16 +1,31 @@
 package org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
+@EOSpringBootTest
 public final class PerfectPitchConfigAggregateTest {
+
+    private PuzzleConfigRepository puzzleConfigRepository;
+    private PuzzleConfigTestHelper puzzleConfigHelper;
+
+    @BeforeEach
+    public void setup() {
+        puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
+        puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
+
+        puzzleConfigHelper.configureSomeValidPuzzleConfig();
+    }
 
     @Test
     public void ensureRootNoteIsUpdated() {
@@ -25,7 +40,7 @@ public final class PerfectPitchConfigAggregateTest {
 
     @Test
     public void ensureRootNoteUpdatingAlsoCausesPianoKeyboardUpdate() {
-        // // TODO this is irrelevant any more. should domain event subscirptions be tested?
+        // // TODO this is irrelevant. should domain event subscirptions be tested?
         // var pianoKeyboardId = PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
         // var configAggregate = getPerfectPitchAggregate();
         // var pianoKeyboard = configAggregate.getPianoKeyboard(pianoKeyboardId);
@@ -40,8 +55,6 @@ public final class PerfectPitchConfigAggregateTest {
     }
 
     private PerfectPitchConfigAggregate<?> getPerfectPitchAggregate() {
-        var repository = DI.get(PuzzleConfigRepository.class);
-        var aggregate = repository.get(AUDIO_PERFECT_PITCH_EXERCISE);
-        return (PerfectPitchConfigAggregate<?>) aggregate;
+        return (PerfectPitchConfigAggregate<?>) puzzleConfigRepository.getPuzzleConfig(AUDIO_PERFECT_PITCH_EXERCISE);
     }
 }
