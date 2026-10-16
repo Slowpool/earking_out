@@ -1,9 +1,12 @@
 package org.swetlokognatsk.earking_out;
 
+import java.util.Locale;
 import java.util.concurrent.Executor;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @SpringBootApplication
 public class SpringApp {
@@ -30,5 +33,12 @@ public class SpringApp {
         executor.initialize();
 
         return executor;
+    }
+
+    @Bean
+    LocaleResolver localeResolver() {
+        var localeResolver = new SessionLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.US);
+        return localeResolver;
     }
 }

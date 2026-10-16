@@ -2,11 +2,13 @@
     <span id="sessionId" hidden th:data-sessionId="${sessionId.id}"></span>
     <div class="centered">
         <span id="number-of-completed-puzzles" th:text="${numberOfCompletedPuzzles}"></span>
-        &nbsp;of&nbsp;
+        &nbsp;
+        <span th:text="#{puzzles.progress.after_number_of_completed_puzzles}"></span>
+        &nbsp;
         <span id="target-number-of-puzzles" th:text="${targetNumberOfPuzzles}"></span>
-        &nbsp;are completed
+        &nbsp;
+        <span th:text="#{puzzles.progress.after_target_number_of_puzzles}"></span>
     </div>
     <progress id="puzzle-progress" th:value="${numberOfCompletedPuzzles}" th:max="${targetNumberOfPuzzles}">
-        
     </div>
 </div>
