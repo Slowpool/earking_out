@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.session;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
@@ -9,6 +10,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.NoActiveSessionException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.AggregateRepository;
@@ -25,6 +28,8 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
     private final SessionAggregatesFactory sessionAggregatesFactory;
     @Getter(AccessLevel.PRIVATE)
     private final UserResolver userResolver;
+    @Getter(AccessLevel.PRIVATE)
+    private final SessionAggregateDTOAssembler dtoAssembler;
 
     private SessionId getActiveSessionId() {
         return activeSessionIds.get(getCurrentUserId());
@@ -47,9 +52,10 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
         return ownedSessionAggregates;
     }
 
-    public InMemorySessionRepository(final SessionAggregatesFactory sessionAggregatesFactory, final UserResolver userResolver) {
+    public InMemorySessionRepository(final SessionAggregatesFactory sessionAggregatesFactory, final Optional<UserResolver> userResolver, final SessionAggregateDTOAssembler dtoAssembler) {
         this.sessionAggregatesFactory = sessionAggregatesFactory;
-        this.userResolver = userResolver;
+        this.userResolver = userResolver.orElse(null);
+        this.dtoAssembler = dtoAssembler;
     }
 
     public SA get(final SessionId id) throws AggregateNotFoundException {
@@ -62,6 +68,13 @@ public abstract class InMemorySessionRepository<SA extends SessionAggregate<?, ?
         var sessionAggregateCopy = getSessionAggregatesFactory()
                 .createDeepCopy(sessionAggregate);
         return (SA) sessionAggregateCopy;
+    }
+
+    public <SADTO extends SessionAggregateDTO<?, ?, ?, SA>> SADTO getDto(final SessionId id, final UserId userId) {
+        var sessionAggregate = sessionAggregates.get(userId)
+                .get(id);
+        return (SADTO) getDtoAssembler()
+                .assemble(sessionAggregate);
     }
 
     public void save(SA sessionAggregate) {

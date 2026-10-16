@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.helpers;
 
 import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.SessionAggregateDTO;
@@ -14,9 +15,21 @@ import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfe
 @Service
 public final class SessionRepositoryDelegator {
     private final SessionRepository<?>[] repositories;
+    private final SessionAggregateDTOAssembler dtoAssembler;
 
-    public SessionRepositoryDelegator(final AudioPerfectPitchSessionRepository audioPerfectPitchSessionRepository) {
+    public SessionRepositoryDelegator(final AudioPerfectPitchSessionRepository audioPerfectPitchSessionRepository, final SessionAggregateDTOAssembler dtoAssembler) {
         repositories = new SessionRepository[] { audioPerfectPitchSessionRepository };
+        this.dtoAssembler = dtoAssembler;
+    }
+
+    public SessionAggregateDTO<?, ?, ?, ?> getSessionAggregateDTO(final SessionId sessionId, final UserId userId) {
+        for (var repository : repositories) {
+            try {
+                return repository.getDto(sessionId, userId);
+            } catch (AggregateNotFoundException e) {
+            }
+        }
+        throw new AggregateNotFoundException();
     }
 
     public SessionAggregate<?, ?, ?, ?> get(final SessionId sessionId) {
@@ -29,9 +42,10 @@ public final class SessionRepositoryDelegator {
         throw new AggregateNotFoundException();
     }
 
+    // TODO think about its implementation
     public SessionAggregateDTO<?, ?, ?, ?> getSessionAggregateDTO(final SessionId sessionId) {
         var sessionAggregate = get(sessionId);
 
-        return SessionAggregateDTOAssembler.assemble(sessionAggregate);
+        return dtoAssembler.assemble(sessionAggregate);
     }
 }

@@ -16,7 +16,7 @@ public final class LogEventOnHintRepeatingRequestedHandler extends LoggingToEven
     }
 
     public void handle(final HintRepeatingRequestedEvent event) {
-        if (loggingIsEnabled(event.puzzle.exercise)) {
+        if (loggingIsEnabled(event.puzzle.exercise, event.userId)) {
             var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
             eventStore.append(eventStream);
         }

@@ -2,10 +2,12 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
@@ -26,10 +28,10 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     private final PuzzleConfigDTOAssembler dtoAssembler;
     private final UserResolver userResolver;
 
-    public InMemoryPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigDTOAssembler dtoAssembler, final UserResolver userResolver) {
+    public InMemoryPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigDTOAssembler dtoAssembler, final Optional<UserResolver> userResolver) {
         this.puzzleConfigAggregatesFactoryResolver = puzzleConfigAggregatesFactoryResolver;
         this.dtoAssembler = dtoAssembler;
-        this.userResolver = userResolver;
+        this.userResolver = userResolver.orElse(null);
 
         // TODO it should be used only in tests as i remember
         // seedConfigs();
@@ -54,7 +56,7 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     }
 
     @SuppressWarnings("unchecked")
-    public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA getPuzzleConfig(E exercise) {
+    public <E extends Exercise, PCA extends PuzzleConfigAggregate<E>> PCA getPuzzleConfig(final E exercise) {
         return (PCA) get(exercise);
     }
 
@@ -74,6 +76,15 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
         var dto = getDtoAssembler()
                 .assemble(puzzleConfig);
         return (PCDTO) dto;
+    }
+
+    public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise, UserId userId) {
+        var puzzleConfigId = new PuzzleConfigId(exercise.toString(), userId.id());
+        // accessing aggregate directly is safe here, cuz it'll be mapped to aggregate
+        var puzzleConfig = (PuzzleConfigAggregate<E>) getAggregates()
+                .get(puzzleConfigId);
+        return getDtoAssembler()
+                .assemble(puzzleConfig);
     }
 
     private <E extends Exercise> PuzzleConfigAggregate<E> innerGet(final E exercise) {
@@ -97,4 +108,5 @@ public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
     public void actualizeCache() {
         // no impl because it's caching repo itself        
     }
+
 }

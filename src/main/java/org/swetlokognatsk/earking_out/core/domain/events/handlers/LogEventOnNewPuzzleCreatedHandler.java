@@ -16,7 +16,7 @@ public final class LogEventOnNewPuzzleCreatedHandler extends LoggingToEventStore
     }
 
     public void handle(final NewPuzzleCreatedEvent event) {
-        if (loggingIsEnabled(event.puzzle.exercise)) {
+        if (loggingIsEnabled(event.puzzle.exercise, event.userId)) {
             var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
             eventStore.append(eventStream);
         }

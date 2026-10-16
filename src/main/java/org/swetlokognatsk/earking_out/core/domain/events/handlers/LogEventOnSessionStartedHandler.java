@@ -17,7 +17,7 @@ public final class LogEventOnSessionStartedHandler extends LoggingToEventStoreHa
     }
 
     public void handle(final SessionStartedEvent event) {
-        if (loggingIsEnabled(event.puzzleConfigDto.exercise)) {
+        if (loggingIsEnabled(event.puzzleConfigDto.exercise, event.userId)) {
             var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
             eventStore.append(eventStream);
         }

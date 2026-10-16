@@ -17,7 +17,7 @@ public final class LogEventOnUserTriedToGuessPuzzleHandler extends LoggingSessio
     }
 
     public void handle(final UserTriedToGuessPuzzleEvent event) {
-        if (loggingIsEnabled(event.sessionId)) {
+        if (loggingIsEnabled(event.sessionId, event.userId)) {
             var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
             eventStore.append(eventStream);
         }

@@ -17,9 +17,8 @@ public final class LogEventOnSessionFinishedHandler extends LoggingSessionEventT
         super(eventStore, puzzleConfigRepository, sessionRepositoryDelegator);
     }
 
-    // TODO add this event to aggregate
     public void handle(final SessionFinishedEvent event) {
-        if (loggingIsEnabled(event.sessionId)) {
+        if (loggingIsEnabled(event.sessionId, event.userId)) {
             var eventStream = new EventStream<SessionId>(event.sessionId, new DomainEvent[] { event });
             eventStore.append(eventStream);
         }

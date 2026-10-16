@@ -2,8 +2,10 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
@@ -76,5 +78,11 @@ public class SpringJpaPuzzleConfigRepository extends PersistentPuzzleConfigRepos
     private int getCurrentUserId() {
         return userResolver.getCurrentUserId()
                 .id();
+    }
+
+    public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(final E exercise, final UserId userId) {
+        // yes, naively relying on cache repo
+        return getCacheRepository()
+                .getPuzzleConfigDTO(exercise, userId);
     }
 }

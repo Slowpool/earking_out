@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.ports.config;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.base.PolymorphicAggregateRepository;
@@ -29,6 +30,9 @@ public interface PuzzleConfigRepository extends PolymorphicAggregateRepository<E
     }
 
     <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise);
+
+    // allowing to read puzzle configs to those threads which are out of request scope, e.g. for async logging it's useful
+    <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise, UserId userId);
 
     void actualizeCache();
 }

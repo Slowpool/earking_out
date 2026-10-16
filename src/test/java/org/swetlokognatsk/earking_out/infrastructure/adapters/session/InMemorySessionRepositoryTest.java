@@ -159,4 +159,15 @@ public final class InMemorySessionRepositoryTest {
         switchToUser(USER_2);
         assertActiveSessionExists();
     }
+
+    @Test
+    public void getSessionDtoOfAnotherUser() {
+        var sessionAggregate = repository.getActiveSession();
+        switchToUser(USER_2);
+
+        var sessionDto = repository.getDto(seededSessionId, USER_1);
+
+        assertNotNull(sessionDto);
+        assertEquals(sessionAggregate.getId(), sessionDto.sessionId);
+    }
 }
