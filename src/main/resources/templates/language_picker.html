@@ -1,0 +1,11 @@
+language_picker.html
+<div id="language-picker">
+    <button
+        th:each="language : ${languages}"
+        th:text="${language}"
+        th:class="${selectedLanguage == language ? 'selected' : null}"
+        hx-trigger="click"
+        hx-target="#language-picker"
+        th:hx-patch="|/api/v1/language/change/${language}|"
+    ></button>
+</div>

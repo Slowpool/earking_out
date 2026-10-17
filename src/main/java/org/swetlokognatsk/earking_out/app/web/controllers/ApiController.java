@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.swetlokognatsk.earking_out.app.web.models.requests.ChangeLanguageRequest;
 import org.swetlokognatsk.earking_out.app.web.models.requests.PianoKeyboardActionRequest;
 import org.swetlokognatsk.earking_out.app.web.models.requests.perfectpitch.AudioPerfectPitchGuessRequest;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyPressingResponse;
@@ -35,6 +34,7 @@ import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDeleg
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
@@ -48,7 +48,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpi
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 
-// TODO all code here is yet a draft, for experiments
+// TODO mention about RPC api design
 /**
  * I gave this controller an `Api` name because it never returns entire html
  * documents - it returns only an html fragments without html/head/body tags,
@@ -262,11 +262,11 @@ public class ApiController {
     }
 
     @PatchMapping("/language/change/{newLanguage}")
-    public ResponseEntity<?> changeLanguage(final String newLanguage) {
+    public ResponseEntity<?> changeLanguage(final Languages newLanguage) {
         DI.get(UserService.class)
                 .changeLanguage(newLanguage);
 
+        return ok(null);
     }
 
-    
 }

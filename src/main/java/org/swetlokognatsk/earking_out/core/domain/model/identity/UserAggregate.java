@@ -8,14 +8,21 @@ public final class UserAggregate extends AggregateRoot<UserId> {
 
     private final UserUuid uuid;
     private final String name;
-    // TODO use Language value object
-    private String lang;
+    private Languages lang;
 
-    public String getLang() {
+    public UserUuid getUuid() {
+        return uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Languages getLang() {
         return lang;
     }
-    
-    public UserAggregate(final UserId id, final UserUuid uuid, final String name, @NonNull final String lang) {
+
+    public UserAggregate(final UserId id, final UserUuid uuid, final String name, @NonNull final Languages lang) {
         super(id);
 
         this.uuid = requireNonNull(uuid);
@@ -23,8 +30,7 @@ public final class UserAggregate extends AggregateRoot<UserId> {
         this.lang = lang;
     }
 
-    // TODO use Language value object
-    public void changeLanguage(final String newLanguage) {
+    public void changeLanguage(final Languages newLanguage) {
         this.lang = newLanguage;
     }
 }

@@ -64,7 +64,7 @@ public class SpringApp {
             var user = userRepository.get(userId);
 
             var lang = user.getLang();
-            var locale = new Locale(lang);
+            var locale = new Locale(lang.value);
             WebUtils.setSessionAttribute(request, LOCALE_ATTR, locale);
 
             return locale;

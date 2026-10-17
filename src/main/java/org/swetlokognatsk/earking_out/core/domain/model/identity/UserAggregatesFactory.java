@@ -11,7 +11,7 @@ public class UserAggregatesFactory extends AggregatesFactory<UserAggregate> {
         super(cloner);
     }
 
-    public UserAggregate create(final UserId userId, final UserUuid uuid, final String name, final String lang) {
+    public UserAggregate create(final UserId userId, final UserUuid uuid, final String name, final Languages lang) {
         return new UserAggregate(userId, uuid, name, lang);
     }
 }
