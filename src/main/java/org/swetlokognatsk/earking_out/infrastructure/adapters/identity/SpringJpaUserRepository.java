@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
@@ -30,7 +31,7 @@ public class SpringJpaUserRepository implements UserRepository {
 
     @Transactional
     public UserAggregate createAndSaveGuestUser(final String namePrefix) {
-        var userEntity = new UserEntity("unknown guest");
+        var userEntity = new UserEntity("unknown guest", Languages.ru);
         entityManager.persist(userEntity);
 
         // TODO ensure it works

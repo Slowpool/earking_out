@@ -18,4 +18,6 @@
 
     <include file="1791275520_add_oauth_identity_table.xml" relativeToChangelogFile="true" />
 
+    <include file="1792256448_add_lang_column_to_users.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

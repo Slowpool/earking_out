@@ -2,12 +2,16 @@
     <table id="audio-perfect-pitch-stats-table" th:if="${not #arrays.isEmpty(stats.notesStats)}">
         <thead>
             <tr>
-                <th th:text="#{puzzles.perfect_pitch.stats.notes.title}"></th>
+                <th>
+                    <span th:text="#{puzzles.perfect_pitch.stats.notes.title}"></span>
+                </th>
                 <th>
                     <span th:text="#{puzzles.perfect_pitch.stats.appearances.title}"></span>
                     <span class="hint" th:title="#{puzzles.perfect_pitch.stats.appearances.hint}">ⓘ</span>
                 </th>
-                <th th:text="#{puzzles.perfect_pitch.stats.guesses.title}"></th>
+                <th th:text="#{puzzles.perfect_pitch.stats.guesses.title}">
+                    <span></span>
+                </th>
                 <th>
                     <span th:text="#{puzzles.perfect_pitch.stats.perfect_guesses.title}"></span>
                     <span class="hint" th:title="#{puzzles.perfect_pitch.stats.perfect_guesses.hint}">ⓘ</span>

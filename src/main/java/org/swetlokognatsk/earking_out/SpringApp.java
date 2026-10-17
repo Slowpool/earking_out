@@ -2,11 +2,17 @@ package org.swetlokognatsk.earking_out;
 
 import java.util.Locale;
 import java.util.concurrent.Executor;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
+import jakarta.servlet.http.HttpSession;
 
 @SpringBootApplication
 public class SpringApp {
@@ -15,6 +21,8 @@ public class SpringApp {
 
     public static final String IS_DESKTOP_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).DESKTOP";
     public static final String IS_WEB_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).WEB";
+
+    private static final Locale DEFAULT_LOCALE = new Locale("ru");
 
     @Bean
     Executor getTaskExecutor() {
@@ -38,7 +46,22 @@ public class SpringApp {
     @Bean
     LocaleResolver localeResolver() {
         var localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.US);
+
+        localeResolver.setLocaleAttributeName("lang");
+
+        localeResolver.setDefaultLocaleFunction(request -> {
+            var userResolver = DI.get(UserResolver.class);
+            var userRepository = DI.get(UserRepository.class);
+
+            var userId = userResolver.getCurrentUserId();
+            if (userId == null) {
+                return DEFAULT_LOCALE;
+            }
+
+            var user = userRepository.get(userId);
+            return new Locale(user.getLang());
+            // TODO save obtaiend lang to session
+        });
         return localeResolver;
     }
 }
