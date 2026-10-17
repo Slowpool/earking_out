@@ -44,8 +44,8 @@ public class SpringJpaUserRepository implements UserRepository {
     }
 
     @Transactional
-    public UserAggregate get(final UserId id) {
-        var userEntity = entityManager.find(UserEntity.class, id);
+    public UserAggregate get(final UserId userId) {
+        var userEntity = entityManager.find(UserEntity.class, userId.id());
         return mapUserEntityToAggregate(userEntity);
     }
 
@@ -53,7 +53,7 @@ public class SpringJpaUserRepository implements UserRepository {
         var userId = new UserId(userEntity.getId());
         var userUuid = new UserUuid(userEntity.getUuid());
         return getUserAggregatesFactory()
-                .create(userId, userUuid, userEntity.getName());
+                .create(userId, userUuid, userEntity.getName(), userEntity.getLang());
     }
 
     @Transactional

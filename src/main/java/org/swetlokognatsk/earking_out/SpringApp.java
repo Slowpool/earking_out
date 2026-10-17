@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.util.WebUtils;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
@@ -23,6 +24,7 @@ public class SpringApp {
     public static final String IS_WEB_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).WEB";
 
     private static final Locale DEFAULT_LOCALE = new Locale("ru");
+    private static final String LOCALE_ATTR = "lang";
 
     @Bean
     Executor getTaskExecutor() {
@@ -47,20 +49,25 @@ public class SpringApp {
     LocaleResolver localeResolver() {
         var localeResolver = new SessionLocaleResolver();
 
-        localeResolver.setLocaleAttributeName("lang");
+        localeResolver.setLocaleAttributeName(LOCALE_ATTR);
 
+        // TODO refactoring. it should be in a special locale resolver class
         localeResolver.setDefaultLocaleFunction(request -> {
             var userResolver = DI.get(UserResolver.class);
-            var userRepository = DI.get(UserRepository.class);
 
             var userId = userResolver.getCurrentUserId();
             if (userId == null) {
                 return DEFAULT_LOCALE;
             }
 
+            var userRepository = DI.get(UserRepository.class);
             var user = userRepository.get(userId);
-            return new Locale(user.getLang());
-            // TODO save obtaiend lang to session
+
+            var lang = user.getLang();
+            var locale = new Locale(lang);
+            WebUtils.setSessionAttribute(request, LOCALE_ATTR, locale);
+
+            return locale;
         });
         return localeResolver;
     }
