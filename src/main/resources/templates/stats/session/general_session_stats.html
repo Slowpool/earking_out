@@ -1,6 +1,7 @@
 <div>
-    <h2 class="centered">Statistics</h2>
+    <h2 class="centered" th:text="#{stats.session.title}"></h2>
     <div class="stats-block centered">
+        <!-- TODO remake -->
         <span th:text="|${puzzlesCompletedPerfectly} of ${numberOfCompletedPuzzles} or ${#numbers.formatDecimal(perfectlyCompletedPuzzlesRate * 100, 1, 2)}% are guessed correctly|"></span>
         <span class="hint" title="The puzzle completed correctly is when you guess it from the first attempt">ⓘ</span>
     </div>

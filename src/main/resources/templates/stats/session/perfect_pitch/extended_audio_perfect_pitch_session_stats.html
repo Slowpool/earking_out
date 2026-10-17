@@ -2,11 +2,11 @@
     <table id="audio-perfect-pitch-stats-table" th:if="${not #arrays.isEmpty(stats.notesStats)}">
         <thead>
             <tr>
-                <th>Notes</th>
-                <th>Appearances <span class="hint" title="The number of times the app generated this note">ⓘ</span></th>
-                <th>Guesses</th>
-                <th>Perfect guesses <span class="hint" title="Perfect guess - when you guess correctly on the first try">ⓘ</span></th>
-                <th>Perfect guesses ratio <span class="hint" title="Perfect guesses / Guesses">ⓘ</span></th>
+                <th th:text="#{puzzles.perfect_pitch.stats.notes.title}"></th>
+                <th th:text="#{puzzles.perfect_pitch.stats.appearances.title}"><span class="hint" th:title="#{puzzles.perfect_pitch.stats.appearances.hint}">ⓘ</span></th>
+                <th th:text="#{puzzles.perfect_pitch.stats.guesses.title}"></th>
+                <th th:text="#{puzzles.perfect_pitch.stats.perfect_guesses.title}"><span class="hint" th:title="#{puzzles.perfect_pitch.stats.perfect_guesses.hint}">ⓘ</span></th>
+                <th th:text="#{puzzles.perfect_pitch.stats.perfect_guesses_ratio.title}"><span class="hint" th:title="#{puzzles.perfect_pitch.stats.perfect_guesses_ratio.hint}">ⓘ</span></th>
             </tr>
         </thead>
         <tbody>
@@ -21,5 +21,5 @@
             </tr>
         </tbody>
     </table>
-    <div th:if="${#arrays.isEmpty(stats.notesStats)}" class="stats-block centered">Enable stats recording to see detailed stats next time</div>
+    <div th:if="${#arrays.isEmpty(stats.notesStats)}" class="stats-block centered" th:text="#{stats.session.recording_is_disabled.title}"></div>
 </div>
