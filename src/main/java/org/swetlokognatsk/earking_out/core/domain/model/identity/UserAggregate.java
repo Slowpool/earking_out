@@ -8,6 +8,7 @@ public final class UserAggregate extends AggregateRoot<UserId> {
 
     private final UserUuid uuid;
     private final String name;
+    // TODO use Language value object
     private String lang;
 
     public String getLang() {
@@ -22,4 +23,8 @@ public final class UserAggregate extends AggregateRoot<UserId> {
         this.lang = lang;
     }
 
+    // TODO use Language value object
+    public void changeLanguage(final String newLanguage) {
+        this.lang = newLanguage;
+    }
 }
