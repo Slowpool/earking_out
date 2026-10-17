@@ -4,7 +4,8 @@
     <body>
         <div layout:fragment="content">
             <h1 th:text="#{main.header}"></h1>
-            <button id="github-login-button" class="action-button" th:text="#{github.login}">
+            <button id="github-login-button" class="action-button">
+                <span th:text="#{github.login}"></span>
                 <img
                     src="/GitHub_Invertocat_Black.svg"
                     alt="GitHub"
@@ -13,7 +14,6 @@
                 >
             </button>
             <!-- TODO add language picker -->
-            <div th:text="#{home.welcome}"></div>
         </div>
     </body>
 </html>
