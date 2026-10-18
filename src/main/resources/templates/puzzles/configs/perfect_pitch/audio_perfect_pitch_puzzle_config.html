@@ -31,7 +31,10 @@
             <span class="hint" th:title="#{puzzles.configs.perfect_pitch.stats_recording.hint}">ⓘ</span>
         </div>
         <div class="puzzle-config-piano-keyboard-property">
-            <label class="centered" for="piano-keyboard-AUDIO_PERFECT_PITCH_NOTES_PICKER" th:text="#{puzzles.configs.perfect_pitch.audio.notes}"></label>
+            <label class="centered" for="piano-keyboard-AUDIO_PERFECT_PITCH_NOTES_PICKER">
+                <span th:text="#{puzzles.configs.perfect_pitch.audio.notes}"></span>
+                <span class="hint" th:title="#{puzzles.configs.perfect_pitch.audio.notes.hint}">ⓘ</span>
+            </label>
             <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${notesPickerPianoKeyboardModel})}"></div>
         </div>
         <div id="audio-perfect-pitch-root-note" class="puzzle-config-piano-keyboard-property" th:attr="hidden=${inputMode.name() == 'KEYBOARD_AS_PIANO'} ? null : 'hidden'">
