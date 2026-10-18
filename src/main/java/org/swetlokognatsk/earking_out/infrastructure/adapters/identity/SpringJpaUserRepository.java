@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
@@ -30,7 +32,7 @@ public class SpringJpaUserRepository implements UserRepository {
 
     @Transactional
     public UserAggregate createAndSaveGuestUser(final String namePrefix) {
-        var userEntity = new UserEntity("unknown guest");
+        var userEntity = new UserEntity("unknown guest", Languages.DEFAULT.value);
         entityManager.persist(userEntity);
 
         // TODO ensure it works
@@ -42,22 +44,35 @@ public class SpringJpaUserRepository implements UserRepository {
         return mapUserEntityToAggregate(userEntity);
     }
 
-    @Transactional
-    public UserAggregate get(final UserId id) {
-        var userEntity = entityManager.find(UserEntity.class, id);
+    public UserAggregate get(final UserId userId) {
+        var userEntity = findById(userId);
+        if (userEntity == null) {
+            throw new AggregateNotFoundException();
+        }
         return mapUserEntityToAggregate(userEntity);
+    }
+
+    private UserEntity findById(final UserId userId) {
+        return entityManager.find(UserEntity.class, userId.id());
     }
 
     private UserAggregate mapUserEntityToAggregate(final UserEntity userEntity) {
         var userId = new UserId(userEntity.getId());
         var userUuid = new UserUuid(userEntity.getUuid());
+        var lang = Languages.valueOf(userEntity.getLang());
         return getUserAggregatesFactory()
-                .create(userId, userUuid, userEntity.getName());
+                .create(userId, userUuid, userEntity.getName(), lang);
     }
 
     @Transactional
     public void save(final UserAggregate userAggregate) {
-        entityManager.persist(userAggregate);
+        var userEntity = mapUserAggregateToEntity(userAggregate);
+        entityManager.persist(userEntity);
     }
 
+    private UserEntity mapUserAggregateToEntity(final UserAggregate userAggregate) {
+        var entity = findById(userAggregate.getId());
+        entity.setLang(userAggregate.getLang().value);
+        return entity;
+    }
 }

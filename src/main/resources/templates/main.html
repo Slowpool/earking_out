@@ -3,9 +3,9 @@
     <head></head>
     <body>
         <div layout:fragment="content">
-            <h1>Pick an exercise in the top left corner to start training</h1>
-            <button id="github-login-button" class="action-button">
-                Login with GitHub
+            <h1 th:text="#{main.header}"></h1>
+            <button id="github-login-button" class="action-button block-on-main">
+                <span th:text="#{github.login}"></span>
                 <img
                     src="/GitHub_Invertocat_Black.svg"
                     alt="GitHub"
@@ -13,6 +13,7 @@
                     class="relative-svg"
                 >
             </button>
+            <div th:replace="~{language_picker}"></div>
         </div>
     </body>
 </html>

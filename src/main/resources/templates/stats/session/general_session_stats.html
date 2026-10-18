@@ -1,7 +1,18 @@
 <div>
-    <h2 class="centered">Statistics</h2>
+    <h2 class="centered" th:text="#{stats.session.title}"></h2>
     <div class="stats-block centered">
-        <span th:text="|${puzzlesCompletedPerfectly} of ${numberOfCompletedPuzzles} or ${#numbers.formatDecimal(perfectlyCompletedPuzzlesRate * 100, 1, 2)}% are guessed correctly|"></span>
-        <span class="hint" title="The puzzle completed correctly is when you guess it from the first attempt">ⓘ</span>
+        <span th:text="${puzzlesCompletedPerfectly}"></span>
+        &nbsp;
+        <span th:text="|#{stats.session.after_puzzles_completed_correctly}|"></span>
+        &nbsp;
+        <!-- TODO remake -->
+        <span th:text="${numberOfCompletedPuzzles}"></span>
+        &nbsp;
+        <span th:text="|#{stats.session.after_after_number_of_completed_puzzles}|"></span>
+        &nbsp;
+        <span th:text="|${#numbers.formatDecimal(perfectlyCompletedPuzzlesRate * 100, 1, 2)}%|"></span>
+        &nbsp;
+        <span th:text="|#{stats.session.after_perfectly_completed_puzzles_rate}|"></span>
+        <span class="hint" th:title="#{stats.session.puzzle_guessed_correctly.hint}">ⓘ</span>
     </div>
 </div>

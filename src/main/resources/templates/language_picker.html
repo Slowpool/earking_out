@@ -1,0 +1,11 @@
+<div id="language-picker">
+    <button
+        th:each="language : ${languages}"
+        th:class="|language-item${selectedLanguage == language ? ' selected' : ''}|"
+        hx-trigger="click"
+        hx-target="#language-picker"
+        th:hx-patch="|/api/v1/language/change/${language}|"
+    >
+        <img th:src="|/flags/${language}.svg|" th:alt="${language}" class="flag-svg">
+    </button>
+</div>

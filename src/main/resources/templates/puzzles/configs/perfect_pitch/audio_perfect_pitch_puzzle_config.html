@@ -1,12 +1,11 @@
 <!-- TODO hints -->
 <div id="audio-perfect-pitch-config-pane">
-    <h1 class="centered">
-        Audio perfect pitch config
-    </h1>
+    <h1 class="centered" th:text="#{puzzles.configs.perfect_pitch.audio.header}"></h1>
     </br>
     <div>
         <div class="puzzle-config-property">
-            <label for="audio-perfect-pitch-target-number-of-puzzles">Number of puzzles:&nbsp;</label>
+            <label for="audio-perfect-pitch-target-number-of-puzzles" th:text="#{puzzles.configs.number_of_puzzles}"></label>
+            &nbsp;
             <input
                 id="audio-perfect-pitch-target-number-of-puzzles"
                 type="number"
@@ -19,7 +18,7 @@
             >
         </div>
         <div class="puzzle-config-property">
-            <label for="audio-perfect-pitch-stats-recording">Stats recording:</label>
+            <label for="audio-perfect-pitch-stats-recording" th:text="#{puzzles.configs.stats_recording}"></label>
             <input
                 id="audio-perfect-pitch-stats-recording"
                 type="checkbox"
@@ -29,21 +28,23 @@
                 hx-trigger="change"
                 hx-swap="none"
             >
-            <span class="hint" title="You can disable stats recording if you want to experiment or feel weak and you don't want your training session to ruin the global stats">ⓘ</span>
+            <span class="hint" th:title="#{puzzles.configs.perfect_pitch.stats_recording.hint}">ⓘ</span>
         </div>
         <div class="puzzle-config-piano-keyboard-property">
-            <label class="centered" for="piano-keyboard-AUDIO_PERFECT_PITCH_NOTES_PICKER">Notes:</label>
+            <label class="centered" for="piano-keyboard-AUDIO_PERFECT_PITCH_NOTES_PICKER">
+                <span th:text="#{puzzles.configs.perfect_pitch.audio.notes}"></span>
+                <span class="hint" th:title="#{puzzles.configs.perfect_pitch.audio.notes.hint}">ⓘ</span>
+            </label>
             <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${notesPickerPianoKeyboardModel})}"></div>
         </div>
         <div id="audio-perfect-pitch-root-note" class="puzzle-config-piano-keyboard-property" th:attr="hidden=${inputMode.name() == 'KEYBOARD_AS_PIANO'} ? null : 'hidden'">
-            <label for="piano-keyboard-AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER">
-                Root note
-                <!-- TODO hint -->
-            </label>
+            <label for="piano-keyboard-AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER" th:text="#{puzzles.configs.perfect_pitch.audio.root_note}">
+                <!-- TODO hint --></label>
             <div th:replace="~{piano/piano_keyboard(pianoKeyboardModel=${rootNotePickerPianoKeyboardModel})}"></div>
         </div>
         <div class="puzzle-config-property">
-            <label id="perfect-pitch-input-mode">Input mode:&nbsp;</label>
+            <label id="perfect-pitch-input-mode" th:text="#{puzzles.configs.perfect_pitch.audio.input_mode}"></label>
+            &nbsp;
             <select
                 id="perfect-pitch-input-mode"
                 th:name="${inputModeProp}"
@@ -54,14 +55,15 @@
                 <option
                     th:each="mode : ${inputModes}"
                     th:value="${mode.name()}"
-                    th:text="${mode.name()}"
+                    th:text="#{puzzles.configs.perfect_pitch.input_mode.__${mode.name()}__}"
                     th:selected="${inputMode == mode}"
                 ></option>
             </select>
-            <span class="hint" title="Piano on the screen - you will see a piano similar on the above one to make guess. Notes as text - you will have to type the note manually in scientific pitch notation">ⓘ</span>
+            <span class="hint" th:title="#{puzzles.configs.perfect_pitch.input_mode.hint}">ⓘ</span>
         </div>
         <div class="puzzle-config-property">
-            <label for="audio-perfect-pitch-guessing-piano-is-soundless">Guessing piano is soundless:&nbsp;</label>
+            <label for="audio-perfect-pitch-guessing-piano-is-soundless" th:text="#{puzzles.configs.perfect_pitch.audio.guessing_piano_is_soundless}"></label>
+            &nbsp;
             <input
                 id="audio-perfect-pitch-guessing-piano-is-soundless"
                 type="checkbox"
@@ -71,7 +73,7 @@
                 hx-trigger="change"
                 hx-swap="none"
             >
-            <span class="hint" title="It's more comfortable to make guesses when piano sounds are disabled. Try to guess with enabled sounds and you will understand">ⓘ</span>
+            <span class="hint" th:title="#{puzzles.configs.perfect_pitch.guessing_piano_is_soundless.hint}">ⓘ</span>
         </div>
         <div class="centered">
             <button
@@ -80,7 +82,8 @@
                 hx-trigger="click"
                 hx-post="/api/v1/session/perfect-pitch/audio/start"
                 hx-target="#main-content"
-            >Start</button>
+                th:text="#{exercises.start}"
+            ></button>
         </div>
     </div>
 </div>

@@ -146,6 +146,13 @@ htmx.on('htmx:afterRequest', function (evt) {
     }
 });
 
+htmx.on('htmx:load', function(e) {
+    var newElement = e.detail.elt
+    if (newElement.getAttribute('id') == 'language-picker') {
+        location.reload();
+    }
+});
+
 function ajax(method, url, options = {}, async = true) {
     const xhr = new XMLHttpRequest();
     xhr.open(method.toUpperCase(), url, async);

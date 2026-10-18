@@ -8,10 +8,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise.unknownExercise;
-import org.springframework.stereotype.Component;
 
-@Component
+@WebComponent
 public class PuzzleGuessingResponseBuilder {
 
     public <R extends GuessResponse> R build(final Exercise exercise, final SessionId sessionId) {

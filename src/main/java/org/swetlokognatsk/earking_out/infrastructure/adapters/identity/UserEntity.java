@@ -4,7 +4,6 @@ import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,9 +24,12 @@ public class UserEntity {
     // TODO use this from jakarta.validation. package: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
     // @NotNull
     private UUID uuid;
-    
+
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String lang;
 
     public int getId() {
         return id;
@@ -49,18 +51,29 @@ public class UserEntity {
         this.name = name;
     }
 
+    public String getLang() {
+        return lang;
+    }
+
+    // TODO validation
+    public void setLang(final String lang) {
+        this.lang = lang;
+    }
+
     public UserEntity() {
     }
 
-    public UserEntity(final String name) {
+    public UserEntity(final String name, final String lang) {
         this.uuid = UserUuid.random()
                 .uuid();
         this.name = name;
+        this.lang = lang;
     }
 
-    public UserEntity(final int id, final UUID uuid, final String name) {
+    public UserEntity(final int id, final UUID uuid, final String name, final String lang) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
+        this.lang = lang;
     }
 }
