@@ -55,7 +55,7 @@
                 <option
                     th:each="mode : ${inputModes}"
                     th:value="${mode.name()}"
-                    th:text="${mode.name()}"
+                    th:text="#{puzzles.configs.perfect_pitch.input_mode.__${mode.name()}__}"
                     th:selected="${inputMode == mode}"
                 ></option>
             </select>
