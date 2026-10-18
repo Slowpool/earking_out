@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
@@ -45,6 +46,9 @@ public class SpringJpaUserRepository implements UserRepository {
 
     public UserAggregate get(final UserId userId) {
         var userEntity = findById(userId);
+        if (userEntity == null) {
+            throw new AggregateNotFoundException();
+        }
         return mapUserEntityToAggregate(userEntity);
     }
 

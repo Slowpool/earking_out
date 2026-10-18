@@ -10,7 +10,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
-
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -24,12 +23,12 @@ public class MainController {
 
     @GetMapping("/")
     public ModelAndView home() {
-
+        // TODO refactoring
         var userRepository = DI.get(UserRepository.class);
         var userResolver = DI.get(UserResolver.class);
         var user = userRepository.get(userResolver.getCurrentUserId());
         var selectedLanguage = user.getLang();
-        
+
         var modelAndView = new ModelAndView("main");
         modelAndView.addObject("languages", Languages.values());
         modelAndView.addObject("selectedLanguage", selectedLanguage);
