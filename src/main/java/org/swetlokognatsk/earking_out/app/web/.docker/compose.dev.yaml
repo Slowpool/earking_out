@@ -3,11 +3,10 @@ services:
     container_name:
       'earking-out-web'
     build:
-      dockerfile: './Dockerfile'
+      dockerfile: './java/Dockerfile'
     volumes:
-      # TODO is it ok? upd: no. use PROJECT_ROOT=/path/to/project env variable and then ${PROJECT_ROOT}
-      - '../../../../../../../../target/classes:/app/BOOT-INF/classes:delegated'
-      - '../../../../../../../../target/lib:/app/BOOT-INF/lib:delegated'
+      - '${PROJECT_ROOT}/target/classes:/app/BOOT-INF/classes:delegated'
+      - '${PROJECT_ROOT}/target/lib:/app/BOOT-INF/lib:delegated'
     environment:
       SPRING_APPLICATION_NAME: "${APP_NAME}"
       SPRING_DATASOURCE_URL: "${POSTGRES_CONNECTION_URI}"
