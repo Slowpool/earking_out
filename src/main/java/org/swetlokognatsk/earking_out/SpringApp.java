@@ -24,7 +24,7 @@ public class SpringApp {
     public static final String IS_WEB_BUILD = "T(org.swetlokognatsk.earking_out.SpringApp).build == T(org.swetlokognatsk.earking_out.Build).WEB";
 
     private static final Locale DEFAULT_LOCALE = new Locale("ru");
-    private static final String LOCALE_ATTR = "lang";
+    public static final String LOCALE_SESSION_ATTR = "lang";
 
     @Bean
     Executor getTaskExecutor() {
@@ -45,11 +45,12 @@ public class SpringApp {
         return executor;
     }
 
+    // TODO decouple from web
     @Bean
     LocaleResolver localeResolver() {
         var localeResolver = new SessionLocaleResolver();
 
-        localeResolver.setLocaleAttributeName(LOCALE_ATTR);
+        localeResolver.setLocaleAttributeName(LOCALE_SESSION_ATTR);
 
         // TODO refactoring. it should be in a special locale resolver class
         localeResolver.setDefaultLocaleFunction(request -> {
@@ -65,7 +66,7 @@ public class SpringApp {
 
             var lang = user.getLang();
             var locale = new Locale(lang.value);
-            WebUtils.setSessionAttribute(request, LOCALE_ATTR, locale);
+            WebUtils.setSessionAttribute(request, LOCALE_SESSION_ATTR, locale);
 
             return locale;
         });

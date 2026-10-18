@@ -4,6 +4,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 import static org.springframework.http.ResponseEntity.*;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
+import org.swetlokognatsk.earking_out.SpringApp;
 import org.swetlokognatsk.earking_out.app.web.models.requests.PianoKeyboardActionRequest;
 import org.swetlokognatsk.earking_out.app.web.models.requests.perfectpitch.AudioPerfectPitchGuessRequest;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyPressingResponse;
@@ -24,6 +27,7 @@ import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzlePianoKeyPre
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzlePianoKeyReleasingResponse;
 import org.swetlokognatsk.earking_out.app.web.services.SimplePuzzleConfigPropertiesCaster;
 import org.swetlokognatsk.earking_out.app.web.services.renderers.perfectpitch.AudioPerfectPitchStatsRenderer;
+import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.ChangeLanguageResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.PuzzleGuessingResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.PuzzlePianoKeyPressingResponseBuilder;
 import org.swetlokognatsk.earking_out.app.web.services.responsebuilders.PuzzlePianoKeyReleasingResponseBuilder;
@@ -47,6 +51,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionSe
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import jakarta.servlet.http.HttpSession;
 
 // TODO mention about RPC api design
 /**
@@ -262,11 +267,19 @@ public class ApiController {
     }
 
     @PatchMapping("/language/change/{newLanguage}")
-    public ResponseEntity<?> changeLanguage(final Languages newLanguage) {
+    public ResponseEntity<?> changeLanguage(@PathVariable final Languages newLanguage, final HttpSession session) {
         DI.get(UserService.class)
                 .changeLanguage(newLanguage);
 
-        return ok(null);
+        saveLangToSession(session, newLanguage);
+        var response = DI.get(ChangeLanguageResponseBuilder.class)
+                .build(newLanguage);
+
+        return response;
+    }
+
+    private void saveLangToSession(final HttpSession session, final Languages newLanguage) {
+        session.setAttribute(SpringApp.LOCALE_SESSION_ATTR, new Locale(newLanguage.value));
     }
 
 }
