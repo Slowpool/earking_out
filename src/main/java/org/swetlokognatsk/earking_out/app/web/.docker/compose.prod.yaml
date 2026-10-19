@@ -1,6 +1,13 @@
 services:
   nginx:
     image: nginx:1.31.7
+    volumes:
+      - './nginx/etc/nginx/ssl:/etc/nginx/ssl:ro'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '1937:5005'
+
   earking-out-java:
     container_name:
       'earking-out-java'
