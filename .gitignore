@@ -27,3 +27,5 @@ target/
 
 .env
 *.pem
+
+sftp.json
