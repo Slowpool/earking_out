@@ -24,3 +24,5 @@ target/
 *.back
 
 .jqwik-database
+
+.env
