@@ -28,7 +28,7 @@
                 .on(VKID.OneTapInternalEvents.LOGIN_SUCCESS, function (payload) {
                     const code = payload.code;
                     const deviceId = payload.device_id;
-                
+                // TODO how is it possible without app secret from backend?
                     VKID.Auth.exchangeCode(code, deviceId)
                         .then(vkidOnCodeSuccess)
                         .catch(vkidOnError);

@@ -10,7 +10,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.identity.UserServ
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
-
 import java.util.Map;
 
 @Controller
@@ -20,18 +19,14 @@ public class OauthController {
     // TODO how to verify that this is indeed this user, not a manual request with self-written body?
     @PostMapping("/vk-id/callback")
     public ResponseEntity<?> vkidCallback(@RequestBody final Map<String, String> body) {
+        // TODO refactoring
         var userId = body.get("userId");
         var avatarUrl = body.get("avatar");
-        var userName = body.get("firstName") + " "
+        var userName = "%s %s".formatted(body.get("firstName"), body.get("lastName"));
+
         DI.get(UserService.class)
-            .attachOauthToCurrentUser(OauthProviders.VKID, userId, avatarUrl);
+                .ensureUserIsAttachedToOauth(OauthProviders.VKID, userId, avatarUrl, userName);
 
-        
-        var userId = DI.get(UserResolver.class)
-                .getCurrentUserId();
-
-        var userRepository = DI.get(UserRepository.class);
-        var user = userRepository.get(userId);
-        return ResponseEntity.ok("{\"bazinga\": true}");
+        return ResponseEntity.ok("{\"success\": true}");
     }
 }
