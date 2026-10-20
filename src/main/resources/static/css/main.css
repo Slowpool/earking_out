@@ -255,3 +255,14 @@ a {
 .block-on-main {
     margin-bottom: 20px;
 }
+
+#alpha-warning {
+    color: black;
+    border: solid 1px black;
+    background-color: rgb(224, 255, 84);
+    width: 100%;
+    padding: 4px;
+    border-radius: 4px;
+    text-align: center;
+    margin-bottom: 10px;
+}
