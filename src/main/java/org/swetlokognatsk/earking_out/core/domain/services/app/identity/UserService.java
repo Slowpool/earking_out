@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.domain.services.app.identity;
 
 import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.OauthProviders;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
@@ -24,5 +25,9 @@ public class UserService {
         var user = repository.get(userResolver.getCurrentUserId());
         user.changeLanguage(newLanguage);
         repository.save(user);
+    }
+
+    public void attachOauthToCurrentUser(final OauthProviders provider, final String providerUserId, final String pictureUrl, final String userName) {
+
     }
 }

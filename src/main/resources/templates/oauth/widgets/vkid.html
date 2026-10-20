@@ -9,7 +9,7 @@
                 redirectUrl: 'https://earking-out.ru/oauth/vk-id/callback',
                 responseMode: VKID.ConfigResponseMode.Callback,
                 source: VKID.ConfigSource.LOWCODE,
-                scope: '', // Complete the necessary accesses as needed
+                scope: 'vkid.profile_info',
             });
         
             const oneTap = new VKID.OneTap();
@@ -30,16 +30,32 @@
                     const deviceId = payload.device_id;
                 
                     VKID.Auth.exchangeCode(code, deviceId)
-                        .then(vkidOnSuccess)
+                        .then(vkidOnCodeSuccess)
                         .catch(vkidOnError);
                 });
             
-            function vkidOnSuccess(data) {
-                // Processing result
+            function vkidOnCodeSuccess(data) {
+                VKID.Auth.userInfo(data.access_token)
+                    .then(vkidOnUserInfoSuccess)
+                    .catch(vkidOnError);
+            }
+
+            function vkidOnUserInfoSuccess(response) {
+                var userInfo = response.user;
+                var neededUserInfo = {
+                    userId: userInfo.user_id,
+                    avatar: userInfo.avatar,
+                    firstName: userInfo.first_name,
+                    lastName: userInfo.last_name
+                };
+                finishVkidOauth(neededUserInfo, function(response) {
+                    alert('after sending the user info to db: ' + response);
+                    location.reload();
+                });
             }
         
             function vkidOnError(error) {
-                // Processing error
+                alert('something went wrong, try again');
             }
         }
     </script>

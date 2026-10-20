@@ -320,3 +320,10 @@ function validateNote(note) {
     let regexp = /^[A-G][b#]?[1-7]$/;
     return regexp.test(note);
 }
+
+function finishVkidOauth(userInfo, callback) {
+    ajax('post', 'https://earking-out.ru/oauth/vk-id/callback', {
+        handler: callback,
+        body: userInfo
+    }, false);
+}
