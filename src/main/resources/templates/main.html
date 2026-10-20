@@ -4,17 +4,23 @@
     <body>
         <div layout:fragment="content">
             <h1 th:text="#{main.header}"></h1>
-            <button id="github-login-button" class="action-button block-on-main">
-                <span th:text="#{github.login}"></span>
-                <img
-                    src="/GitHub_Invertocat_Black.svg"
-                    alt="GitHub"
-                    title="GitHub"
-                    class="relative-svg"
-                >
-            </button>
-            <div th:replace="~{oauth/widgets/vkid}"></div>
-            <div th:replace="~{language_picker}"></div>
+            <div id="auth-block block-on-main">
+                <div id="github-oauth" class="oauth-button">
+                    <button id="github-login-button" class="action-button">
+                        <span th:text="#{github.login}"></span>
+                        <img
+                            src="/GitHub_Invertocat_Black.svg"
+                            alt="GitHub"
+                            title="GitHub"
+                            class="relative-svg"
+                        >
+                    </button>
+                </div>
+                <div id="vkid-oauth" class="oauth-button">
+                    <div th:replace="~{oauth/widgets/vkid}"></div>
+                </div>
+            </div>
+            <div class="block-on-main" th:replace="~{language_picker}"></div>
         </div>
     </body>
 </html>
