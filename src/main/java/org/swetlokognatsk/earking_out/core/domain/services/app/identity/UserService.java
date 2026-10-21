@@ -33,12 +33,12 @@ public class UserService {
     // 2. new user (guest) just used oauth by some provider the first time - attach this oauth data to this guest user, change name, attach avatar
     // 3. technically new user (guest) used oauth provider, and he is has already registered via this provider before - for now, throw away the current guest user, save the id of already registered via oauth user to session
     // 4. user with already attach some oauth provider x decided to also attach oauth provider y - yet not implemented.
-    public void ensureUserIsAttachedToOauth(final OauthProviders provider, final String providerUserId, final String pictureUrl, final String userName) {
+    public void ensureUserIsAttachedToOauth(final OauthProviders provider, final String providerUserId, final String userName, final String pictureUrl) {
         var userId = DI.get(UserResolver.class)
                 .getCurrentUserId();
 
         var userRepository = DI.get(UserRepository.class);
         var user = userRepository.get(userId);
-
+        // TODO ensureUserIsAttachedToOauth
     }
 }

@@ -30,3 +30,4 @@ target/
 
 sftp.json
 settings.json
+node_modules

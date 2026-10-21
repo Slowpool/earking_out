@@ -31,6 +31,7 @@ module org.swetlokognatsk {
     requires thymeleaf.spring6;
     requires spring.session.core;
     requires org.apache.tomcat.embed.core;
+    requires java.net.http;
 
     // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them for learning/training. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
