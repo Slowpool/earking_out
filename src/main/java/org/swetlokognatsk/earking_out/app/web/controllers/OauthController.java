@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +13,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.identity.UserServ
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
-
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class OauthController {
         var tokens = exchangeVkidCode(code, state, deviceId, codeVerifier);
         // var accessToken = tokens.get("accessToken");
         // var userInfo = getUserInfo(accessToken);
-        
+
         // var vkUserId = userInfo.get("user_id");
         // var avatarUrl = userInfo.get("avatar");
         // var userName = "%s %s".formatted(userInfo.get("first_name"), userInfo.get("last_name"));
@@ -44,24 +44,27 @@ public class OauthController {
         return ResponseEntity.ok("{\"success\": true}");
     }
 
-    private Map<String,String> exchangeVkidCode(final String code, final String state, final String deviceId, final String codeVerifier) {
+    private Map<String, Object> exchangeVkidCode(final String code, final String state, final String deviceId, final String codeVerifier) {
+        var serviceId = System.getProperty("VKID_SERVICE_ID");
+
         var body = new HashMap<String, String>();
         body.put("grant_type", "authorization_code");
         body.put("code_verifier", codeVerifier);
         body.put("redirect_uri", "https://earking-out.ru/oauth/vk-id/callback");
         body.put("code", code);
+        body.put("service_id", serviceId);
         body.put("client_id", "54834142");
         body.put("device_id", deviceId);
         body.put("state", state);
 
         var restClient = RestClient.create();
-        restClient.post()
-            .uri("https://id.vk.com/oauth2/auth")
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .body(body)
-            .retrieve()
-            .body(Map.class);
+        var responseBody = restClient.post()
+                .uri("https://id.vk.com/oauth2/auth")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(body)
+                .retrieve()
+                .body(Map.class);
 
-        return 
+        return responseBody;
     }
 }
