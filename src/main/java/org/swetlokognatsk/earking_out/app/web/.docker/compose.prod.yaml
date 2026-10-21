@@ -1,13 +1,28 @@
 services:
-  earking-out-web:
-    container_name:
-      'earking-out-web'
-    build:
-      dockerfile: './Dockerfile'
+  nginx:
+    image: nginx:1.31.7
     volumes:
-      # TODO is it ok? upd: no. use PROJECT_ROOT=/path/to/project env variable and then ${PROJECT_ROOT}
-      - '../../../../../../../../target/classes:/app/BOOT-INF/classes:delegated'
-      - '../../../../../../../../target/lib:/app/BOOT-INF/lib:delegated'
+      - './nginx/etc/nginx/ssl:/etc/nginx/ssl:ro'
+      - './nginx/etc/nginx/conf.d/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
+      - './nginx/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '1937:5005'
+    depends_on:
+      - 'earking-out-java'
+
+  earking-out-java:
+    container_name:
+      'earking-out-java'
+    build:
+      dockerfile: './java/Dockerfile.prod'
+    user: "1000:1000"
+    volumes:
+    # TODO mount static files, templates, resources.
+    # TODO remove these lines
+      - '${PROJECT_ROOT}/target/classes:/app/BOOT-INF/classes:delegated'
+      - '${PROJECT_ROOT}/target/lib:/app/BOOT-INF/lib:delegated'
     environment:
       SPRING_APPLICATION_NAME: "${APP_NAME}"
       SPRING_DATASOURCE_URL: "${POSTGRES_CONNECTION_URI}"
@@ -16,9 +31,6 @@ services:
       # SPRING_DATA_REDIS_HOST: "${SPRING_DATA_REDIS_HOST}"
       # SPRING_DATA_REDIS_PORT: "${SPRING_DATA_REDIS_PORT}"
       # SPRING_DATA_REDIS_PASSWORD: "${SPRING_DATA_REDIS_PASSWORD}"
-    ports:
-      - "1941:8081"
-      - '5015:5005'
     depends_on:
       - postgres
 
@@ -30,8 +42,6 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - 'pg_db:/var/lib/postgresql'
-    ports:
-      - "5433:5432"
 
 volumes:
   pg_db:

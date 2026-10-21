@@ -20,4 +20,6 @@
 
     <include file="1792256448_add_lang_column_to_users.xml" relativeToChangelogFile="true" />
 
+    <include file="1792506598_insert_vkid_and_github_oauth_providers.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

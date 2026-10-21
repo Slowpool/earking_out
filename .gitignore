@@ -24,3 +24,10 @@ target/
 *.back
 
 .jqwik-database
+
+.env
+*.pem
+
+sftp.json
+settings.json
+node_modules

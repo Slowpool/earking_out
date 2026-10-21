@@ -98,5 +98,6 @@
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.infrastructure.web.adapters.piano=ALL-UNNAMED",
             ]
         }
-    ]
+    ],
+    "java.jdt.ls.java.home": "/usr/lib/jvm/java-26-openjdk-amd64"
 }

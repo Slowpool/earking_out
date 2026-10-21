@@ -6,6 +6,7 @@ import static java.util.Objects.requireNonNull;
 
 public final class UserAggregate extends AggregateRoot<UserId> {
 
+    // TODO add created_on
     private final UserUuid uuid;
     private final String name;
     private Languages lang;

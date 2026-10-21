@@ -25,6 +25,13 @@
         },
         {
             "type": "java",
+            "name": "Remote debug",
+            "request": "attach",
+            "hostName": "earking-out.ru",
+            "port": "1937",
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
