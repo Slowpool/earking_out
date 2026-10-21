@@ -27,27 +27,28 @@ public class OauthController {
         var code = body.get("code");
         var state = body.get("state");
         var deviceId = body.get("deviceId");
+        var codeVerifier = body.get("codeVerifier");
 
-        var tokens = exchangeVkidCode(code, state, deviceId);
-        var accessToken = tokens.get("accessToken");
-        var userInfo = getUserInfo(accessToken);
+        // var tokens = exchangeVkidCode(code, state, deviceId);
+        // var accessToken = tokens.get("accessToken");
+        // var userInfo = getUserInfo(accessToken);
         
-        var vkUserId = userInfo.get("user_id");
-        var avatarUrl = userInfo.get("avatar");
-        var userName = "%s %s".formatted(userInfo.get("first_name"), userInfo.get("last_name"));
+        // var vkUserId = userInfo.get("user_id");
+        // var avatarUrl = userInfo.get("avatar");
+        // var userName = "%s %s".formatted(userInfo.get("first_name"), userInfo.get("last_name"));
 
-        DI.get(UserService.class)
-                .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
+        // DI.get(UserService.class)
+        //         .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
 
         return ResponseEntity.ok("{\"success\": true}");
     }
 
-    private Map<String,String> exchangeVkidCode(final String code, final String state, final String deviceId, final String codeVerifier) {
-        var body = new HashMap<String, String>();
-        body.put("grant_type", "authorization_code");
-        body.put("code_verifier", codeVerifier);
+    // private Map<String,String> exchangeVkidCode(final String code, final String state, final String deviceId, final String codeVerifier) {
+    //     var body = new HashMap<String, String>();
+    //     body.put("grant_type", "authorization_code");
+    //     body.put("code_verifier", codeVerifier);
 
-        var uri = URI.create("https://id.vk.com/oauth2/auth");
-        var httpRequest = HttpRequest.newBuilder(uri);
-    }
+    //     var uri = URI.create("https://id.vk.com/oauth2/auth");
+    //     var httpRequest = HttpRequest.newBuilder(uri);
+    // }
 }

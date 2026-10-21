@@ -1,9 +1,9 @@
 import pkceChallenge from 'pkce-challenge';
 
-(async() => {
-    if('VKIDSDK' in window) {
+(async () => {
+    if ('VKIDSDK' in window) {
         const VKID = window.VKIDSDK;
-        const { codeVerifier, codeChallenge } = await pkceChallenge();
+        const { code_verifier, code_challenge } = await pkceChallenge();
 
         VKID.Config.init({
             app: 54834142,
@@ -11,7 +11,7 @@ import pkceChallenge from 'pkce-challenge';
             responseMode: VKID.ConfigResponseMode.Callback,
             source: VKID.ConfigSource.LOWCODE,
             scope: 'vkid.profile_info',
-            codeChallenge: codeChallenge,
+            codeChallenge: code_challenge,
             // TODO is it necessary?
             codeChallengeMethod: 'S256'
         });
@@ -36,7 +36,7 @@ import pkceChallenge from 'pkce-challenge';
                 code: payload.code,
                 state: payload.state,
                 deviceId: payload.device_id,
-                codeVerifier: codeVerifier
+                codeVerifier: code_verifier
             };
             finishVkidOauth(body, function (response) {
                 alert('after sending the user info to db: ' + response);
