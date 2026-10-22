@@ -24,7 +24,7 @@ import pkceChallenge from 'pkce-challenge';
             showAlternativeLogin: true,
             styles: {
                 borderRadius: 4,
-                width: 175,
+                width: 208,
                 height: 32
             }
         })
