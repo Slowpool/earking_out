@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +26,8 @@ public class OauthIdentityEntity {
     @Column(name = "user_id")
     public int userId;
 
-    // TODO
+    @Column(name = "provider_id")
+    @Convert(converter = OauthProviderConverter.class)
     public OauthProviders provider;
 
     @Column(name = "provider_user_id")
@@ -38,7 +40,6 @@ public class OauthIdentityEntity {
     @Column(name = "connected_at")
     private LocalDateTime connectedAt;
 
-    // TODO add
     @Setter
     @Column(name = "last_login_on")
     private LocalDateTime lastLoginOn;

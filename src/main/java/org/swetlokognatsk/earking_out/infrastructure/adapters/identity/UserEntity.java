@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.identity;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -9,6 +11,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,6 +35,10 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String lang;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<OauthIdentityEntity> oauthIdentities = new HashSet<>();
 
     public int getId() {
         return id;
@@ -60,6 +69,10 @@ public class UserEntity {
         this.lang = lang;
     }
 
+    public Set<OauthIdentityEntity> getOauthIdentities() {
+        return oauthIdentities;
+    }
+
     public UserEntity() {
     }
 
@@ -70,10 +83,11 @@ public class UserEntity {
         this.lang = lang;
     }
 
-    public UserEntity(final int id, final UUID uuid, final String name, final String lang) {
+    public UserEntity(final int id, final UUID uuid, final String name, final String lang, final Set<OauthIdentityEntity> oauthIdentities) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
         this.lang = lang;
+        this.oauthIdentities = oauthIdentities;
     }
 }

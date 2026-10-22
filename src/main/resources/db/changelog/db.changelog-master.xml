@@ -26,4 +26,6 @@
 
     <include file="1792660161_add_last_login_at_to_oauth_identity.xml" relativeToChangelogFile="true" />
 
+    <include file="1792662559_add_user_id_provider_id_unique_to_oauth_identity.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

@@ -45,8 +45,8 @@ public final class UserAggregate extends AggregateRoot<UserId> {
         this.lang = newLanguage;
     }
 
-    public boolean hasOauthIdentity(final OauthProviders provider, final String providerUserId) {
-        // TODO hasOauthIdentity
-        // TODO test first
+    public boolean hasOauthIdentity(final OauthProviders provider) {
+        return oauthIdentities.stream()
+                .anyMatch(oauthIdentity -> oauthIdentity.provider.equals(provider));
     }
 }

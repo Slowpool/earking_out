@@ -5,12 +5,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthIdentity;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthIdentityId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -93,8 +97,18 @@ public class SpringJpaUserRepository implements UserRepository {
         var userId = new UserId(userEntity.getId());
         var userUuid = new UserUuid(userEntity.getUuid());
         var lang = Languages.valueOf(userEntity.getLang());
+        var oauthIdentities = userEntity.getOauthIdentities()
+                .stream()
+                .map(this::mapOauthIdentityEntityToAggregate)
+                .collect(Collectors.toSet());
         return getUserAggregatesFactory()
-                .create(userId, userUuid, userEntity.getName(), lang);
+                .create(userId, userUuid, userEntity.getName(), lang, oauthIdentities);
+    }
+
+    private OauthIdentity mapOauthIdentityEntityToAggregate(final OauthIdentityEntity entity) {
+        var id = new OauthIdentityId(entity.getId());
+        var userId = new UserId(entity.userId);
+        return new OauthIdentity(id, userId, entity.provider, entity.providerUserId, entity.getPictureUrl(), entity.getConnectedAt(), entity.getLastLoginOn());
     }
 
     @Transactional
