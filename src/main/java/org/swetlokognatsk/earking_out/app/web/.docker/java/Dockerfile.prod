@@ -2,4 +2,4 @@ FROM eclipse-temurin:26-jre
 
 WORKDIR /app
 # TODO launch .jar
-ENTRYPOINT ["java", "-cp", "/app/BOOT-INF/classes:/app/BOOT-INF/lib/*", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-Dspring.profiles.active=dev,web", "-DVKID_SERVICE_ID=$VKID_SERVICE_ID", "org.swetlokognatsk.earking_out.WebEntryPoint"]
+ENTRYPOINT ["java", "-cp", "/app/BOOT-INF/classes:/app/BOOT-INF/lib/*", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-Dspring.profiles.active=dev,web", "org.swetlokognatsk.earking_out.WebEntryPoint"]

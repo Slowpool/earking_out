@@ -1,8 +1,10 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,17 +47,18 @@ public class OauthController {
     }
 
     private Map<String, Object> exchangeVkidCode(final String code, final String state, final String deviceId, final String codeVerifier) {
-        var serviceId = System.getProperty("VKID_SERVICE_ID");
+        var serviceId = DI.get(Environment.class)
+            .getProperty("VKID_SERVICE_ID");
 
-        var body = new HashMap<String, String>();
-        body.put("grant_type", "authorization_code");
-        body.put("code_verifier", codeVerifier);
-        body.put("redirect_uri", "https://earking-out.ru/oauth/vk-id/callback");
-        body.put("code", code);
-        body.put("service_id", serviceId);
-        body.put("client_id", "54834142");
-        body.put("device_id", deviceId);
-        body.put("state", state);
+        var body = new LinkedMultiValueMap<String, String>();
+        body.add("grant_type", "authorization_code");
+        body.add("code_verifier", codeVerifier);
+        body.add("redirect_uri", "https://earking-out.ru/oauth/vk-id/callback");
+        body.add("code", code);
+        body.add("service_token", serviceId);
+        body.add("client_id", "54834142");
+        body.add("device_id", deviceId);
+        body.add("state", state);
 
         var restClient = RestClient.create();
         var responseBody = restClient.post()
