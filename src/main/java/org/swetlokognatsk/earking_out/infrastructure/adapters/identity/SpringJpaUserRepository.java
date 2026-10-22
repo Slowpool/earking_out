@@ -4,12 +4,14 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
+import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -50,6 +52,37 @@ public class SpringJpaUserRepository implements UserRepository {
             throw new AggregateNotFoundException();
         }
         return mapUserEntityToAggregate(userEntity);
+    }
+
+    // TODO according clean ddd, it should be this way, in userSerivce:
+    // 
+    // var user = repository.get();
+    // user.attachNewOauthIdentity(new NewOauthIdentity(/* the same properties as in OauthIdentity except Id */)); // also changing the user name
+    // repository.save(user);
+    // 
+    // then, inside repository:
+    //
+    // users.save(user); // saving new name
+    // oauthIdentities.save(user.newOauthIdentity); // creates OauthIdenity, assigning new id
+    //
+    @Transactional
+    public void attachOauthIdentity(final UserId userId, final OauthProviders provider, final String providerUserId, final String userName, final String pictureUrl) {
+        saveNewOauthIdentity(userId, provider, providerUserId, pictureUrl);
+
+        updateUserName(userId, userName);
+    }
+
+    @Transactional
+    private void saveNewOauthIdentity(final UserId userId, final OauthProviders provider, final String providerUserId, final String pictureUrl) {
+        var newOauthIdentity = new OauthIdentityEntity(userId.id(), provider, providerUserId, pictureUrl, LocalDateTime.now(), LocalDateTime.now());
+        entityManager.persist(newOauthIdentity);
+    }
+
+    @Transactional
+    private void updateUserName(final UserId userId, final String userName) {
+        var user = get(userId);
+        user.setName(userName);
+        save(user);
     }
 
     private UserEntity findById(final UserId userId) {

@@ -9,20 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestClient;
-import org.swetlokognatsk.earking_out.app.web.services.UriBuilder;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.OauthProviders;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
 import org.swetlokognatsk.earking_out.core.domain.services.app.identity.UserService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
-import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
-import java.net.URI;
-import java.net.http.HttpRequest;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/oauth")
 public class OauthController {
+    public static final String CLIENT_ID = "54834142";
 
     // TODO refactoring
     @PostMapping("/vk-id/callback")
@@ -33,22 +28,23 @@ public class OauthController {
         var codeVerifier = body.get("codeVerifier");
 
         var tokens = exchangeVkidCode(code, state, deviceId, codeVerifier);
-        // var accessToken = tokens.get("accessToken");
-        // var userInfo = getUserInfo(accessToken);
+        var accessToken = (String) tokens.get("access_token");
+        var userInfo = getUserInfo(accessToken);
 
-        // var vkUserId = userInfo.get("user_id");
-        // var avatarUrl = userInfo.get("avatar");
-        // var userName = "%s %s".formatted(userInfo.get("first_name"), userInfo.get("last_name"));
+        var vkUserId = userInfo.get("user_id");
+        var avatarUrl = userInfo.get("avatar");
+        var userName = "%s %s".formatted(userInfo.get("first_name"), userInfo.get("last_name"));
 
-        // DI.get(UserService.class)
-        //         .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
+        DI.get(UserService.class)
+                .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
 
         return ResponseEntity.ok("{\"success\": true}");
     }
 
-    private Map<String, Object> exchangeVkidCode(final String code, final String state, final String deviceId, final String codeVerifier) {
+    private Map<String, Object> exchangeVkidCode(final String code, final String state, final String deviceId,
+            final String codeVerifier) {
         var serviceId = DI.get(Environment.class)
-            .getProperty("VKID_SERVICE_ID");
+                .getProperty("VKID_SERVICE_ID");
 
         var body = new LinkedMultiValueMap<String, String>();
         body.add("grant_type", "authorization_code");
@@ -56,7 +52,7 @@ public class OauthController {
         body.add("redirect_uri", "https://earking-out.ru/oauth/vk-id/callback");
         body.add("code", code);
         body.add("service_token", serviceId);
-        body.add("client_id", "54834142");
+        body.add("client_id", CLIENT_ID);
         body.add("device_id", deviceId);
         body.add("state", state);
 
@@ -69,5 +65,22 @@ public class OauthController {
                 .body(Map.class);
 
         return responseBody;
+    }
+
+    private Map<String, String> getUserInfo(final String accessToken) {
+        var body = new LinkedMultiValueMap<String, String>();
+
+        body.add("access_token", accessToken);
+        body.add("client_id", CLIENT_ID);
+
+        var restClient = RestClient.create();
+        var responseBody = restClient.post()
+                .uri("https://id.vk.com/oauth2/user_info")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(body)
+                .retrieve()
+                .body(Map.class);
+
+        return (Map<String, String>) responseBody.get("user");
     }
 }
