@@ -149,7 +149,7 @@ public class SpringJpaUserRepository implements UserRepository {
     private OauthIdentityEntity findOauthIdentity(final OauthProviders provider, final String providerUserId) {
         var jpql = """
                     SELECT oauthIdentity
-                    FROM OauthIdentity oauthIdentity
+                    FROM OauthIdentityEntity oauthIdentity
                     WHERE oauthIdentity.provider = :provider
                         AND oauthIdentity.providerUserId = :providerUserId
                 """;
