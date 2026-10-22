@@ -28,9 +28,9 @@ public class MainController {
         var userRepository = DI.get(UserRepository.class);
         var userResolver = DI.get(UserResolver.class);
         var user = userRepository.get(userResolver.getCurrentUserId());
-        modelAndView.addObject("user_name", user.getName());
-        modelAndView.addObject("user_picture_url", user.getPictureUrl());
-        
+        modelAndView.addObject("userName", user.getName());
+        modelAndView.addObject("userPictureUrl", user.getPictureUrl());
+        modelAndView.addObject("userIsGuest", user.isGuest());
         modelAndView.addObject("languages", Languages.values());
 
         var selectedLanguage = user.getLang();

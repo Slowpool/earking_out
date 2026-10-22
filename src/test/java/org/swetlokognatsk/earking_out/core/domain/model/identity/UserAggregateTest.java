@@ -27,12 +27,17 @@ public class UserAggregateTest {
         return new OauthIdentity(new OauthIdentityId(1), new UserId(1), oauthProvider, ANY_PROVIDER_USER_ID, "", LocalDateTime.now(), LocalDateTime.now());
     }
 
-    @Test
-    public void positiveHasOauthIdentityForAllProviders() {
+    private Set<OauthIdentity> createOauthIdentitiesForAllProviders() {
         var oauthIdentities = new HashSet<OauthIdentity>();
         for (var oauthProvider : OauthProviders.values()) {
             oauthIdentities.add(createAnyOauthIdentity(oauthProvider));
         }
+        return oauthIdentities;
+    }
+
+    @Test
+    public void positiveHasOauthIdentityForAllProviders() {
+        var oauthIdentities = createOauthIdentitiesForAllProviders();
 
         var user = createAnyUser(oauthIdentities);
 
@@ -61,5 +66,33 @@ public class UserAggregateTest {
         var user = createAnyUser(oauthIdentities);
 
         assertFalse(user.hasOauthIdentity(OauthProviders.VKID));
+    }
+
+    @Test
+    public void positiveIsGuest() {
+        var oauthIdentities = new HashSet<OauthIdentity>();
+
+        var user = createAnyUser(oauthIdentities);
+
+        assertTrue(user.isGuest());
+    }
+
+    @Test
+    public void isGuestWithOneOauthIdentity() {
+        var oauthIdentities = new HashSet<OauthIdentity>();
+        oauthIdentities.add(createAnyOauthIdentity(OauthProviders.Github));
+
+        var user = createAnyUser(oauthIdentities);
+
+        assertFalse(user.isGuest());
+    }
+
+    @Test
+    public void isGuestWithAllOauthIdentities() {
+        var oauthIdentities = createOauthIdentitiesForAllProviders();
+
+        var user = createAnyUser(oauthIdentities);
+
+        assertFalse(user.isGuest());
     }
 }

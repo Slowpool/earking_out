@@ -4,7 +4,7 @@
     <body>
         <div layout:fragment="content">
             <h1 th:text="#{main.header}"></h1>
-            <div id="auth-block block-on-main">
+            <div th:if="${userIsGuest}" id="auth-block block-on-main">
                 <div id="github-oauth" class="oauth-button">
                     <button id="github-login-button" class="action-button">
                         <span th:text="#{github.login}"></span>

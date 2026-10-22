@@ -58,4 +58,8 @@ public final class UserAggregate extends AggregateRoot<UserId> {
         return oauthIdentities.stream()
                 .anyMatch(oauthIdentity -> oauthIdentity.provider.equals(provider));
     }
+
+    public boolean isGuest() {
+        return oauthIdentities.size() == 0;
+    }
 }

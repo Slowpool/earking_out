@@ -25,8 +25,8 @@
                 </nav>
             </div>
             <div class="user-small-info">
-                <img class="small-user-picture" th:src="${(user_picture_url != null && user_picture_url != '') ? user_picture_url : '/default_user_picture.png'}">
-                <span class="small-user-name" th:text="${user_name}"></span>
+                <img class="small-user-picture" th:src="${(userPictureUrl != null && userPictureUrl != '') ? userPictureUrl : '/default_user_picture.png'}">
+                <span class="small-user-name" th:text="${userName}"></span>
             </div>
         </header>
         <main id="main-content" layout:fragment="content">
