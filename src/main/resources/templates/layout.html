@@ -12,20 +12,22 @@
             ⓘ
         </div>
         <header id="main-header">
-            <nav class="nav-item">
-                <a id="home-link" href="/" th:text="#{app.name}"></a>
-            </nav>
-            <div th:replace="~{exercises}"></div>
-            <nav class="nav-item">
-                <a
-                    href="https://github.com/Slowpool/earking_out"
-                    target="_blank"
-                    title="GitHub"
-                >
-                <span th:text="#{github.source}"></span>
-                    <img src="/GitHub_Invertocat_Black.svg" alt="GitHub" class="relative-svg">
-                </a>
-            </nav>
+            <div class="nav-bar">
+                <nav class="nav-item">
+                    <a id="home-link" href="/" th:text="#{app.name}"></a>
+                </nav>
+                <div th:replace="~{exercises}"></div>
+                <nav class="nav-item">
+                    <a href="https://github.com/Slowpool/earking_out" target="_blank" title="GitHub">
+                        <span th:text="#{github.source}"></span>
+                        <img src="/GitHub_Invertocat_Black.svg" alt="GitHub" class="relative-svg">
+                    </a>
+                </nav>
+            </div>
+            <div class="user-small-info">
+                <img class="small-user-picture" th:src="${(user_picture_url != null && user_picture_url != '') ? user_picture_url : '/default_user_picture.png'}">
+                <span class="small-user-name" th:text="${user_name}"></span>
+            </div>
         </header>
         <main id="main-content" layout:fragment="content">
             <p></p>

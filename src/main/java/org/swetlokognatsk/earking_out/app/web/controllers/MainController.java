@@ -23,14 +23,17 @@ public class MainController {
 
     @GetMapping("/")
     public ModelAndView home() {
+        var modelAndView = new ModelAndView("main");
         // TODO refactoring
         var userRepository = DI.get(UserRepository.class);
         var userResolver = DI.get(UserResolver.class);
         var user = userRepository.get(userResolver.getCurrentUserId());
-        var selectedLanguage = user.getLang();
-
-        var modelAndView = new ModelAndView("main");
+        modelAndView.addObject("user_name", user.getName());
+        modelAndView.addObject("user_picture_url", user.getPictureUrl());
+        
         modelAndView.addObject("languages", Languages.values());
+
+        var selectedLanguage = user.getLang();
         modelAndView.addObject("selectedLanguage", selectedLanguage);
         return modelAndView;
     }

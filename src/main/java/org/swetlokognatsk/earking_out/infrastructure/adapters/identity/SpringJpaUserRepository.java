@@ -50,6 +50,7 @@ public class SpringJpaUserRepository implements UserRepository {
         return mapUserEntityToAggregate(userEntity);
     }
 
+    @Transactional
     public UserAggregate get(final UserId userId) {
         var userEntity = findById(userId);
         if (userEntity == null) {
@@ -89,10 +90,12 @@ public class SpringJpaUserRepository implements UserRepository {
         save(user);
     }
 
+    @Transactional
     private UserEntity findById(final UserId userId) {
         return entityManager.find(UserEntity.class, userId.id());
     }
 
+    @Transactional
     private UserAggregate mapUserEntityToAggregate(final UserEntity userEntity) {
         var userId = new UserId(userEntity.getId());
         var userUuid = new UserUuid(userEntity.getUuid());

@@ -32,6 +32,15 @@ public final class UserAggregate extends AggregateRoot<UserId> {
         return lang;
     }
 
+    public String getPictureUrl() {
+        return oauthIdentities.size() == 0
+                ? null
+                // yet taking randomnly
+                : oauthIdentities.iterator()
+                        .next()
+                        .getPictureUrl();
+    }
+
     public UserAggregate(final UserId id, final UserUuid uuid, final String name, @NonNull final Languages lang, @NonNull final Set<OauthIdentity> oauthIdentities) {
         super(id);
 

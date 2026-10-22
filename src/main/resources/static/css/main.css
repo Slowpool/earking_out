@@ -142,6 +142,10 @@ a {
 
 #main-header {
     display: flex;
+}
+
+.nav-bar {
+    display: flex;
     gap: 10px;
 }
 
@@ -156,6 +160,7 @@ a {
     background: #00b4d8;
     border-radius: 4px;
     color: #000000;
+    height: max-content;
 }
 
 .dropdown-btn {
@@ -269,4 +274,18 @@ a {
 
 .oauth-button {
     margin-bottom: 10px;
+}
+
+.user-small-info {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.small-user-name {}
+
+.small-user-picture {
+    width: 50px;
+    border-radius: 25px;
 }
