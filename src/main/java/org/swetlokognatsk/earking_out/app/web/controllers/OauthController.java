@@ -9,10 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestClient;
+import static org.swetlokognatsk.earking_out.app.web.SessionAttributes.*;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.DuplicateOauthAuthenticationException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
 import org.swetlokognatsk.earking_out.core.domain.services.app.identity.UserService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import jakarta.servlet.http.HttpSession;
 import java.util.Map;
+import static org.springframework.http.ResponseEntity.*;
 
 @Controller
 @RequestMapping("/oauth")
@@ -21,7 +26,7 @@ public class OauthController {
 
     // TODO refactoring
     @PostMapping("/vk-id/callback")
-    public ResponseEntity<?> vkidCallback(@RequestBody final Map<String, String> body) {
+    public ResponseEntity<?> vkidCallback(@RequestBody final Map<String, String> body, final HttpSession session) {
         var code = body.get("code");
         var state = body.get("state");
         var deviceId = body.get("deviceId");
@@ -35,10 +40,22 @@ public class OauthController {
         var avatarUrl = userInfo.get("avatar");
         var userName = "%s %s".formatted(userInfo.get("first_name"), userInfo.get("last_name"));
 
-        DI.get(UserService.class)
-                .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
+        try {
+            var actualUserId = DI.get(UserService.class)
+                    .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
+            if (actualUserId.isPresent()) {
+                saveUserToSession(session, actualUserId.get());
+            }
+        } catch (DuplicateOauthAuthenticationException e) {
+            return status(409)
+                    .body("attempt to login under the same oauth provider twice: " + e.provider.name());
+        }
 
-        return ResponseEntity.ok("{\"success\": true}");
+        return ok("{\"success\": true}");
+    }
+
+    private void saveUserToSession(final HttpSession session, final UserId actualUserId) {
+        session.setAttribute(USER_ID, actualUserId);
     }
 
     private Map<String, Object> exchangeVkidCode(final String code, final String state, final String deviceId,

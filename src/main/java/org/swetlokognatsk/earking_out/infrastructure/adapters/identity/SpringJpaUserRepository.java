@@ -126,4 +126,42 @@ public class SpringJpaUserRepository implements UserRepository {
         entity.setName(userAggregate.getName());
         return entity;
     }
+
+    @Transactional
+    public boolean hasOauthIdentity(final OauthProviders provider, final String providerUserId) {
+        boolean isFound;
+        try {
+            findOauthIdentity(provider, providerUserId);
+            isFound = true;
+        } catch (AggregateNotFoundException e) {
+            isFound = false;
+        }
+        return isFound;
+    }
+
+    @Transactional
+    public OauthIdentity getOauthIdentity(final OauthProviders provider, final String providerUserId) {
+        var entity = findOauthIdentity(provider, providerUserId);
+        return mapOauthIdentityEntityToAggregate(entity);
+    }
+
+    @Transactional
+    private OauthIdentityEntity findOauthIdentity(final OauthProviders provider, final String providerUserId) {
+        var jpql = """
+                    SELECT oauthIdentity
+                    FROM OauthIdentity oauthIdentity
+                    WHERE oauthIdentity.provider = :provider
+                        AND oauthIdentity.providerUserId = :providerUserId
+                """;
+        var oauthIdentity = entityManager.createQuery(jpql, OauthIdentityEntity.class)
+                .setParameter("provider", provider)
+                .setParameter("providerUserId", providerUserId)
+                .getSingleResultOrNull();
+
+        if (oauthIdentity == null) {
+            throw new AggregateNotFoundException();
+        }
+
+        return oauthIdentity;
+    }
 }

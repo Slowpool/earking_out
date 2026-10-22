@@ -3,8 +3,8 @@ package org.swetlokognatsk.earking_out.core.domain.services.app.identity;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.DuplicateOauthAuthenticationException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
@@ -34,17 +34,18 @@ public class UserService {
     // 3. technically new user (guest) used oauth provider, and he is has already registered via this provider before - for now, throw away the current guest user, save the id of already registered via oauth user to session
     // 4. user with already attach some oauth provider x decided to also attach oauth provider y - yet not implemented.
     /**
-     * @return actualUserId
+     * @return Optional<UserId> actualUserId - only when the user attached to oauth differs from the current user
      */
-    public Optional<UserId> ensureUserIsAttachedToOauth(final OauthProviders provider, final String providerUserId, final String userName, final String pictureUrl) {
+    public Optional<UserId> ensureUserIsAttachedToOauth(final OauthProviders provider, final String providerUserId, final String userName, final String pictureUrl) throws DuplicateOauthAuthenticationException {
         var userId = userResolver.getCurrentUserId();
         var user = repository.get(userId);
 
         UserId actualUserId;
         if (user.hasOauthIdentity(provider)) {
-            // TODO throw away the current user, make oauthIdentity's user as current, return userId to set it to session
-            // actualUserId = new
-            actualUserId = null;
+            throw new DuplicateOauthAuthenticationException(provider);
+        } else if (repository.hasOauthIdentity(provider, providerUserId)) {
+            var oauthIdentity = repository.getOauthIdentity(provider, providerUserId);
+            actualUserId = oauthIdentity.userId;
         } else {
             repository.attachOauthIdentity(userId, provider, providerUserId, userName, pictureUrl);
             actualUserId = null;
