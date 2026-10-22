@@ -123,6 +123,7 @@ public class SpringJpaUserRepository implements UserRepository {
     private UserEntity mapUserAggregateToEntity(final UserAggregate userAggregate) {
         var entity = findById(userAggregate.getId());
         entity.setLang(userAggregate.getLang().value);
+        entity.setName(userAggregate.getName());
         return entity;
     }
 }

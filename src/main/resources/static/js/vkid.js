@@ -39,7 +39,7 @@ import pkceChallenge from 'pkce-challenge';
                 codeVerifier: code_verifier
             };
             finishVkidOauth(body, function (response) {
-                alert('after sending the user info to db: ' + response);
+                // TODO check response, do something if it's not 200
                 location.reload();
             });
         }
