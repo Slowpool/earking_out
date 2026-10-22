@@ -8,9 +8,10 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.PerfectPitchSessionStatsService;
+import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
 import lombok.AllArgsConstructor;
 
-@Component
+@WebComponent
 @AllArgsConstructor
 public class AudioPerfectPitchStatsRenderer {
 
