@@ -142,6 +142,10 @@ a {
 
 #main-header {
     display: flex;
+}
+
+.nav-bar {
+    display: flex;
     gap: 10px;
 }
 
@@ -156,6 +160,7 @@ a {
     background: #00b4d8;
     border-radius: 4px;
     color: #000000;
+    height: max-content;
 }
 
 .dropdown-btn {
@@ -213,7 +218,8 @@ a {
 }
 
 .nav-item,
-.action-button {
+.action-button,
+.config-error {
     padding-block: 4px;
     padding-inline: 16px;
 }
@@ -226,7 +232,7 @@ a {
 }
 
 .action-button.finish {
-    margin-top: 30vh;
+    margin-top: 25vh;
 }
 
 #perfect-pitch-guessing-textbox {
@@ -269,4 +275,47 @@ a {
 
 .oauth-button {
     margin-bottom: 10px;
+}
+
+.user-small-info {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.small-user-name {}
+
+.small-user-picture {
+    width: 50px;
+    border-radius: 25px;
+}
+
+.config-errors {
+    margin-block: 10px;
+
+}
+
+.config-error {
+    background-color: #00b4d8;
+    border-radius: 4px;
+    width: max-content;
+    margin-block: 10px;
+}
+
+.error-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ff3333;
+    color: #ffffff;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 0.85em;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    vertical-align: middle;
+    line-height: 1;
+    margin-left: 5px;
 }

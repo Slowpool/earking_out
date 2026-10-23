@@ -12,7 +12,7 @@ abstract class FinalizedPerfectPitchConfigValidator<PPCA extends PerfectPitchCon
         var errors = super.gatherAllErrors(aggregate);
 
         if (aggregate.getNormalizedNotesForPuzzle().length == 0) {
-            errors.add(new Error("%s must have at least one note".formatted(NORMALIZED_NOTES_FOR_PUZZLE_PROP)));
+            errors.add(new Error(NORMALIZED_NOTES_FOR_PUZZLE_PROP, "puzzles.configs.perfect_pitch.audio.notes", "puzzles.configs.perfect_pitch.audio.notes.invalid_value.no_notes"));
         }
 
         return errors;

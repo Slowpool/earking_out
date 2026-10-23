@@ -12,20 +12,23 @@
             ⓘ
         </div>
         <header id="main-header">
-            <nav class="nav-item">
-                <a id="home-link" href="/" th:text="#{app.name}"></a>
-            </nav>
-            <div th:replace="~{exercises}"></div>
-            <nav class="nav-item">
-                <a
-                    href="https://github.com/Slowpool/earking_out"
-                    target="_blank"
-                    title="GitHub"
-                >
-                <span th:text="#{github.source}"></span>
-                    <img src="/GitHub_Invertocat_Black.svg" alt="GitHub" class="relative-svg">
-                </a>
-            </nav>
+            <div class="nav-bar">
+                <nav class="nav-item">
+                    <a id="home-link" href="/" th:text="#{app.name}"></a>
+                </nav>
+                <div th:replace="~{exercises}"></div>
+                <nav class="nav-item">
+                    <a href="https://github.com/Slowpool/earking_out" target="_blank" title="GitHub">
+                        <span th:text="#{github.source}"></span>
+                        <img src="/GitHub_Invertocat_Black.svg" alt="GitHub" class="relative-svg">
+                    </a>
+                </nav>
+            </div>
+            <div class="user-small-info">
+                <button th:if="${!userIsGuest}" class="action-button" th:text="#{identity.exit}" hx-post="/identity/sign-out" hx-trigger="click" hx-swap="none"></button>
+                <img class="small-user-picture" th:src="${(userPictureUrl != null && userPictureUrl != '') ? userPictureUrl : '/default_user_picture.png'}">
+                <span class="small-user-name" th:text="${userName}"></span>
+            </div>
         </header>
         <main id="main-content" layout:fragment="content">
             <p></p>

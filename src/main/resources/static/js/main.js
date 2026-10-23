@@ -208,9 +208,10 @@ function playPianoKeySound(pianoKey) {
     }
 
     var pianoKeyNumber = pianoKey.getAttribute('data-keyNumber');
-    if (playingAudios.length > 1) {
-        stopAllSounds();
-    }
+    // TODO think about it
+    // if (playingAudios.length > 88) {
+    //     stopAllSounds();
+    // }
 
     const audioPath = `/sounds/piano_keys/key${pianoKeyNumber}.wav`;
     const audio = new Audio(audioPath);

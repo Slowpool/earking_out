@@ -4,6 +4,8 @@ import pkceChallenge from 'pkce-challenge';
     if ('VKIDSDK' in window) {
         const VKID = window.VKIDSDK;
         const { code_verifier, code_challenge } = await pkceChallenge();
+        // TODO weird `=` syntax, Lax? Secure? path? max-age? does it remove other cookies?
+        document.cookie = `vkid_pkce_code_verifier=${code_verifier}; path=/; max-age=300; SameSite=Lax; Secure`;
 
         VKID.Config.init({
             app: 54834142,
@@ -19,12 +21,12 @@ import pkceChallenge from 'pkce-challenge';
         const oneTap = new VKID.OneTap();
 
         oneTap.render({
-            container: document.currentScript.parentElement,
+            container: document.querySelector("#vkid-onetap-button"),
             fastAuthEnabled: false,
             showAlternativeLogin: true,
             styles: {
                 borderRadius: 4,
-                width: 175,
+                width: 208,
                 height: 32
             }
         })
@@ -39,7 +41,7 @@ import pkceChallenge from 'pkce-challenge';
                 codeVerifier: code_verifier
             };
             finishVkidOauth(body, function (response) {
-                alert('after sending the user info to db: ' + response);
+                // TODO check response, do something if it's not 200
                 location.reload();
             });
         }

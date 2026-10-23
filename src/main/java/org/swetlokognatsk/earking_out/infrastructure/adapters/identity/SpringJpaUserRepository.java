@@ -4,12 +4,18 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
+import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthIdentity;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthIdentityId;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -44,6 +50,7 @@ public class SpringJpaUserRepository implements UserRepository {
         return mapUserEntityToAggregate(userEntity);
     }
 
+    @Transactional
     public UserAggregate get(final UserId userId) {
         var userEntity = findById(userId);
         if (userEntity == null) {
@@ -52,16 +59,59 @@ public class SpringJpaUserRepository implements UserRepository {
         return mapUserEntityToAggregate(userEntity);
     }
 
+    // TODO according clean ddd, it should be this way, in userSerivce:
+    // 
+    // var user = repository.get();
+    // user.attachNewOauthIdentity(new NewOauthIdentity(/* the same properties as in OauthIdentity except Id */)); // also changing the user name
+    // repository.save(user);
+    // 
+    // then, inside repository:
+    //
+    // users.save(user); // saving new name
+    // oauthIdentities.save(user.newOauthIdentity); // creates OauthIdenity, assigning new id
+    //
+    @Transactional
+    public void attachOauthIdentity(final UserId userId, final OauthProviders provider, final String providerUserId, final String userName, final String pictureUrl) {
+        saveNewOauthIdentity(userId, provider, providerUserId, pictureUrl);
+
+        updateUserName(userId, userName);
+    }
+
+    @Transactional
+    private void saveNewOauthIdentity(final UserId userId, final OauthProviders provider, final String providerUserId, final String pictureUrl) {
+        var newOauthIdentity = new OauthIdentityEntity(userId.id(), provider, providerUserId, pictureUrl, LocalDateTime.now(), LocalDateTime.now());
+        entityManager.persist(newOauthIdentity);
+    }
+
+    @Transactional
+    private void updateUserName(final UserId userId, final String userName) {
+        var user = get(userId);
+        user.setName(userName);
+        save(user);
+    }
+
+    @Transactional
     private UserEntity findById(final UserId userId) {
         return entityManager.find(UserEntity.class, userId.id());
     }
 
+    @Transactional
     private UserAggregate mapUserEntityToAggregate(final UserEntity userEntity) {
         var userId = new UserId(userEntity.getId());
         var userUuid = new UserUuid(userEntity.getUuid());
         var lang = Languages.valueOf(userEntity.getLang());
+        var oauthIdentities = userEntity.getOauthIdentities()
+                .stream()
+                .map(this::mapOauthIdentityEntityToAggregate)
+                .collect(Collectors.toSet());
         return getUserAggregatesFactory()
-                .create(userId, userUuid, userEntity.getName(), lang);
+                .create(userId, userUuid, userEntity.getName(), lang, oauthIdentities);
+    }
+
+    private OauthIdentity mapOauthIdentityEntityToAggregate(final OauthIdentityEntity entity) {
+        var id = new OauthIdentityId(entity.getId());
+        var userId = new UserId(entity.userId);
+        return new OauthIdentity(id, userId, entity.provider, entity.providerUserId, entity.getPictureUrl(), entity.getConnectedAt(), entity.getLastLoginOn());
     }
 
     @Transactional
@@ -73,6 +123,45 @@ public class SpringJpaUserRepository implements UserRepository {
     private UserEntity mapUserAggregateToEntity(final UserAggregate userAggregate) {
         var entity = findById(userAggregate.getId());
         entity.setLang(userAggregate.getLang().value);
+        entity.setName(userAggregate.getName());
         return entity;
+    }
+
+    @Transactional
+    public boolean hasOauthIdentity(final OauthProviders provider, final String providerUserId) {
+        boolean isFound;
+        try {
+            findOauthIdentity(provider, providerUserId);
+            isFound = true;
+        } catch (AggregateNotFoundException e) {
+            isFound = false;
+        }
+        return isFound;
+    }
+
+    @Transactional
+    public OauthIdentity getOauthIdentity(final OauthProviders provider, final String providerUserId) {
+        var entity = findOauthIdentity(provider, providerUserId);
+        return mapOauthIdentityEntityToAggregate(entity);
+    }
+
+    @Transactional
+    private OauthIdentityEntity findOauthIdentity(final OauthProviders provider, final String providerUserId) {
+        var jpql = """
+                    SELECT oauthIdentity
+                    FROM OauthIdentityEntity oauthIdentity
+                    WHERE oauthIdentity.provider = :provider
+                        AND oauthIdentity.providerUserId = :providerUserId
+                """;
+        var oauthIdentity = entityManager.createQuery(jpql, OauthIdentityEntity.class)
+                .setParameter("provider", provider)
+                .setParameter("providerUserId", providerUserId)
+                .getSingleResultOrNull();
+
+        if (oauthIdentity == null) {
+            throw new AggregateNotFoundException();
+        }
+
+        return oauthIdentity;
     }
 }

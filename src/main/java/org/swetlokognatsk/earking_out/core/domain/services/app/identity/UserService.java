@@ -1,13 +1,13 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.identity;
 
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.OauthProviders;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
-import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.DuplicateOauthAuthenticationException;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
-
 import lombok.AllArgsConstructor;
 
 @Service
@@ -33,12 +33,23 @@ public class UserService {
     // 2. new user (guest) just used oauth by some provider the first time - attach this oauth data to this guest user, change name, attach avatar
     // 3. technically new user (guest) used oauth provider, and he is has already registered via this provider before - for now, throw away the current guest user, save the id of already registered via oauth user to session
     // 4. user with already attach some oauth provider x decided to also attach oauth provider y - yet not implemented.
-    public void ensureUserIsAttachedToOauth(final OauthProviders provider, final String providerUserId, final String userName, final String pictureUrl) {
-        var userId = DI.get(UserResolver.class)
-                .getCurrentUserId();
+    /**
+     * @return Optional<UserId> actualUserId - only when the user attached to oauth differs from the current user
+     */
+    public Optional<UserId> ensureUserIsAttachedToOauth(final OauthProviders provider, final String providerUserId, final String userName, final String pictureUrl) throws DuplicateOauthAuthenticationException {
+        var userId = userResolver.getCurrentUserId();
+        var user = repository.get(userId);
 
-        var userRepository = DI.get(UserRepository.class);
-        var user = userRepository.get(userId);
-        // TODO ensureUserIsAttachedToOauth
+        UserId actualUserId;
+        if (user.hasOauthIdentity(provider)) {
+            throw new DuplicateOauthAuthenticationException(provider);
+        } else if (repository.hasOauthIdentity(provider, providerUserId)) {
+            var oauthIdentity = repository.getOauthIdentity(provider, providerUserId);
+            actualUserId = oauthIdentity.userId;
+        } else {
+            repository.attachOauthIdentity(userId, provider, providerUserId, userName, pictureUrl);
+            actualUserId = null;
+        }
+        return Optional.ofNullable(actualUserId);
     }
 }
