@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.Duplicate
 import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
 import org.swetlokognatsk.earking_out.core.domain.services.app.identity.UserService;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 import static org.springframework.http.ResponseEntity.*;
@@ -29,6 +33,7 @@ public class OauthController {
     // TODO move to .env
     public static final String CLIENT_ID = "54834142";
     public static final String VKID_CALLBACK_ENDPOINT = "/vk-id/callback";
+    public static final String VKID_CODE_VERIFIER_COOKIE = "vkid_pkce_code_verifier";
 
     // TODO refactoring
     @PostMapping(VKID_CALLBACK_ENDPOINT)
@@ -47,11 +52,11 @@ public class OauthController {
     }
 
     @GetMapping(VKID_CALLBACK_ENDPOINT)
-    public RedirectView getVkidFallbackCallback(@RequestParam final Map<String, String> requestParams, final HttpSession session, @CookieValue("vkid_pkce_code_verifier") final String codeVerifier) {
+    public RedirectView getVkidFallbackCallback(@RequestParam final Map<String, String> requestParams, final HttpSession session, @CookieValue(VKID_CODE_VERIFIER_COOKIE) final String codeVerifier, final HttpServletResponse response) {
         var code = requestParams.get("code");
         var state = requestParams.get("state");
         var deviceId = requestParams.get("device_id");
-        // TODO remove codeVerifier cookie?
+        clearCodeVerifierCookie(response);
 
         try {
             vkidCallback(code, state, deviceId, codeVerifier, session);
@@ -64,6 +69,11 @@ public class OauthController {
         }
 
         return new RedirectView("/");
+    }
+
+    private void clearCodeVerifierCookie(final HttpServletResponse response) {
+        var cookie = new Cookie(VKID_CODE_VERIFIER_COOKIE, null);
+        response.addCookie(cookie);
     }
 
     private ResponseEntity<?> vkidCallback(final String code, final String state, final String deviceId, final String codeVerifier, final HttpSession session) throws DuplicateOauthAuthenticationException {
