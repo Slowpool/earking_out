@@ -58,6 +58,7 @@ public class OauthController {
 
     private void saveUserToSession(final HttpSession session, final UserId actualUserId) {
         session.setAttribute(USER_ID, actualUserId);
+        session.removeAttribute(LOCALE);
     }
 
     private Map<String, Object> exchangeVkidCode(final String code, final String state, final String deviceId,
