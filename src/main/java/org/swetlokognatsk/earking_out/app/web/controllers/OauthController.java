@@ -49,7 +49,7 @@ public class OauthController {
     public RedirectView getVkidCallback(@RequestParam final Map<String, String> requestParams, final HttpSession session) {
         var code = requestParams.get("code");
         var state = requestParams.get("state");
-        var deviceId = requestParams.get("device_d");
+        var deviceId = requestParams.get("device_id");
         var codeVerifier = requestParams.get("code_verifier");
 
         try {
