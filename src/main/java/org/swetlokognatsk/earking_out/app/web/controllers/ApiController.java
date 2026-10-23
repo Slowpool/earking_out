@@ -88,8 +88,9 @@ public class ApiController {
         try {
             sessionService.start();
         } catch (InvalidPuzzleConfigException e) {
-            // TODO display errors
-            return exercise(exercise);
+            var exercisesModelAndView = exercise(exercise);
+            exercisesModelAndView.addObject("configErrors", e.errors);
+            return exercisesModelAndView;
         }
 
         var view = getSessionView(exercise);

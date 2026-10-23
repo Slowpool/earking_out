@@ -85,5 +85,11 @@
                 th:text="#{exercises.start}"
             ></button>
         </div>
+        <div class="config-errors">
+            <div class="config-error" th:each="error : ${configErrors}">
+                <span th:text="|#{__${error.i18nProperty}__} #{__${error.i18nMessage}__}|"></span>
+                <span class="error-badge">!</span>
+            </div>
+        </div>
     </div>
 </div>
