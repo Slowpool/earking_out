@@ -4,6 +4,8 @@ import pkceChallenge from 'pkce-challenge';
     if ('VKIDSDK' in window) {
         const VKID = window.VKIDSDK;
         const { code_verifier, code_challenge } = await pkceChallenge();
+        // TODO weird `=` syntax, Lax? Secure? path? max-age? does it remove other cookies?
+        document.cookie = `vkid_pkce_code_verifier=${code_verifier}; path=/; max-age=300; SameSite=Lax; Secure`;
 
         VKID.Config.init({
             app: 54834142,

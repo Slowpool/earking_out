@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,11 +47,11 @@ public class OauthController {
     }
 
     @GetMapping(VKID_CALLBACK_ENDPOINT)
-    public RedirectView getVkidCallback(@RequestParam final Map<String, String> requestParams, final HttpSession session) {
+    public RedirectView getVkidFallbackCallback(@RequestParam final Map<String, String> requestParams, final HttpSession session, @CookieValue("vkid_pkce_code_verifier") final String codeVerifier) {
         var code = requestParams.get("code");
         var state = requestParams.get("state");
         var deviceId = requestParams.get("device_id");
-        var codeVerifier = requestParams.get("code_verifier");
+        // TODO remove codeVerifier cookie?
 
         try {
             vkidCallback(code, state, deviceId, codeVerifier, session);
