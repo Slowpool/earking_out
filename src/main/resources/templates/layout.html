@@ -25,6 +25,7 @@
                 </nav>
             </div>
             <div class="user-small-info">
+                <button th:if="${!userIsGuest}" class="action-button" th:text="#{identity.exit}" hx-post="/identity/sign-out" hx-trigger="click" hx-swap="none"></button>
                 <img class="small-user-picture" th:src="${(userPictureUrl != null && userPictureUrl != '') ? userPictureUrl : '/default_user_picture.png'}">
                 <span class="small-user-name" th:text="${userName}"></span>
             </div>

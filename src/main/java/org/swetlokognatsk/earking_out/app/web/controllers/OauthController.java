@@ -22,6 +22,7 @@ import static org.springframework.http.ResponseEntity.*;
 @Controller
 @RequestMapping("/oauth")
 public class OauthController {
+    // TODO move to .env
     public static final String CLIENT_ID = "54834142";
 
     // TODO refactoring
@@ -44,6 +45,7 @@ public class OauthController {
             var actualUserId = DI.get(UserService.class)
                     .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
             if (actualUserId.isPresent()) {
+                // TODO also save language to session
                 saveUserToSession(session, actualUserId.get());
             }
         } catch (DuplicateOauthAuthenticationException e) {

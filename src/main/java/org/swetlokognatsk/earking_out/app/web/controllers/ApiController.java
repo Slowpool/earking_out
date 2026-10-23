@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
+import static org.swetlokognatsk.earking_out.app.web.SessionAttributes.LOCALE;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise.unknownExercise;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 import static org.springframework.http.ResponseEntity.*;
@@ -279,7 +280,7 @@ public class ApiController {
     }
 
     private void saveLangToSession(final HttpSession session, final Languages newLanguage) {
-        session.setAttribute(SpringApp.LOCALE_SESSION_ATTR, new Locale(newLanguage.value));
+        session.setAttribute(LOCALE, new Locale(newLanguage.value));
     }
 
 }
