@@ -56,7 +56,6 @@ public class OauthController {
         var code = requestParams.get("code");
         var state = requestParams.get("state");
         var deviceId = requestParams.get("device_id");
-        clearCodeVerifierCookie(response);
 
         try {
             vkidCallback(code, state, deviceId, codeVerifier, session);
@@ -69,11 +68,6 @@ public class OauthController {
         }
 
         return new RedirectView("/");
-    }
-
-    private void clearCodeVerifierCookie(final HttpServletResponse response) {
-        var cookie = new Cookie(VKID_CODE_VERIFIER_COOKIE, null);
-        response.addCookie(cookie);
     }
 
     private ResponseEntity<?> vkidCallback(final String code, final String state, final String deviceId, final String codeVerifier, final HttpSession session) throws DuplicateOauthAuthenticationException {
