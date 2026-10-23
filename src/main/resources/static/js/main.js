@@ -102,6 +102,10 @@ document.addEventListener('keydown', function (e) {
     }
 
     let sessionId = findSessionId();
+    if (!prevalidateNoteLength(target.value)) {
+        showMessage(`Invalid note`);
+        return;
+    }
     let guess = normalizeNoteFormat(target.value);
     if (!validateNote(guess)) {
         showMessage(guess ? `\`${target.value}\` is invalid or out of range note` : `Invalid note`);
@@ -302,6 +306,10 @@ function showMessage(message) {
     if (messageBox) {
         messageBox.textContent = message;
     }
+}
+
+function prevalidateNoteLength(note) {
+    return note.length < 4;
 }
 
 // eB4 => Eb4
