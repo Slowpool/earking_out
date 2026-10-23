@@ -19,7 +19,7 @@ import pkceChallenge from 'pkce-challenge';
         const oneTap = new VKID.OneTap();
 
         oneTap.render({
-            container: document.currentScript.parentElement,
+            container: document.querySelector("#vkid-onetap-button"),
             fastAuthEnabled: false,
             showAlternativeLogin: true,
             styles: {
