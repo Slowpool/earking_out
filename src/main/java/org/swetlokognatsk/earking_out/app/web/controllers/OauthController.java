@@ -5,10 +5,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.servlet.view.RedirectView;
 import static org.swetlokognatsk.earking_out.app.web.SessionAttributes.*;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.DuplicateOauthAuthenticationException;
@@ -24,15 +27,45 @@ import static org.springframework.http.ResponseEntity.*;
 public class OauthController {
     // TODO move to .env
     public static final String CLIENT_ID = "54834142";
+    public static final String VKID_CALLBACK_ENDPOINT = "/vk-id/callback";
 
     // TODO refactoring
-    @PostMapping("/vk-id/callback")
-    public ResponseEntity<?> vkidCallback(@RequestBody final Map<String, String> body, final HttpSession session) {
+    @PostMapping(VKID_CALLBACK_ENDPOINT)
+    public ResponseEntity<?> postVkidCallback(@RequestBody final Map<String, String> body, final HttpSession session) {
         var code = body.get("code");
         var state = body.get("state");
         var deviceId = body.get("deviceId");
         var codeVerifier = body.get("codeVerifier");
 
+        try {
+            return vkidCallback(code, state, deviceId, codeVerifier, session);
+        } catch (DuplicateOauthAuthenticationException e) {
+            return status(409)
+                    .body("attempt to login under the same oauth provider twice: " + e.provider.name());
+        }
+    }
+
+    @GetMapping(VKID_CALLBACK_ENDPOINT)
+    public RedirectView getVkidCallback(@RequestParam final Map<String, String> requestParams, final HttpSession session) {
+        var code = requestParams.get("code");
+        var state = requestParams.get("state");
+        var deviceId = requestParams.get("device_d");
+        var codeVerifier = requestParams.get("code_verifier");
+
+        try {
+            vkidCallback(code, state, deviceId, codeVerifier, session);
+        } catch (DuplicateOauthAuthenticationException e) {
+            // TODO show `you already authorized` message
+            return new RedirectView("/");
+        } catch (Throwable e) {
+            // TODO show `something went wrong, try again` message
+            return new RedirectView("/");
+        }
+
+        return new RedirectView("/");
+    }
+
+    private ResponseEntity<?> vkidCallback(final String code, final String state, final String deviceId, final String codeVerifier, final HttpSession session) throws DuplicateOauthAuthenticationException {
         var tokens = exchangeVkidCode(code, state, deviceId, codeVerifier);
         var accessToken = (String) tokens.get("access_token");
         var userInfo = getUserInfo(accessToken);
@@ -41,16 +74,11 @@ public class OauthController {
         var avatarUrl = userInfo.get("avatar");
         var userName = "%s %s".formatted(userInfo.get("first_name"), userInfo.get("last_name"));
 
-        try {
-            var actualUserId = DI.get(UserService.class)
-                    .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
-            if (actualUserId.isPresent()) {
-                // TODO also save language to session
-                saveUserToSession(session, actualUserId.get());
-            }
-        } catch (DuplicateOauthAuthenticationException e) {
-            return status(409)
-                    .body("attempt to login under the same oauth provider twice: " + e.provider.name());
+        var actualUserId = DI.get(UserService.class)
+                .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
+        if (actualUserId.isPresent()) {
+            // TODO also save language to session
+            saveUserToSession(session, actualUserId.get());
         }
 
         return ok("{\"success\": true}");
