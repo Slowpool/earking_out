@@ -9,16 +9,16 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectpitch.PerfectPitchConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.keyboard.PianoKeyboardDTO;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 
 @Service
 public final class PuzzleConfigService {
 
-    private final PuzzleConfigRepository repository;
+    private final PersistentPuzzleConfigRepository repository;
     private final PianoKeyboardRepository pianoKeyboardRepository;
 
-    public PuzzleConfigService(final PuzzleConfigRepository repository, final PianoKeyboardRepository pianoKeyboardRepository) {
+    public PuzzleConfigService(final PersistentPuzzleConfigRepository repository, final PianoKeyboardRepository pianoKeyboardRepository) {
         this.repository = Objects.requireNonNull(repository);
         this.pianoKeyboardRepository = pianoKeyboardRepository;
     }

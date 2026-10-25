@@ -9,15 +9,15 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.config.CachingPuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleConfigNotFoundException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 @Getter(AccessLevel.PROTECTED)
-abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepository {
+abstract class BasePuzzleConfigRepository implements PersistentPuzzleConfigRepository {
 
     protected final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver;
     protected final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer;
@@ -28,7 +28,7 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
 
     protected abstract void saveImpl(final PuzzleConfigAggregate<?> aggregate);
 
-    public PersistentPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final CachingPuzzleConfigRepository cacheRepository) {
+    public BasePuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final CachingPuzzleConfigRepository cacheRepository) {
         this.puzzleConfigAggregatesFactoryResolver = puzzleConfigAggregatesFactoryResolver;
         this.puzzleConfigJsonSerializer = puzzleConfigJsonSerializer;
         this.dtoAssembler = dtoAssembler;

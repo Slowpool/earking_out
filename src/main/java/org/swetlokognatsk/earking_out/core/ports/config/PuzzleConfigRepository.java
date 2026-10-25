@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleCo
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.base.PolymorphicAggregateRepository;
 
-public interface PuzzleConfigRepository extends PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<? extends Exercise>> {
+public abstract interface PuzzleConfigRepository extends PolymorphicAggregateRepository<Exercise, PuzzleConfigAggregate<? extends Exercise>> {
     /**
      * Use {@link #getPuzzleConfig() } instead to get typed puzzle config aggregate
      * object.

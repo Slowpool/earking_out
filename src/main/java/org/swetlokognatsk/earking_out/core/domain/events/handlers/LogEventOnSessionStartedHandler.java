@@ -1,18 +1,17 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
 @Service
 public final class LogEventOnSessionStartedHandler extends LoggingToEventStoreHandler<SessionStartedEvent> {
 
-    public LogEventOnSessionStartedHandler(final EventStore eventStore, final PuzzleConfigRepository puzzleConfigRepository) {
+    public LogEventOnSessionStartedHandler(final EventStore eventStore, final PersistentPuzzleConfigRepository puzzleConfigRepository) {
         super(eventStore, puzzleConfigRepository);
     }
 

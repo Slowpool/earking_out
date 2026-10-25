@@ -3,7 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import org.springframework.stereotype.Service;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler extends DomainEventHandler<AudioPerfectPitchExercisePickedEvent> {
 
     private final PianoKeyboardRepository pianoKeyboardRepository;
-    private final PuzzleConfigRepository puzzleConfigRepository;
+    private final PersistentPuzzleConfigRepository puzzleConfigRepository;
 
-    public ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler(final PianoKeyboardRepository pianoKeyboardRepository, final PuzzleConfigRepository puzzleConfigRepository) {
+    public ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler(final PianoKeyboardRepository pianoKeyboardRepository, final PersistentPuzzleConfigRepository puzzleConfigRepository) {
         this.pianoKeyboardRepository = pianoKeyboardRepository;
         this.puzzleConfigRepository = puzzleConfigRepository;
     }

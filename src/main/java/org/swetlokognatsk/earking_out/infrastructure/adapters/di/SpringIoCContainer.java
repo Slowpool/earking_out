@@ -47,8 +47,6 @@ public final class SpringIoCContainer implements IoCContainer {
         // javafx beans
         ctx.registerBean(PuzzlePanesFactory.class, () -> new PuzzlePanesFactory(get(SessionRepositoryDelegator.class)));
 
-        ctx.registerBean(StatsPanesFactory.class, () -> new StatsPanesFactory(get(PuzzleConfigRepository.class), get(SessionRepositoryDelegator.class)));
-
         ctx.registerBean(PianoKeyboardHandlersRegister.class, () -> new PianoKeyboardHandlersRegister(get(PianoKeyboardRepository.class)));
 
         ctx.registerBean(ConfigPanesFactory.class, () -> new ConfigPanesFactory(get(PianoKeyboardHandlersRegister.class)));

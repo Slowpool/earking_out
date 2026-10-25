@@ -7,20 +7,19 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionAggregate
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.FinalizedPuzzleConfigValidator;
-import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.PuzzleConfigValidator;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.SessionRepository;
 
 public abstract class SessionService<E extends Exercise, SA extends SessionAggregate<E, ?, ?, ?>, SP extends SessionRepository<SA>, PCA extends PuzzleConfigAggregate<E>, FPCV extends FinalizedPuzzleConfigValidator<PCA>> {
-    protected final PuzzleConfigRepository puzzleConfigRepository;
+    protected final PersistentPuzzleConfigRepository puzzleConfigRepository;
     protected final SP sessionRepository;
     protected final SessionAggregatesFactory sessionAggregatesFactory;
     protected final FPCV configValidator;
 
     protected abstract E getExercise();
 
-    public SessionService(final PuzzleConfigRepository puzzleConfigRepository, final SP sessionRepository, final SessionAggregatesFactory sessionAggregatesFactory, final FPCV configValidator) {
+    public SessionService(final PersistentPuzzleConfigRepository puzzleConfigRepository, final SP sessionRepository, final SessionAggregatesFactory sessionAggregatesFactory, final FPCV configValidator) {
         this.puzzleConfigRepository = Objects.requireNonNull(puzzleConfigRepository);
         this.sessionRepository = Objects.requireNonNull(sessionRepository);
         this.sessionAggregatesFactory = Objects.requireNonNull(sessionAggregatesFactory);

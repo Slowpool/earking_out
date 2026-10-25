@@ -3,17 +3,16 @@ package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
 // TODO make it working via tasks, in special thread or asynchronously
 abstract class LoggingToEventStoreHandler<DE extends DomainEvent> extends DomainEventHandler<DE> {
     protected final EventStore eventStore;
-    private final PuzzleConfigRepository puzzleConfigRepository;
+    private final PersistentPuzzleConfigRepository puzzleConfigRepository;
 
-    LoggingToEventStoreHandler(final EventStore eventStore, final PuzzleConfigRepository puzzleConfigRepository) {
+    LoggingToEventStoreHandler(final EventStore eventStore, final PersistentPuzzleConfigRepository puzzleConfigRepository) {
         this.eventStore = eventStore;
         this.puzzleConfigRepository = puzzleConfigRepository;
     }

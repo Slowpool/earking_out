@@ -10,7 +10,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.factories.Sessio
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.perfectpitch.FinalizedAudioPerfectPitchConfigValidator;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public final class AudioPerfectPitchSessionService extends SessionService<AudioP
         return AUDIO_PERFECT_PITCH_EXERCISE;
     }
 
-    public AudioPerfectPitchSessionService(final PuzzleConfigRepository puzzleConfigRepository, final AudioPerfectPitchSessionRepository sessionRepository, final SessionAggregatesFactory sessionAggregatesFactory, final FinalizedAudioPerfectPitchConfigValidator configValidator) {
+    public AudioPerfectPitchSessionService(final PersistentPuzzleConfigRepository puzzleConfigRepository, final AudioPerfectPitchSessionRepository sessionRepository, final SessionAggregatesFactory sessionAggregatesFactory, final FinalizedAudioPerfectPitchConfigValidator configValidator) {
         super(puzzleConfigRepository, sessionRepository, sessionAggregatesFactory, configValidator);
     }
 
