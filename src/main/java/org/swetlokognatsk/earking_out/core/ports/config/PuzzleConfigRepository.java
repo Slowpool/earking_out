@@ -33,6 +33,4 @@ public interface PuzzleConfigRepository extends PolymorphicAggregateRepository<E
 
     // allowing to read puzzle configs to those threads which are out of request scope, e.g. for async logging it's useful
     <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise, UserId userId);
-
-    void actualizeCache();
 }

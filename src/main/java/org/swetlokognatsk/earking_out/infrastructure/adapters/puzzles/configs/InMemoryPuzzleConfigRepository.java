@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
@@ -13,6 +14,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factorie
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
+import org.swetlokognatsk.earking_out.core.ports.config.CachingPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleConfigNotFoundException;
@@ -21,7 +23,7 @@ import lombok.Getter;
 
 @Repository
 @Getter(AccessLevel.PRIVATE)
-public class InMemoryPuzzleConfigRepository implements PuzzleConfigRepository {
+public class InMemoryPuzzleConfigRepository implements CachingPuzzleConfigRepository {
     private final Map<PuzzleConfigId, PuzzleConfigAggregate<?>> aggregates = new HashMap<>();
 
     private final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver;

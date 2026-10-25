@@ -3,12 +3,12 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateRoot;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTOAssembler;
+import org.swetlokognatsk.earking_out.core.ports.config.CachingPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigJsonSerializer;
 import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.PuzzleConfigNotFoundException;
@@ -22,13 +22,13 @@ abstract class PersistentPuzzleConfigRepository implements PuzzleConfigRepositor
     protected final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver;
     protected final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer;
     protected final PuzzleConfigDTOAssembler dtoAssembler;
-    protected final InMemoryPuzzleConfigRepository cacheRepository;
+    protected final CachingPuzzleConfigRepository cacheRepository;
 
     protected abstract String getOrCreatePuzzleConfigJson(final Exercise exercise);
 
     protected abstract void saveImpl(final PuzzleConfigAggregate<?> aggregate);
 
-    public PersistentPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final InMemoryPuzzleConfigRepository cacheRepository) {
+    public PersistentPuzzleConfigRepository(final PuzzleConfigAggregatesFactoryResolver puzzleConfigAggregatesFactoryResolver, final PuzzleConfigJsonSerializer puzzleConfigJsonSerializer, final PuzzleConfigDTOAssembler dtoAssembler, final CachingPuzzleConfigRepository cacheRepository) {
         this.puzzleConfigAggregatesFactoryResolver = puzzleConfigAggregatesFactoryResolver;
         this.puzzleConfigJsonSerializer = puzzleConfigJsonSerializer;
         this.dtoAssembler = dtoAssembler;
