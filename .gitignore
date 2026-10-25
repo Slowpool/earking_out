@@ -27,6 +27,7 @@ target/
 
 .env
 *.pem
+redis.conf
 
 sftp.json
 settings.json

@@ -12,14 +12,16 @@ services:
       SPRING_DATASOURCE_URL: "${POSTGRES_CONNECTION_URI}"
       SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER}"
       SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD}"
-      # SPRING_DATA_REDIS_HOST: "${SPRING_DATA_REDIS_HOST}"
-      # SPRING_DATA_REDIS_PORT: "${SPRING_DATA_REDIS_PORT}"
-      # SPRING_DATA_REDIS_PASSWORD: "${SPRING_DATA_REDIS_PASSWORD}"
+      SPRING_DATA_REDIS_HOST: "${SPRING_DATA_REDIS_HOST}"
+      SPRING_DATA_REDIS_PORT: "${SPRING_DATA_REDIS_PORT}"
+      SPRING_DATA_REDIS_PASSWORD: "${SPRING_DATA_REDIS_PASSWORD}"
+      VKID_SERVICE_ID: "${VKID_SERVICE_ID}"
     ports:
       - "1941:8081"
       - '5015:5005'
     depends_on:
       - postgres
+      - redis
 
   postgres:
     image: 'postgres:18.6'
@@ -31,7 +33,22 @@ services:
       - 'pg_db:/var/lib/postgresql'
     ports:
       - "5433:5432"
+  
+  redis:
+    container_name:
+      'earking-out-redis'
+    image: 'redis:8.10.2'
+    restart: always
+    stop_grace_period: 20s
+    volumes:
+      - './redis/redis.conf:/usr/local/etc/redis/redis.conf'
+      - 'redis_data:/data'
+    command: >
+      redis-server
+      /usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
 
 volumes:
   pg_db:
-  # redis_data:
+  redis_data:
