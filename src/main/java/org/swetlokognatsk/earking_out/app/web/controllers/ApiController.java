@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.WebUtils;
-import org.swetlokognatsk.earking_out.SpringApp;
 import org.swetlokognatsk.earking_out.app.web.models.requests.PianoKeyboardActionRequest;
 import org.swetlokognatsk.earking_out.app.web.models.requests.perfectpitch.AudioPerfectPitchGuessRequest;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyPressingResponse;
@@ -66,7 +64,11 @@ public class ApiController {
 
     private final ExerciseService exerciseService;
     private final PuzzleConfigViewFiller puzzleConfigViewFiller;
+
+    // TODO do something with it: fix the lack of generic or remove one of them
     private final SessionService sessionService;
+    private final AudioPerfectPitchSessionService audioPerfectPitchSessionService;
+
     private final PuzzleViewFiller puzzleViewFiller;
     private final SimplePuzzleConfigPropertiesCaster simplePuzzleConfigPropertiesCaster;
     private final PuzzleConfigService puzzleConfigService;
@@ -76,7 +78,6 @@ public class ApiController {
     private final SessionRepositoryDelegator sessionRepositoryDelegator;
     private final ThreadPoolTaskExecutor taskExecutor;
     private final PuzzlePianoKeyReleasingResponseBuilder puzzlePianoKeyReleasingResponseBuilder;
-    private final AudioPerfectPitchSessionService audioPerfectPitchSessionService;
     private final AudioPerfectPitchStatsRenderer audioPerfectPitchStatsRenderer;
     private final PuzzleGuessingResponseBuilder puzzleGuessingResponseBuilder;
     private final UserService userService;
