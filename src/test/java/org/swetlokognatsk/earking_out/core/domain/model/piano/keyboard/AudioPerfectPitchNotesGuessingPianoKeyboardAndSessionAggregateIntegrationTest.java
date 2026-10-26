@@ -22,6 +22,7 @@ import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.piano.PianoKeyboardRepository;
 import org.swetlokognatsk.earking_out.core.ports.session.perfectpitch.AudioPerfectPitchSessionRepository;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.configs.InMemoryPuzzleConfigRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 
 @EOSpringBootTest
@@ -125,7 +126,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
         pianoKeyboardRepository = DI.get(PianoKeyboardRepository.class);
         sessionService = DI.get(AudioPerfectPitchSessionService.class);
         sessionRepository = DI.get(AudioPerfectPitchSessionRepository.class);
-        puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
+        puzzleConfigRepository = DI.get(InMemoryPuzzleConfigRepository.class);
         puzzleConfigTestHelper = DI.get(PuzzleConfigTestHelper.class);
         pianoKeyboardHelper = DI.get(PianoKeyboardTestHelper.class);
 

@@ -11,17 +11,20 @@ import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 
 @Controller
 @RequestMapping("/identity")
+@AllArgsConstructor
 public class IdentityController {
+
+    private final UserResolver userResolver;
+    private final UserRepository userRepository;
 
     @PostMapping("/sign-out")
     public ResponseEntity<?> signOut(final HttpSession session, final HttpServletResponse response) {
-        var userId = DI.get(UserResolver.class)
-                .getCurrentUserId();
-        var user = DI.get(UserRepository.class)
-                .get(userId);
+        var userId = userResolver.getCurrentUserId();
+        var user = userRepository.get(userId);
         if (user.isGuest()) {
             return status(401)
                     .body("guest cannot sign out");

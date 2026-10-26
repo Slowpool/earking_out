@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.perfectp
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 import org.swetlokognatsk.earking_out.app.web.views.models.PianoKeyboardViewModelsProjector;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
 import lombok.AllArgsConstructor;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId.*;
@@ -16,7 +16,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.p
 @AllArgsConstructor
 public class AudioPerfectPitchConfigViewFiller {
 
-    private final PuzzleConfigRepository puzzleConfigRepository;
+    private final PersistentPuzzleConfigRepository puzzleConfigRepository;
     private final PianoKeyboardViewModelsProjector pianoKeyboardsProjector;
 
     public void fill(final ModelAndView modelAndView) {

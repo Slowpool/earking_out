@@ -1,12 +1,11 @@
 package org.swetlokognatsk.earking_out;
 
+import static org.swetlokognatsk.earking_out.SpringProfiles.WEB;
 import static org.swetlokognatsk.earking_out.app.web.SessionAttributes.LOCALE;
 import java.util.Locale;
-import java.util.concurrent.Executor;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -14,7 +13,6 @@ import org.springframework.web.util.WebUtils;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
-import jakarta.servlet.http.HttpSession;
 
 @SpringBootApplication
 public class SpringApp {
@@ -27,7 +25,7 @@ public class SpringApp {
     private static final Locale DEFAULT_LOCALE = new Locale("ru");
 
     @Bean
-    Executor getTaskExecutor() {
+    ThreadPoolTaskExecutor getTaskExecutor() {
         var executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(1);
         executor.setMaxPoolSize(2);
@@ -45,8 +43,8 @@ public class SpringApp {
         return executor;
     }
 
-    // TODO decouple from web
     @Bean
+    @Profile(WEB)
     LocaleResolver localeResolver() {
         var localeResolver = new SessionLocaleResolver();
 

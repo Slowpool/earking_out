@@ -3,7 +3,6 @@ package org.swetlokognatsk.earking_out.core.domain.model.puzzles;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.springframework.stereotype.Service;
-import org.swetlokognatsk.earking_out.DebugUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.VisualPerfectPitchExercise;
@@ -12,7 +11,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.puzzles.perfectpitch.Vis
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.PuzzleConfigDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.SolutionGenerator;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.perfectpitch.AudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generators.SolutionGeneratorsFactory;
@@ -21,7 +20,7 @@ import org.swetlokognatsk.earking_out.infrastructure.factories.puzzles.generator
 @Service
 public final class PuzzlesFactory {
     private final SolutionGeneratorsFactory solutionGeneratorsFactory;
-    private final PuzzleConfigRepository puzzleConfigRepository;
+    private final PersistentPuzzleConfigRepository puzzleConfigRepository;
 
     // latch entry to avoid `cachedSolutionGenerator == null` checking
     // TODO think about it. now it's a mess
@@ -33,7 +32,7 @@ public final class PuzzlesFactory {
     };
     private Entry<PuzzleConfigDTO<?>, SolutionGenerator<?>> cachedSolutionGenerator = Map.entry(latchConfig, latchSolutionGenerator);
 
-    public PuzzlesFactory(final SolutionGeneratorsFactory solutionGeneratorsFactory, final PuzzleConfigRepository puzzleConfigRepository) {
+    public PuzzlesFactory(final SolutionGeneratorsFactory solutionGeneratorsFactory, final PersistentPuzzleConfigRepository puzzleConfigRepository) {
         this.solutionGeneratorsFactory = solutionGeneratorsFactory;
         this.puzzleConfigRepository = puzzleConfigRepository;
     }

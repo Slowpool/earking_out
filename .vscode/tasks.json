@@ -4,7 +4,7 @@
         {
             "label": "WaitForBootstrap",
             "type": "shell",
-            "command": "sleep 20"
+            "command": "sleep 30"
         }
     ]
 }

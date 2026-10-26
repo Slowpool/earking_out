@@ -5,9 +5,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.sound.PianoKeyNumberSolution;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
-import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.annotations.TestComponent;
 import lombok.AllArgsConstructor;
@@ -16,7 +13,6 @@ import lombok.AllArgsConstructor;
 @TestComponent
 @AllArgsConstructor
 public final class PuzzleTestHelper {
-    private final PuzzleConfigRepository puzzleConfigRepository;
     private final PuzzlesFactory puzzlesFactory;
 
     public <E extends Exercise, P extends Puzzle<E, ?>> P createPuzzle(final E exercise) {

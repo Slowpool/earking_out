@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.WebUtils;
-import org.swetlokognatsk.earking_out.SpringApp;
 import org.swetlokognatsk.earking_out.app.web.models.requests.PianoKeyboardActionRequest;
 import org.swetlokognatsk.earking_out.app.web.models.requests.perfectpitch.AudioPerfectPitchGuessRequest;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyPressingResponse;
@@ -51,10 +49,9 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.identity.UserServ
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.SessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 import org.swetlokognatsk.earking_out.core.domain.services.domain.puzzles.configs.exceptions.InvalidPuzzleConfigException;
-import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 
-// TODO mention about RPC api design
 /**
  * I gave this controller an `Api` name because it never returns entire html
  * documents - it returns only an html fragments without html/head/body tags,
@@ -62,17 +59,37 @@ import jakarta.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping("/api/v1")
+@AllArgsConstructor
 public class ApiController {
+
+    private final ExerciseService exerciseService;
+    private final PuzzleConfigViewFiller puzzleConfigViewFiller;
+
+    // TODO do something with it: fix the lack of generic or remove one of them
+    private final SessionService sessionService;
+    private final AudioPerfectPitchSessionService audioPerfectPitchSessionService;
+
+    private final PuzzleViewFiller puzzleViewFiller;
+    private final SimplePuzzleConfigPropertiesCaster simplePuzzleConfigPropertiesCaster;
+    private final PuzzleConfigService puzzleConfigService;
+    private final PianoKeyboardService pianoKeyboardService;
+    private final PianoKeyboardViewModelsProjector pianoKeyboardViewModelsProjector;
+    private final PuzzlePianoKeyPressingResponseBuilder puzzlePianoKeyPressingResponseBuilder;
+    private final SessionRepositoryDelegator sessionRepositoryDelegator;
+    private final ThreadPoolTaskExecutor taskExecutor;
+    private final PuzzlePianoKeyReleasingResponseBuilder puzzlePianoKeyReleasingResponseBuilder;
+    private final AudioPerfectPitchStatsRenderer audioPerfectPitchStatsRenderer;
+    private final PuzzleGuessingResponseBuilder puzzleGuessingResponseBuilder;
+    private final UserService userService;
+    private final ChangeLanguageResponseBuilder changeLanguageResponseBuilder;
 
     @GetMapping("/exercise/{exerciseName}/{exerciseType}")
     public ModelAndView exercise(final Exercise exercise) {
-        var exerciseService = DI.get(ExerciseService.class);
         exerciseService.pickExercise(exercise);
 
         var view = getExerciseView(exercise);
         var modelAndView = new ModelAndView(view);
-        DI.get(PuzzleConfigViewFiller.class)
-                .fill(exercise, modelAndView);
+        puzzleConfigViewFiller.fill(exercise, modelAndView);
 
         return modelAndView;
     }
@@ -84,7 +101,6 @@ public class ApiController {
 
     @PostMapping("/session/{exerciseName}/{exerciseType}/start")
     public ModelAndView startSession(final Exercise exercise) {
-        var sessionService = DI.get(SessionService.class);
         try {
             sessionService.start();
         } catch (InvalidPuzzleConfigException e) {
@@ -95,8 +111,7 @@ public class ApiController {
 
         var view = getSessionView(exercise);
         var modelAndView = new ModelAndView(view);
-        DI.get(PuzzleViewFiller.class)
-                .fill(exercise, modelAndView);
+        puzzleViewFiller.fill(exercise, modelAndView);
 
         return modelAndView;
     }
@@ -106,31 +121,13 @@ public class ApiController {
         return "puzzles/perfect_pitch/audio_perfect_pitch_puzzle";
     }
 
-    @PostMapping("/session/{exerciseName}/{exerciseType}/abort")
-    public ModelAndView abortSession(final Exercise exercise) {
-        var view = getStatsSessionView(exercise);
-        var modelAndView = new ModelAndView(view);
-        modelAndView.addObject("puzzlesCompletedPerfectly", 5);
-        modelAndView.addObject("numberOfCompletedPuzzles", 50);
-        modelAndView.addObject("perfectlyCompletedPuzzlesRate", 0.1);
-
-        return modelAndView;
-    }
-
-    private String getStatsSessionView(final Exercise exercise) {
-        // TODO getStatsSessionView
-        return "stats/session/perfect_pitch/audio_perfect_pitch_session_stats";
-    }
-
     @PatchMapping("/puzzle/config/{exerciseName}/{exerciseType}/update/{propertyName}")
     public ResponseEntity<?> updatePuzzleConfigProperty(final Exercise exercise, @PathVariable final String propertyName, @RequestParam final Map<String, String> body) {
-        var simplePuzzleConfigPropertiesCaster = DI.get(SimplePuzzleConfigPropertiesCaster.class);
         var newValue = body.get(propertyName);
 
         try {
             var castedNewValue = simplePuzzleConfigPropertiesCaster.cast(exercise, propertyName, newValue);
-            DI.get(PuzzleConfigService.class)
-                    .updateProperty(exercise, propertyName, castedNewValue);
+            puzzleConfigService.updateProperty(exercise, propertyName, castedNewValue);
             return ok().body(null);
         } catch (IllegalArgumentException e) {
             // TODO add detailed info
@@ -141,11 +138,9 @@ public class ApiController {
     // TODO create new PianoKey view model, with only variable piano key data (isPressed, isSelected), without color and octaveScopedKeyNumber
     @PostMapping("/puzzle/config/{exerciseName}/{exerciseType}/piano-keyboard/press-key")
     public ResponseEntity<PuzzleConfigPianoKeyPressingResponse> pressPuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
-        DI.get(PianoKeyboardService.class)
-                .pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
+        pianoKeyboardService.pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
 
-        var pianoKeyboardViewModel = DI.get(PianoKeyboardViewModelsProjector.class)
-                .build(body.pianoKeyboardId);
+        var pianoKeyboardViewModel = pianoKeyboardViewModelsProjector.build(body.pianoKeyboardId);
         var response = new PuzzleConfigPianoKeyPressingResponse(pianoKeyboardViewModel);
 
         return ok(response);
@@ -153,11 +148,9 @@ public class ApiController {
 
     @PostMapping("/puzzle/config/{exerciseName}/{exerciseType}/piano-keyboard/release-key")
     public ResponseEntity<PuzzleConfigPianoKeyReleasingResponse> releasePuzzleConfigPianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
-        DI.get(PianoKeyboardService.class)
-                .releasePianoKey(body.pianoKeyboardId);
+        pianoKeyboardService.releasePianoKey(body.pianoKeyboardId);
 
-        var pianoKeyboardViewModel = DI.get(PianoKeyboardViewModelsProjector.class)
-                .build(body.pianoKeyboardId);
+        var pianoKeyboardViewModel = pianoKeyboardViewModelsProjector.build(body.pianoKeyboardId);
         var response = new PuzzleConfigPianoKeyReleasingResponse(pianoKeyboardViewModel);
 
         return ok(response);
@@ -166,20 +159,17 @@ public class ApiController {
     // why to receive sessionId only on pressing? to prevent from case when the guess was last and we obtain the updated session info via getActiveSession(), which fails in that case. schematically: frontend---press key-->backend---update domain state-->responseBuilder-->update domain state via `getActiveSession()`, but wait, it'll throw exception beause it just was finished! well, then, let's get session by it's id - no exception, good!
     @PostMapping("/puzzle/{exerciseName}/{exerciseType}/piano-keyboard/press-key")
     public ResponseEntity<? extends PuzzlePianoKeyPressingResponse> pressPuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body, @RequestParam(required = true) final SessionId sessionId) {
-        DI.get(PianoKeyboardService.class)
-                .pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
+        pianoKeyboardService.pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
 
         persistQueuedEventLogs(sessionId);
-        var response = DI.get(PuzzlePianoKeyPressingResponseBuilder.class)
-                .build(exercise, sessionId);
+        var response = puzzlePianoKeyPressingResponseBuilder.build(exercise, sessionId);
 
         return ok(response);
     }
 
     // TODO now this is a temporary hack that executes all globally queued tasks. why to do it? events a logged asynchronously, and if user finishes the session before all events are logged, stats will be based on partial event logs and consequently they will be incorrect. debugging i figured out it's still imperfect, - there's still a possibility of wrong stats, but it's much lower
     private void persistQueuedEventLogs(final SessionId sessionId) {
-        var sessionDto = DI.get(SessionRepositoryDelegator.class)
-                .getSessionAggregateDTO(sessionId);
+        var sessionDto = sessionRepositoryDelegator.getSessionAggregateDTO(sessionId);
 
         if (sessionDto.state == SessionStates.COMPLETED || sessionDto.state == SessionStates.ABORTED) {
             executeAllTasksSynchronously();
@@ -187,8 +177,6 @@ public class ApiController {
     }
 
     private void executeAllTasksSynchronously() {
-        var taskExecutor = DI.get(ThreadPoolTaskExecutor.class);
-
         var remainedTasks = new LinkedList<Runnable>();
         taskExecutor.getThreadPoolExecutor()
                 .getQueue()
@@ -207,11 +195,9 @@ public class ApiController {
     // why no sessionId? because either the session is open, either it's closed and ui must not send any release commands after session is closed. such a convention.
     @PostMapping("/puzzle/{exerciseName}/{exerciseType}/piano-keyboard/release-key")
     public ResponseEntity<? extends PuzzlePianoKeyReleasingResponse> releasePuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body) {
-        var pianoKeyboardService = DI.get(PianoKeyboardService.class);
         pianoKeyboardService.releasePianoKey(body.pianoKeyboardId);
 
-        var response = DI.get(PuzzlePianoKeyReleasingResponseBuilder.class)
-                .build(exercise);
+        var response = puzzlePianoKeyReleasingResponseBuilder.build(exercise);
         return ok(response);
     }
 
@@ -224,8 +210,7 @@ public class ApiController {
 
         switch (exercise) {
         case AudioPerfectPitchExercise appe:
-            DI.get(AudioPerfectPitchSessionService.class)
-                    .hearAgain();
+            audioPerfectPitchSessionService.hearAgain();
             break;
         default:
             throw new RuntimeException(unknownExercise(exercise));
@@ -239,20 +224,24 @@ public class ApiController {
 
     @PostMapping("/session/{exerciseName}/{exerciseType}/abort/{sessionId}")
     public ResponseEntity<?> abortSession(final Exercise exercise, @PathVariable SessionId sessionId) {
-        DI.get(SessionService.class)
-                .abort(sessionId);
+        sessionService.abort(sessionId);
 
-        var body = DI.get(AudioPerfectPitchStatsRenderer.class)
-                .renderPage(sessionId);
+        // TODO use abstract renderer
+        var body = audioPerfectPitchStatsRenderer.renderPage(sessionId);
 
         return ok(body);
+    }
+
+    // TODO remove if it's not used
+    private String getStatsSessionView(final Exercise exercise) {
+        // TODO getStatsSessionView
+        return "stats/session/perfect_pitch/audio_perfect_pitch_session_stats";
     }
 
     @PostMapping("/puzzle/perfect-pitch/audio/guess")
     public ResponseEntity<?> guess(@RequestBody final AudioPerfectPitchGuessRequest body, @RequestParam(required = true) final SessionId sessionId) {
         try {
-            DI.get(AudioPerfectPitchSessionService.class)
-                    .guessViaTextNote(body.note());
+            audioPerfectPitchSessionService.guessViaTextNote(body.note());
         } catch (InvalidTextNoteException e) {
             // TODO InvalidTextNoteException
             return badRequest().body("InvalidTextNoteException");
@@ -262,25 +251,23 @@ public class ApiController {
         }
 
         persistQueuedEventLogs(sessionId);
-        var response = DI.get(PuzzleGuessingResponseBuilder.class)
-                .build(AUDIO_PERFECT_PITCH_EXERCISE, sessionId);
+        var response = puzzleGuessingResponseBuilder.build(AUDIO_PERFECT_PITCH_EXERCISE, sessionId);
 
         return ok(response);
     }
 
     @PatchMapping("/language/change/{newLanguage}")
     public ResponseEntity<?> changeLanguage(@PathVariable final Languages newLanguage, final HttpSession session) {
-        DI.get(UserService.class)
-                .changeLanguage(newLanguage);
+        userService.changeLanguage(newLanguage);
 
         saveLangToSession(session, newLanguage);
-        var response = DI.get(ChangeLanguageResponseBuilder.class)
-                .build(newLanguage);
+        var response = changeLanguageResponseBuilder.build(newLanguage);
 
         return response;
     }
 
     private void saveLangToSession(final HttpSession session, final Languages newLanguage) {
+        // TODO refactoring (deprecated)
         session.setAttribute(LOCALE, new Locale(newLanguage.value));
     }
 

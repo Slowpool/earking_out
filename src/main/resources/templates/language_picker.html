@@ -1,4 +1,5 @@
 <div id="language-picker">
+    <h3 th:text="#{language}"></h3>
     <button
         th:each="language : ${languages}"
         th:class="|language-item${selectedLanguage == language ? ' selected' : ''}|"

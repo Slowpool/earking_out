@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.session.perfectpitch.AudioPerfectPitchSessionAggregateDTO;
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.PerfectPitchSessionStatsService;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.annotations.DesktopComponent;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 @DesktopComponent
 @AllArgsConstructor
 public final class StatsPanesFactory {
-    private final PuzzleConfigRepository puzzleConfigRepository;
+    private final PersistentPuzzleConfigRepository puzzleConfigRepository;
     private final SessionRepositoryDelegator sessionRepository;
 
     public SessionStatsPane<?, ?, ?> create(final SessionId sessionId) {

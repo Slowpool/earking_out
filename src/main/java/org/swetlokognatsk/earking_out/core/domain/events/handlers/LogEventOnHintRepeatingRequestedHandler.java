@@ -5,13 +5,13 @@ import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.ports.config.PuzzleConfigRepository;
+import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
 @Service
 public final class LogEventOnHintRepeatingRequestedHandler extends LoggingToEventStoreHandler<HintRepeatingRequestedEvent> {
 
-    public LogEventOnHintRepeatingRequestedHandler(final EventStore eventStore, final PuzzleConfigRepository puzzleConfigRepository) {
+    public LogEventOnHintRepeatingRequestedHandler(final EventStore eventStore, final PersistentPuzzleConfigRepository puzzleConfigRepository) {
         super(eventStore, puzzleConfigRepository);
     }
 
