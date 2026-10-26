@@ -43,13 +43,11 @@ public class RedisPuzzleConfigRepository implements CachingPuzzleConfigRepositor
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(E exercise) {
         var puzzleConfig = getPuzzleConfig(exercise);
-        return getDtoAssembler()
-                .assemble(puzzleConfig);
+        return (PCDTO) assemble(puzzleConfig);
     }
 
     public <E extends Exercise, PCDTO extends PuzzleConfigDTO<E>> PCDTO getPuzzleConfigDTO(final E exercise, final UserId userId) {
         var key = buildKey(userId, exercise);
-        // TODO what do these `ops` word mean? possible commands for that data structure?
         var serializedPuzzleConfig = redisTemplate.opsForValue()
                 .get(key);
 
@@ -58,8 +56,7 @@ public class RedisPuzzleConfigRepository implements CachingPuzzleConfigRepositor
         }
 
         var puzzleConfig = puzzleConfigJsonSerializer.deserializePuzzleConfig(exercise, serializedPuzzleConfig);
-        return (PCDTO) getDtoAssembler()
-                .assemble(puzzleConfig);
+        return (PCDTO) assemble(puzzleConfig);
     }
 
     public <PCA extends PuzzleConfigAggregate<? extends Exercise>> void save(final PCA puzzleConfigAggregate) {
@@ -85,5 +82,10 @@ public class RedisPuzzleConfigRepository implements CachingPuzzleConfigRepositor
 
     private final String buildKey(final UserId userId, final Exercise exercise) {
         return "puzzle_configs:%d:%s".formatted(userId.id(), exercise.toString());
+    }
+
+    private <E extends Exercise> PuzzleConfigDTO<E> assemble(final PuzzleConfigAggregate<E> config) {
+        return getDtoAssembler()
+                .assemble(config);
     }
 }
