@@ -82,7 +82,6 @@ public class OauthController {
         var actualUserId = DI.get(UserService.class)
                 .ensureUserIsAttachedToOauth(OauthProviders.VKID, vkUserId, userName, avatarUrl);
         if (actualUserId.isPresent()) {
-            // TODO also save language to session
             saveUserToSession(session, actualUserId.get());
         }
 
@@ -91,9 +90,11 @@ public class OauthController {
 
     private void saveUserToSession(final HttpSession session, final UserId actualUserId) {
         session.setAttribute(USER_ID, actualUserId);
+        // locale interceptor will set it
         session.removeAttribute(LOCALE);
     }
 
+    // TODO move to custom HttpClient
     private Map<String, Object> exchangeVkidCode(final String code, final String state, final String deviceId,
             final String codeVerifier) {
         var serviceId = DI.get(Environment.class)
