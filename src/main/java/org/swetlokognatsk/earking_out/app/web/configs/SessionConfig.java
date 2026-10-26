@@ -1,6 +1,10 @@
 package org.swetlokognatsk.earking_out.app.web.configs;
 
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -23,6 +27,7 @@ class SessionConfig {
     private static final int SESSION_COOKIE_MAX_AGE = SECONDS_IN_DAY * 10;
 
     @Bean
+    @ConditionalOnMissingClass("org.springframework.session.data.redis.RedisSessionRepository")
     SessionRepository<MapSession> sessionRepository() {
         return new MapSessionRepository(new ConcurrentHashMap<>());
     }

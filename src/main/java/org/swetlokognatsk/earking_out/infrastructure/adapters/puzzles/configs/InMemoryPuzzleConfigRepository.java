@@ -32,9 +32,6 @@ public class InMemoryPuzzleConfigRepository implements CachingPuzzleConfigReposi
         this.puzzleConfigAggregatesFactoryResolver = puzzleConfigAggregatesFactoryResolver;
         this.dtoAssembler = dtoAssembler;
         this.userResolver = userResolver.orElse(null);
-
-        // TODO it should be used only in tests as i remember
-        // seedConfigs();
     }
 
     private <E extends Exercise, PCAF extends PuzzleConfigAggregatesFactory<? extends PuzzleConfigAggregate<E>>> PCAF createFactory(final E exercise) {
@@ -104,9 +101,4 @@ public class InMemoryPuzzleConfigRepository implements CachingPuzzleConfigReposi
                 .id();
         return new PuzzleConfigId(exercise.toString(), userId);
     }
-
-    public void actualizeCache() {
-        // no impl because it's caching repo itself        
-    }
-
 }
