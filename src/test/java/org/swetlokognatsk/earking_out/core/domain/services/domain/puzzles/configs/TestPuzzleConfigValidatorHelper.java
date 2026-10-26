@@ -33,23 +33,11 @@ public final class TestPuzzleConfigValidatorHelper {
     public static void assertErrorsCorrespondToProperties(final List<Error> errors, final List<String> expectedPropertiesToFail) {
         var mutableExpectedProps = new ArrayList<>(expectedPropertiesToFail);
         for (var error : errors) {
-        // TODO remake according to new error structure
-            var message = error.message();
-            var property = tryFindAnyProperty(message, mutableExpectedProps);
-            if (property == null) {
-                throw new AssertionError("property not found in errors. message: %s".formatted(message));
+            if (mutableExpectedProps.contains(error.property())) {
+                mutableExpectedProps.remove(error.property());
             } else {
-                mutableExpectedProps.remove(property);
+                throw new AssertionError("unexpected error: %s".formatted(error.toString()));
             }
         }
     }
-
-    public static String tryFindAnyProperty(final String message, final List<String> expectedPropertiesToFail) {
-        var optionalProperty = expectedPropertiesToFail.stream()
-        // TODO property must be here
-                .filter(message::contains)
-                .findFirst();
-        return optionalProperty.orElse(null);
-    }
-
 }
