@@ -39,18 +39,17 @@ public class SpringJpaUserRepository implements UserRepository {
     @Transactional
     public UserAggregate createAndSaveGuestUser(final String namePrefix) {
         var userEntity = new UserEntity("unknown guest", Languages.DEFAULT.value);
+        // save to get id from db
         entityManager.persist(userEntity);
 
-        // TODO ensure it works
         var name = NAME_TEMPLATE.formatted(namePrefix, userEntity.getId());
         userEntity.setName(name);
         entityManager.persist(userEntity);
 
-        // TODO what if use get()? will it be in the same transaciton?
         return mapUserEntityToAggregate(userEntity);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public UserAggregate get(final UserId userId) {
         var userEntity = findById(userId);
         if (userEntity == null) {
@@ -77,25 +76,21 @@ public class SpringJpaUserRepository implements UserRepository {
         updateUserName(userId, userName);
     }
 
-    @Transactional
     private void saveNewOauthIdentity(final UserId userId, final OauthProviders provider, final String providerUserId, final String pictureUrl) {
         var newOauthIdentity = new OauthIdentityEntity(userId.id(), provider, providerUserId, pictureUrl, LocalDateTime.now(), LocalDateTime.now());
         entityManager.persist(newOauthIdentity);
     }
 
-    @Transactional
     private void updateUserName(final UserId userId, final String userName) {
         var user = get(userId);
         user.setName(userName);
         save(user);
     }
 
-    @Transactional
     private UserEntity findById(final UserId userId) {
         return entityManager.find(UserEntity.class, userId.id());
     }
 
-    @Transactional
     private UserAggregate mapUserEntityToAggregate(final UserEntity userEntity) {
         var userId = new UserId(userEntity.getId());
         var userUuid = new UserUuid(userEntity.getUuid());
@@ -127,7 +122,7 @@ public class SpringJpaUserRepository implements UserRepository {
         return entity;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean hasOauthIdentity(final OauthProviders provider, final String providerUserId) {
         boolean isFound;
         try {
@@ -139,13 +134,12 @@ public class SpringJpaUserRepository implements UserRepository {
         return isFound;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public OauthIdentity getOauthIdentity(final OauthProviders provider, final String providerUserId) {
         var entity = findOauthIdentity(provider, providerUserId);
         return mapOauthIdentityEntityToAggregate(entity);
     }
 
-    @Transactional
     private OauthIdentityEntity findOauthIdentity(final OauthProviders provider, final String providerUserId) {
         var jpql = """
                     SELECT oauthIdentity

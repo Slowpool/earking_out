@@ -14,7 +14,7 @@ public final class DebugUtils {
         System.out.println("start: " + start);
     }
 
-    public static void stopStopwatch() {
+    public static double stopStopwatch() {
         var end = System.nanoTime();
         System.out.println("end: " + end);
         var diff = (end - start);
@@ -25,6 +25,8 @@ public final class DebugUtils {
         diffs.add(diffMillis);
         var avgDiff = diffs.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
         System.out.println("avg diff (s): " + avgDiff);
+
+        return diff;
     }
 
     public static void waitForDebugging() {
