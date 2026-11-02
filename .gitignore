@@ -32,3 +32,6 @@ redis.conf
 sftp.json
 settings.json
 node_modules
+
+StreamApiTests.java
+src/test/java/org/swetlokognatsk/earking_out/TryCatchTests.java

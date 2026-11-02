@@ -21,7 +21,6 @@ public class EventSourcingEventEntity {
     @Column(nullable = false)
     private String type;
 
-    // TODO use LocalDateTime instead
     @Column(name = "created_on", nullable = false)
     private LocalDateTime createdOn;
 

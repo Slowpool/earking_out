@@ -239,16 +239,8 @@ public class ApiController {
     }
 
     @PostMapping("/puzzle/perfect-pitch/audio/guess")
-    public ResponseEntity<?> guess(@RequestBody final AudioPerfectPitchGuessRequest body, @RequestParam(required = true) final SessionId sessionId) {
-        try {
-            audioPerfectPitchSessionService.guessViaTextNote(body.note());
-        } catch (InvalidTextNoteException e) {
-            // TODO InvalidTextNoteException
-            return badRequest().body("InvalidTextNoteException");
-        } catch (OutOfRangeTextNoteException e) {
-            // TODO OutOfRangeTextNoteException
-            return badRequest().body("OutOfRangeTextNoteException");
-        }
+    public ResponseEntity<?> guess(@RequestBody final AudioPerfectPitchGuessRequest body, @RequestParam(required = true) final SessionId sessionId) throws InvalidTextNoteException, OutOfRangeTextNoteException {
+        audioPerfectPitchSessionService.guessViaTextNote(body.note());
 
         persistQueuedEventLogs(sessionId);
         var response = puzzleGuessingResponseBuilder.build(AUDIO_PERFECT_PITCH_EXERCISE, sessionId);
