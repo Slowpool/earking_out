@@ -5,19 +5,19 @@ Earking out = Ear + working out
 # Brief description
 
 An app to train **perfect pitch** and related musical skills. There are billions of similar apps, but this one is the best in my honest opinion, at least because I can modify it on my own and do **whatever** i want.
-I also develop it for learning - Java, JavaFX, DDD, TDD, Event sourcing, PostgreSQL, SQLite, Hibernate
+I also develop it for learning - `Java`, `JavaFX`, `DDD`, `TDD`, `Event logging`, `PostgreSQL`, `SQLite`, `Hibernate`, `Spring`, `Redis`
 
 # Domains
-P.S. yep, the sole domain cuz i ain't gonna difficulty (the ending is pronounced like in simplify) things with separating it in two different domains (the training itself and statistics)
+For now, the whole app is built around a single domain:
 
-## Musical skills training // TODO think think think
+## Musical skills training
 ### Subdomains
    - Different musical skills **training** via `Exercises`
    - Dashboard with parameterized **statistics** // TODO implement
 
 # Ubiquitous language
 
-### The vast majority of points are made-up-by-me terms, cuz dunno how to correctly name these actions/phenomena. There're no any definitions for them neither in english nor in russian. So, they may be not clear without these definitions.
+### The vast majority of points are made-up-by-me terms, because I don't how to correctly name these actions/phenomena. There are no any definitions for them neither in english nor in russian. So, they may be not clear enough without these definitions.
 
 1. `Exercise` - some type of musical **training activity**, that is conducted in order to improve the one narrowly focused skill.
 
@@ -78,7 +78,7 @@ P.S. yep, the sole domain cuz i ain't gonna difficulty (the ending is pronounced
 
    If the `Session` status is `Completed` or `Aborted`, it cannot be changed any more.
 
-// TODO the draft is further
+// TODO
 x. Achievement
 
 
@@ -86,20 +86,16 @@ x. Achievement
 
 - Hexagonal architecture (Ports/Adapters)
 
-- In general, the whole app is supposed to be tightly coupled to `spring.boot` (though so far it never was), because it's decoupling framework by itself. Although it's still possible to decouple it and it'd be fine for really high complexity software
+- Test Driven Development - all business logic is firstly driven by unit tests. Not all infrastructure components are test-covered at all - the most of them require complicated integration tests
 
-- There are two modes:
-  - `app mode` - used to launch app and **use** it as **finite** user
-  - `test mode` - lightweight infrastructure implementations for **fast test launching**
+- In general, technically the whole app is tightly coupled to `spring`/`spring.boot` annotations because it's decoupling framework by itself. Though at the initial and middle stages it was decoupled from it successfully via bean factory API. After these first stages of experiments, I see that it's quite possible to decouple it and it'd be fine for really high complexity software, but not for this app, at least right now
 
-- Domain events publishing and subscribing are decoupled, so that implementation can be replaced. The current ones are via: `spring.boot` for app mode and `greenrobot.eventbus` (lightweight third-party event bus) for test mode.
+- Domain events publishing and subscribing are decoupled, so that implementation can be replaced. The currently used one is implemented via `spring.boot`, though another one via `greenrobot.eventbus` (lightweight third-party event bus) also exists
 
-- IoC container is decoupled. Two implementaions of it exist now:
-   - Spring framework (for app mode). So, yes, spring annotations aren't used and beans factory API is used instead.
-   - Handmade IoC container (for test mode)
+- IoC container is decoupled. Two implementaions of it existed ever:
+   - via `Spring framework` annotations. The actual implementation
+   - `Handmade IoC container` - obsolete implementation. Removed in later releases. Brings extra work in dependencies registering, but allowed to run tests faster, without spring context
 
-- There are two different builds:
-   - Web: PostgreSQL, MongoDB and Redis // TODO implement
-   - Desktop: SQLite // TODO implement via Hibernate/JPA
-   
-   Hexagonal architecture allows to do it via the shared core.
+- There are two different builds (hexagonal architecture is designed to do it via the shared core):
+   - Web: `Nginx`, `spring.web`, `PostgreSQL`, `Redis`
+   - Desktop: `JavaFX`, `SQLite`
