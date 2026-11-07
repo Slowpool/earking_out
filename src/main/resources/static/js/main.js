@@ -3,6 +3,7 @@ const WHITE = 'WHITE';
 const BLACK = 'BLACK';
 
 const SESSION_COMPLETED = 'COMPLETED';
+const SESSION_IN_PROGRESS = 'IN_PROGRESS';
 
 const PUZZLE_CONFIG_CONTEXT = 'PUZZLE_CONFIG_CONTEXT';
 const PUZZLE_CONTEXT = 'PUZZLE_CONTEXT';
@@ -119,7 +120,8 @@ document.addEventListener('keydown', function (e) {
         handler: function (response) {
             updatePuzzleAfterGuess(response);
             target.value = '';
-            if (!sessionState == SESSION_COMPLETED && response.guessIsSuccessful) {
+            var sessionIsInProgress = sessionState == SESSION_IN_PROGRESS;
+            if (sessionIsInProgress && response.guessIsSuccessful) {
                 clearMessage();
             }
             else {
