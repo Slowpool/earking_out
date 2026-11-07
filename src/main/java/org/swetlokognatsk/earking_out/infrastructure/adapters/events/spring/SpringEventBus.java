@@ -33,41 +33,45 @@ public final class SpringEventBus implements EventBus {
 
     public <DE extends DomainEvent> void subscribe(final Class<DE> eventClass, DomainEventHandler<DE> domainEventHandler) {
         // TODO one more optimization: keep keep keep keep flush keep keep keep flush
-        var handler = shouldWrapInTask(domainEventHandler)
-                ? new DomainEventHandler<DE>() {
-                    public void handle(final DE domainEvent) {
-                        taskExecutor.execute(() -> {
-                            domainEventHandler.handle(domainEvent);
-                        });
-                    }
-                }
+        var handler = shouldBeAsync(domainEventHandler)
+                ? wrapInAsync(domainEventHandler)
                 : domainEventHandler;
 
-        ApplicationListener<?> listener;
+        ApplicationListener<?> l;
         if (eventClass.equals(PianoKeyPressedEvent.class)) {
-            listener = (SpringPianoKeyPressedEvent e) -> handler.handle((DE) (e.domainEvent));
+            l = (SpringPianoKeyPressedEvent e) -> handler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(NewPuzzleCreatedEvent.class)) {
-            listener = (SpringNewPuzzleCreatedEvent e) -> handler.handle((DE) (e.domainEvent));
+            l = (SpringNewPuzzleCreatedEvent e) -> handler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(HintRepeatingRequestedEvent.class)) {
-            listener = (SpringHintRepeatingRequestedEvent e) -> handler.handle((DE) (e.domainEvent));
+            l = (SpringHintRepeatingRequestedEvent e) -> handler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(SessionStartedEvent.class)) {
-            listener = (SpringSessionStartedEvent e) -> handler.handle((DE) (e.domainEvent));
+            l = (SpringSessionStartedEvent e) -> handler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(SessionFinishedEvent.class)) {
-            listener = (SpringSessionFinishedEvent e) -> handler.handle((DE) (e.domainEvent));
+            l = (SpringSessionFinishedEvent e) -> handler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(UserTriedToGuessPuzzleEvent.class)) {
-            listener = (SpringUserTriedToGuessPuzzleEvent e) -> handler.handle((DE) (e.domainEvent));
+            l = (SpringUserTriedToGuessPuzzleEvent e) -> handler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(AudioPerfectPitchExercisePickedEvent.class)) {
-            listener = (SpringAudioPerfectPitchExercisePickedEvent e) -> handler.handle((DE) (e.domainEvent));
+            l = (SpringAudioPerfectPitchExercisePickedEvent e) -> handler.handle((DE) (e.domainEvent));
         } else {
             throw new RuntimeException("unknown event class: " + eventClass.getName());
         }
-        ctx.addApplicationListener(listener);
+        ctx.addApplicationListener(l);
     }
 
-    private final boolean shouldWrapInTask(final DomainEventHandler<?> domainEventHandler) {
+    private final boolean shouldBeAsync(final DomainEventHandler<?> domainEventHandler) {
         // smart hack
         return domainEventHandler.getClass()
                 .getSimpleName()
                 .startsWith("Log");
+    }
+
+    private <DE extends DomainEvent> DomainEventHandler<DE> wrapInAsync(DomainEventHandler<DE> handler) {
+        return new DomainEventHandler<DE>() {
+            public void handle(final DE domainEvent) {
+                taskExecutor.execute(() -> {
+                    handler.handle(domainEvent);
+                });
+            }
+        };
     }
 }
