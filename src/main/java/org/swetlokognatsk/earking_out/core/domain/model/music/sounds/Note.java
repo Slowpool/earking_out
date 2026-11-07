@@ -3,7 +3,9 @@ package org.swetlokognatsk.earking_out.core.domain.model.music.sounds;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import static java.util.Objects.requireNonNull;
@@ -24,21 +26,25 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public final class Note extends ValueObject implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static Set<Note> innerStorage;
+    private static Map<Note, PianoKeyNumber> innerStorage;
 
     public final NoteNames noteName;
     public final Accidentals accidental;
     public final Octaves octave;
 
     static {
-        var innerStorage = new HashSet<Note>();
+        var innerStorage = new HashMap<Note, PianoKeyNumber>();
 
         var accidentals = new ArrayList<>(Arrays.asList(Accidentals.values()));
         accidentals.add(null);
+
+        Note note;
         for (var noteName : NoteNames.values()) {
             for (var accidental : accidentals) {
                 for (var octave : Octaves.values()) {
-                    innerStorage.add(new Note(noteName, accidental, octave));
+                    note = new Note(noteName, accidental, octave);
+                    // passing null as keyNumber because it must be initialized later, in lazy way, because spring context is required in DI
+                    innerStorage.put(note, null);
                 }
             }
         }
@@ -54,7 +60,8 @@ public final class Note extends ValueObject implements Serializable {
 
     public static Note valueOf(final NoteNames noteName, final Accidentals accidental, final Octaves octave) {
         // yep, pretty not optimized, but we know that premature optimization is bad idea
-        return innerStorage.stream()
+        return innerStorage.keySet()
+                .stream()
                 .filter((Note note) -> Objects.equals(note.accidental, accidental)
                         && note.noteName.equals(noteName)
                         && note.octave.equals(octave))
@@ -63,9 +70,10 @@ public final class Note extends ValueObject implements Serializable {
     }
 
     public static Note[] denormalize(final PianoKeyNumber pianoKeyNumber, final boolean excludeNaturalAccidental) {
-        return innerStorage.stream()
-                .filter((Note note) -> Objects.equals(note.normalize(), pianoKeyNumber) &&
-                        !(excludeNaturalAccidental && Objects.equals(note.accidental, Accidentals.NATURAL)))
+        return innerStorage.keySet()
+                .stream()
+                .filter((Note note) -> Objects.equals(note.normalize(), pianoKeyNumber)
+                        && !(excludeNaturalAccidental && Objects.equals(note.accidental, Accidentals.NATURAL)))
                 .toArray(Note[]::new);
     }
 
@@ -74,13 +82,18 @@ public final class Note extends ValueObject implements Serializable {
     }
 
     public static Note[] getAll() {
-        return innerStorage.toArray(Note[]::new);
+        return innerStorage.keySet()
+                .toArray(Note[]::new);
     }
 
     // technically, low-level-module-depends-on-high-level-module violation. pragmatically, convenience method
     public PianoKeyNumber normalize() {
-        return DI.get(NotesNormalizingService.class)
-                .normalize(this);
+        return innerStorage.computeIfAbsent(this, (note) -> {
+            var keyNumber = DI.get(NotesNormalizingService.class)
+                    .normalize(note);
+            innerStorage.put(note, keyNumber);
+            return keyNumber;
+        });
     }
 
     public Note withOctave(Octaves octave) {

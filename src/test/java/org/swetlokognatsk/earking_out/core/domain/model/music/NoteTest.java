@@ -186,7 +186,7 @@ public final class NoteTest {
     @Test
     public void benchmarkValueOf() {
         // DebugUtils.startStopwatch();
-        for (int i = 0; i < /*1000*/0; i++) {
+        for (int i = 0; i < /* 1000 */0; i++) {
             List<Note> notes = new ArrayList<Note>(Note.getAll().length);
             for (var noteName : NoteNames.values()) {
                 for (var accidental : Accidentals.values()) {
@@ -195,6 +195,28 @@ public final class NoteTest {
                     }
                 }
             }
+            notes.clear();
+        }
+        // throw new RuntimeException(String.valueOf(DebugUtils.stopStopwatch()));
+    }
+
+    @Test
+    /**
+     * before optimization
+     * 2.0323433869E10
+     * 2.0460332773E10
+     *
+     * after optimization
+     * 1.2829191842E10
+     * 1.2804065209E10
+     */
+    public void benchmarkDenormalize() {
+        // DebugUtils.startStopwatch();
+        for (int i = 0; i < /*1000*/0; i++) {
+            final var notes = new LinkedList<Note[]>();
+            PianoKeyNumber.forEachKey((keyNumber) -> {
+                notes.add(Note.denormalize(keyNumber));
+            });
             notes.clear();
         }
         // throw new RuntimeException(String.valueOf(DebugUtils.stopStopwatch()));
