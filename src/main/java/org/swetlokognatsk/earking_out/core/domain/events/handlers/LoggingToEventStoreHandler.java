@@ -8,7 +8,7 @@ import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRe
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
 // TODO make it working via tasks, in special thread or asynchronously
-abstract class LoggingToEventStoreHandler<DE extends DomainEvent> extends DomainEventHandler<DE> {
+abstract class LoggingToEventStoreHandler<DE extends DomainEvent> implements DomainEventHandler<DE> {
     protected final EventStore eventStore;
     private final PersistentPuzzleConfigRepository puzzleConfigRepository;
 

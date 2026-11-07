@@ -31,6 +31,11 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - 'pg_db:/var/lib/postgresql'
+    command: >
+      postgres
+      -c log_statement=all
+      -c log_min_duration_statement=0
+      -c log_destination=stderr
     ports:
       - "5433:5432"
   

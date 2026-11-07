@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.services.app.session.perfectpitch.AudioPerfectPitchSessionService;
 
 @Service
-public final class AudioPerfectPitchGuessingOnPianoKeyPressedHandler extends DomainEventHandler<PianoKeyPressedEvent> {
+public final class AudioPerfectPitchGuessingOnPianoKeyPressedHandler implements DomainEventHandler<PianoKeyPressedEvent> {
 
     private final AudioPerfectPitchSessionService sessionService;
 

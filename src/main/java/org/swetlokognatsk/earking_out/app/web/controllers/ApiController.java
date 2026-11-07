@@ -4,11 +4,10 @@ import static org.swetlokognatsk.earking_out.app.web.SessionAttributes.LOCALE;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise.unknownExercise;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 import static org.springframework.http.ResponseEntity.*;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.swetlokognatsk.earking_out.SpringProfiles;
 import org.swetlokognatsk.earking_out.app.web.models.requests.PianoKeyboardActionRequest;
 import org.swetlokognatsk.earking_out.app.web.models.requests.perfectpitch.AudioPerfectPitchGuessRequest;
 import org.swetlokognatsk.earking_out.app.web.models.responses.PuzzleConfigPianoKeyPressingResponse;
@@ -39,7 +39,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExerciseTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
-import org.swetlokognatsk.earking_out.core.domain.model.session.SessionStates;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.InvalidTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.model.session.exceptions.OutOfRangeTextNoteException;
 import org.swetlokognatsk.earking_out.core.domain.services.app.ExerciseService;
@@ -58,6 +57,7 @@ import lombok.AllArgsConstructor;
  * json objects and etc.
  */
 @RestController
+@Profile(SpringProfiles.WEB)
 @RequestMapping("/api/v1")
 @AllArgsConstructor
 public class ApiController {
@@ -76,7 +76,6 @@ public class ApiController {
     private final PianoKeyboardViewModelsProjector pianoKeyboardViewModelsProjector;
     private final PuzzlePianoKeyPressingResponseBuilder puzzlePianoKeyPressingResponseBuilder;
     private final SessionRepositoryDelegator sessionRepositoryDelegator;
-    private final ThreadPoolTaskExecutor taskExecutor;
     private final PuzzlePianoKeyReleasingResponseBuilder puzzlePianoKeyReleasingResponseBuilder;
     private final AudioPerfectPitchStatsRenderer audioPerfectPitchStatsRenderer;
     private final PuzzleGuessingResponseBuilder puzzleGuessingResponseBuilder;
@@ -161,35 +160,9 @@ public class ApiController {
     public ResponseEntity<? extends PuzzlePianoKeyPressingResponse> pressPuzzlePianoKey(final Exercise exercise, @RequestBody final PianoKeyboardActionRequest body, @RequestParam(required = true) final SessionId sessionId) {
         pianoKeyboardService.pressPianoKey(body.pianoKeyboardId, body.pianoKeyNumber);
 
-        persistQueuedEventLogs(sessionId);
         var response = puzzlePianoKeyPressingResponseBuilder.build(exercise, sessionId);
 
         return ok(response);
-    }
-
-    // TODO now this is a temporary hack that executes all globally queued tasks. why to do it? events a logged asynchronously, and if user finishes the session before all events are logged, stats will be based on partial event logs and consequently they will be incorrect. debugging i figured out it's still imperfect, - there's still a possibility of wrong stats, but it's much lower
-    private void persistQueuedEventLogs(final SessionId sessionId) {
-        var sessionDto = sessionRepositoryDelegator.getSessionAggregateDTO(sessionId);
-
-        if (sessionDto.state == SessionStates.COMPLETED || sessionDto.state == SessionStates.ABORTED) {
-            executeAllTasksSynchronously();
-        }
-    }
-
-    private void executeAllTasksSynchronously() {
-        var remainedTasks = new LinkedList<Runnable>();
-        taskExecutor.getThreadPoolExecutor()
-                .getQueue()
-                .drainTo(remainedTasks);
-
-        for (var task : remainedTasks) {
-            try {
-                task.run();
-            } catch (Throwable e) {
-                // TODO log
-                System.out.println("failed to execute task: %s".formatted(e.getMessage()));
-            }
-        }
     }
 
     // why no sessionId? because either the session is open, either it's closed and ui must not send any release commands after session is closed. such a convention.
@@ -242,7 +215,6 @@ public class ApiController {
     public ResponseEntity<?> guess(@RequestBody final AudioPerfectPitchGuessRequest body, @RequestParam(required = true) final SessionId sessionId) throws InvalidTextNoteException, OutOfRangeTextNoteException {
         audioPerfectPitchSessionService.guessViaTextNote(body.note());
 
-        persistQueuedEventLogs(sessionId);
         var response = puzzleGuessingResponseBuilder.build(AUDIO_PERFECT_PITCH_EXERCISE, sessionId);
 
         return ok(response);

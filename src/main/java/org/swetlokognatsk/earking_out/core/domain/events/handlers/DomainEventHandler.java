@@ -1,8 +1,14 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
+import java.util.function.Consumer;
 
-public abstract class DomainEventHandler<DE extends DomainEvent> {
+@FunctionalInterface
+public interface DomainEventHandler<DE extends DomainEvent> extends Consumer<DE> {
 
-    public abstract void handle(final DE domainevent);
+    void handle(final DE domainevent);
+
+    default void accept(DE domainEvent) {
+        handle(domainEvent);
+    }
 }
