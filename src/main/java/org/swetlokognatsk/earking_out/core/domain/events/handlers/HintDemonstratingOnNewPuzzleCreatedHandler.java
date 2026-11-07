@@ -5,7 +5,7 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreate
 import org.swetlokognatsk.earking_out.infrastructure.adapters.hints.demonstrators.HintDemonstratorDelegator;
 
 @Service
-public final class HintDemonstratingOnNewPuzzleCreatedHandler extends DomainEventHandler<NewPuzzleCreatedEvent> {
+public final class HintDemonstratingOnNewPuzzleCreatedHandler implements DomainEventHandler<NewPuzzleCreatedEvent> {
 
     private final HintDemonstratorDelegator hintDemonstrator;
 

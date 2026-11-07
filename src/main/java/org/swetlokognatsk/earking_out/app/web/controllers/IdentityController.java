@@ -2,10 +2,13 @@ package org.swetlokognatsk.earking_out.app.web.controllers;
 
 import static org.swetlokognatsk.earking_out.app.web.SessionAttributes.*;
 import static org.springframework.http.ResponseEntity.*;
+
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.swetlokognatsk.earking_out.SpringProfiles;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
@@ -14,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
 @Controller
+@Profile(SpringProfiles.WEB)
 @RequestMapping("/identity")
 @AllArgsConstructor
 public class IdentityController {

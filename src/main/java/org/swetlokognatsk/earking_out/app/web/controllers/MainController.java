@@ -1,14 +1,17 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.swetlokognatsk.earking_out.SpringProfiles;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import lombok.AllArgsConstructor;
 
 @Controller
+@Profile(SpringProfiles.WEB)
 @AllArgsConstructor
 public class MainController {
 

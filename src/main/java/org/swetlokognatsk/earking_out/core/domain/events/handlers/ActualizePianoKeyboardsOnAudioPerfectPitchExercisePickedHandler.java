@@ -9,7 +9,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 import org.springframework.stereotype.Service;
 
 @Service
-public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler extends DomainEventHandler<AudioPerfectPitchExercisePickedEvent> {
+public class ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler implements DomainEventHandler<AudioPerfectPitchExercisePickedEvent> {
 
     private final PianoKeyboardRepository pianoKeyboardRepository;
     private final PersistentPuzzleConfigRepository puzzleConfigRepository;

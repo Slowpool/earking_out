@@ -1,15 +1,12 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.events.spring;
 
-import java.util.concurrent.Executor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandler;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionFinishedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
@@ -17,6 +14,8 @@ import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinished
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.UserTriedToGuessPuzzleEvent;
 import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
+import org.swetlokognatsk.earking_out.infrastructure.AsyncTaskExecutorByUser;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.events.EventBuses;
 
 @Component
@@ -24,17 +23,19 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.events.EventBuses;
 public final class SpringEventBus implements EventBus {
 
     private final ConfigurableApplicationContext ctx;
-    private final Executor taskExecutor;
+    private final AsyncTaskExecutorByUser asyncTaskExecutorByUser;
+    private final UserResolver userResolver;
 
-    public SpringEventBus(final ConfigurableApplicationContext ctx, final Executor taskExecutor) {
+    public SpringEventBus(final ConfigurableApplicationContext ctx, final AsyncTaskExecutorByUser asyncTaskExecutorByUser, final UserResolver userResolver) {
         this.ctx = ctx;
-        this.taskExecutor = taskExecutor;
+        this.asyncTaskExecutorByUser = asyncTaskExecutorByUser;
+        this.userResolver = userResolver;
     }
 
     public <DE extends DomainEvent> void subscribe(final Class<DE> eventClass, DomainEventHandler<DE> domainEventHandler) {
         // TODO one more optimization: keep keep keep keep flush keep keep keep flush
         var handler = shouldBeAsync(domainEventHandler)
-                ? wrapInAsync(domainEventHandler)
+                ? asyncTaskExecutorByUser.wrapInAsync(domainEventHandler)
                 : domainEventHandler;
 
         ApplicationListener<?> l;
@@ -63,15 +64,5 @@ public final class SpringEventBus implements EventBus {
         return domainEventHandler.getClass()
                 .getSimpleName()
                 .startsWith("Log");
-    }
-
-    private <DE extends DomainEvent> DomainEventHandler<DE> wrapInAsync(DomainEventHandler<DE> handler) {
-        return new DomainEventHandler<DE>() {
-            public void handle(final DE domainEvent) {
-                taskExecutor.execute(() -> {
-                    handler.handle(domainEvent);
-                });
-            }
-        };
     }
 }

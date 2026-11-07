@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.app.web.controllers;
 
 import jakarta.servlet.http.Cookie;
+
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.view.RedirectView;
 import static org.swetlokognatsk.earking_out.app.web.SessionAttributes.*;
+
+import org.swetlokognatsk.earking_out.SpringProfiles;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.DuplicateOauthAuthenticationException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.oauth.OauthProviders;
@@ -28,6 +32,7 @@ import java.util.Map;
 import static org.springframework.http.ResponseEntity.*;
 
 @Controller
+@Profile(SpringProfiles.WEB)
 @RequestMapping("/oauth")
 public class OauthController {
     // TODO move to .env

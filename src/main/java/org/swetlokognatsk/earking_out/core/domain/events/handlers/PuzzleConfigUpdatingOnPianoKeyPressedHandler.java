@@ -6,7 +6,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.services.app.PuzzleConfigService;
 
 @Service
-public final class PuzzleConfigUpdatingOnPianoKeyPressedHandler extends DomainEventHandler<PianoKeyPressedEvent> {
+public final class PuzzleConfigUpdatingOnPianoKeyPressedHandler implements DomainEventHandler<PianoKeyPressedEvent> {
 
     private final PuzzleConfigService puzzleConfigService;
 

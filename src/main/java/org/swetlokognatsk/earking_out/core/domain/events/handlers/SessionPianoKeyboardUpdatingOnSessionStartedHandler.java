@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyb
 import org.swetlokognatsk.earking_out.core.domain.services.app.PianoKeyboardService;
 
 @Service
-public final class SessionPianoKeyboardUpdatingOnSessionStartedHandler extends DomainEventHandler<SessionStartedEvent> {
+public final class SessionPianoKeyboardUpdatingOnSessionStartedHandler implements DomainEventHandler<SessionStartedEvent> {
 
     private final PianoKeyboardService pianoKeyboardService;
 

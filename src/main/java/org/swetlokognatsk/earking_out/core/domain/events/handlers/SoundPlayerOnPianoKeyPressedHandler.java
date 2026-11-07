@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public final class SoundPlayerOnPianoKeyPressedHandler extends DomainEventHandler<PianoKeyPressedEvent> {
+public final class SoundPlayerOnPianoKeyPressedHandler implements DomainEventHandler<PianoKeyPressedEvent> {
 
     private final PianoKeySoundsPlayer pianoKeySoundsPlayer;
     private final PianoSoundPolicyService pianoSoundPolicyService;
