@@ -55,8 +55,8 @@ public final class Note extends ValueObject implements Serializable {
     public static Note valueOf(final NoteNames noteName, final Accidentals accidental, final Octaves octave) {
         // yep, pretty not optimized, but we know that premature optimization is bad idea
         return innerStorage.stream()
-                .filter((Note note) -> note.noteName.equals(noteName)
-                        && Objects.equals(note.accidental, accidental)
+                .filter((Note note) -> Objects.equals(note.accidental, accidental)
+                        && note.noteName.equals(noteName)
                         && note.octave.equals(octave))
                 .findFirst()
                 .orElseThrow();

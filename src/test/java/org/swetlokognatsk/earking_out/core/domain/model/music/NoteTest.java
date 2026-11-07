@@ -2,8 +2,11 @@ package org.swetlokognatsk.earking_out.core.domain.model.music;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.swetlokognatsk.earking_out.DebugUtils;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.music.Accidentals;
 import org.swetlokognatsk.earking_out.core.domain.model.music.NoteNames;
@@ -180,4 +183,20 @@ public final class NoteTest {
                         && octave == Octaves.SEVENTH;
     }
 
+    @Test
+    public void benchmarkValueOf() {
+        // DebugUtils.startStopwatch();
+        for (int i = 0; i < /*1000*/0; i++) {
+            List<Note> notes = new ArrayList<Note>(Note.getAll().length);
+            for (var noteName : NoteNames.values()) {
+                for (var accidental : Accidentals.values()) {
+                    for (var octave : Octaves.values()) {
+                        notes.add(Note.valueOf(noteName, accidental, octave));
+                    }
+                }
+            }
+            notes.clear();
+        }
+        // throw new RuntimeException(String.valueOf(DebugUtils.stopStopwatch()));
+    }
 }

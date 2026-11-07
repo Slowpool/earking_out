@@ -1,7 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.model.music;
 
-import java.util.stream.Collectors;
-
 /**
  * Domain-restricted list of octaves. Physically the number of them is not
  * limited. `FIRST` is also called C1 in science
