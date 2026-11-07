@@ -29,9 +29,16 @@ public class AsyncTaskExecutorByUser {
                 } else {
                     future = completableFuture.thenRunAsync(() -> handler.handle(domainEvent), taskExecutor);
                 }
+                cleanUpOnComplete(userId, future);
                 return future;
             });
         };
+    }
+
+    private final void cleanUpOnComplete(final UserId userId, final CompletableFuture<Void> future) {
+        future.whenComplete((_, _) -> {
+            asyncHandlers.computeIfPresent(userId, (_, currentFuture) -> (future == currentFuture) ? null : currentFuture);
+        });
     }
 
     public void executeSynchronously() throws ExecutionException {
