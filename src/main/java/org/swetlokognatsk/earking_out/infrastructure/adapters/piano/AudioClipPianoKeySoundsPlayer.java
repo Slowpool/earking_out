@@ -24,13 +24,14 @@ public final class AudioClipPianoKeySoundsPlayer implements PianoKeySoundsPlayer
     private void buildSoundPlayers() {
         var files = getFiles();
         final var soundPlayers = new HashMap<PianoKeyNumber, AudioClipSoundPlayer>();
-        var filesStream = files.entrySet().stream();
-        filesStream.forEach((Map.Entry<PianoKeyNumber, File> fileEntry) -> {
-            var pianoKeyNumber = fileEntry.getKey();
-            var file = fileEntry.getValue();
-            var soundPlayer = new AudioClipSoundPlayer(file);
-            soundPlayers.put(pianoKeyNumber, soundPlayer);
-        });
+        files.entrySet()
+                .stream()
+                .forEach((Map.Entry<PianoKeyNumber, File> fileEntry) -> {
+                    var pianoKeyNumber = fileEntry.getKey();
+                    var file = fileEntry.getValue();
+                    var soundPlayer = new AudioClipSoundPlayer(file);
+                    soundPlayers.put(pianoKeyNumber, soundPlayer);
+                });
         this.soundPlayers = soundPlayers;
     }
 

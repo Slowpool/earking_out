@@ -1,7 +1,5 @@
 package org.swetlokognatsk.earking_out.core.domain.services.app.session;
 
-import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
-import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.ExtendedSessionStats;

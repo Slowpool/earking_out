@@ -13,10 +13,9 @@ public final class PianoKeyDTOAssembler {
     }
 
     public static PianoKeyDTO[] assemble(final PianoKey[] pianoKeys) {
-        var stream = Arrays.stream(pianoKeys);
-        var dtosStream = stream.map((PianoKey pianoKey) -> assemble(pianoKey));
-        var dtos = dtosStream.toArray(PianoKeyDTO[]::new);
-        return dtos;
+        return Arrays.stream(pianoKeys)
+                .map(PianoKeyDTOAssembler::assemble)
+                .toArray(PianoKeyDTO[]::new);
     }
 
     public static Map<PianoKeyNumber, PianoKeyDTO> assemble(final Map<PianoKeyNumber, PianoKey> pianoKeys) {

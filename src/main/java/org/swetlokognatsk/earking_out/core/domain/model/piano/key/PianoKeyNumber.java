@@ -1,14 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.model.piano.key;
 
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
-import org.swetlokognatsk.earking_out.core.domain.model.puzzles.PuzzlesFactory;
-import org.swetlokognatsk.earking_out.core.ports.di.DI;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +44,10 @@ public final class PianoKeyNumber extends ValueObject implements Serializable {
         return octaveScopedKeyNumber;
     }
 
-    /** Use {@link #valueOf()} if you wanna some PianoKeyNumber. It optimizes the memory */
+    /**
+     * Use {@link #valueOf()} if you wanna some PianoKeyNumber. It optimizes the
+     * memory
+     */
     private PianoKeyNumber(final byte value) {
         validate(value);
         this.value = (byte) value;

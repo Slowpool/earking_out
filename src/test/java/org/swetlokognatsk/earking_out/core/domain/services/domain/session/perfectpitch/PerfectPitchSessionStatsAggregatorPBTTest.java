@@ -34,7 +34,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKe
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
+// TODO stream optimization
 @JqwikSpringSupport
 @SpringBootTest
 public final class PerfectPitchSessionStatsAggregatorPBTTest {
@@ -56,12 +56,8 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
     // TODO optimization
     // ensuring that the set of stats notes is subset of possible solutions
     private void assertAllNotesExistInPossibleSolutions(final PerfectPitchSessionStats<?> stats, final List<PianoKeyNumber> possibleSolutions) {
-        var statsNotes = Arrays.stream(stats.notesStats)
-                .map(noteStats -> noteStats.keyNumber)
-                .toList();
-        for (var note : statsNotes) {
-            assertTrue(possibleSolutions.contains(note));
-        }
+        Arrays.stream(stats.notesStats)
+                .forEach(noteStats -> assertTrue(possibleSolutions.contains(noteStats.keyNumber)));
     }
 
     private void assertNumberOfNoteApperancesEqual(final DomainEvent[] domainEvents, final PerfectPitchSessionStats<?> stats) {

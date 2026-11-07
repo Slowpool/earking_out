@@ -20,7 +20,6 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.SerializationCloner;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.identity.TestUserResolver;
-
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 @EOSpringBootTest
@@ -50,9 +49,10 @@ public class RandomAudioPerfectPitchSolutionGeneratorTest {
         var notes = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
         var generator = createPuzzleGenerator(notes);
 
-        Stream<PianoKeyNumber> stream = Arrays.stream(notes);
-        var map = stream.map((PianoKeyNumber keyNumber) -> new AudioPerfectPitchSolution(keyNumber));
-        Solution[] possibleSolutions = map.toArray(Solution[]::new);
+        Solution[] possibleSolutions = Arrays.stream(notes)
+        // WOOOW. did not know this syntax is possible
+                .map(AudioPerfectPitchSolution::new)
+                .toArray(Solution[]::new);
         Solution generatedSolution;
         for (int i = 0; i < ITERATIONS_NUMBER; i++) {
             generatedSolution = generator.generate();

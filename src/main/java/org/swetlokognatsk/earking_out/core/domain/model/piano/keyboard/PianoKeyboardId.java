@@ -27,10 +27,8 @@ public enum PianoKeyboardId {
     }
 
     public static PianoKeyboardId[] getPianoKeyboardIds(final Exercise exercise) {
-        var allIds = values();
-        var stream = Arrays.stream(allIds);
-        var filteredIds = stream.filter((PianoKeyboardId pianoKeyboardId) -> exercise.equals(pianoKeyboardId.exercise));
-        var pianoKeyboardIds = filteredIds.toArray(PianoKeyboardId[]::new);
-        return pianoKeyboardIds;
+        return Arrays.stream(values())
+                .filter((PianoKeyboardId pianoKeyboardId) -> exercise.equals(pianoKeyboardId.exercise))
+                .toArray(PianoKeyboardId[]::new);
     }
 }

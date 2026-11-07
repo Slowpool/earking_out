@@ -3,10 +3,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generator
 import java.util.Arrays;
 import java.util.Random;
 import java.util.function.IntFunction;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
-import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.PerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.PerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.puzzles.generators.ConfigBasedSolutionGenerator;
@@ -17,6 +14,7 @@ public abstract class RandomPerfectPitchSolutionGenerator<S extends PerfectPitch
     protected final S[] possibleSolutions;
 
     protected abstract S buildPossibleSolution(final PianoKeyNumber keyNumber);
+
     protected abstract IntFunction<S[]> getArrayConstructor();
 
     public RandomPerfectPitchSolutionGenerator(final PCDTO puzzleConfig) {
@@ -27,9 +25,9 @@ public abstract class RandomPerfectPitchSolutionGenerator<S extends PerfectPitch
     }
 
     private S[] buildPossibleSolutions() {
-        var stream = Arrays.stream(puzzleConfigDto.normalizedNotesForPuzzle);
-        Solution[] possibleSolutions = stream.map(possibleNote -> buildPossibleSolution(possibleNote)).toArray(getArrayConstructor());
-        return (S[]) possibleSolutions;
+        return Arrays.stream(puzzleConfigDto.normalizedNotesForPuzzle)
+                .map(this::buildPossibleSolution)
+                .toArray(getArrayConstructor());
     }
 
     // TODO actually all logic in current class (except this method) is core logic, whereas this method should be implemented via infrastructure service
