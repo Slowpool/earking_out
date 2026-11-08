@@ -11,6 +11,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.factories.SessionAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
@@ -30,14 +31,18 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());
 
     private InMemoryAudioPerfectPitchSessionRepository repository;
-    private SessionId seededSessionId;
     private SessionRepositoryTestHelper sessionRepositoryHelper;
+    private PuzzleConfigTestHelper puzzleConfigHelper;
+
+    private SessionId seededSessionId;
 
     @BeforeEach
     public void setup() {
         repository = DI.get(InMemoryAudioPerfectPitchSessionRepository.class);
         sessionRepositoryHelper = DI.get(SessionRepositoryTestHelper.class);
-
+        puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
+        puzzleConfigHelper.configureSomeValidPuzzleConfig();
+        
         seededSessionId = sessionRepositoryHelper.startSession(repository);
     }
 
