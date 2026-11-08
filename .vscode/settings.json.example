@@ -11,6 +11,7 @@
             
             "vmArgs": [
                 "-Dspring.profiles.active=test",
+                "-Dtest.profiles=audio,experiment",
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.app=ALL-UNNAMED",
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.app.desktop=ALL-UNNAMED",
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.app.desktop.components=ALL-UNNAMED",

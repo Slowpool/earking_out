@@ -5,6 +5,8 @@ import static org.swetlokognatsk.earking_out.core.domain.model.music.Constants.*
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
@@ -22,6 +24,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.session.SessionRep
 
 @EOSpringBootTest
 @DirtiesContext
+@EnableAutoConfiguration(exclude = {})
 public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepositoryTest<SessionId, AudioPerfectPitchSessionAggregate, InMemoryAudioPerfectPitchSessionRepository> {
     private static final AudioPerfectPitchSolution SOLUTION = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
     private static final AudioPerfectPitchSolution WRONG_SOLUTION = new AudioPerfectPitchSolution(SOLUTION.keyNumber.increment());

@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.piano;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
@@ -13,6 +14,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.piano.AudioClipPia
  * there's no any exception during playing, that's it.
  */
 @EOSpringBootTest
+@EnabledIfSystemProperty(named = "test.profiles", matches = ".*audio.*")
 public final class AudioClipPianoKeySoundsPlayerIntegrationTest {
 
     private AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
