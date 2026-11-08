@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
@@ -39,6 +40,11 @@ public final class DomainEventsFactory {
     public PianoKeyPressedEvent createPianoKeyPressedEvent(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber pianoKeyNumber) {
         var timestamp = createTimestamp();
         return new PianoKeyPressedEvent(getCurrentUserId(), timestamp, pianoKeyboardId, pianoKeyNumber);
+    }
+
+    public PianoKeyReleasedEvent createPianoKeyReleasedEvent(final PianoKeyboardId pianoKeyboardId, final PianoKeyNumber pianoKeyNumber) {
+        var timestamp = createTimestamp();
+        return new PianoKeyReleasedEvent(getCurrentUserId(), timestamp, pianoKeyboardId, pianoKeyNumber);
     }
 
     public NewPuzzleCreatedEvent createNewPuzzleCreatedEvent(final SessionId sessionId, final Puzzle<?, ?> puzzle) {

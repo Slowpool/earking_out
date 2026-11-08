@@ -2,7 +2,7 @@ package org.swetlokognatsk.earking_out.infrastructure.adapters.events.greenrobot
 
 import org.greenrobot.eventbus.Subscribe;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.base.DomainEventHandler;
 
 public abstract class GreenrobotEventHandler<DE extends DomainEvent, DH extends DomainEventHandler<DE>> {
     protected final DH domainHandler;

@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.events.handlers;
+package org.swetlokognatsk.earking_out.core.domain.events.handlers.base;
 
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
@@ -7,7 +7,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRepository;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
-abstract class LoggingSessionEventToEventStoreHandler<DE extends DomainEvent> extends LoggingToEventStoreHandler<DE> {
+public abstract class LoggingSessionEventToEventStoreHandler<DE extends DomainEvent> extends LoggingToEventStoreHandler<DE> {
 
     private final SessionRepositoryDelegator sessionRepositoryDelegator;
 

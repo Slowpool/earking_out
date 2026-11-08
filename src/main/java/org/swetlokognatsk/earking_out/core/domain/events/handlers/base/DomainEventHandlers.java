@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.events.handlers;
+package org.swetlokognatsk.earking_out.core.domain.events.handlers.base;
 
 import org.swetlokognatsk.earking_out.core.ports.events.EventBus;
 import java.util.HashMap;
@@ -7,6 +7,19 @@ import java.util.logging.Handler;
 import static java.util.Map.entry;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.AudioPerfectPitchGuessingOnPianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnHintRepeatingRequestedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.HintDemonstratingOnNewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnHintRepeatingRequestedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnNewPuzzleCreatedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionFinishedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnSessionStartedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.LogEventOnUserTriedToGuessPuzzleHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.PuzzleConfigUpdatingOnPianoKeyPressedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SendToMessageBrokerOnDomainEventHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SessionPianoKeyboardUpdatingOnSessionStartedHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.SoundPlayerOnPianoKeyPressedHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
@@ -43,5 +56,7 @@ public final class DomainEventHandlers {
         eventBus.subscribe(PianoKeyPressedEvent.class, DI.get(AudioPerfectPitchGuessingOnPianoKeyPressedHandler.class));
 
         eventBus.subscribe(AudioPerfectPitchExercisePickedEvent.class, DI.get(ActualizePianoKeyboardsOnAudioPerfectPitchExercisePickedHandler.class));
+
+        eventBus.subscribe(DomainEvent.class, DI.get(SendToMessageBrokerOnDomainEventHandler.class));
     }
 }

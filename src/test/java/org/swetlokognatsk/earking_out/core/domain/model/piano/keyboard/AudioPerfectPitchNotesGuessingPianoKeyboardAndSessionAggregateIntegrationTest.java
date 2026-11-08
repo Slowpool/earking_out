@@ -5,7 +5,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.base.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;

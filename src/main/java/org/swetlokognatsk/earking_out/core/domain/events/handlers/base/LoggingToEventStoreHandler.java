@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.events.handlers;
+package org.swetlokognatsk.earking_out.core.domain.events.handlers.base;
 
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
@@ -8,11 +8,11 @@ import org.swetlokognatsk.earking_out.core.ports.config.PersistentPuzzleConfigRe
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 
 // TODO make it working via tasks, in special thread or asynchronously
-abstract class LoggingToEventStoreHandler<DE extends DomainEvent> implements DomainEventHandler<DE> {
+public abstract class LoggingToEventStoreHandler<DE extends DomainEvent> implements DomainEventHandler<DE> {
     protected final EventStore eventStore;
     private final PersistentPuzzleConfigRepository puzzleConfigRepository;
 
-    LoggingToEventStoreHandler(final EventStore eventStore, final PersistentPuzzleConfigRepository puzzleConfigRepository) {
+    public LoggingToEventStoreHandler(final EventStore eventStore, final PersistentPuzzleConfigRepository puzzleConfigRepository) {
         this.eventStore = eventStore;
         this.puzzleConfigRepository = puzzleConfigRepository;
     }

@@ -6,8 +6,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.base.DomainEventHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
@@ -41,6 +42,8 @@ public final class SpringEventBus implements EventBus {
         ApplicationListener<?> l;
         if (eventClass.equals(PianoKeyPressedEvent.class)) {
             l = (SpringPianoKeyPressedEvent e) -> handler.handle((DE) (e.domainEvent));
+        } else if (eventClass.equals(PianoKeyReleasedEvent.class)) {
+            l = (SpringPianoKeyReleasedEvent e) -> handler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(NewPuzzleCreatedEvent.class)) {
             l = (SpringNewPuzzleCreatedEvent e) -> handler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(HintRepeatingRequestedEvent.class)) {
@@ -53,6 +56,8 @@ public final class SpringEventBus implements EventBus {
             l = (SpringUserTriedToGuessPuzzleEvent e) -> handler.handle((DE) (e.domainEvent));
         } else if (eventClass.equals(AudioPerfectPitchExercisePickedEvent.class)) {
             l = (SpringAudioPerfectPitchExercisePickedEvent e) -> handler.handle((DE) (e.domainEvent));
+        } else if (eventClass.equals(DomainEvent.class)) {
+            l = (SpringDomainEvent e) -> handler.handle((DE) (e.domainEvent));
         } else {
             throw new RuntimeException("unknown event class: " + eventClass.getName());
         }

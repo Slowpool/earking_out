@@ -3,10 +3,13 @@ package org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.core.ports.events.messagebroker.MessageBroker;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardTestHelper.*;
 
@@ -43,15 +46,29 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void playSoundOnPress() {
+    public void createEventOnKeyPress() {
         var pianoKeyboard = createPianoKeyboard();
         pianoKeyboard.pressKey(PianoKeyNumber.FIRST_NOTE_NUMBER);
 
         var events = pianoKeyboard.flushEvents();
-        assertEquals(1, events.size());
 
+        assertEquals(1, events.size());
         var event = events.getFirst();
-        assertTrue(PianoKeyPressedEvent.class.equals(event.getClass()));
+        assertEquals(PianoKeyPressedEvent.class, event.getClass());
+    }
+
+    @Test
+    public void createEventOnKeyRelease() {
+        var pianoKeyboard = createPianoKeyboard();
+        pianoKeyboard.pressKey(PianoKeyNumber.FIRST_NOTE_NUMBER);
+        pianoKeyboard.flushEvents();
+        pianoKeyboard.releaseKey();
+
+        var events = pianoKeyboard.flushEvents();
+
+        assertEquals(1, events.size());
+        var event = events.getFirst();
+        assertEquals(PianoKeyReleasedEvent.class, event.getClass());
     }
 
     @Test

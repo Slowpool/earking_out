@@ -9,6 +9,7 @@ import static org.swetlokognatsk.earking_out.SpringProfiles.*;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.exercises.AudioPerfectPitchExercisePickedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyPressedEvent;
+import org.swetlokognatsk.earking_out.core.domain.events.pianokeyboard.PianoKeyReleasedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.HintRepeatingRequestedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.NewPuzzleCreatedEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
@@ -37,6 +38,7 @@ public final class SpringEventPublisher implements EventPublisher {
         return switch (domainEvent) {
         // TODO what to do with source? remain as is? remove domainEvent?
         case PianoKeyPressedEvent de -> new SpringPianoKeyPressedEvent(de, de);
+        case PianoKeyReleasedEvent de -> new SpringPianoKeyReleasedEvent(de, de);
         case NewPuzzleCreatedEvent de -> new SpringNewPuzzleCreatedEvent(de, de);
         case HintRepeatingRequestedEvent de -> new SpringHintRepeatingRequestedEvent(de, de);
         case SessionStartedEvent de -> new SpringSessionStartedEvent(de, de);

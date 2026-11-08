@@ -4,7 +4,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.swetlokognatsk.earking_out.app.desktop.EarkingOutDesktopApplication;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandlers;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.base.DomainEventHandlers;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import javafx.application.Application;
 

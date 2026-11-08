@@ -3,6 +3,7 @@ package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.base.LoggingSessionEventToEventStoreHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionFinishedEvent;
 import org.swetlokognatsk.earking_out.core.domain.helpers.SessionRepositoryDelegator;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;

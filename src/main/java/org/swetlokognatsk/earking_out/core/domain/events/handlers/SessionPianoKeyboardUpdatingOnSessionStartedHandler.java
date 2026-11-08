@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.core.domain.events.handlers;
 
 import org.springframework.stereotype.Service;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.base.DomainEventHandler;
 import org.swetlokognatsk.earking_out.core.domain.events.session.SessionStartedEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;

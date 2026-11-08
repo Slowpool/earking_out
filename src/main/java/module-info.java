@@ -144,6 +144,7 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.events.handlers;
     exports org.swetlokognatsk.earking_out.core.ports.identity;
     exports org.swetlokognatsk.earking_out.core.domain.model.identity.oauth;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.messagebroker;
 
     opens org.swetlokognatsk.earking_out;
     opens org.swetlokognatsk.earking_out.app.desktop;

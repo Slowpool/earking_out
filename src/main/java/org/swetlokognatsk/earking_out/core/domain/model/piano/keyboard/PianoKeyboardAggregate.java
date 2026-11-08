@@ -231,6 +231,10 @@ public final class PianoKeyboardAggregate extends AggregateRoot<OwnedPianoKeyboa
         pressedKey.release();
         applySelectingLogicAfterRelease(pressedKey);
 
+        var pianoKeyReleasedEvent = getDomainEventsFactory()
+                .createPianoKeyReleasedEvent(getId().pianoKeyboardId(), pressedKey.keyNumber);
+        addEvent(pianoKeyReleasedEvent);
+
         pressedKey = null;
     }
 

@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
-import org.swetlokognatsk.earking_out.core.domain.events.handlers.DomainEventHandler;
+import org.swetlokognatsk.earking_out.core.domain.events.handlers.base.DomainEventHandler;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import lombok.AllArgsConstructor;
