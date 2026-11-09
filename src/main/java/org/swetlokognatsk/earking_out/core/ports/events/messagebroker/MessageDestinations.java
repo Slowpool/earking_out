@@ -7,5 +7,5 @@ import lombok.AllArgsConstructor;
 public enum MessageDestinations {
     DOMAIN_EVENTS("domain-events");
 
-    final String destination;
+    public final String value;
 }

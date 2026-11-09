@@ -34,6 +34,9 @@ module org.swetlokognatsk {
     requires java.net.http;
     requires spring.data.redis;
     requires jdk.net;
+    requires kafka.clients;
+    requires spring.kafka;
+    requires spring.messaging;
 
     // further exports/opens are definitely cluttering. spring recommends to delete the module-info.java file at all because spring requires reflection over almost the whole code base. nevertheless i decided to keep them for learning/training. wanna have some debugging experience and type-is-not-{exported/opened} and method-is-not-accessible errors
     exports org.swetlokognatsk.earking_out.app.desktop;
@@ -253,5 +256,6 @@ module org.swetlokognatsk {
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.identity;
     opens org.swetlokognatsk.earking_out.app.web.views.models.fillers.perfectpitch;
     opens org.swetlokognatsk.earking_out.core.domain.events.handlers;
+    opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.messagebroker;
 
 }
