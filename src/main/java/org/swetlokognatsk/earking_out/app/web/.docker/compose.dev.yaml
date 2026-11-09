@@ -67,7 +67,6 @@ services:
       KAFKA_PROCESS_ROLES: broker,controller
     # TODO what is this
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-    # TODO what is this
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
     # TODO what is this
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
@@ -86,6 +85,8 @@ services:
       KAFKA_NUM_PARTITIONS: 3
     volumes:
       - 'kafka_data:/var/lib/kafka/data'
+    ports:
+      - '9092:9092'
     # TODO explore details
     healthcheck:
       test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]

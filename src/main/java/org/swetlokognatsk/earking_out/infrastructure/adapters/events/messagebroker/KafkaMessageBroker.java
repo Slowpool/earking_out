@@ -18,16 +18,12 @@ public class KafkaMessageBroker implements MessageBroker {
     }
 
     public void send(final MessageDestinations destination, final Object message) {
-        // TODO remove
-        System.out.println("");
-        System.out.println("sending the message to kafka: " + message.toString());
-        System.out.println("");
         // TODO is it open/closed-compatible?
         switch (destination) {
         case DOMAIN_EVENTS:
             var domainEvent = (DomainEvent) message;
             var key = domainEvent.userId.toString();
-            kafkaTemplate.send(destination.value, key, domainEvent)
+            kafkaTemplate.send(destination.value, key, domainEvent.toString())
             // TODO .handle(exception -> logger.log(exception))
             ;
             break;
