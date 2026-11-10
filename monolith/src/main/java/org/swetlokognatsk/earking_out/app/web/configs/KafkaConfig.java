@@ -21,7 +21,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 @EnableKafka
 public class KafkaConfig {
 
-    @Value("${spring.kafka.consumer.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
     public static final String GROUP_ID = "earking-out-app";

@@ -8,14 +8,10 @@ import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
 import lombok.AllArgsConstructor;
 
 @WebComponent
-// @AllArgsConstructor
+@AllArgsConstructor
 public class KafkaMessageBroker implements MessageBroker {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
-
-    public KafkaMessageBroker(final KafkaTemplate<String, Object> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
 
     public void send(final MessageDestinations destination, final Object message) {
         // TODO is it open/closed-compatible?
@@ -23,7 +19,7 @@ public class KafkaMessageBroker implements MessageBroker {
         case DOMAIN_EVENTS:
             var domainEvent = (DomainEvent) message;
             var key = domainEvent.userId.toString();
-            kafkaTemplate.send(destination.value, key, domainEvent.toString())
+            kafkaTemplate.send(destination.value, key, domainEvent)
             // TODO .handle(exception -> logger.log(exception))
             ;
             break;
