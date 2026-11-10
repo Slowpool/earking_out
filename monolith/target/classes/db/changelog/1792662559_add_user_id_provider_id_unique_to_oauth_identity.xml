@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="14" author="slowpool">
+        <!-- well, it's typo in `1791275520_add_oauth_identity_table.xml` constaint name - it must have been `oauth_identity_provider_id_and_provider_user_id_uq`, so using it now -->
+        <addUniqueConstraint
+            constraintName="oauth_identity_provider_id_and_provider_user_id_uq"
+            tableName="oauth_identity"
+            columnNames="user_id,provider_id"
+        />
+    </changeSet>
+
+</databaseChangeLog>

@@ -7,6 +7,7 @@ import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.core.ports.events.DomainEventJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.ObjectMapper;
@@ -14,9 +15,11 @@ import tools.jackson.databind.json.JsonMapper;
 
 // TODO why to use spring boot docker compose extension at all then if running app via docker compose directly is much simpler?
 @Component
+@NoArgsConstructor
+// TODO DomainEvent > Object because it's common (cross-app) serializer
 public class KafkaSerializer implements Serializer<DomainEvent> {
 
-    private final DomainEventJsonSerializer eventSerializer;
+    private DomainEventJsonSerializer eventSerializer;
     private final ObjectMapper objectMapper;
 
     {
@@ -24,8 +27,12 @@ public class KafkaSerializer implements Serializer<DomainEvent> {
                 .build();
     }
 
-    public KafkaSerializer() {
-        this.eventSerializer = DI.get(DomainEventJsonSerializer.class);
+    // lazy init, because kafka handles serializers out of spring
+    public DomainEventJsonSerializer getEventSerializer() {
+        if (eventSerializer == null) {
+            eventSerializer = DI.get(DomainEventJsonSerializer.class);
+        }
+        return eventSerializer;
     }
 
     public KafkaSerializer(final DomainEventJsonSerializer eventSerializer) {
@@ -33,20 +40,24 @@ public class KafkaSerializer implements Serializer<DomainEvent> {
     }
 
     public byte[] serialize(final String topic, final DomainEvent event) {
-        var serializedDomainEvent = eventSerializer.serializeDomainEvent(event);
+        var serializedDomainEvent = getEventSerializer()
+                .serializeDomainEvent(event);
         serializedDomainEvent = wrapWithType(event.getClass(), serializedDomainEvent);
         return serializedDomainEvent.getBytes();
     }
 
     /**
      * Converts
+     * 
      * <pre>
      * {
      *     "userId": 1,
      *     "timestamp": 2026-10-22T14:34:04.147064557
      * }
      * </pre>
+     * 
      * to
+     * 
      * <pre>
      * {
      *     "type": "SessionStartedEvent",

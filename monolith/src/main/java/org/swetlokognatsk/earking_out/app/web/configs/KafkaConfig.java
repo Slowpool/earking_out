@@ -27,7 +27,7 @@ public class KafkaConfig {
     public static final String GROUP_ID = "earking-out-app";
 
     @Bean
-    NewTopics domainEventsTopic() {
+    NewTopics newTopics() {
         return new NewTopics(
                 new NewTopic("domain-events", 3, (short) 1),
                 new NewTopic("achievements", 3, (short) 1));

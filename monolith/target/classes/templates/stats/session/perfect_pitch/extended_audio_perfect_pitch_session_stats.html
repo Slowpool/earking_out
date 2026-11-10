@@ -1,0 +1,38 @@
+<div class="stats-block centered">
+    <table id="audio-perfect-pitch-stats-table" th:if="${not #arrays.isEmpty(stats.notesStats)}">
+        <thead>
+            <tr>
+                <th>
+                    <span th:text="#{puzzles.perfect_pitch.stats.notes.title}"></span>
+                </th>
+                <th>
+                    <span th:text="#{puzzles.perfect_pitch.stats.appearances.title}"></span>
+                    <span class="hint" th:title="#{puzzles.perfect_pitch.stats.appearances.hint}">ⓘ</span>
+                </th>
+                <th th:text="#{puzzles.perfect_pitch.stats.guesses.title}">
+                    <span></span>
+                </th>
+                <th>
+                    <span th:text="#{puzzles.perfect_pitch.stats.perfect_guesses.title}"></span>
+                    <span class="hint" th:title="#{puzzles.perfect_pitch.stats.perfect_guesses.hint}">ⓘ</span>
+                </th>
+                <th>
+                    <span th:text="#{puzzles.perfect_pitch.stats.perfect_guesses_ratio.title}"></span>
+                    <span class="hint" th:title="#{puzzles.perfect_pitch.stats.perfect_guesses_ratio.hint}">ⓘ</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="noteStats : ${stats.notesStats}" th:with="notes=${T(org.swetlokognatsk.earking_out.core.domain.model.music.sounds.Note).denormalize(noteStats.keyNumber, true)}">
+                <td>
+                    <span th:each="note : ${notes}" th:text="|${note.noteName.name()}${note.accidental?.character ?: ''}${note.octave.number} |"></span>
+                </td>
+                <td th:text="${noteStats.numberOfAppearances}"></td>
+                <td th:text="${noteStats.numberOfAllGuesses}"></td>
+                <td th:text="${noteStats.numberOfPerfectGuesses}"></td>
+                <td th:text="${#numbers.formatPercent(noteStats.perfectGuessesRatio, 1, 2)}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div th:if="${#arrays.isEmpty(stats.notesStats)}" class="stats-block centered" th:text="#{stats.session.recording_is_disabled.title}"></div>
+</div>

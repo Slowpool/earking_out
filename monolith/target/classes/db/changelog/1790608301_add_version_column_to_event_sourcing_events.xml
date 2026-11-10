@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="5-sqlite" author="slowpool" dbms="sqlite">
+        <sql>
+            ALTER TABLE event_sourcing_events ADD COLUMN version INTEGER NOT NULL DEFAULT 1
+        </sql>
+    </changeSet>
+
+    <changeSet id="5-standard" author="slowpool" dbms="!sqlite">
+        <addColumn tableName="event_sourcing_events">
+            <column name="version" type="int" defaultValueNumeric="1">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
