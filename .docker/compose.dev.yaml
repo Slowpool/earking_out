@@ -3,10 +3,10 @@ services:
     container_name:
       'earking-out-web'
     build:
-      dockerfile: './java/Dockerfile'
+      dockerfile: '${MONOLITH_ROOT}/src/main/java/org/swetlokognatsk/earking_out/app/web/.docker/java/Dockerfile.dev'
     volumes:
-      - '${PROJECT_ROOT}/target/classes:/app/BOOT-INF/classes:delegated'
-      - '${PROJECT_ROOT}/target/lib:/app/BOOT-INF/lib:delegated'
+      - '${MONOLITH_ROOT}/target/classes:/app/BOOT-INF/classes:delegated'
+      - '${MONOLITH_ROOT}/target/lib:/app/BOOT-INF/lib:delegated'
     environment:
       SPRING_APPLICATION_NAME: "${APP_NAME}"
       SPRING_DATASOURCE_URL: "${POSTGRES_CONNECTION_URI}"
@@ -24,6 +24,27 @@ services:
         condition: service_started
       redis:
         condition: service_started
+      kafka:
+        condition: service_healthy
+
+  achievements-service:
+    container_name:
+      earking_out-achievements
+    build:
+      dockerfile: '${ACHIEVEMENTS_ROOT}/.docker/achievements_service/Dockerfile.dev'
+    volumes:
+      - '${ACHIEVEMENTS_ROOT}/target/classes:/app/BOOT-INF/classes:delegated'
+      - '${ACHIEVEMENTS_ROOT}/target/lib:/app/BOOT-INF/lib:delegated'
+    environment:
+      SPRING_APPLICATION_NAME: "${ACHIEVEMENTS_SERVICE_NAME}"
+      # # TODO is it needed
+      # SPRING_DATA_REDIS_HOST: "${SPRING_DATA_REDIS_HOST}"
+      # SPRING_DATA_REDIS_PORT: "${SPRING_DATA_REDIS_PORT}"
+      # SPRING_DATA_REDIS_PASSWORD: "${SPRING_DATA_REDIS_PASSWORD}"
+    ports:
+      - '1942:8082'
+      - '5016:5006'
+    depends_on:
       kafka:
         condition: service_healthy
 

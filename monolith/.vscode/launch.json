@@ -17,11 +17,19 @@
         },
         {
             "type": "java",
-            "name": "Debug",
+            "name": "DebugMonolith",
             "request": "attach",
             "hostName": "localhost",
             "port": "5015",
-            "preLaunchTask": "WaitForBootstrap"
+            // "preLaunchTask": "WaitForBootstrap"
+        },
+        {
+            "type": "java",
+            "name": "DebugAchievements",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": "5016",
+            // "preLaunchTask": "WaitForBootstrap"
         },
         {
             "type": "java",
@@ -42,7 +50,15 @@
             "name": "WebAppDebug",
             "configurations": [
                 "WebApp",
-                "Debug"
+                "DebugMonolith",
+                "DebugAchievements"
+            ]
+        },
+        {
+            "name": "Debug",
+            "configurations": [
+                "DebugMonolith",
+                "DebugAchievements"
             ]
         }
     ]
