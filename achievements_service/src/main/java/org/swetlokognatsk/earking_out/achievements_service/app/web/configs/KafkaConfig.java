@@ -22,12 +22,7 @@ public class KafkaConfig {
     private String bootstrapServers;
 
     public static final String GROUP_ID = "achievements-service";
-
-    @Bean
-    NewTopics newTopics() {
-        return new NewTopics(
-                new NewTopic("achievements", 3, (short) 1));
-    }
+    public static final String ACHIEVEMENTS_TOPIC = "achievements";
 
     @Bean
     ConsumerFactory<String, String> consumerFactory() {
