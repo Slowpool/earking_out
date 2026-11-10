@@ -1,0 +1,65 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "DesktopApp",
+            "request": "launch",
+            "mainClass": "org.swetlokognatsk/org.swetlokognatsk.earking_out.DesktopEntryPoint",
+            "vmArgs": "-Dspring.profiles.active=desktop"
+        },
+        {
+            "type": "java",
+            "name": "WebApp",
+            "request": "launch",
+            "mainClass": "org.swetlokognatsk/org.swetlokognatsk.earking_out.WebEntryPoint",
+            "vmArgs": "-Dspring.profiles.active=web --add-reads org.swetlokognatsk=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang=spring.core"
+        },
+        {
+            "type": "java",
+            "name": "DebugMonolith",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": "5015",
+            // "preLaunchTask": "WaitForBootstrap"
+        },
+        {
+            "type": "java",
+            "name": "DebugAchievements",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": "5016",
+            // "preLaunchTask": "WaitForBootstrap"
+        },
+        {
+            "type": "java",
+            "name": "Remote debug",
+            "request": "attach",
+            "hostName": "earking-out.ru",
+            "port": "1937",
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "WebAppDebug",
+            "configurations": [
+                "WebApp",
+                "DebugMonolith",
+                "DebugAchievements"
+            ]
+        },
+        {
+            "name": "Debug",
+            "configurations": [
+                "DebugMonolith",
+                "DebugAchievements"
+            ]
+        }
+    ]
+}

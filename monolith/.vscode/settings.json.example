@@ -11,7 +11,7 @@
             
             "vmArgs": [
                 "-Dspring.profiles.active=test",
-                "-Dtest.profiles=",
+                "-Dtest.profiles=audio,experiment",
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.app=ALL-UNNAMED",
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.app.desktop=ALL-UNNAMED",
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.app.desktop.components=ALL-UNNAMED",
@@ -96,8 +96,9 @@
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.occurent_tests=ALL-UNNAMED",
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.learning_tests=ALL-UNNAMED",
                 "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.infrastructure.web=ALL-UNNAMED",
-                "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.infrastructure.web.adapters.piano=ALL-UNNAMED"
+                "--add-opens=org.swetlokognatsk/org.swetlokognatsk.earking_out.infrastructure.web.adapters.piano=ALL-UNNAMED",
             ]
         }
-    ]
+    ],
+    "java.jdt.ls.java.home": "/usr/lib/jvm/java-26-openjdk-amd64"
 }
