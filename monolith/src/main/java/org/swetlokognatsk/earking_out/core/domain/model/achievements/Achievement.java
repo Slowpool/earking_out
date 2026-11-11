@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.core.domain.model;
+package org.swetlokognatsk.earking_out.core.domain.model.achievements;
 
 import java.io.Serializable;
 import org.swetlokognatsk.earking_out.core.domain.model.base.ValueObject;
