@@ -7,8 +7,8 @@ import org.swetlokognatsk.earking_out.infrastructure.annotations.WebComponent;
 @WebComponent
 public class TestDomainEventsListener {
 
-    @KafkaListener(topics = "domain-events")
-    public void accept(/* DomainEvent */ String domainEvent) {
+    // @KafkaListener(topics = "domain-events")
+    public void accept(DomainEvent domainEvent) {
         System.out.println("");
         System.out.println("reading the domain event from kafka: %s".formatted(domainEvent));
         System.out.println("");

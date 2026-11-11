@@ -45,7 +45,7 @@ public class AchievementService {
     private Set<UnlockedAchievement> tryUnlockAfter(final Set<Achievement> lockedAchievements, final DomainEvent domainEvent) {
         var userId = domainEvent.get("userId", UserId.class);
         // TODO tryUnlockAfter
-        return Set.of(new UnlockedAchievement(new AchievementId(1), userId));
+        return Set.of(new UnlockedAchievement(new AchievementId(1), new UserId(1)));
     }
 
     private void sendUnlockedAchievements(final Set<UnlockedAchievement> achievements) {

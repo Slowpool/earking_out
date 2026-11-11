@@ -12,6 +12,8 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaAdmin.NewTopics;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 
 @Configuration
 // TODO investigate @EnableKafka
@@ -20,6 +22,8 @@ public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
+    @Value("${spring.kafka.producer.properties.spring.json.add.type.headers}")
+    private String addTypeHeaders;
 
     public static final String GROUP_ID = "achievements-service";
     public static final String ACHIEVEMENTS_TOPIC = "achievements";
@@ -32,6 +36,7 @@ public class KafkaConfig {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(JacksonJsonSerializer.ADD_TYPE_INFO_HEADERS, addTypeHeaders);
 
         return new DefaultKafkaConsumerFactory<>(props);
     }
