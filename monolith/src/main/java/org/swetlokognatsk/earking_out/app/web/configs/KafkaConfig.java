@@ -13,7 +13,6 @@ import org.springframework.kafka.core.KafkaAdmin.NewTopics;
 import org.springframework.kafka.support.converter.StringJacksonJsonMessageConverter;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
-
 import static org.swetlokognatsk.earking_out.SpringProfiles.WEB;
 import java.util.HashMap;
 import org.apache.kafka.clients.admin.NewTopic;

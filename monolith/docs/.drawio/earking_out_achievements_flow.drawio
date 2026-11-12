@@ -1,0 +1,232 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="MluiWcNceP5h4QbJ7DUV">
+    <mxGraphModel dx="976" dy="490" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gKglogDBTnhUNa3I1dRx-7" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-41" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-43">
+          <mxGeometry relative="1" x="0.0332" as="geometry">
+            <Array as="points">
+              <mxPoint x="127.24999999999989" y="140.00000000000006" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-8" connectable="0" parent="gKglogDBTnhUNa3I1dRx-7" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Acts in application" vertex="1">
+          <mxGeometry relative="1" x="0.3137" y="1" as="geometry">
+            <mxPoint x="-18" y="-9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-1" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlActor;size=40;" value="" vertex="1">
+          <mxGeometry height="400" width="20" x="50" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-41" parent="gKglogDBTnhUNa3I1dRx-1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="120" width="10" x="5" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-14" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-2" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-4">
+          <mxGeometry relative="1" x="-0.0029" as="geometry">
+            <Array as="points">
+              <mxPoint x="292.2499999999999" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-15" connectable="0" parent="gKglogDBTnhUNa3I1dRx-14" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Publishes domain&lt;div&gt;events asynchronously&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.2607" as="geometry">
+            <mxPoint x="-20" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-18" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-43" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;dashed=1;" target="gKglogDBTnhUNa3I1dRx-41">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="129.99999999999994" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-19" connectable="0" parent="gKglogDBTnhUNa3I1dRx-18" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(#000000, var(--ge-light-color, #ffffff));&quot;&gt;Sends response&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.3385" y="-2" as="geometry">
+            <mxPoint x="25" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-2" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="Java monolith" vertex="1">
+          <mxGeometry height="400" width="80" x="160" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-40" parent="gKglogDBTnhUNa3I1dRx-2" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="35" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-43" parent="gKglogDBTnhUNa3I1dRx-2" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="120" width="10" x="35" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-9" edge="1" parent="gKglogDBTnhUNa3I1dRx-2" source="gKglogDBTnhUNa3I1dRx-43" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-43">
+          <mxGeometry relative="1" x="0.2346" as="geometry">
+            <Array as="points">
+              <mxPoint x="75.5" y="60" />
+              <mxPoint x="75.5" y="80" />
+            </Array>
+            <mxPoint x="105.5" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-11" connectable="0" parent="gKglogDBTnhUNa3I1dRx-9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Creates domain events" vertex="1">
+          <mxGeometry relative="1" x="0.1852" y="1" as="geometry">
+            <mxPoint x="64" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="User" vertex="1">
+          <mxGeometry height="30" width="60" x="30" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-4" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="Message broker, domain events" vertex="1">
+          <mxGeometry height="400" width="120" x="320" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-5" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="Achievements service" vertex="1">
+          <mxGeometry height="400" width="80" x="640" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-44" parent="gKglogDBTnhUNa3I1dRx-5" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="90" width="10" x="35" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-12" edge="1" parent="1" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;">
+          <mxGeometry relative="1" x="0.1481" as="geometry">
+            <Array as="points">
+              <mxPoint x="235" y="170" />
+              <mxPoint x="235" y="190" />
+            </Array>
+            <mxPoint x="205" y="170" as="sourcePoint" />
+            <mxPoint x="205" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-13" connectable="0" parent="gKglogDBTnhUNa3I1dRx-12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Publishes domain&lt;div&gt;events synchronously&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0988" y="1" as="geometry">
+            <mxPoint x="59" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-20" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-4" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-44">
+          <mxGeometry relative="1" x="0.0288" as="geometry">
+            <Array as="points">
+              <mxPoint x="529.5" y="260" />
+            </Array>
+            <mxPoint x="365" y="260" as="sourcePoint" />
+            <mxPoint x="525" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-21" connectable="0" parent="gKglogDBTnhUNa3I1dRx-20" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Consumes domain events" vertex="1">
+          <mxGeometry relative="1" x="0.313" as="geometry">
+            <mxPoint x="-33" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-22" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="Message broker, achievements" vertex="1">
+          <mxGeometry height="400" width="120" x="480" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-24" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Earking out: Achievements flow" vertex="1">
+          <mxGeometry height="30" width="140" x="350" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-31" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-44" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="612.2500000000002" y="399.9999999999999" />
+            </Array>
+            <mxPoint x="615" y="400" as="sourcePoint" />
+            <mxPoint x="915" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-32" connectable="0" parent="gKglogDBTnhUNa3I1dRx-31" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Sends new&lt;div&gt;unlocked achievements&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.2733" as="geometry">
+            <mxPoint x="20" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-33" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-22" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-2">
+          <mxGeometry relative="1" x="0.0164" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="380" />
+            </Array>
+            <mxPoint x="425" y="420" as="sourcePoint" />
+            <mxPoint x="285" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-34" connectable="0" parent="gKglogDBTnhUNa3I1dRx-33" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Consumes unlocked achievements" vertex="1">
+          <mxGeometry relative="1" x="-0.9821" as="geometry">
+            <mxPoint x="-156" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-39" connectable="0" parent="gKglogDBTnhUNa3I1dRx-33" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Publishes AchievementUnlocked&lt;div&gt;event asynchronously&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.9821" as="geometry">
+            <mxPoint x="-246" y="20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-35" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-40" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-1">
+          <mxGeometry relative="1" x="-0.5055" as="geometry">
+            <Array as="points">
+              <mxPoint x="130" y="400" />
+            </Array>
+            <mxPoint x="435" y="480" as="sourcePoint" />
+            <mxPoint x="95" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-36" connectable="0" parent="gKglogDBTnhUNa3I1dRx-35" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];whiteSpace=wrap;" value="Sends notification about achievement unlocking" vertex="1">
+          <mxGeometry relative="1" x="-0.9819" as="geometry">
+            <mxPoint x="-68" y="-40" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-37" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-40" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-4">
+          <mxGeometry relative="1" x="-0.49" as="geometry">
+            <Array as="points">
+              <mxPoint x="297.2500000000002" y="470.0000000000001" />
+            </Array>
+            <mxPoint x="515" y="490" as="sourcePoint" />
+            <mxPoint x="375" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-27" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-44" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-44">
+          <mxGeometry relative="1" x="0.08" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="320" />
+              <mxPoint x="720" y="350" />
+            </Array>
+            <mxPoint x="760" y="315" as="sourcePoint" />
+            <mxPoint x="760" y="335" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-45" edge="1" parent="1" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;" target="gKglogDBTnhUNa3I1dRx-2">
+          <mxGeometry relative="1" x="-0.714" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="290" />
+            </Array>
+            <mxPoint x="675" y="290" as="sourcePoint" />
+            <mxPoint x="540" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-46" connectable="0" parent="gKglogDBTnhUNa3I1dRx-45" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Asks for other domain events as source of information" vertex="1">
+          <mxGeometry relative="1" x="-0.6383" as="geometry">
+            <mxPoint x="-139" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-47" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-2" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;dashed=1;" target="gKglogDBTnhUNa3I1dRx-44">
+          <mxGeometry relative="1" x="-0.6845" as="geometry">
+            <Array as="points">
+              <mxPoint x="437.25" y="320" />
+            </Array>
+            <mxPoint x="350" y="320" as="sourcePoint" />
+            <mxPoint x="220" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-48" connectable="0" parent="gKglogDBTnhUNa3I1dRx-47" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Returns domain events" vertex="1">
+          <mxGeometry relative="1" x="0.3385" y="-2" as="geometry">
+            <mxPoint x="-77" y="-17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-49" edge="1" parent="1" source="gKglogDBTnhUNa3I1dRx-44" style="edgeStyle=sequenceEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;libavoidRouting=0;curved=0;exitX=1;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" target="gKglogDBTnhUNa3I1dRx-44">
+          <mxGeometry relative="1" x="-0.94" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="255" />
+              <mxPoint x="720" y="290" />
+            </Array>
+            <mxPoint x="695" y="225" as="sourcePoint" />
+            <mxPoint x="695" y="255" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-52" parent="1" style="whiteSpace=wrap;labelBorderColor=none;strokeColor=none;" value="Figures out what domain events to ask for (single just consumed event  is not enough)" vertex="1">
+          <mxGeometry height="70" width="120" x="720" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="gKglogDBTnhUNa3I1dRx-53" parent="1" style="whiteSpace=wrap;labelBorderColor=none;strokeColor=none;" value="Inspects whether conditions are met to throw any possible achievements" vertex="1">
+          <mxGeometry height="70" width="120" x="720" y="310" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
