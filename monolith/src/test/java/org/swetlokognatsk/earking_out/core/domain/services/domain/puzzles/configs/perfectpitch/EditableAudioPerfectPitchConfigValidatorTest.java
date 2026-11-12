@@ -32,7 +32,7 @@ public final class EditableAudioPerfectPitchConfigValidatorTest extends PuzzleCo
     }
 
     @Test
-    public void noNormalizedNotesForPuzzleIsOk() {
+    void noNormalizedNotesForPuzzleIsOk() {
         var puzzleConfigAggregate = createPuzzleConfig();
         // just ensuring there's no normalized notes after creating
         assertEquals(0, puzzleConfigAggregate.getNormalizedNotesForPuzzle().length);
@@ -42,7 +42,7 @@ public final class EditableAudioPerfectPitchConfigValidatorTest extends PuzzleCo
 
     @Test
     // TODO if inputMode is not `KEYBOARD_AS_PIANO`
-    public void someNormalizedNotesForPuzzleIsOk() {
+    void someNormalizedNotesForPuzzleIsOk() {
         var puzzleConfigAggregate = createPuzzleConfig();
         // TODO use PianoKeyboardTest.SOME_PIANO_KEYS somehow, probably via extra helper
         var somePianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, LAST_NOTE_NUMBER };
@@ -52,7 +52,7 @@ public final class EditableAudioPerfectPitchConfigValidatorTest extends PuzzleCo
     }
 
     @Test
-    public void noNormalizedRootNoteIsOk() {
+    void noNormalizedRootNoteIsOk() {
         var puzzleConfigAggregate = createPuzzleConfig();
         assertNull(puzzleConfigAggregate.getNormalizedRootNote());
 
@@ -61,7 +61,7 @@ public final class EditableAudioPerfectPitchConfigValidatorTest extends PuzzleCo
 
     @Test
     // TODO if inputMode is not `KEYBOARD_AS_PIANO`
-    public void someNormalizedRootNoteIsOk() {
+    void someNormalizedRootNoteIsOk() {
         var puzzleConfigAggregate = createPuzzleConfig();
 
         puzzleConfigAggregate.updateProperty(NORMALIZED_ROOT_NOTE_PROP, FIRST_NOTE_NUMBER);

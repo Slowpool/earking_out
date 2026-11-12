@@ -41,12 +41,12 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         pianoKeyboardHelper = DI.get(PianoKeyboardTestHelper.class);
     }
 
     @Test
-    public void createEventOnKeyPress() {
+    void createEventOnKeyPress() {
         var pianoKeyboard = createPianoKeyboard();
         pianoKeyboard.pressKey(PianoKeyNumber.FIRST_NOTE_NUMBER);
 
@@ -58,7 +58,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void createEventOnKeyRelease() {
+    void createEventOnKeyRelease() {
         var pianoKeyboard = createPianoKeyboard();
         pianoKeyboard.pressKey(PianoKeyNumber.FIRST_NOTE_NUMBER);
         pianoKeyboard.flushEvents();
@@ -72,7 +72,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void selectedKeysDisappearAfterRefresh() {
+    void selectedKeysDisappearAfterRefresh() {
         var pianoKeyboard = createPianoKeyboard();
         ensureSomePianoKeysAreSelected(pianoKeyboard);
 
@@ -82,7 +82,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void pressedKeysDisappearAfterRefresh() {
+    void pressedKeysDisappearAfterRefresh() {
         var pianoKeyboard = createPianoKeyboard();
         ensureSomePianoKeysArePressed(pianoKeyboard);
 
@@ -92,7 +92,7 @@ public final class AnyPianoKeyboardTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void thereAreNoEventsAfterEventsFlushing() {
+    void thereAreNoEventsAfterEventsFlushing() {
         var pianoKeyboard = createPianoKeyboard();
         makeSomeEvents(pianoKeyboard);
 

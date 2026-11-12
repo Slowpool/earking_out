@@ -143,7 +143,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
     }
 
     @BeforeTry
-    public void setup(@Autowired ApplicationContext springContext) {
+    void setup(@Autowired ApplicationContext springContext) {
         DI.setContext(springContext, true);
         DI.register(AudioPerfectPitchSolutionGenerator.class, DetermenisticRandomAudioPerfectPitchSolutionGenerator.class);
 
@@ -185,7 +185,7 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
     }
 
     @Property
-    public void allProperties(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
+    void allProperties(@ForAll("randomPianoKeyNumbers") final List<PianoKeyNumber> possibleSolutions, @ForAll("randomGuesses") final List<Boolean> guesses) {
         var domainEvents = buildDomainEventsTimeline(possibleSolutions, guesses);
 
         var stats = aggregate(domainEvents);
@@ -207,31 +207,31 @@ public final class PerfectPitchSessionStatsAggregatorPBTTest {
                 () -> assertPerfectGuessesRatio(stats, domainEvents));
     }
 
-    public void assertAllNotesAreDistinct(final PerfectPitchSessionStats<?> stats) {
+    void assertAllNotesAreDistinct(final PerfectPitchSessionStats<?> stats) {
         var distinctNotesStream = Arrays.stream(stats.notesStats)
                 .map(noteStats -> noteStats.keyNumber)
                 .distinct();
         assertEquals(stats.notesStats.length, distinctNotesStream.count());
     }
 
-    public void assertAllNotesAreFromPossibleSolutions(final PerfectPitchSessionStats<?> stats, final List<PianoKeyNumber> possibleSolutions, final List<Boolean> guesses) {
+    void assertAllNotesAreFromPossibleSolutions(final PerfectPitchSessionStats<?> stats, final List<PianoKeyNumber> possibleSolutions, final List<Boolean> guesses) {
         assertTrue(stats.notesStats.length <= possibleSolutions.size());
         assertAllNotesExistInPossibleSolutions(stats, possibleSolutions);
     }
 
-    public void assertNumberOfNoteAppearances(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
+    void assertNumberOfNoteAppearances(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
         assertNumberOfNoteApperancesEqual(domainEvents, stats);
     }
 
-    public void assertNumberOfEachNoteAllGuesses(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
+    void assertNumberOfEachNoteAllGuesses(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
         assertNumberOfAllGuessesEqual(domainEvents, stats);
     }
 
-    public void assertNumberOfNotePerfectGuesses(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
+    void assertNumberOfNotePerfectGuesses(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
         assertNumberOfPerfectGuessesEqual(domainEvents, stats);
     }
 
-    public void assertPerfectGuessesRatio(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
+    void assertPerfectGuessesRatio(final PerfectPitchSessionStats<?> stats, final DomainEvent[] domainEvents) {
         assertPerfectGuessesRatioEqual(domainEvents, stats);
     }
 

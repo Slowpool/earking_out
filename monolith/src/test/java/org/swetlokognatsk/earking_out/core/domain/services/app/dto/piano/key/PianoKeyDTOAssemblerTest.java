@@ -28,7 +28,7 @@ public final class PianoKeyDTOAssemblerTest {
 
     // TODO WHAT! HOW IT WORKS!? 
     @BeforeEach
-    public void setup() {
+    void setup() {
         pianoKeysFactory = DI.get(PianoKeysFactory.class);
 
         pianoKey1 = pianoKeysFactory.create(FIRST_NOTE_NUMBER, PianoKeyMode.SELECT);
@@ -41,52 +41,52 @@ public final class PianoKeyDTOAssemblerTest {
     }
 
     @Test
-    public void keyNumber1() {
+    void keyNumber1() {
         assertEquals(pianoKey1.keyNumber, dto1.keyNumber());
     }
 
     @Test
-    public void keyNumber2() {
+    void keyNumber2() {
         assertEquals(pianoKey2.keyNumber, dto2.keyNumber());
     }
 
     @Test
-    public void color1() {
+    void color1() {
         assertEquals(pianoKey1.color, dto1.color());
     }
 
     @Test
-    public void color2() {
+    void color2() {
         assertEquals(pianoKey2.color, dto2.color());
     }
 
     @Test
-    public void mode1() {
+    void mode1() {
         assertEquals(pianoKey1.mode, dto1.mode());
     }
 
     @Test
-    public void mode2() {
+    void mode2() {
         assertEquals(pianoKey2.mode, dto2.mode());
     }
 
     @Test
-    public void isSelected1() {
+    void isSelected1() {
         assertEquals(pianoKey1.getIsSelected(), dto1.isSelected());
     }
 
     @Test
-    public void isSelected2() {
+    void isSelected2() {
         assertEquals(pianoKey2.getIsSelected(), dto2.isSelected());
     }
 
     @Test
-    public void isPressed1() {
+    void isPressed1() {
         assertEquals(pianoKey1.getIsPressed(), dto1.isPressed());
     }
 
     @Test
-    public void isPressed2() {
+    void isPressed2() {
         assertEquals(pianoKey2.getIsPressed(), dto2.isPressed());
     }
 

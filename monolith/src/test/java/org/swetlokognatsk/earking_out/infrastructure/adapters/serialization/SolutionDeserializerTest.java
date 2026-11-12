@@ -66,7 +66,7 @@ public class SolutionDeserializerTest extends DeserializerBaseTest<Solution, Sol
     }
 
     @Test
-    public void deserializeAudioPerfectPitchSolution() {
+    void deserializeAudioPerfectPitchSolution() {
         var solution = readValue(AUDIO_PERFECT_PITCH_SOLUTION, AudioPerfectPitchSolution.class);
 
         assertAudioPerfectPitchSolution(solution);
@@ -74,7 +74,7 @@ public class SolutionDeserializerTest extends DeserializerBaseTest<Solution, Sol
 
     // // TODO uncover after returning to visual perfect pitch
     // @Test
-    // public void deserializeVisualPerfectPitchPuzzleWithVC() {
+    // void deserializeVisualPerfectPitchPuzzleWithVC() {
     //     var puzzle = readValue(VISUAL_PERFECT_PITCH_PUZZLE, VisualPerfectPitchPuzzle.class);
 
     //     assertVisualPerfectPitchPuzzle(puzzle);

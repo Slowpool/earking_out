@@ -17,7 +17,7 @@ public class AudioPerfectPitchPuzzleTest {
     private PuzzleConfigTestHelper puzzleConfigHelper;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         puzzleHelper = DI.get(PuzzleTestHelper.class);
         puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
 
@@ -26,14 +26,14 @@ public class AudioPerfectPitchPuzzleTest {
 
     @Test
     // TODO it checks whether puzzle.create indeed creates the object of `Puzzle` type, that's it. is it ok to test such a thing or it is redundant?
-    public void puzzleClassCorresponds() {
+    void puzzleClassCorresponds() {
         var puzzle = puzzleHelper.createPuzzle(AUDIO_PERFECT_PITCH_EXERCISE);
 
         assertTrue(puzzle instanceof AudioPerfectPitchPuzzle);
     }
 
     @Test
-    public void perfectPitchCorrectPuzzleGuess() {
+    void perfectPitchCorrectPuzzleGuess() {
         var solution = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
         var puzzle = puzzleHelper.createPuzzle(AUDIO_PERFECT_PITCH_EXERCISE, solution);
 
@@ -43,7 +43,7 @@ public class AudioPerfectPitchPuzzleTest {
     }
 
     @Test
-    public void perfectPitchWrongPuzzleGuess() {
+    void perfectPitchWrongPuzzleGuess() {
         var solution = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER);
         var puzzle = puzzleHelper.createPuzzle(AUDIO_PERFECT_PITCH_EXERCISE, solution);
         var wrongSolution = new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER.increment());
@@ -61,7 +61,7 @@ public class AudioPerfectPitchPuzzleTest {
     //  * constructor successfully assigned the object variable `IHintFinder` as a
     //  * dependency
     //  */
-    // public void hintCorrespondsToSolution() {
+    // void hintCorrespondsToSolution() {
     //     var fakeSolution = "4";
     //     var exercise = AUDIO_PERFECT_PITCH_EXERCISE;
 

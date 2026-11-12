@@ -57,7 +57,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         repository = DI.get(InMemoryPianoKeyboardRepository.class);
     }
 
@@ -65,7 +65,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
     @Test
     @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
     // actually it's a wrong approach to test it, because it does not cover the whole """immutability""". the correct approach here is to check references of objects from `get()` before and after save - they must be different so that modifying some aggregate's state it'd not be immediately saved in the memory even afore `save()` call due to having the same reference to the same object.
-    public void changeAggregatePropertyWithoutSave() {
+    void changeAggregatePropertyWithoutSave() {
         var rootNotePicker = repository.getInevitably(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
 
         rootNotePicker.touchKey(FIRST_NOTE_NUMBER);
@@ -82,7 +82,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
     @Test
     @Deprecated
     @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
-    public void changeAggregatePropertyWithSave() {
+    void changeAggregatePropertyWithSave() {
         var rootNotePicker = repository.getInevitably(AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER);
         var someRootNote = FIRST_NOTE_NUMBER;
 
@@ -94,23 +94,23 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
     }
 
     @Test
-    public void ensureGetMethodGivesCopyWithoutSaveProxy() {
+    void ensureGetMethodGivesCopyWithoutSaveProxy() {
         ensureGetMethodGivesCopyWithoutSave();
     }
 
     @Test
-    public void ensureGetMethodGivesCopyAfterSaveProxy() {
+    void ensureGetMethodGivesCopyAfterSaveProxy() {
         ensureGetMethodGivesCopyAfterSave();
     }
 
     @Test
-    public void ensureSaveMethodPersistsCopyProxy() {
+    void ensureSaveMethodPersistsCopyProxy() {
         ensureSaveMethodPersistsCopy();
     }
 
     @Test
     @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
-    public void getInevitablyCreatesWhenAggregateDoesNotExist() {
+    void getInevitablyCreatesWhenAggregateDoesNotExist() {
         var pianoKeyboardId = AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
         try {
             repository.get(pianoKeyboardId);
@@ -129,7 +129,7 @@ public final class InMemoryPianoKeyboardRepositoryTest extends InMemoryRepositor
     }
 
     @Test
-    public void tryGetPianoKeyboardOfAnotherUser() {
+    void tryGetPianoKeyboardOfAnotherUser() {
         var pianoKeyboardId = AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
         var currentUserId = getCurrentUserId();
         var anotherUserId = getUserIdThatIsDifferentFrom(currentUserId);

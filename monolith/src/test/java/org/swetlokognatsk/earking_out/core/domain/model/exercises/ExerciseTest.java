@@ -6,7 +6,7 @@ import org.junit.jupiter.api.*;
 public final class ExerciseTest {
 
     @Test
-    public void exerciseToString() {
+    void exerciseToString() {
         var exercise = ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 
         var stringedExercise = exercise.toString();
@@ -16,7 +16,7 @@ public final class ExerciseTest {
     }
 
     @Test
-    public void valueOfAudioPerfectPitchExercise() {
+    void valueOfAudioPerfectPitchExercise() {
         var exercise = ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 
         var stringedExercise = buildExpectedStringedExercise(exercise);

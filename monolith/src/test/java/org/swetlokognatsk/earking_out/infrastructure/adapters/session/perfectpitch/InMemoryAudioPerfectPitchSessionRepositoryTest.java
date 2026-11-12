@@ -37,7 +37,7 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
     private SessionId seededSessionId;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         repository = DI.get(InMemoryAudioPerfectPitchSessionRepository.class);
         sessionRepositoryHelper = DI.get(SessionRepositoryTestHelper.class);
         puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
@@ -69,23 +69,23 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
     }
 
     @Test
-    public void ensureGetMethodGivesCopyWithoutSaveProxy() {
+    void ensureGetMethodGivesCopyWithoutSaveProxy() {
         ensureGetMethodGivesCopyWithoutSave();
     }
 
     @Test
-    public void ensureGetMethodGivesCopyAfterSaveProxy() {
+    void ensureGetMethodGivesCopyAfterSaveProxy() {
         ensureGetMethodGivesCopyAfterSave();
     }
 
     @Test
-    public void ensureSaveMethodPersistsCopyProxy() {
+    void ensureSaveMethodPersistsCopyProxy() {
         ensureSaveMethodPersistsCopy();
     }
 
     // // TODO i'm not sure whether should it be tested at all? anyway pianoKeyboardRepository won't be accessed from any another place, so it does not make sense to refresh pianoKeyboards for each get/save sessionRepository access
     // @Test
-    // public void getMethodLoadsPianoKeyboardFromRepository() {
+    // void getMethodLoadsPianoKeyboardFromRepository() {
     //     var aggregate = getAggregate();
     //     var aggregatePianoKeyboard = aggregate.getGuessingPianoKeyboard();
     //     var sourcePianoKeyboard = getPianoKeyboardRepository().get(PianoKeyboardId.PERFECT_PITCH_NOTES_PICKER);
@@ -97,7 +97,7 @@ public class InMemoryAudioPerfectPitchSessionRepositoryTest extends InMemoryRepo
     // }
 
     // @Test
-    // public void saveMethodSavesPianoKeyboardToRepository() {
+    // void saveMethodSavesPianoKeyboardToRepository() {
 
     // }
 

@@ -70,7 +70,6 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs;
     exports org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs.perfectpitch;
     exports org.swetlokognatsk.earking_out.core.domain.helpers;
-    exports org.swetlokognatsk.earking_out.core.domain.model;
     exports org.swetlokognatsk.earking_out.core.domain.model.base;
     exports org.swetlokognatsk.earking_out.core.domain.model.exercises.intervals.melodic;
     exports org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch;
@@ -182,7 +181,6 @@ module org.swetlokognatsk {
     opens org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs;
     opens org.swetlokognatsk.earking_out.core.domain.events.puzzles.configs.perfectpitch;
     opens org.swetlokognatsk.earking_out.core.domain.helpers;
-    opens org.swetlokognatsk.earking_out.core.domain.model;
     opens org.swetlokognatsk.earking_out.core.domain.model.base;
     opens org.swetlokognatsk.earking_out.core.domain.model.exercises.intervals.melodic;
     opens org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch;

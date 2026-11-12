@@ -45,7 +45,7 @@ public class RandomAudioPerfectPitchSolutionGeneratorTest {
     }
 
     @Test
-    public void generateSolutionTest() {
+    void generateSolutionTest() {
         var notes = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, FIRST_NOTE_NUMBER.increment() };
         var generator = createPuzzleGenerator(notes);
 

@@ -16,7 +16,7 @@ public abstract class DeserializerBaseTest<Type, Deserializer extends StdDeseria
     protected abstract Class<Type> getTestedDeserializerType();
 
     @BeforeEach
-    public void setup() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    void setup() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         var deserializer = getTestedDeserializerClass()
                 .getDeclaredConstructor(Class.class)
                 .newInstance(getTestedDeserializerType());

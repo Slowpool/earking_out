@@ -17,7 +17,7 @@ public abstract class InMemoryRepositoryTest<ID, A extends AggregateRoot<ID>, AR
 
     protected abstract void assertAreDifferentByMinorChange(final A freshman, final A suspect);
 
-    public void ensureGetMethodGivesCopyWithoutSave() {
+    protected void ensureGetMethodGivesCopyWithoutSave() {
         var aggregate1 = getSomeAggregate();
         var aggregate2 = getSomeAggregate();
         assertNotEquals(aggregate1, aggregate2);
@@ -37,7 +37,7 @@ public abstract class InMemoryRepositoryTest<ID, A extends AggregateRoot<ID>, AR
         }
     }
 
-    public void ensureGetMethodGivesCopyAfterSave() {
+    protected void ensureGetMethodGivesCopyAfterSave() {
         var aggregate1 = getSomeAggregate();
         saveToRepository(aggregate1);
         var aggregate2 = getSomeAggregate();
@@ -51,7 +51,7 @@ public abstract class InMemoryRepositoryTest<ID, A extends AggregateRoot<ID>, AR
      * someAggregate from client code wouldn't cause any immediate changes in
      * in-memory aggregate
      */
-    public void ensureSaveMethodPersistsCopy() {
+    protected void ensureSaveMethodPersistsCopy() {
         var suspect = getSomeAggregate();
 
         saveToRepository(suspect);

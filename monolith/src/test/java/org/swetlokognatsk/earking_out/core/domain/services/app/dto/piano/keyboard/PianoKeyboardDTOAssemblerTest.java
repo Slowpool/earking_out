@@ -41,7 +41,7 @@ public final class PianoKeyboardDTOAssemblerTest {
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         pianoKeyboardFactory = DI.get(PianoKeyboardAggregatesFactory.class);
         pianoKeyboardDtoAssembler = DI.get(PianoKeyboardDtoAssembler.class);
         userResolver = DI.get(UserResolver.class);
@@ -58,18 +58,18 @@ public final class PianoKeyboardDTOAssemblerTest {
     }
 
     @Test
-    public void mode1() {
+    void mode1() {
         assertEquals(dto1.mode(), pianoKeyboard1.getMode());
     }
 
     @Test
-    public void mode2() {
+    void mode2() {
         assertEquals(dto2.mode(), pianoKeyboard2.getMode());
     }
 
     // responsibility for further dto assembling is on PianoKeyDTOAssembler. so just testing the general stuff (number of elements, dto is null or is not null and etc.)
     @Test
-    public void pianoKeys() {
+    void pianoKeys() {
         assertNotNull(dto1.pianoKeys());
         assertEquals(pianoKeyboard1.getPianoKeys().size(), dto1.pianoKeys().size());
 
@@ -78,7 +78,7 @@ public final class PianoKeyboardDTOAssemblerTest {
     }
 
     @Test
-    public void selectedKeys() {
+    void selectedKeys() {
         assertNotNull(dto1.selectedKeys());
         assertEquals(pianoKeyboard1.getSelectedKeyNumbers().length, dto1.selectedKeys().length);
 
@@ -87,7 +87,7 @@ public final class PianoKeyboardDTOAssemblerTest {
     }
 
     @Test
-    public void pressedKey() {
+    void pressedKey() {
         assertNull(dto1.pressedKey());
         assertNotNull(dto2.pressedKey());
     }

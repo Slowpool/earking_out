@@ -22,7 +22,7 @@ public class PerfectPitchNoteStatsPBTTest {
     }
 
     @Property
-    public void perfectGuessesRatio(@ForAll("allGuessesAndPerfectGuesses") final AllGuessesAndPerfectGuessesPair allGuessesAndPerfectGuesses) {
+    void perfectGuessesRatio(@ForAll("allGuessesAndPerfectGuesses") final AllGuessesAndPerfectGuessesPair allGuessesAndPerfectGuesses) {
         var allGuesses = allGuessesAndPerfectGuesses.numberOfAllGuesses();
         var perfectGuesses = allGuessesAndPerfectGuesses.numberOfPerfectGuesses();
 

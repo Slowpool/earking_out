@@ -37,7 +37,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     private static final String OUT_OF_RANGE_TEXT_NOTE = "C#9";
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         sessionAggregatesFactory = DI.get(SessionAggregatesFactory.class);
         puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
 
@@ -91,7 +91,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void demonstrateHintGivesCorrectEvent() {
+    void demonstrateHintGivesCorrectEvent() {
         var aggregate = createAggregateAndFlushEvents();
 
         aggregate.demonstrateHintAgain();
@@ -103,7 +103,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void demonstrateHintGivesEventWithCorrespondingPuzzle() {
+    void demonstrateHintGivesEventWithCorrespondingPuzzle() {
         var aggregate = createAggregateAndFlushEvents();
 
         aggregate.demonstrateHintAgain();
@@ -116,7 +116,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void demonstrateHintAfterAbort() {
+    void demonstrateHintAfterAbort() {
         var aggregate = createAggregateAndAbort();
 
         try {
@@ -127,7 +127,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void getNumberOfGuessesOfCurrentPuzzleAfterAbort() {
+    void getNumberOfGuessesOfCurrentPuzzleAfterAbort() {
         var aggregate = createAggregateAndAbort();
 
         try {
@@ -138,7 +138,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void getPuzzleAfterAbort() {
+    void getPuzzleAfterAbort() {
         var aggregate = createAggregateAndAbort();
 
         try {
@@ -149,7 +149,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void guessAfterAbort() {
+    void guessAfterAbort() {
         var aggregate = createAggregateAndAbort();
 
         try {
@@ -160,7 +160,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void guessViaPianoKeyPressingAfterAbort() {
+    void guessViaPianoKeyPressingAfterAbort() {
         var aggregate = createAggregateAndAbort();
 
         try {
@@ -171,7 +171,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void successfulGuessCreatesUserTriedToGuessEvent() {
+    void successfulGuessCreatesUserTriedToGuessEvent() {
         var aggregate = createAggregateAndFlushEvents();
 
         aggregate.guess(SOLUTION);
@@ -181,7 +181,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void guessCreatesUserTriedToGuessEventWithCorrectSessionId() {
+    void guessCreatesUserTriedToGuessEventWithCorrectSessionId() {
         var aggregate = createAggregateAndFlushEvents();
         var aggregateSessionId = aggregate.getId();
 
@@ -193,7 +193,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void successfulGuessCreatesUserTriedToGuessEventWithCorrectPuzzleNumber() {
+    void successfulGuessCreatesUserTriedToGuessEventWithCorrectPuzzleNumber() {
         var aggregate = createAggregateAndFlushEvents();
 
         var targetNumberOfPuzzles = aggregate.getPuzzleConfig().targetNumberOfPuzzles;
@@ -205,7 +205,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void puzzleNumberInUserTriedToGuessEventRemainsAsIsAfterWrongGuess() {
+    void puzzleNumberInUserTriedToGuessEventRemainsAsIsAfterWrongGuess() {
         var aggregate = createAggregateAndFlushEvents();
 
         var targetNumberOfPuzzles = aggregate.getPuzzleConfig().targetNumberOfPuzzles;
@@ -221,7 +221,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void guessCorrespondsToOriginalGuessInUserTriedToGuessEvent() {
+    void guessCorrespondsToOriginalGuessInUserTriedToGuessEvent() {
         var aggregate = createAggregateAndFlushEvents();
 
         aggregate.guess(SOLUTION);
@@ -230,7 +230,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void attemptIsIncrementedAfterWrongGuessInUserTriedToGuessEvent() {
+    void attemptIsIncrementedAfterWrongGuessInUserTriedToGuessEvent() {
         var aggregate = createAggregateAndFlushEvents();
 
         for (int expectedAttempt = 1; expectedAttempt <= 3; expectedAttempt++) {
@@ -240,7 +240,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void attemptIsResetAfterSucccessfulGuessInUserTriedToGuessEvent() {
+    void attemptIsResetAfterSucccessfulGuessInUserTriedToGuessEvent() {
         var aggregate = createAggregateAndFlushEvents();
 
         var targetNumberOfPuzzles = aggregate.getPuzzleConfig().targetNumberOfPuzzles;
@@ -252,7 +252,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void attemptIsResetAfterWrongThenSucccessfulGuessInUserTriedToGuessEvent() {
+    void attemptIsResetAfterWrongThenSucccessfulGuessInUserTriedToGuessEvent() {
         var aggregate = createAggregateAndFlushEvents();
 
         var targetNumberOfPuzzles = aggregate.getPuzzleConfig().targetNumberOfPuzzles;
@@ -267,7 +267,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void successIsTrueAfterSucccessfulGuessInUserTriedToGuessEvent() {
+    void successIsTrueAfterSucccessfulGuessInUserTriedToGuessEvent() {
         var aggregate = createAggregateAndFlushEvents();
 
         aggregate.guess(SOLUTION);
@@ -275,7 +275,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void successIsFalseAfterWrongGuessInUserTriedToGuessEvent() {
+    void successIsFalseAfterWrongGuessInUserTriedToGuessEvent() {
         var aggregate = createAggregateAndFlushEvents();
 
         aggregate.guess(WRONG_SOLUTION);
@@ -283,7 +283,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void guessViaTextNoteWithInvalidNote() {
+    void guessViaTextNoteWithInvalidNote() {
         var aggregate = createAggregateAndFlushEvents();
 
         try {
@@ -296,7 +296,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void guessViaTextWithOutOfRangeNote() {
+    void guessViaTextWithOutOfRangeNote() {
         var aggregate = createAggregateAndFlushEvents();
 
         try {
@@ -309,7 +309,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void successfulGuessViaTextNote() {
+    void successfulGuessViaTextNote() {
         var aggregate = createAggregateAndFlushEvents();
 
         try {
@@ -322,7 +322,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void alternativeSuccessfulGuessViaTextNote() {
+    void alternativeSuccessfulGuessViaTextNote() {
         var aggregate = createAggregateAndFlushEvents();
 
         try {
@@ -335,7 +335,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void wrongGuessViaTextNote() {
+    void wrongGuessViaTextNote() {
         var aggregate = createAggregateAndFlushEvents();
 
         try {
@@ -348,7 +348,7 @@ public final class AudioPerfectPitchSessionAggregateTest {
     }
 
     @Test
-    public void anotherWrongGuessViaTextNote() {
+    void anotherWrongGuessViaTextNote() {
         var aggregate = createAggregateAndFlushEvents();
 
         try {

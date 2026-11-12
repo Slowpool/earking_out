@@ -41,7 +41,7 @@ public class IdentityControllerTest {
     }
 
     @Test
-    public void signOutBeingLoggedInUser() throws Exception {
+    void signOutBeingLoggedInUser() throws Exception {
         Mockito.when(user.isGuest())
                 .thenReturn(false);
         mockThisUser(user);
@@ -52,7 +52,7 @@ public class IdentityControllerTest {
     }
 
     @Test
-    public void signOutBeingGuest() throws Exception {
+    void signOutBeingGuest() throws Exception {
         Mockito.when(user.isGuest())
                 .thenReturn(true);
         mockThisUser(user);

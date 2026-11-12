@@ -119,7 +119,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         DomainEventHandlers.registerDomainEventHandlers();
 
         pianoKeyboardService = DI.get(PianoKeyboardService.class);
@@ -135,7 +135,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void pianoKeyboardDoesNotHaveSelectedKeysAfterSessionStarting() throws InvalidPuzzleConfigException {
+    void pianoKeyboardDoesNotHaveSelectedKeysAfterSessionStarting() throws InvalidPuzzleConfigException {
         var session = startSession();
         selectSomePianoKeyboardKey();
         abortSession(session.getId());
@@ -146,7 +146,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void pianoKeyboardDoesNotHavePressedKeysAfterSessionStarting() throws InvalidPuzzleConfigException {
+    void pianoKeyboardDoesNotHavePressedKeysAfterSessionStarting() throws InvalidPuzzleConfigException {
         var session = startSession();
         pressSomePianoKeyboardKey();
         abortSession(session.getId());
@@ -157,7 +157,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void sessionCountsThePuzzleAsCompletedAfterCorrectGuess() throws InvalidPuzzleConfigException {
+    void sessionCountsThePuzzleAsCompletedAfterCorrectGuess() throws InvalidPuzzleConfigException {
         updateNormalizedNotesForPuzzle(SOLUTION);
         sessionService.start();
         assertActiveSessionHasCompletedPuzzles(0);
@@ -168,7 +168,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void sessionDoesNotCountThePuzzleAsCompletedAfterWrongGuess() throws InvalidPuzzleConfigException {
+    void sessionDoesNotCountThePuzzleAsCompletedAfterWrongGuess() throws InvalidPuzzleConfigException {
         updateNormalizedNotesForPuzzle(SOLUTION);
         sessionService.start();
         assertActiveSessionHasCompletedPuzzles(0);
@@ -179,7 +179,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void pressPianoKeyAfterSessionAbort() throws InvalidPuzzleConfigException {
+    void pressPianoKeyAfterSessionAbort() throws InvalidPuzzleConfigException {
         startAndAbortSession();
 
         try {
@@ -191,7 +191,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void releasePianoKeyAfterAbort() throws InvalidPuzzleConfigException {
+    void releasePianoKeyAfterAbort() throws InvalidPuzzleConfigException {
         startAndAbortSession();
 
         try {
@@ -202,7 +202,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void pressPianoKeyWhenThereIsNoActiveSession() {
+    void pressPianoKeyWhenThereIsNoActiveSession() {
         try {
             pressPianoKey(ANY_PIANO_KEY);
             fail();
@@ -211,7 +211,7 @@ public final class AudioPerfectPitchNotesGuessingPianoKeyboardAndSessionAggregat
     }
 
     @Test
-    public void releasePianoKeyWhenThereIsNoActiveSession() {
+    void releasePianoKeyWhenThereIsNoActiveSession() {
         try {
             releasePianoKey();
             fail();

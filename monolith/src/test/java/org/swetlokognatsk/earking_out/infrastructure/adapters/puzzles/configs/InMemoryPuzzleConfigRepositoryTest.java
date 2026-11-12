@@ -56,7 +56,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         repository = DI.get(InMemoryPuzzleConfigRepository.class);
         puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
 
@@ -64,7 +64,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
     }
 
     @Test
-    public void validateAggregateClass() {
+    void validateAggregateClass() {
         var aggregate = getPerfectPitchConfigAggregate();
 
         assertTrue(AudioPerfectPitchConfigAggregate.class.equals(aggregate.getClass()));
@@ -77,7 +77,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
      */
     @Test
     @Deprecated
-    public void changeAggregatePropertyWithoutSave() {
+    void changeAggregatePropertyWithoutSave() {
         var aggregate = getPerfectPitchConfigAggregate();
         assertEquals(null, aggregate.getNormalizedRootNote());
 
@@ -95,7 +95,7 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
      */
     @Test
     @Deprecated
-    public void changeAggregatePropertyWithSave() {
+    void changeAggregatePropertyWithSave() {
         var aggregate = getPerfectPitchConfigAggregate();
         assertEquals(null, aggregate.getNormalizedRootNote());
 
@@ -108,17 +108,17 @@ public final class InMemoryPuzzleConfigRepositoryTest extends InMemoryRepository
     }
 
     @Test
-    public void ensureGetMethodGivesCopyWithoutSaveProxy() {
+    void ensureGetMethodGivesCopyWithoutSaveProxy() {
         ensureGetMethodGivesCopyWithoutSave();
     }
 
     @Test
-    public void ensureGetMethodGivesCopyAfterSaveProxy() {
+    void ensureGetMethodGivesCopyAfterSaveProxy() {
         ensureGetMethodGivesCopyAfterSave();
     }
 
     @Test
-    public void ensureSaveMethodPersistsCopyProxy() {
+    void ensureSaveMethodPersistsCopyProxy() {
         ensureSaveMethodPersistsCopy();
     }
 

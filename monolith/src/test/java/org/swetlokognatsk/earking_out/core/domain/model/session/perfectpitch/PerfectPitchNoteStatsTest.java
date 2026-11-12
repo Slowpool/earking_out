@@ -16,7 +16,7 @@ public class PerfectPitchNoteStatsTest {
     private static final int VALID_PERFECT_GUESSES = 0;
 
     @Test
-    public void negativeNumberOfAllAppearances() {
+    void negativeNumberOfAllAppearances() {
         try {
             new PerfectPitchNoteStats(ANY_NOTE, -1, VALID_ALL_GUESSES, VALID_PERFECT_GUESSES);
             fail();
@@ -25,7 +25,7 @@ public class PerfectPitchNoteStatsTest {
     }
 
     @Test
-    public void negativeNumberOfAllGuesses() {
+    void negativeNumberOfAllGuesses() {
         try {
             new PerfectPitchNoteStats(ANY_NOTE, VALID_APPEARANCES, -1, VALID_PERFECT_GUESSES);
             fail();
@@ -34,7 +34,7 @@ public class PerfectPitchNoteStatsTest {
     }
 
     @Test
-    public void nonZeroAllGuessesWithoutAppearances() {
+    void nonZeroAllGuessesWithoutAppearances() {
         try {
             new PerfectPitchNoteStats(ANY_NOTE, 0, 1, VALID_PERFECT_GUESSES);
             fail();
@@ -43,7 +43,7 @@ public class PerfectPitchNoteStatsTest {
     }
 
     @Test
-    public void perfectGuessesGreaterThanNumberOfAllGuesses() {
+    void perfectGuessesGreaterThanNumberOfAllGuesses() {
         try {
             new PerfectPitchNoteStats(ANY_NOTE, VALID_APPEARANCES, 0, 1);
             fail();
@@ -52,7 +52,7 @@ public class PerfectPitchNoteStatsTest {
     }
 
     @Test
-    public void perfectGuessesGreaterThanAppearances() {
+    void perfectGuessesGreaterThanAppearances() {
         try {
             // technically under the hood it fails due to `appearances < (allGuesses - 1)`
             new PerfectPitchNoteStats(ANY_NOTE, 0, 1, 1);
@@ -62,7 +62,7 @@ public class PerfectPitchNoteStatsTest {
     }
 
     @Test
-    public void allGuessesLessThanAppearancesByOne() {
+    void allGuessesLessThanAppearancesByOne() {
         new PerfectPitchNoteStats(ANY_NOTE, 1, 0, VALID_PERFECT_GUESSES);
         new PerfectPitchNoteStats(ANY_NOTE, 2, 1, VALID_PERFECT_GUESSES);
         new PerfectPitchNoteStats(ANY_NOTE, 3, 2, VALID_PERFECT_GUESSES);
@@ -70,7 +70,7 @@ public class PerfectPitchNoteStatsTest {
     }
 
     @Test
-    public void zeroPerfectGuessesRatio() {
+    void zeroPerfectGuessesRatio() {
         var stats = new PerfectPitchNoteStats(ANY_NOTE, 0, 0, 0);
 
         assertEquals(0.0, stats.perfectGuessesRatio, 0.0);

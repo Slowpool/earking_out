@@ -84,7 +84,7 @@ public class NotesParsingServiceTest {
     }
 
     @Test
-    public void noteNamesAreParsedCorrectly() {
+    void noteNamesAreParsedCorrectly() {
         parseEachNoteAndAssert((String textNote, Note parsedNote, Integer i) -> {
             var expectedNoteName = EXPECTED_TEXT_NOTES_NOTE_NAMES[i];
             assertEquals(expectedNoteName, parsedNote.noteName);
@@ -92,7 +92,7 @@ public class NotesParsingServiceTest {
     }
 
     @Test
-    public void accidentalsAreParsedCorrectly() {
+    void accidentalsAreParsedCorrectly() {
         parseEachNoteAndAssert((String textNote, Note parsedNote, Integer i) -> {
             var expectedAccidental = EXPECTED_TEXT_NOTES_ACCIDENTALS[i];
             assertEquals(expectedAccidental, parsedNote.accidental);
@@ -100,7 +100,7 @@ public class NotesParsingServiceTest {
     }
 
     @Test
-    public void octavesAreParsedCorrectly() {
+    void octavesAreParsedCorrectly() {
         parseEachNoteAndAssert((String textNote, Note parsedNote, Integer i) -> {
             var expectedOctave = EXPECTED_TEXT_NOTES_OCTAVES[i];
             assertEquals(expectedOctave, parsedNote.octave);
@@ -108,7 +108,7 @@ public class NotesParsingServiceTest {
     }
 
     @Test
-    public void traverseInvalidTextNotes() {
+    void traverseInvalidTextNotes() {
         Class<? extends Exception> expectedExceptionClass;
         for (String invalidTextNote : INVALID_TEXT_NOTES.keySet()) {
             try {

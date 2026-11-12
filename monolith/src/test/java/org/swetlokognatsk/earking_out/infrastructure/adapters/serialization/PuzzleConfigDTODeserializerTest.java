@@ -92,28 +92,28 @@ public class PuzzleConfigDTODeserializerTest extends DeserializerBaseTest<Puzzle
     }
 
     @Test
-    public void deserializeAudioPerfectPitchConfigWithVC() {
+    void deserializeAudioPerfectPitchConfigWithVC() {
         var puzzleConfig = readValue(APPE_SERIALIZED_CONFIG_DTO, AudioPerfectPitchConfigDTO.class);
 
         assertAudioPerfectPitchConfigDto(puzzleConfig);
     }
 
     @Test
-    public void deserializeAudioPerfectPitchConfigWithAbstractVC() {
+    void deserializeAudioPerfectPitchConfigWithAbstractVC() {
         var puzzleConfig = (AudioPerfectPitchConfigDTO) readValue(APPE_SERIALIZED_CONFIG_DTO, PuzzleConfigDTO.class);
 
         assertAudioPerfectPitchConfigDto(puzzleConfig);
     }
 
     @Test
-    public void deserializeVisualPerfectPitchConfigWithVC() {
+    void deserializeVisualPerfectPitchConfigWithVC() {
         var puzzleConfig = readValue(VPPE_SERIALIZED_CONFIG_DTO, VisualPerfectPitchConfigDTO.class);
 
         assertVisualPerfectPitchConfigDto(puzzleConfig);
     }
 
     @Test
-    public void deserializeVisualPerfectPitchConfigWithAbstractVC() {
+    void deserializeVisualPerfectPitchConfigWithAbstractVC() {
         var puzzleConfig = (VisualPerfectPitchConfigDTO) readValue(VPPE_SERIALIZED_CONFIG_DTO, PuzzleConfigDTO.class);
 
         assertVisualPerfectPitchConfigDto(puzzleConfig);

@@ -10,37 +10,37 @@ import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKe
 public final class PianoKeyNumberTest {
 
     @Test
-    public void correctValue1() {
+    void correctValue1() {
         // if there's no exception, then `valueOf(4)` works fine
         var test = FIRST_NOTE_NUMBER;
     }
 
     @Test
-    public void correctValue2() {
+    void correctValue2() {
         var test = LAST_NOTE_NUMBER;
     }
 
     @Test
-    public void octaveScopedKeyNumber1() {
+    void octaveScopedKeyNumber1() {
         var pianoKeyNumber = FIRST_NOTE_NUMBER;
         assertEquals((byte) 1, pianoKeyNumber.getOctaveScopedKeyNumber());
     }
 
     @Test
-    public void octaveScopedKeyNumber2() {
+    void octaveScopedKeyNumber2() {
         var pianoKeyNumber = FIRST_NOTE_NUMBER.add(KEYS_IN_OCTAVE);
         assertEquals((byte) 1, pianoKeyNumber.getOctaveScopedKeyNumber());
     }
 
     @Test
-    public void addWithoutOverflow() {
+    void addWithoutOverflow() {
         var number = 5;
         var keyNumber = FIRST_NOTE_NUMBER.add(number);
         assertEquals((byte) (FIRST_NOTE_NUMBER.value + number), keyNumber.value);
     }
 
     @Test
-    public void addWithOverflow() {
+    void addWithOverflow() {
         try {
             FIRST_NOTE_NUMBER.add(PIANO_KEYS_NUMBER);
             fail();
@@ -49,14 +49,14 @@ public final class PianoKeyNumberTest {
     }
 
     @Test
-    public void subtractWithoutOverflow() {
+    void subtractWithoutOverflow() {
         var number = 5;
         var keyNumber = LAST_NOTE_NUMBER.subtract(number);
         assertEquals((byte) (LAST_NOTE_NUMBER.value - number), keyNumber.value);
     }
 
     @Test
-    public void subtractWithOverflow() {
+    void subtractWithOverflow() {
         try {
             FIRST_NOTE_NUMBER.subtract(PIANO_KEYS_NUMBER);
             fail();
@@ -65,13 +65,13 @@ public final class PianoKeyNumberTest {
     }
 
     @Test
-    public void incrementWithoutOverflow() {
+    void incrementWithoutOverflow() {
         var keyNumber = FIRST_NOTE_NUMBER.increment();
         assertEquals((byte) (FIRST_NOTE_NUMBER.value + 1), keyNumber.value);
     }
 
     @Test
-    public void incrementWithOverflow() {
+    void incrementWithOverflow() {
         try {
             LAST_NOTE_NUMBER.increment();
             fail();
@@ -80,13 +80,13 @@ public final class PianoKeyNumberTest {
     }
 
     @Test
-    public void decrementWithoutOverflow() {
+    void decrementWithoutOverflow() {
         var keyNumber = LAST_NOTE_NUMBER.decrement();
         assertEquals((byte) (LAST_NOTE_NUMBER.value - 1), keyNumber.value);
     }
 
     @Test
-    public void decrementWithOverflow() {
+    void decrementWithOverflow() {
         try {
             FIRST_NOTE_NUMBER.decrement();
             fail();
@@ -95,27 +95,27 @@ public final class PianoKeyNumberTest {
     }
 
     @Test
-    public void equalsTheSameValue() {
+    void equalsTheSameValue() {
         var pianoKeyNumber1 = FIRST_NOTE_NUMBER;
         var pianoKeyNumber2 = FIRST_NOTE_NUMBER;
         assertTrue(pianoKeyNumber1.equals(pianoKeyNumber2));
     }
 
     @Test
-    public void equalsDifferentValue() {
+    void equalsDifferentValue() {
         var pianoKeyNumber1 = FIRST_NOTE_NUMBER;
         var pianoKeyNumber2 = FIRST_NOTE_NUMBER.increment();
         assertFalse(pianoKeyNumber1.equals(pianoKeyNumber2));
     }
 
     @Test
-    public void equalsNull() {
+    void equalsNull() {
         var pianoKeyNumber = FIRST_NOTE_NUMBER;
         assertFalse(pianoKeyNumber.equals(null));
     }
 
     @Test
-    public void equalsAnotherClass() {
+    void equalsAnotherClass() {
         var pianoKeyNumber = FIRST_NOTE_NUMBER;
         assertFalse(pianoKeyNumber.equals(new Dummy()));
     }
@@ -125,7 +125,7 @@ public final class PianoKeyNumberTest {
 
     // // WAIT, i've remembered why there was no such a toString() logic. because there are several ways to represent the same PianoKeyNumber - e.g. PianoKeyNumber with number 4 can be either B#0 or C1
     // @Test
-    // public void toStringTest1() {
+    // void toStringTest1() {
     //     var pianoKeyNumber = FIRST_NOTE_NUMBER;
 
     //     var stringedKeyNumber = pianoKeyNumber.toString();
@@ -134,7 +134,7 @@ public final class PianoKeyNumberTest {
     // }
 
     // @Test
-    // public void toStringTest2() {
+    // void toStringTest2() {
     //     var pianoKeyNumber = LAST_NOTE_NUMBER;
 
     //     var stringedKeyNumber = pianoKeyNumber.toString();

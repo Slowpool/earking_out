@@ -16,12 +16,12 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void initWithoutSelectedKeys() {
+    void initWithoutSelectedKeys() {
         pianoKeyboardHelper.assertNoSelectedKeys(pianoKeyboard);
     }
 
     @Test
-    public void initWithSelectedKey() {
+    void initWithSelectedKey() {
         try {
             createPianoKeyboard(new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER });
             fail();
@@ -30,7 +30,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void initWithSelectedKeys() {
+    void initWithSelectedKeys() {
         var pianoKeyNumber = ANY_PIANO_KEY_NUMBER;
         var severalSelectedKeys = new PianoKeyNumber[] { pianoKeyNumber, pianoKeyNumber.increment() };
         try {
@@ -41,14 +41,14 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void selectedKeysAfterOneKeyTouching() {
+    void selectedKeysAfterOneKeyTouching() {
         pianoKeyboard.touchKey(ANY_PIANO_KEY_NUMBER);
 
         pianoKeyboardHelper.assertNoSelectedKeys(pianoKeyboard);
     }
 
     @Test
-    public void selectedKeysAfterPressing() {
+    void selectedKeysAfterPressing() {
         PianoKeyNumber pianoKey = ANY_PIANO_KEY_NUMBER;
 
         pianoKeyboard.pressKey(pianoKey);
@@ -57,7 +57,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void selectedKeysAfterReleasing() {
+    void selectedKeysAfterReleasing() {
         PianoKeyNumber pianoKey = ANY_PIANO_KEY_NUMBER;
         pianoKeyboard.pressKey(pianoKey);
 
@@ -67,7 +67,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void pressKeyTwice() {
+    void pressKeyTwice() {
         PianoKeyNumber pianoKey = ANY_PIANO_KEY_NUMBER;
 
         pianoKeyboard.pressKey(pianoKey);
@@ -79,7 +79,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void pressTwoKeys() {
+    void pressTwoKeys() {
         var pianoKeyNumber = ANY_PIANO_KEY_NUMBER;
         PianoKeyNumber[] pianoKeys = new PianoKeyNumber[] { pianoKeyNumber, pianoKeyNumber.increment() };
 
@@ -92,7 +92,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void releaseWithoutPressing() {
+    void releaseWithoutPressing() {
         try {
             pianoKeyboard.releaseKey();
             fail();
@@ -101,7 +101,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void restoreSeveralSelectedKeys() {
+    void restoreSeveralSelectedKeys() {
         try {
             pianoKeyboard.restoreSelectedKeys(SOME_PIANO_KEYS);
             fail();
@@ -112,7 +112,7 @@ public final class PianoKeyboardOneKeyTouchTest extends PianoKeyboardTest {
     }
 
     @Test
-    public void restoreSelectedKeysWhenSomeOtherKeysAreSelected() {
+    void restoreSelectedKeysWhenSomeOtherKeysAreSelected() {
         pianoKeyboard.pressKey(ANY_PIANO_KEY_NUMBER);
 
         try {

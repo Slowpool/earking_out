@@ -18,7 +18,7 @@ public final class PianoKeySoundsPlayerTest extends PianoKeyboardTest {
 
     // // TODO remove and sort out where it should be
     // @Test
-    // public void allKeysAreSoundlessForSoundlessMode() {
+    // void allKeysAreSoundlessForSoundlessMode() {
     //     // TODO remake according to new `PianoKeyPressedEvent` domain event
     //     var pianoKeyboard = createPianoKeyboard();
     //     PianoKeyNumber.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
@@ -32,7 +32,7 @@ public final class PianoKeySoundsPlayerTest extends PianoKeyboardTest {
     // }
 
     // @Test
-    // public void allKeysMakeSoundForUsualMode() {
+    // void allKeysMakeSoundForUsualMode() {
     //     // TODO remake according to new `PianoKeyPressedEvent` domain event
     //     PianoKeyNumber.forEachKey((PianoKeyNumber pianoKeyNumber) -> {
     //         var pianoKeyboard = createPianoKeyboard();

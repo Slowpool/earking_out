@@ -10,7 +10,7 @@ public final class PianoKeysHelperTest {
     private int numberOfKeysTraversed = 0;
 
     @Test
-    public void forEachKeyTraverseAllNotes() {
+    void forEachKeyTraverseAllNotes() {
         PianoKeyNumber.forEachKey(pianoKeyNumber -> numberOfKeysTraversed++);
         assertEquals(PIANO_KEYS_NUMBER, numberOfKeysTraversed);
     }

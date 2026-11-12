@@ -70,7 +70,7 @@ public final class InMemorySessionRepositoryTest {
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         // TODO is there another way to test exactly InMemorySesisonRepository abstract class?
         repository = DI.get(InMemoryAudioPerfectPitchSessionRepository.class);
         sessionRepositoryHelper = DI.get(SessionRepositoryTestHelper.class);
@@ -89,7 +89,7 @@ public final class InMemorySessionRepositoryTest {
     }
 
     @Test
-    public void gettingActiveSession() {
+    void gettingActiveSession() {
         var activeSession = repository.getActiveSession();
 
         assertTrue(seededSessionId.equals(activeSession.getId()));
@@ -97,7 +97,7 @@ public final class InMemorySessionRepositoryTest {
 
     @Test
     @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
-    public void gettingActiveSessionAfterAbortingTheActiveOne() {
+    void gettingActiveSessionAfterAbortingTheActiveOne() {
         var sessionAggregate = repository.get(seededSessionId);
         sessionAggregate.abort();
         repository.save(sessionAggregate);
@@ -111,7 +111,7 @@ public final class InMemorySessionRepositoryTest {
 
     @Test
     @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
-    public void addingAnotherActiveSessionWhenTheFirstOneIsYetActive() {
+    void addingAnotherActiveSessionWhenTheFirstOneIsYetActive() {
         AudioPerfectPitchSessionAggregate newSessionAggregate = sessionAggregatesFactory.create(AUDIO_PERFECT_PITCH_EXERCISE);
 
         repository.save(newSessionAggregate);
@@ -122,7 +122,7 @@ public final class InMemorySessionRepositoryTest {
 
     @Test
     @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
-    public void createdSessionIsAttachedToCurrentUser() {
+    void createdSessionIsAttachedToCurrentUser() {
         assertActiveSessionExists();
 
         switchToUser(USER_2);
@@ -134,7 +134,7 @@ public final class InMemorySessionRepositoryTest {
 
     @Test
     @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
-    public void abortSessionDoesNotAffectSessionsOfOtherUsers() {
+    void abortSessionDoesNotAffectSessionsOfOtherUsers() {
         switchToUser(USER_2);
         sessionRepositoryHelper.startSession(repository);
 
@@ -148,7 +148,7 @@ public final class InMemorySessionRepositoryTest {
 
     @Test
     @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
-    public void completingTheSessionDoesNotAffectSessionsOfOtherUsers() {
+    void completingTheSessionDoesNotAffectSessionsOfOtherUsers() {
         switchToUser(USER_2);
         sessionRepositoryHelper.startSession(repository);
 
@@ -161,7 +161,7 @@ public final class InMemorySessionRepositoryTest {
     }
 
     @Test
-    public void getSessionDtoOfAnotherUser() {
+    void getSessionDtoOfAnotherUser() {
         var sessionAggregate = repository.getActiveSession();
         switchToUser(USER_2);
 

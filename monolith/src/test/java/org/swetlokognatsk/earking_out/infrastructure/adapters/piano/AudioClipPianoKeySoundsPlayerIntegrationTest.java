@@ -20,7 +20,7 @@ public final class AudioClipPianoKeySoundsPlayerIntegrationTest {
     private AudioClipPianoKeySoundsPlayer audioClipPianoKeySoundsPlayer;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         audioClipPianoKeySoundsPlayer = DI.get(AudioClipPianoKeySoundsPlayer.class);
     }
 
@@ -32,12 +32,12 @@ public final class AudioClipPianoKeySoundsPlayerIntegrationTest {
     }
 
     @Test
-    public void playWorks() {
+    void playWorks() {
         playEachKey(audioClipPianoKeySoundsPlayer);
     }
 
     @Test
-    public void serializationTest() {
+    void serializationTest() {
         var cloner = DI.get(SerializationCloner.class);
 
         var soundsPlayerCopy = cloner.clone(audioClipPianoKeySoundsPlayer);

@@ -20,17 +20,17 @@ public class KafkaSerializerTest {
     private KafkaSerializer serializer;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         serializer = new KafkaSerializer(new JacksonJsonSerializer());
     }
 
     @AfterEach
-    public void cleanup() {
+    void cleanup() {
         serializer.close();
     }
 
     @Test
-    public void serializeDomainEvent() {
+    void serializeDomainEvent() {
         var pianoKey = FIRST_NOTE_NUMBER;
         var currentDateTime = LocalDateTime.parse("2026-10-22T14:34:04.147064557");
         var sessionId = "188f4b50-1fe1-475a-b7ca-307c20ebf320";

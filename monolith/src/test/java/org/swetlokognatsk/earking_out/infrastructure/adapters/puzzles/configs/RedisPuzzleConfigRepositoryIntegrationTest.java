@@ -74,7 +74,7 @@ public class RedisPuzzleConfigRepositoryIntegrationTest {
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         // using `new` instead of `DI.get` because `test` spring profile ignores this bean on scanning. activating `web` profile in tests would make a lots of bean to init, degrading the performance
         repository = new RedisPuzzleConfigRepository(DI.get(StringRedisTemplate.class), DI.get(PuzzleConfigJsonSerializer.class), DI.get(UserResolver.class), DI.get(PuzzleConfigDTOAssembler.class));
 
@@ -87,7 +87,7 @@ public class RedisPuzzleConfigRepositoryIntegrationTest {
     }
 
     @Test
-    public void saveSomeConfig() {
+    void saveSomeConfig() {
         var config = puzzleConfigsFactory.createDefault();
         var serializedConfig = puzzleConfigSerializer.serializePuzzleConfig(config);
 
@@ -101,7 +101,7 @@ public class RedisPuzzleConfigRepositoryIntegrationTest {
     }
 
     @Test
-    public void getSomeConfig() {
+    void getSomeConfig() {
         var config = puzzleConfigsFactory.createDefault();
         saveDirectly(config);
 

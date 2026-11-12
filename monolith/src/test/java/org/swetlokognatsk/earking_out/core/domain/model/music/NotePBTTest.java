@@ -39,7 +39,7 @@ public class NotePBTTest {
     }
 
     @BeforeTry
-    public void setup(@Autowired ApplicationContext springContext) {
+    void setup(@Autowired ApplicationContext springContext) {
         DI.setContext(springContext, true);
     }
 
@@ -49,7 +49,7 @@ public class NotePBTTest {
     }
 
     @Property
-    public void pianoKeyNumberWithoutNatural(@ForAll("getAllPianoKeyNumbers") final PianoKeyNumber pianoKeyNumber) {
+    void pianoKeyNumberWithoutNatural(@ForAll("getAllPianoKeyNumbers") final PianoKeyNumber pianoKeyNumber) {
         var notes = Note.denormalize(pianoKeyNumber, true);
 
         var expectedNumberOfNotes = getExpectedNumberOfNotes(pianoKeyNumber);

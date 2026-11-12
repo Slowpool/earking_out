@@ -27,7 +27,7 @@ public final class FinalizedAudioPerfectPitchConfigValidatorTest extends PuzzleC
     }
 
     @Test
-    public void noNormalizedNotesForPuzzleFails() {
+    void noNormalizedNotesForPuzzleFails() {
         var puzzleConfigAggregate = createPuzzleConfig();
         assertEquals(0, puzzleConfigAggregate.getNormalizedNotesForPuzzle().length);
 
@@ -36,7 +36,7 @@ public final class FinalizedAudioPerfectPitchConfigValidatorTest extends PuzzleC
 
     @Test
     // TODO if inputMode is not `KEYBOARD_AS_PIANO`
-    public void someNormalizedNotesForPuzzleIsOk() {
+    void someNormalizedNotesForPuzzleIsOk() {
         var puzzleConfigAggregate = createPuzzleConfig();
         // TODO use PianoKeyboardTest.SOME_PIANO_KEYS somehow, probably via extra helper
         var somePianoKeys = new PianoKeyNumber[] { FIRST_NOTE_NUMBER, LAST_NOTE_NUMBER };

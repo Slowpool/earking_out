@@ -37,12 +37,12 @@ public class SpringBootSelfTest {
     private @Value("${java.class.path}") String classPaths;
 
     @Test
-    public void profileIsTest() {
+    void profileIsTest() {
         assertEquals(SpringProfiles.TEST, activeProfile);
     }
 
     @Test
-    public void eventBusExists() {
+    void eventBusExists() {
         EventBus eventBus = null;
         switch (selectedEventBus) {
         case EventBuses.GREENROBOT:
@@ -59,25 +59,25 @@ public class SpringBootSelfTest {
     }
 
     @Test
-    public void classPathIsNotNull() {
+    void classPathIsNotNull() {
         assertNotNull(classPaths);
     }
 
     @Test
-    public void classContainsTestRoot() {
+    void classContainsTestRoot() {
         // false because vs code's extension uses some classpath isolation under the hood. but actually jvm has this classpath
         assertFalse(classPaths.contains("/src/test/resources"));
     }
 
     @Test
-    public void autodetectionIsEnabled(final ExtensionContext extensionContext) {
+    void autodetectionIsEnabled(final ExtensionContext extensionContext) {
         var test = extensionContext.getConfigurationParameter("junit.jupiter.extensions.autodetection.enabled");
 
         assertEquals("true", test.get());
     }
 
     @Test
-    public void extensionsFileIsRead(final ExtensionContext extensionContext) {
+    void extensionsFileIsRead(final ExtensionContext extensionContext) {
         var classLoader = Thread.currentThread()
                 .getContextClassLoader();
         var extensionFile = classLoader.getResource("META-INF/services/org.junit.jupiter.api.extension.Extension");

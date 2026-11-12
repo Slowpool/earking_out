@@ -22,12 +22,12 @@ public final class NotesNormalizingServiceTest {
     static PianoKeyNumber[] normalizedValues = NoteTest.normalizedValues;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         noteNormalizer = DI.get(NotesNormalizingService.class);
     }
 
     @Test
-    public void normalizingInOctave() {
+    void normalizingInOctave() {
         byte expected;
         for (int i = 0; i < notes.length; i++) {
             var normalizedValue = noteNormalizer.normalizeInOctave(notes[i]);
@@ -40,19 +40,19 @@ public final class NotesNormalizingServiceTest {
 
     // TODO implementation tests further. isn't it awkward?
     @Test
-    public void gettingAccidentalShiftSharp() {
+    void gettingAccidentalShiftSharp() {
         var accidentalShift = Accidentals.getShift(Accidentals.SHARP);
         assertEquals(1, accidentalShift);
     }
 
     @Test
-    public void gettingAccidentalShiftNatural() {
+    void gettingAccidentalShiftNatural() {
         var accidentalShift = Accidentals.getShift(Accidentals.NATURAL);
         assertEquals(0, accidentalShift);
     }
 
     @Test
-    public void gettingAccidentalShiftFlat() {
+    void gettingAccidentalShiftFlat() {
         var accidentalShift = Accidentals.getShift(Accidentals.FLAT);
         assertEquals(-1, accidentalShift);
     }

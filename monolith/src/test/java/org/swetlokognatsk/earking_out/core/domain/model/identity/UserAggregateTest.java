@@ -36,7 +36,7 @@ public class UserAggregateTest {
     }
 
     @Test
-    public void positiveHasOauthIdentityForAllProviders() {
+    void positiveHasOauthIdentityForAllProviders() {
         var oauthIdentities = createOauthIdentitiesForAllProviders();
 
         var user = createAnyUser(oauthIdentities);
@@ -47,7 +47,7 @@ public class UserAggregateTest {
     }
 
     @Test
-    public void negativeHasOauthIdentityForAllProviders() {
+    void negativeHasOauthIdentityForAllProviders() {
         var oauthIdentities = new HashSet<OauthIdentity>();
 
         var user = createAnyUser(oauthIdentities);
@@ -59,7 +59,7 @@ public class UserAggregateTest {
     }
 
     @Test
-    public void differentProviderButTheSameProviderUserId() {
+    void differentProviderButTheSameProviderUserId() {
         var oauthIdentities = new HashSet<OauthIdentity>();
         oauthIdentities.add(createAnyOauthIdentity(OauthProviders.Github));
 
@@ -69,7 +69,7 @@ public class UserAggregateTest {
     }
 
     @Test
-    public void positiveIsGuest() {
+    void positiveIsGuest() {
         var oauthIdentities = new HashSet<OauthIdentity>();
 
         var user = createAnyUser(oauthIdentities);
@@ -78,7 +78,7 @@ public class UserAggregateTest {
     }
 
     @Test
-    public void isGuestWithOneOauthIdentity() {
+    void isGuestWithOneOauthIdentity() {
         var oauthIdentities = new HashSet<OauthIdentity>();
         oauthIdentities.add(createAnyOauthIdentity(OauthProviders.Github));
 
@@ -88,7 +88,7 @@ public class UserAggregateTest {
     }
 
     @Test
-    public void isGuestWithAllOauthIdentities() {
+    void isGuestWithAllOauthIdentities() {
         var oauthIdentities = createOauthIdentitiesForAllProviders();
 
         var user = createAnyUser(oauthIdentities);

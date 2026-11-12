@@ -16,7 +16,7 @@ abstract class PianoKeyboardTest {
     protected static final PianoKeyNumber[] SOME_PIANO_KEYS = new PianoKeyNumber[] { ANY_PIANO_KEY_NUMBER, ANY_ANOTHER_PIANO_KEY_NUMBER };
 
     @BeforeEach
-    public void before() {
+    void before() {
         pianoKeyboardHelper = DI.get(PianoKeyboardTestHelper.class);
 
         pianoKeyboard = createPianoKeyboard();

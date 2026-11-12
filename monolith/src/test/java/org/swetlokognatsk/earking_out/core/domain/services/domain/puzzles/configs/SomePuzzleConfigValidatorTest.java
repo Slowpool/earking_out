@@ -17,7 +17,7 @@ public final class SomePuzzleConfigValidatorTest {
     private PuzzleConfigValidator<SomePuzzleConfigAggregate> validator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         validator = new PuzzleConfigValidator<SomePuzzleConfigAggregate>() {
         };
     }
@@ -26,7 +26,7 @@ public final class SomePuzzleConfigValidatorTest {
         return new SomePuzzleConfigAggregate(new SomeExercise(), targetNumberOfPuzzles, statsRecording);
     }
 
-    public void thisTargetNumberOfPuzzlesFails(final int targetNumberOfPuzzles) {
+    void thisTargetNumberOfPuzzlesFails(final int targetNumberOfPuzzles) {
         var puzzleConfig = createSomePuzzleConfig(targetNumberOfPuzzles, ANY_STATS_RECORDING);
 
         var validationResult = validator.validate(puzzleConfig);
@@ -36,17 +36,17 @@ public final class SomePuzzleConfigValidatorTest {
 
     // TODO how about parameterized test like [TestCase] in c#
     @Test
-    public void zeroTargetNumberOfPuzzlesFails() {
+    void zeroTargetNumberOfPuzzlesFails() {
         thisTargetNumberOfPuzzlesFails(0);
     }
 
     @Test
-    public void negativeTargetNumberOfPuzzlesFails() {
+    void negativeTargetNumberOfPuzzlesFails() {
         thisTargetNumberOfPuzzlesFails(-1);
     }
 
     @Test
-    public void positiveTargetNumberOfPuzzlesIsOk() {
+    void positiveTargetNumberOfPuzzlesIsOk() {
         var puzzleConfig = createSomePuzzleConfig(1, ANY_STATS_RECORDING);
 
         var validationResult = validator.validate(puzzleConfig);
@@ -61,7 +61,7 @@ class SomePuzzleConfigAggregate extends PuzzleConfigAggregate<SomeExercise> {
         super(new UserId(1), exercise, targetNumberOfPuzzles, statsRecording);
     }
 
-    public void updateConfigSpecificProperty(String a, Object o) {
+    void updateConfigSpecificProperty(String a, Object o) {
     }
 }
 

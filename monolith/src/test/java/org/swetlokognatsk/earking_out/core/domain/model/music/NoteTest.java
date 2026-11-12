@@ -101,21 +101,21 @@ public final class NoteTest {
     }
 
     @Test
-    public void normalizingFirstAndSecondOctave() {
+    void normalizingFirstAndSecondOctave() {
         for (int octave = 0; octave < octaves.length; octave++) {
             checkOctaveNormalizing(octaves[octave], octaveShifts[octave], null, (byte) 0);
         }
     }
 
     @Test
-    public void normalizingWithAccidentals() {
+    void normalizingWithAccidentals() {
         for (int accidentalNumber = 0; accidentalNumber < accidentals.length; accidentalNumber++) {
             checkOctaveNormalizing(null, (byte) 0, accidentals[accidentalNumber], accidentalShifts[accidentalNumber]);
         }
     }
 
     @Test
-    public void normalizingWithAccidentalsOverOctaves() {
+    void normalizingWithAccidentalsOverOctaves() {
         for (int octave = 0; octave < octaves.length; octave++) {
             for (int accidentalNumber = 0; accidentalNumber < accidentals.length; accidentalNumber++) {
                 checkOctaveNormalizing(octaves[octave], octaveShifts[octave], accidentals[accidentalNumber], accidentalShifts[accidentalNumber]);
@@ -124,7 +124,7 @@ public final class NoteTest {
     }
 
     @Test
-    public void humanReadableNormalizingTest1() {
+    void humanReadableNormalizingTest1() {
         var octave = Octaves.FIRST;
 
         var E = Note.valueOf(NoteNames.E, Accidentals.NATURAL, octave);
@@ -137,7 +137,7 @@ public final class NoteTest {
     }
 
     @Test
-    public void humanReadableNormalizingTest2() {
+    void humanReadableNormalizingTest2() {
         var octave = Octaves.SEVENTH;
 
         var CSharp = Note.valueOf(NoteNames.C, Accidentals.SHARP, octave);
@@ -151,7 +151,7 @@ public final class NoteTest {
 
     @Test
     @Deprecated
-    public void attachedPianoKeyNumber() {
+    void attachedPianoKeyNumber() {
         var allNotes = new LinkedList<Note>();
 
         for (var noteName : NoteNames.values()) {
@@ -184,7 +184,7 @@ public final class NoteTest {
     }
 
     @Test
-    public void benchmarkValueOf() {
+    void benchmarkValueOf() {
         // DebugUtils.startStopwatch();
         for (int i = 0; i < /* 1000 */0; i++) {
             List<Note> notes = new ArrayList<Note>(Note.getAll().length);
@@ -210,7 +210,7 @@ public final class NoteTest {
      * 1.2829191842E10
      * 1.2804065209E10
      */
-    public void benchmarkDenormalize() {
+    void benchmarkDenormalize() {
         // DebugUtils.startStopwatch();
         for (int i = 0; i < /*1000*/0; i++) {
             final var notes = new LinkedList<Note[]>();

@@ -20,7 +20,7 @@ public final class PerfectPitchConfigAggregateTest {
     private PuzzleConfigTestHelper puzzleConfigHelper;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         puzzleConfigRepository = DI.get(PuzzleConfigRepository.class);
         puzzleConfigHelper = DI.get(PuzzleConfigTestHelper.class);
 
@@ -28,7 +28,7 @@ public final class PerfectPitchConfigAggregateTest {
     }
 
     @Test
-    public void ensureRootNoteIsUpdated() {
+    void ensureRootNoteIsUpdated() {
         var aggregate = getPerfectPitchAggregate();
         assertEquals(null, aggregate.getNormalizedRootNote());
 
@@ -39,7 +39,7 @@ public final class PerfectPitchConfigAggregateTest {
     }
 
     @Test
-    public void ensureRootNoteUpdatingAlsoCausesPianoKeyboardUpdate() {
+    void ensureRootNoteUpdatingAlsoCausesPianoKeyboardUpdate() {
         // // TODO this is irrelevant. should domain event subscirptions be tested?
         // var pianoKeyboardId = PianoKeyboardId.AUDIO_PERFECT_PITCH_ROOT_NOTE_PICKER;
         // var configAggregate = getPerfectPitchAggregate();

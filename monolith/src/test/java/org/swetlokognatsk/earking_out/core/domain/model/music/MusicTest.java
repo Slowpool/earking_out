@@ -17,7 +17,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 public class MusicTest {
     
     @Test
-    public void createNote() {
+    void createNote() {
         var note = Note.valueOf(NoteNames.C, Accidentals.SHARP, Octaves.FIRST);
 
         int shift = 3;

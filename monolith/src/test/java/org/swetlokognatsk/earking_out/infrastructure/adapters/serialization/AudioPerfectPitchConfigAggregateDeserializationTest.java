@@ -21,7 +21,7 @@ public class AudioPerfectPitchConfigAggregateDeserializationTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         var module = new SimpleModule()
                 // .addDeserializer(AudioPerfectPitchConfigAggregate.class, new AudioPerfectPitchConfigAggregateDeserializer())
                 .addDeserializer(UserId.class, new UserIdDeserializer());
@@ -32,7 +32,7 @@ public class AudioPerfectPitchConfigAggregateDeserializationTest {
     }
 
     @Test
-    public void deserialize() {
+    void deserialize() {
         var serializedConfig = """
                 {
                     "userId": 1,

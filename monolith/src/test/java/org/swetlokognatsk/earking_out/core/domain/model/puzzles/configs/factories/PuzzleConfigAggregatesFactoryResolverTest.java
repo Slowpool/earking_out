@@ -10,7 +10,7 @@ import static org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercis
 public final class PuzzleConfigAggregatesFactoryResolverTest {
 
     @Test
-    public void testAudioPerfectPitch() {
+    void testAudioPerfectPitch() {
         var exercise = AUDIO_PERFECT_PITCH_EXERCISE;
         var puzzleConfigAggregatesFactoryResolver = new PuzzleConfigAggregatesFactoryResolver();
         var audioPerfectPitchFactory = puzzleConfigAggregatesFactoryResolver.resolveFactory(exercise);

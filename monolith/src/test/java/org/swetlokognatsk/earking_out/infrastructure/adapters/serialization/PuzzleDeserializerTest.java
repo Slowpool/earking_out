@@ -75,14 +75,14 @@ public class PuzzleDeserializerTest extends DeserializerBaseTest<Puzzle<?, ?>, P
     }
 
     @Test
-    public void deserializeAudioPerfectPitchPuzzleWithVC() {
+    void deserializeAudioPerfectPitchPuzzleWithVC() {
         var puzzle = readValue(AUDIO_PERFECT_PITCH_PUZZLE, AudioPerfectPitchPuzzle.class);
 
         assertAudioPerfectPitchPuzzle(puzzle);
     }
 
     @Test
-    public void deserializeAudioPerfectPitchPuzzleWithAbstractVC() {
+    void deserializeAudioPerfectPitchPuzzleWithAbstractVC() {
         var puzzle = (AudioPerfectPitchPuzzle) readValue(AUDIO_PERFECT_PITCH_PUZZLE, Puzzle.class);
 
         assertAudioPerfectPitchPuzzle(puzzle);
@@ -90,14 +90,14 @@ public class PuzzleDeserializerTest extends DeserializerBaseTest<Puzzle<?, ?>, P
 
     // TODO return when i'll return to visual perfect pitch
     // @Test
-    // public void deserializeVisualPerfectPitchPuzzleWithVC() {
+    // void deserializeVisualPerfectPitchPuzzleWithVC() {
     //     var puzzle = readValue(VISUAL_PERFECT_PITCH_PUZZLE, VisualPerfectPitchPuzzle.class);
 
     //     assertVisualPerfectPitchPuzzle(puzzle);
     // }
 
     // @Test
-    // public void deserializeVisualPerfectPitchPuzzleWithAbstractVC() {
+    // void deserializeVisualPerfectPitchPuzzleWithAbstractVC() {
     //     var puzzle = (VisualPerfectPitchPuzzle) readValue(VISUAL_PERFECT_PITCH_PUZZLE, Puzzle.class);
 
     //     assertVisualPerfectPitchPuzzle(puzzle);

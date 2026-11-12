@@ -23,7 +23,7 @@ public abstract class PuzzleConfigValidatorTest<E extends Exercise, PCA extends 
     protected abstract Class<VC> getValidatorClass();
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         aggregatesFactory = (PCAF) DI.get(PuzzleConfigAggregatesFactoryResolver.class).resolveFactory(getExercise());
         validator = DI.get(getValidatorClass());

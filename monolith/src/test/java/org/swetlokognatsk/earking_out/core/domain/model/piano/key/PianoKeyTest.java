@@ -16,14 +16,14 @@ public final class PianoKeyTest {
     private MockPianoKeySoundsPlayer mockSoundPlayer;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         // TODO mockito?
         mockSoundPlayer = new MockPianoKeySoundsPlayer();
         pianoKeysFactory = DI.get(PianoKeysFactory.class);
     }
 
     @Test
-    public void pianoKeyColorTest() {
+    void pianoKeyColorTest() {
         PianoKeyNumber.forEachKey((PianoKeyNumber keyNumber) -> {
             var pianoKey = pianoKeysFactory.create(keyNumber, PianoKeyMode.TOUCH);
             var expectedColor = getExpectedPianoKeyColor(keyNumber);
@@ -42,7 +42,7 @@ public final class PianoKeyTest {
     }
 
     @Test
-    public void pressPianoKeyInTouchMode() {
+    void pressPianoKeyInTouchMode() {
         var pianoKey = pianoKeysFactory.create(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
 
         pianoKey.press();
@@ -53,7 +53,7 @@ public final class PianoKeyTest {
     }
 
     @Test
-    public void releasePianoKeyInTouchMode() {
+    void releasePianoKeyInTouchMode() {
         var pianoKey = pianoKeysFactory.create(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
 
         try {
@@ -64,7 +64,7 @@ public final class PianoKeyTest {
     }
 
     @Test
-    public void pressTwicePianoKeyInTouchMode() {
+    void pressTwicePianoKeyInTouchMode() {
         var pianoKey = pianoKeysFactory.create(ANY_PIANO_KEY_NUMBER, PianoKeyMode.TOUCH);
 
         pianoKey.press();
