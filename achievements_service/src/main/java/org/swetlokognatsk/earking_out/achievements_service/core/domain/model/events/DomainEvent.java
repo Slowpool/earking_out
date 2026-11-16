@@ -1,7 +1,9 @@
-package org.swetlokognatsk.earking_out.achievements_service.core.domain.model;
+package org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+
+import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
 
 // TODO test properties logic
 /**

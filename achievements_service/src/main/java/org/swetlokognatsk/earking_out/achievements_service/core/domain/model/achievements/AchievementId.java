@@ -1,5 +1,5 @@
 package org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements;
 
-public record AchievementId(int id) {
+public record AchievementId(String id) {
     
 }

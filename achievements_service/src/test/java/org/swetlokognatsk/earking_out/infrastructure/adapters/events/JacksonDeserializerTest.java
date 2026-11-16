@@ -1,14 +1,11 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.events;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.junit.jupiter.api.*;
-import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.DomainEvent;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
+import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEvent;
 import org.swetlokognatsk.earking_out.achievements_service.core.ports.events.DomainEventDeserializer;
 import org.swetlokognatsk.earking_out.achievements_service.infrastructure.adapters.events.JacksonDeserializer;
 

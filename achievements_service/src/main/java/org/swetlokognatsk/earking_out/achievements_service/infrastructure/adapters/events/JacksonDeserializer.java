@@ -3,8 +3,8 @@ package org.swetlokognatsk.earking_out.achievements_service.infrastructure.adapt
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import org.springframework.stereotype.Component;
-import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.DomainEvent;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
+import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEvent;
 import org.swetlokognatsk.earking_out.achievements_service.core.ports.events.DomainEventDeserializer;
 import lombok.NonNull;
 import tools.jackson.core.type.TypeReference;
