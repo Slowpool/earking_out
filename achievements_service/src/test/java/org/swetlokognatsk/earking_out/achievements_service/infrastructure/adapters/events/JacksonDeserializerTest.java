@@ -1,4 +1,4 @@
-package org.swetlokognatsk.earking_out.infrastructure.adapters.events;
+package org.swetlokognatsk.earking_out.achievements_service.infrastructure.adapters.events;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;

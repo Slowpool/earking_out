@@ -4,5 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public final class DomainEvents extends HashMap<String, List<DomainEvent>> {
-
+    // // TODO
+    // public void add(final DomainEvent domainEvent)
 }
