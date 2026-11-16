@@ -10,6 +10,7 @@ import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.Use
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.Achievement;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.AchievementId;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.UnlockedAchievement;
+import org.swetlokognatsk.earking_out.achievements_service.core.ports.events.DomainEventDeserializer;
 import org.swetlokognatsk.earking_out.achievements_service.core.ports.messagebroker.MessageBroker;
 import lombok.AllArgsConstructor;
 
@@ -18,10 +19,11 @@ import lombok.AllArgsConstructor;
 public class AchievementService {
 
     private final MessageBroker messageBroker;
+    private final DomainEventDeserializer domainEventDeserializer;
 
     public void tryMakeNewAchievements(final String serializedDomainEvent) {
         var domainEvent = deserializeDomainEvent(serializedDomainEvent);
-        var lockedAchievements = getLockedAchievements(domainEvent);
+        var lockedAchievements = gatherLockedAchievements(domainEvent);
         if (lockedAchievements.isEmpty()) {
             return;
         }
@@ -31,11 +33,10 @@ public class AchievementService {
     }
 
     private DomainEvent deserializeDomainEvent(final String serializedDomainEvent) {
-        // TODO deserializeDomainEvent
-        return new DomainEvent("SomeDomainEvent", new UserId(1), LocalDateTime.now(), new HashMap<>());
+        return domainEventDeserializer.deserializeDomainEvent(serializedDomainEvent);
     }
 
-    private Set<Achievement> getLockedAchievements(final DomainEvent domainEvent) {
+    private Set<Achievement> gatherLockedAchievements(final DomainEvent domainEvent) {
         // TODO getUnlockedAchievements
         return Set.of(
                 new Achievement(new AchievementId(1)),
