@@ -8,12 +8,11 @@ import java.util.Map;
 import org.junit.jupiter.api.*;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEvent;
-import org.swetlokognatsk.earking_out.achievements_service.core.ports.events.DomainEventDeserializer;
 import org.swetlokognatsk.earking_out.achievements_service.infrastructure.adapters.events.JacksonDeserializer;
 
 public class JacksonDeserializerTest {
 
-    private DomainEventDeserializer deserializer;
+    private JacksonDeserializer deserializer;
 
     void assertHasProperty(final DomainEvent event, final String property, final Object expectedValue) {
         var propertyValue = event.get(property);
@@ -185,7 +184,7 @@ public class JacksonDeserializerTest {
 
         var event = deserializer.deserializeDomainEvent(serializedDomainEvent);
 
-        assertHasProperty(event, "array", List.of(1,2,3));
+        assertHasProperty(event, "array", List.of(1, 2, 3));
     }
 
     @Test
@@ -210,5 +209,92 @@ public class JacksonDeserializerTest {
         var object = (Map<String, Object>) event.get("object");
         assertEquals(object.get("property1"), "propertyValue1");
         assertEquals(object.get("property2"), "propertyValue2");
+    }
+
+    @Test
+    void batchWithTheSameTypes() {
+        String serializedDomainEvents = """
+                [
+                    {
+                        "type": "SomeEventType",
+                        "payload": {
+                            "userId": {"id": 1937},
+                            "timestamp": "2026-11-16T10:48:46.118501009"
+                        }
+                    },
+                    {
+                        "type": "SomeEventType",
+                        "payload": {
+                            "userId": {"id": 1937},
+                            "timestamp": "2026-11-16T10:48:46.118501009"
+                        }
+                    }
+                ]
+                """;
+
+        var events = deserializer.deserializeDomainEvents(serializedDomainEvents);
+
+        var eventsList = (List<DomainEvent>) events.get("SomeEventType");
+        assertEquals(2, eventsList.size());
+    }
+
+    @Test
+    void batchWithDifferentTypes() {
+        String serializedDomainEvents = """
+                [
+                    {
+                        "type": "SomeEventType",
+                        "payload": {
+                            "userId": {"id": 1937},
+                            "timestamp": "2026-11-16T10:48:46.118501009"
+                        }
+                    },
+                    {
+                        "type": "AnotherEventType",
+                        "payload": {
+                            "userId": {"id": 1937},
+                            "timestamp": "2026-11-16T10:48:46.118501009"
+                        }
+                    }
+                ]
+                """;
+
+        var events = deserializer.deserializeDomainEvents(serializedDomainEvents);
+
+        var someEvents = (List<DomainEvent>) events.get("SomeEventType");
+        assertEquals(1, someEvents.size());
+        var otherEvents = (List<DomainEvent>) events.get("AnotherEventType");
+        assertEquals(1, otherEvents.size());
+    }
+
+    @Test
+    void deserializeDomainEventsFromResponse() {
+        String response = """
+                {
+                    "domainEvents": [
+                        {
+                            "type": "SomeEventType",
+                            "payload": {
+                                "userId": {"id": 1937},
+                                "timestamp": "2026-11-16T10:48:46.118501009"
+                            }
+                        },
+                        {
+                            "type": "AnotherEventType",
+                            "payload": {
+                                "userId": {"id": 1937},
+                                "timestamp": "2026-11-16T10:48:46.118501009"
+                            }
+                        }
+                    ]
+                }
+                """;
+
+        var events = deserializer.deserializeDomainEventsResponse(response);
+
+        var someEvents = (List<DomainEvent>) events.get("SomeEventType");
+        assertEquals(1, someEvents.size());
+        var otherEvents = (List<DomainEvent>) events.get("AnotherEventType");
+        assertEquals(1, otherEvents.size());
     }
 }

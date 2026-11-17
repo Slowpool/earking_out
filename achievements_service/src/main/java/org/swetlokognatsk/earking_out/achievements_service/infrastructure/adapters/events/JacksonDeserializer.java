@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.springframework.stereotype.Component;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEvent;
+import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEvents;
+import org.swetlokognatsk.earking_out.achievements_service.core.ports.ResponseDeserializer;
 import org.swetlokognatsk.earking_out.achievements_service.core.ports.events.DomainEventDeserializer;
 import lombok.NonNull;
 import tools.jackson.core.type.TypeReference;
@@ -12,7 +14,7 @@ import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
 @Component
-public class JacksonDeserializer implements DomainEventDeserializer {
+public class JacksonDeserializer implements DomainEventDeserializer, ResponseDeserializer {
 
     private final ObjectMapper objectMapper;
 
@@ -52,5 +54,22 @@ public class JacksonDeserializer implements DomainEventDeserializer {
         if (!serializedDomainEvent.strip().startsWith("{")) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public DomainEvents deserializeDomainEvents(final String serializedDomainEvents) {
+        var rootNode = objectMapper.readTree(serializedDomainEvents);
+        var domainEvents = new DomainEvents();
+        DomainEvent domainEvent;
+        for (var domainEventNode : rootNode) {
+            domainEvent = deserializeDomainEvent(domainEventNode.toString());
+            domainEvents.add(domainEvent);
+        }
+        return domainEvents;
+    }
+
+    public DomainEvents deserializeDomainEventsResponse(final String response) {
+        var rootNode = objectMapper.readTree(response);
+        var eventsNode = rootNode.get("domainEvents");
+        return deserializeDomainEvents(eventsNode.toString());
     }
 }
