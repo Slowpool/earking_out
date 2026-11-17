@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.achievements_service;
 
+import static org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.Achievements.FIRST_AUDIO_PERFECT_PITCH_SUCCESS;
 import static org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEventTypes.GUESS;
 import static org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEventTypes.SESSION_FINISHED;
 import static org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEventTypes.SESSION_STARTED;
@@ -11,6 +12,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
+import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.Achievements;
+import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.UnlockedAchievement;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEvent;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEvents;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.services.app.AchievementService;
@@ -41,36 +44,44 @@ class AchievementServiceTest {
 	@InjectMocks
 	private AchievementService service;
 
-	@Test
-	void tryMakeNewAchievementsAfterGuess() {
-		var eventTypesCaptor = ArgumentCaptor.forClass(String[].class);
+	private DomainEvent createGuessEvent(final boolean successfulGuess) {
 		var properties = newProperties();
-		// properties.put();
-		var guessEvent = new DomainEvent(GUESS, USER_ID, LocalDateTime.now(), properties);
+		properties.put("success", successfulGuess);
+		return new DomainEvent(GUESS, USER_ID, LocalDateTime.now(), properties);
+	}
+
+	private void mockHttpClientGetDomainEvents(final DomainEvent guessEvent) {
 		when(httpClient.getDomainEvents(any(UserId.class), any(String[].class)))
-				.thenReturn(new DomainEvents());
+				.thenReturn(new DomainEvents(guessEvent));
+	}
+
+	private void assertRequestedEventsAre(final String[] eventTypes) {
+		verify(httpClient)
+				.getDomainEvents(USER_ID, eventTypes);
+	}
+
+	@Test
+	void tryMakeNewAchievementsAfterFirstSuccessfulGuess() {
+		var guessEvent = createGuessEvent(true);
+		mockHttpClientGetDomainEvents(guessEvent);
 
 		service.tryMakeNewAchievements(guessEvent);
 
-		verify(httpClient)
-				.getDomainEvents(any(UserId.class), eventTypesCaptor.capture());
-		var requestedEventTypes = eventTypesCaptor.getValue();
-		assertArrayEquals(new String[] { GUESS }, requestedEventTypes);
+		assertRequestedEventsAre(new String[] { GUESS });
+		var expectedUnlockedAchievement = new UnlockedAchievement(FIRST_AUDIO_PERFECT_PITCH_SUCCESS.id, USER_ID);
+		verify(messageBroker)
+				.sendNewAchievement(expectedUnlockedAchievement);
 	}
 
 	@Test
-	void doSomething() {
-		var eventTypesCaptor = ArgumentCaptor.forClass(String[].class);
-		when(httpClient.getDomainEvents(any(UserId.class), any(String[].class)))
-				.thenReturn(null);
-		var sessionFinishedEvent = new DomainEvent(SESSION_FINISHED, USER_ID, LocalDateTime.now(), null);
+	void tryMakeNewAchievementsWithoutSuccessfulGuess() {
+		var guessEvent = createGuessEvent(false);
+		mockHttpClientGetDomainEvents(guessEvent);
 
-		service.tryMakeNewAchievements(sessionFinishedEvent);
+		service.tryMakeNewAchievements(guessEvent);
 
-		verify(httpClient)
-				.getDomainEvents(any(UserId.class), eventTypesCaptor.capture());
-		var requestedEventTypes = eventTypesCaptor.getValue();
-		assertArrayEquals(new String[] { SESSION_FINISHED, SESSION_STARTED }, requestedEventTypes);
+		assertRequestedEventsAre(new String[] { GUESS });
+		verify(messageBroker, never())
+				.sendNewAchievement(any(UnlockedAchievement.class));
 	}
-
 }

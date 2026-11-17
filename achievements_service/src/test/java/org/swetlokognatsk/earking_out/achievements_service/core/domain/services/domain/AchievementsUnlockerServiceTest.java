@@ -69,8 +69,8 @@ public class AchievementsUnlockerServiceTest {
         var unlockedAchievement = achievementsUnlocker.tryUnlock(FIRST_AUDIO_PERFECT_PITCH_SUCCESS, domainEvents, guessEvent);
 
         assertNotNull(unlockedAchievement);
-        assertEquals(FIRST_AUDIO_PERFECT_PITCH_SUCCESS.id, unlockedAchievement.id);
-        assertEquals(guessEvent.userId(), unlockedAchievement.userId);
+        assertEquals(FIRST_AUDIO_PERFECT_PITCH_SUCCESS.id, unlockedAchievement.id());
+        assertEquals(guessEvent.userId(), unlockedAchievement.userId());
     }
 
     @Test
@@ -93,8 +93,8 @@ public class AchievementsUnlockerServiceTest {
         var unlockedAchievement = achievementsUnlocker.tryUnlock(FINISH_10_AUDIO_PERFECT_PITCH_SESSIONS, domainEvents, lastSessionFinishedEvent);
 
         assertNotNull(unlockedAchievement);
-        assertEquals(FINISH_10_AUDIO_PERFECT_PITCH_SESSIONS.id, unlockedAchievement.id);
-        assertEquals(lastSessionFinishedEvent.userId(), unlockedAchievement.userId);
+        assertEquals(FINISH_10_AUDIO_PERFECT_PITCH_SESSIONS.id, unlockedAchievement.id());
+        assertEquals(lastSessionFinishedEvent.userId(), unlockedAchievement.userId());
     }
 
     @Test

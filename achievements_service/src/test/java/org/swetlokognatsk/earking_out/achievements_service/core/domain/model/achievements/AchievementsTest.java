@@ -1,15 +1,13 @@
 package org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.swetlokognatsk.earking_out.achievements_service.core.domain.DomainEventsTestHelper.*;
 import static org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.Achievements.*;
 import java.util.List;
 import org.junit.jupiter.api.*;
-import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
 import static org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEventTypes.*;
 
 public class AchievementsTest {
-
-    private static final UserId USER_ID = new UserId(1);
 
     @Test
     void unlock() {
@@ -17,8 +15,8 @@ public class AchievementsTest {
 
         var unlockedAchievement = achievement.unlock(USER_ID);
 
-        assertEquals(achievement.id, unlockedAchievement.id);
-        assertEquals(USER_ID, unlockedAchievement.userId);
+        assertEquals(achievement.id, unlockedAchievement.id());
+        assertEquals(USER_ID, unlockedAchievement.userId());
     }
 
     @Test
