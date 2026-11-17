@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.achievements_service.core.domain.services
 
 import static org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.Achievements.*;
 import static org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEventTypes.SESSION_FINISHED;
+import static org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEventTypes.SESSION_STARTED;
+
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.stereotype.Service;
@@ -48,11 +50,11 @@ public class AchievementsUnlockerService {
     }
 
     private @Nullable UnlockedAchievement tryUnlockFinishXAudioPerfectPitchSessions(final DomainEvents source, final DomainEvent trigger, final int x, final Achievements achievement) {
-        var numberOfStartedSessions = source.get(SESSION_FINISHED)
+        var numberOfStartedSessions = source.get(SESSION_STARTED)
                 .stream()
                 // achievement will be given only after x + 1 sessionStarted events. why? because sessionFinishedEvent does not contain exercise info
                 // TODO upd: actually, source should contian all SessionStartedEvents. fix this weird sessionStarted logic
-                .filter(this::isAudioPerfectPitchSessionFinishedEvent)
+                .filter(this::isAudioPerfectPitchSessionStartedEvent)
                 .filter(event -> event.userId().equals(trigger.userId()))
                 .count();
         return numberOfStartedSessions >= x + 1
@@ -60,10 +62,10 @@ public class AchievementsUnlockerService {
                 : null;
     }
 
-    private boolean isAudioPerfectPitchSessionFinishedEvent(final DomainEvent sessionStartedEvent) {
+    private boolean isAudioPerfectPitchSessionStartedEvent(final DomainEvent sessionStartedEvent) {
         // {"name":"PERFECT_PITCH","type":"AUDIO"}
         return sessionStartedEvent.type()
-                .equals(SESSION_FINISHED)
+                .equals(SESSION_STARTED)
                 && sessionStartedEvent.get("puzzleConfigDto.exercise.name")
                         .equals(PERFECT_PITCH)
                 && sessionStartedEvent.get("puzzleConfigDto.exercise.type")

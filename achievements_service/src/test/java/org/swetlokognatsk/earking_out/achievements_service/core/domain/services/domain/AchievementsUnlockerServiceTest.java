@@ -23,10 +23,6 @@ public class AchievementsUnlockerServiceTest {
     private AchievementsUnlockerService achievementsUnlocker = new AchievementsUnlockerService();
     private final DomainEventsTestHelper domainEventsHelper = new DomainEventsTestHelper();
 
-    private Map<String, Object> newProperties() {
-        return domainEventsHelper.newProperties();
-    }
-
     private DomainEvents generateFakeAudioPerfectPitchFirstSuccessEvents(final boolean success) {
         var properties = newProperties();
         properties.put("success", success);
@@ -46,11 +42,11 @@ public class AchievementsUnlockerServiceTest {
         properties.put("puzzleConfigDto", puzzleConfigDto);
         var fakeEvents = new ArrayList<DomainEvent>(numberOfFinishedSessions);
         for (int i = 0; i < numberOfFinishedSessions; i++) {
-            var event = new DomainEvent(SESSION_FINISHED, USER_ID, LocalDateTime.now(), properties);
+            var event = new DomainEvent(SESSION_STARTED, USER_ID, LocalDateTime.now(), properties);
             fakeEvents.add(event);
         }
         var domainEvents = new DomainEvents();
-        domainEvents.put(SESSION_FINISHED, fakeEvents);
+        domainEvents.put(SESSION_STARTED, fakeEvents);
         return domainEvents;
     }
 

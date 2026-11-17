@@ -2,6 +2,8 @@ package org.swetlokognatsk.earking_out.achievements_service.infrastructure.adapt
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.*;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
@@ -183,7 +185,7 @@ public class JacksonDeserializerTest {
 
         var event = deserializer.deserializeDomainEvent(serializedDomainEvent);
 
-        assertHasProperty(event, "array", new int[] { 1, 2, 3 });
+        assertHasProperty(event, "array", List.of(1,2,3));
     }
 
     @Test

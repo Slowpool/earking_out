@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @RestController
-public class AchievementsServiceApplication {
+public class AchievementsApplication {
 
 	@RequestMapping("/")
 	public ResponseEntity<String> test() {

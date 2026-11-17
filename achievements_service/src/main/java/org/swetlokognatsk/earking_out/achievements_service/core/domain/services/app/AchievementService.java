@@ -64,14 +64,14 @@ public class AchievementService {
         for (var lockedAchievement : lockedAchievements) {
             Collections.addAll(typesOfDomainEventsToRequest, lockedAchievement.triggerEventTypes);
         }
-        var domainEvents = requestDomainEvents(typesOfDomainEventsToRequest.toArray(String[]::new), domainEvent.userId());
+        var domainEvents = requestDomainEvents(typesOfDomainEventsToRequest, domainEvent.userId());
         var unlockedAchievements = achievementsUnlocker.tryUnlock(lockedAchievements, domainEvents, domainEvent);
         return unlockedAchievements;
     }
 
-    private DomainEvents requestDomainEvents(final String[] domainEventTypes, final UserId userId) {
-        // TODO requestDomainEvents
-        return null;
+    private DomainEvents requestDomainEvents(final Set<String> domainEventTypes, final UserId userId) {
+        var types = domainEventTypes.toArray(String[]::new);
+        return httpClient.getDomainEvents(userId, types);
     }
 
     private void sendUnlockedAchievements(final Set<UnlockedAchievement> achievements) {

@@ -2,7 +2,6 @@ package org.swetlokognatsk.earking_out.achievements_service.core.domain;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
 
 public class DomainEventsTestHelper {
@@ -11,8 +10,10 @@ public class DomainEventsTestHelper {
     public static final UserId ANOTHER_USER_ID = new UserId(2);
     public static final String PERFECT_PITCH = "PERFECT_PITCH";
     public static final String AUDIO = "AUDIO";
-    
-    public Map<String, Object> newProperties() {
+    public static final String SESSION_EVENT = "session-event";
+    public static final String IDENTITY_EVENT = "identity-event";
+
+    public static Map<String, Object> newProperties() {
         return new HashMap<>();
     }
 }
