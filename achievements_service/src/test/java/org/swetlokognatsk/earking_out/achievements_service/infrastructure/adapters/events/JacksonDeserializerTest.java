@@ -67,7 +67,7 @@ public class JacksonDeserializerTest {
                 {
                     "type": "SomeEventType",
                     "payload": {
-                        "userId": {"id": 1937},
+                        "userId": 1937,
                         "timestamp": "2026-11-16T10:48:46.118501009",
                         "null": null
                     }
@@ -85,7 +85,7 @@ public class JacksonDeserializerTest {
                 {
                     "type": "SomeEventType",
                     "payload": {
-                        "userId": {"id": 1937},
+                        "userId": 1937,
                         "timestamp": "2026-11-16T10:48:46.118501009"
                     }
                 }
@@ -102,7 +102,7 @@ public class JacksonDeserializerTest {
                 {
                     "type": "SomeEventType",
                     "payload": {
-                        "userId": {"id": 1937},
+                        "userId": 1937,
                         "timestamp": "2026-11-16T10:48:46.118501009"
                     }
                 }
@@ -120,7 +120,7 @@ public class JacksonDeserializerTest {
                 {
                     "type": "SomeEventType",
                     "payload": {
-                        "userId": {"id": 1937},
+                        "userId": 1937,
                         "timestamp": "2026-11-16T10:48:46.118501009",
                         "boolean": true
                     }
@@ -138,7 +138,7 @@ public class JacksonDeserializerTest {
                 {
                     "type": "SomeEventType",
                     "payload": {
-                        "userId": {"id": 1937},
+                        "userId": 1937,
                         "timestamp": "2026-11-16T10:48:46.118501009",
                         "int": 1937
                     }
@@ -156,7 +156,7 @@ public class JacksonDeserializerTest {
                 {
                     "type": "SomeEventType",
                     "payload": {
-                        "userId": {"id": 1937},
+                        "userId": 1937,
                         "timestamp": "2026-11-16T10:48:46.118501009",
                         "string": "someString"
                     }
@@ -175,7 +175,7 @@ public class JacksonDeserializerTest {
                 {
                     "type": "SomeEventType",
                     "payload": {
-                        "userId": {"id": 1937},
+                        "userId": 1937,
                         "timestamp": "2026-11-16T10:48:46.118501009",
                         "array": [1, 2, 3]
                     }
@@ -193,7 +193,7 @@ public class JacksonDeserializerTest {
                 {
                     "type": "SomeEventType",
                     "payload": {
-                        "userId": {"id": 1937},
+                        "userId": 1937,
                         "timestamp": "2026-11-16T10:48:46.118501009",
                         "object": {
                             "property1": "propertyValue1",
@@ -218,14 +218,14 @@ public class JacksonDeserializerTest {
                     {
                         "type": "SomeEventType",
                         "payload": {
-                            "userId": {"id": 1937},
+                            "userId": 1937,
                             "timestamp": "2026-11-16T10:48:46.118501009"
                         }
                     },
                     {
                         "type": "SomeEventType",
                         "payload": {
-                            "userId": {"id": 1937},
+                            "userId": 1937,
                             "timestamp": "2026-11-16T10:48:46.118501009"
                         }
                     }
@@ -245,14 +245,14 @@ public class JacksonDeserializerTest {
                     {
                         "type": "SomeEventType",
                         "payload": {
-                            "userId": {"id": 1937},
+                            "userId": 1937,
                             "timestamp": "2026-11-16T10:48:46.118501009"
                         }
                     },
                     {
                         "type": "AnotherEventType",
                         "payload": {
-                            "userId": {"id": 1937},
+                            "userId": 1937,
                             "timestamp": "2026-11-16T10:48:46.118501009"
                         }
                     }
@@ -275,14 +275,14 @@ public class JacksonDeserializerTest {
                         {
                             "type": "SomeEventType",
                             "payload": {
-                                "userId": {"id": 1937},
+                                "userId": 1937,
                                 "timestamp": "2026-11-16T10:48:46.118501009"
                             }
                         },
                         {
                             "type": "AnotherEventType",
                             "payload": {
-                                "userId": {"id": 1937},
+                                "userId": 1937,
                                 "timestamp": "2026-11-16T10:48:46.118501009"
                             }
                         }
