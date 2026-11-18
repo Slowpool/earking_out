@@ -28,4 +28,8 @@
 
     <include file="1792662559_add_user_id_provider_id_unique_to_oauth_identity.xml" relativeToChangelogFile="true" />
 
+    <include file="1794991888_create_achievements_tables.xml" relativeToChangelogFile="true" />
+
+    <include file="1795000561_add_some_achievements.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

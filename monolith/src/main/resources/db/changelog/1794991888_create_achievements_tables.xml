@@ -1,0 +1,60 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="15" author="slowpool">
+        <createTable tableName="achievements">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="technical_name" type="varchar(128)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="unlocked_achievements">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="achievement_id" type="uuid">
+                <constraints nullable="false" />
+            </column>
+            <column name="unlocked_on" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="notification_is_sent" type="boolean">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+            constraintName="unlocked_achievements_user_id_to_users"
+            baseTableName="unlocked_achievements"
+            baseColumnNames="user_id"
+            referencedTableName="users"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            onUpdate="CASCADE"
+        />
+
+        <addForeignKeyConstraint
+            constraintName="unlocked_achievements_achievement_id_to_achievements"
+            baseTableName="unlocked_achievements"
+            baseColumnNames="achievement_id"
+            referencedTableName="achievements"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            onUpdate="CASCADE"
+        />
+
+        <addUniqueConstraint
+            constraintName="uq_unlocked_achievements_user_id_achievement_id"
+            tableName="unlocked_achievements"
+            columnNames="user_id,achievement_id"
+        />
+    </changeSet>
+
+</databaseChangeLog>

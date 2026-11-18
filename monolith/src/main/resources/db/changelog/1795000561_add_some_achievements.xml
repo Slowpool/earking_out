@@ -1,0 +1,20 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="16" author="slowpool">
+        <insert tableName="achievements">
+            <column name="id" value="251f5a5c-3611-41fd-9c4d-f6a7831ca5c6" />
+            <column name="technical_name" value="first_audio_perfect_pitch_success" />
+        </insert>
+        <insert tableName="achievements">
+            <column name="id" value="59691901-a5d1-436a-afea-05f09ac42aad" />
+            <column name="technical_name" value="finish_10_audio_perfect_pitch_sessions" />
+        </insert>
+        <insert tableName="achievements">
+            <column name="id" value="57c6cf73-d553-44f6-9aed-8f840cfb8d94" />
+            <column name="technical_name" value="finish_100_audio_perfect_pitch_sessions" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
