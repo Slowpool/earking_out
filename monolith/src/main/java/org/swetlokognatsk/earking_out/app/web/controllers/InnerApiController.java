@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.swetlokognatsk.earking_out.app.web.services.achievements.AchievementsService;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.AchievementTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.AchievementService;
+
 import lombok.AllArgsConstructor;
 import static org.swetlokognatsk.earking_out.SpringProfiles.WEB;
 import java.util.HashMap;
@@ -20,12 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @AllArgsConstructor
 public class InnerApiController {
 
-    private final AchievementsService achievementsService;
+    private final AchievementService achievementService;
 
     // TODO add api key check
     @GetMapping("/achievements")
     public ResponseEntity<?> getAchievements(@RequestParam final AchievementTypes type, @RequestParam(required = false) final UserId userId) {
-        var achievements = achievementsService.get(type, userId);
+        var achievements = achievementService.get(type, userId);
         return ok(achievements);
     }
 
