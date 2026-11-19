@@ -10,4 +10,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class AchievementId extends ValueObject implements Serializable {
     public final UUID id;
+
+    public static AchievementId random() {
+        return new AchievementId(UUID.randomUUID());
+    }
 }

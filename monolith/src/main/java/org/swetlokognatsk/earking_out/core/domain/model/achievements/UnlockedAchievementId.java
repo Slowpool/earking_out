@@ -6,4 +6,7 @@ import java.util.UUID;
 public record UnlockedAchievementId(UUID id) implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public static UnlockedAchievementId random() {
+        return new UnlockedAchievementId(UUID.randomUUID());
+    }
 }

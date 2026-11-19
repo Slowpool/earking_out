@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.core.domain.model.base;
 
 import java.lang.reflect.Array;
-
 import org.swetlokognatsk.earking_out.core.ports.base.ObjectCloner;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 

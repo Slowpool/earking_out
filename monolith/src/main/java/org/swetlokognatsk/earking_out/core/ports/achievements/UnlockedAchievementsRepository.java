@@ -10,5 +10,5 @@ import org.swetlokognatsk.earking_out.core.ports.base.TypedAggregateRepository;
 public interface UnlockedAchievementsRepository extends TypedAggregateRepository<UnlockedAchievementId, UnlockedAchievementAggregate> {
     boolean exists(UserId userId, AchievementId achievementId);
 
-    void save(NewUnlockedAchievement newUnlockedAchievement);
+    UnlockedAchievementAggregate get(UserId userId, AchievementId achievementId);
 }

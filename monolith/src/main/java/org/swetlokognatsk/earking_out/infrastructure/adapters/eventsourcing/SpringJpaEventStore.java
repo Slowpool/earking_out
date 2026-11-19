@@ -24,7 +24,7 @@ import lombok.Getter;
 
 @Repository
 @Primary
-@Profile({ DESKTOP, WEB })
+@Profile(JPA)
 @Getter(AccessLevel.PRIVATE)
 public class SpringJpaEventStore implements EventStore {
 

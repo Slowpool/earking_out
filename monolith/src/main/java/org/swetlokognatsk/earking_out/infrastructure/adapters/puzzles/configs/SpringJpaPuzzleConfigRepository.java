@@ -22,7 +22,7 @@ import lombok.AccessLevel;
 // TODO integration tests. definitely
 @Repository
 @Primary
-@Profile({ DESKTOP, WEB })
+@Profile(JPA)
 @Getter(AccessLevel.PRIVATE)
 public class SpringJpaPuzzleConfigRepository extends BasePuzzleConfigRepository {
 

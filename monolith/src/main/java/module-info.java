@@ -148,6 +148,8 @@ module org.swetlokognatsk {
     exports org.swetlokognatsk.earking_out.core.domain.model.identity.oauth;
     exports org.swetlokognatsk.earking_out.infrastructure.adapters.events.messagebroker;
     exports org.swetlokognatsk.earking_out.core.domain.model.achievements;
+    exports org.swetlokognatsk.earking_out.infrastructure.adapters.achievements;
+    exports org.swetlokognatsk.earking_out.app.web.services.converters;
 
     opens org.swetlokognatsk.earking_out;
     opens org.swetlokognatsk.earking_out.app.desktop;
@@ -257,5 +259,6 @@ module org.swetlokognatsk {
     opens org.swetlokognatsk.earking_out.core.domain.events.handlers;
     opens org.swetlokognatsk.earking_out.infrastructure.adapters.events.messagebroker;
     opens org.swetlokognatsk.earking_out.core.domain.model.achievements;
+    opens org.swetlokognatsk.earking_out.infrastructure.adapters.achievements;
 
 }

@@ -9,4 +9,5 @@ public final class SpringProfiles {
     public static final String DESKTOP = "desktop";
     public static final String WEB = "web";
     public static final String TEST = "test";
+    public static final String JPA = "jpa";
 }
