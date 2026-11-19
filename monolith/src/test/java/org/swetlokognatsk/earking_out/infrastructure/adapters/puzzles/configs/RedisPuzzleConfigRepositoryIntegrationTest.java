@@ -19,11 +19,9 @@ import org.testcontainers.utility.DockerImageName;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-@Testcontainers
 @EOSpringBootTest
 public class RedisPuzzleConfigRepositoryIntegrationTest {
 
-    @Container
     @ServiceConnection(name = "redis")
     private static GenericContainer<?> redis;
 

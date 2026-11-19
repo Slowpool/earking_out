@@ -39,7 +39,7 @@ public class SpringJpaUnlockedAchievementsRepository implements UnlockedAchievem
                 """;
         var exists = queryByUserAndAchievement(jpql, Integer.class, userId, achievementId)
                 .getSingleResultOrNull();
-        return exists == 1;
+        return exists != null;
     }
 
     private <T> TypedQuery<T> queryByUserAndAchievement(final String jpql, final Class<T> resultType, final UserId userId, final AchievementId achievementId) {
@@ -50,7 +50,7 @@ public class SpringJpaUnlockedAchievementsRepository implements UnlockedAchievem
     }
 
     public UnlockedAchievementAggregate get(final UnlockedAchievementId id) {
-        var entity = entityManager.find(UnlockedAchievementEntity.class, id);
+        var entity = entityManager.find(UnlockedAchievementEntity.class, id.id());
         if (entity == null) {
             throw new AggregateNotFoundException();
         }
@@ -83,13 +83,37 @@ public class SpringJpaUnlockedAchievementsRepository implements UnlockedAchievem
     }
 
     @Transactional
-    public void save(final UnlockedAchievementAggregate newUnlockedAchievement) {
-        var entity = mapToEntity(newUnlockedAchievement);
+    public UnlockedAchievementId createAndSave(final UnlockedAchievementAggregate aggregate) {
+        var entity = innerSave(aggregate);
+
+        return new UnlockedAchievementId(entity.getId());
+    }
+
+    @Transactional
+    public void save(final UnlockedAchievementAggregate aggregate) {
+        innerSave(aggregate);
+    }
+
+    private UnlockedAchievementEntity innerSave(final UnlockedAchievementAggregate aggregate) {
+        var entity = mapToEntity(aggregate);
 
         entityManager.persist(entity);
+        return entity;
     }
 
     private UnlockedAchievementEntity mapToEntity(final UnlockedAchievementAggregate aggregate) {
-        return new UnlockedAchievementEntity();
+        // TODO where to put null checks?
+        var id = aggregate.getId()
+                .id();
+        var achievementId = aggregate.achievementId.id;
+        var userId = aggregate.userId.id();
+        var unlockedOn = aggregate.unlockedOn;
+        var notificationIsSent = aggregate.notificationIsSent;
+        if (id == null) {
+            return new UnlockedAchievementEntity(userId, achievementId, unlockedOn, notificationIsSent);
+        } else {
+            var entity = new UnlockedAchievementEntity(id, userId, achievementId, unlockedOn, notificationIsSent);
+            return entityManager.merge(entity);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.achievements;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -22,32 +23,43 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import static org.swetlokognatsk.earking_out.TestHelper.*;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import javax.sql.DataSource;
 
-// TODO what does it do
-@Testcontainers
 @DirtiesContext(methodMode = BEFORE_METHOD)
 @EOSpringBootTest
 @EnableAutoConfiguration(exclude = {})
 @ActiveProfiles({ TEST, JPA })
 public class SpringJpaUnlockedAchievementsRepositoryTest {
 
-    // TODO what does it do
-    @Container
-    // TODO what does it do
     @ServiceConnection
     static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.6");
 
     private SpringJpaUnlockedAchievementsRepository repository;
 
     private UnlockedAchievementAggregate newUnlockedAchievementAggregate() {
-        return new UnlockedAchievementAggregate(UnlockedAchievementId.random(), USER_ID, AchievementId.random(), LocalDateTime.now());
+        return new UnlockedAchievementAggregate(new UnlockedAchievementId(null), USER_ID, AchievementId.random(), LocalDateTime.now());
     }
 
     @BeforeEach
     public void setup() {
         repository = DI.get(SpringJpaUnlockedAchievementsRepository.class);
+
+        ensureTestcontainerIsUsed();
+    }
+
+    void ensureTestcontainerIsUsed() {
+        var dataSource = DI.get(DataSource.class);
+        try {
+
+            var db = dataSource.getConnection()
+                    .getMetaData()
+                    .getDatabaseProductName()
+                    .toLowerCase();
+            assertEquals("postgresql", db);
+        } catch (SQLException e) {
+        }
     }
 
     @Test
@@ -88,9 +100,9 @@ public class SpringJpaUnlockedAchievementsRepositoryTest {
     @Test
     void getExistingById() {
         var unlockedAchievement = newUnlockedAchievementAggregate();
-        repository.save(unlockedAchievement);
+        var id = repository.createAndSave(unlockedAchievement);
 
-        var aggregate = repository.get(unlockedAchievement.getId());
+        var aggregate = repository.get(id);
 
         assertNotNull(aggregate);
         assertEquals(unlockedAchievement.userId, aggregate.userId);

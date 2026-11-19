@@ -1,7 +1,6 @@
 package org.swetlokognatsk.earking_out.core.ports.achievements;
 
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.AchievementId;
-import org.swetlokognatsk.earking_out.core.domain.model.achievements.NewUnlockedAchievement;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementId;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
@@ -11,4 +10,6 @@ public interface UnlockedAchievementsRepository extends TypedAggregateRepository
     boolean exists(UserId userId, AchievementId achievementId);
 
     UnlockedAchievementAggregate get(UserId userId, AchievementId achievementId);
+
+    UnlockedAchievementId createAndSave(UnlockedAchievementAggregate aggregate);
 }
