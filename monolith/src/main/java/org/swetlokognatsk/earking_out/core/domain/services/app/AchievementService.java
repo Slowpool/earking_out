@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.AchievementTypes;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.NewUnlockedAchievement;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementAggregate;
+import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.ports.achievements.UnlockedAchievementsRepository;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.AllArgsConstructor;
 public class AchievementService {
 
     final private UnlockedAchievementsRepository repository;
+    final private UnlockedAchievementAggregatesFactory aggregatesFactory;
 
     public Set<?> get(final AchievementTypes type, final UserId userId) {
         return switch (type) {
@@ -23,7 +26,7 @@ public class AchievementService {
     }
 
     private Set<UnlockedAchievementAggregate> getUnlockedAchievements(final UserId userId) {
-
+        return repository.get(userId);
     }
 
     public void handleNewUnlockedAchievement(final NewUnlockedAchievement newUnlockedAchievement) {
@@ -31,7 +34,10 @@ public class AchievementService {
             return;
         }
 
-        repository.save(newUnlockedAchievement);
+        var aggregate = aggregatesFactory.create(UnlockedAchievementId.empty(), newUnlockedAchievement.userId(), newUnlockedAchievement.id(), newUnlockedAchievement.unlockedOn());
+        var unlockedAchievementId = repository.saveAndGetId(aggregate);
+
+        // TODO send to websockets
     }
 
     private boolean alreadyPersisted(final NewUnlockedAchievement newUnlockedAchievement) {

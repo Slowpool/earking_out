@@ -2,12 +2,14 @@ package org.swetlokognatsk.earking_out;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.sql.SQLException;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.TestUserResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import javax.sql.DataSource;
 
 public final class TestHelper {
     public static final UserId USER_ID = new UserId(1);
+    public static final UserId ANOTHER_USER_ID = new UserId(2);
 
     public static void ensureH2IsUsed() {
         ensureThisDatabaseIsUsed("H2");
@@ -31,4 +33,18 @@ public final class TestHelper {
         }
     }
 
+    public static void switchToUser(final UserId userId) {
+        DI.get(TestUserResolver.class)
+                .setCurrentUserId(userId);
+    }
+
+    public static void switchToHomeUser() {
+        DI.get(TestUserResolver.class)
+                .setCurrentUserId(USER_ID);
+    }
+
+    public static void switchToAnotherUser() {
+        DI.get(TestUserResolver.class)
+                .setCurrentUserId(ANOTHER_USER_ID);
+    }
 }

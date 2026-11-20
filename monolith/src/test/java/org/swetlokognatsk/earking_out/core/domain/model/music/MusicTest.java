@@ -15,7 +15,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber
 
 @EOSpringBootTest
 public class MusicTest {
-    
+
     @Test
     void createNote() {
         var note = Note.valueOf(NoteNames.C, Accidentals.SHARP, Octaves.FIRST);

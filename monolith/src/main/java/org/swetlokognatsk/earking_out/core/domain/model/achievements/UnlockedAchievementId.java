@@ -10,4 +10,8 @@ public record UnlockedAchievementId(UUID id) implements Serializable {
     public static UnlockedAchievementId random() {
         return new UnlockedAchievementId(UUID.randomUUID());
     }
+
+    public static UnlockedAchievementId empty() {
+        return new UnlockedAchievementId(null);
+    }
 }

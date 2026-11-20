@@ -1,6 +1,10 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.achievements;
 
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +15,7 @@ import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAch
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementId;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.asdf;
 import org.swetlokognatsk.earking_out.core.ports.achievements.UnlockedAchievementsRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -58,6 +63,25 @@ public class SpringJpaUnlockedAchievementsRepository implements UnlockedAchievem
         return mapToAggregate(entity);
     }
 
+    public Set<UnlockedAchievementAggregate> get(final UserId userId) {
+        var jpql = """
+                SELECT unlockedAchievement
+                FROM UnlockedAchievementEntity unlockedAchievement
+                WHERE unlockedAchievement.userId = :userId
+                """;
+        var entities = getEntityManager()
+                .createQuery(jpql, UnlockedAchievementEntity.class)
+                .setParameter("userId", userId.id())
+                .getResultList();
+        return mapToAggregates(entities);
+    }
+
+    private Set<UnlockedAchievementAggregate> mapToAggregates(final List<UnlockedAchievementEntity> entities) {
+        return entities.stream()
+                .map(this::mapToAggregate)
+                .collect(Collectors.toSet());
+    }
+
     private UnlockedAchievementAggregate mapToAggregate(final UnlockedAchievementEntity entity) {
         var id = new UnlockedAchievementId(entity.getId());
         var userId = new UserId(entity.getUserId());
@@ -83,7 +107,7 @@ public class SpringJpaUnlockedAchievementsRepository implements UnlockedAchievem
     }
 
     @Transactional
-    public UnlockedAchievementId createAndSave(final UnlockedAchievementAggregate aggregate) {
+    public UnlockedAchievementId saveAndGetId(final UnlockedAchievementAggregate aggregate) {
         var entity = innerSave(aggregate);
 
         return new UnlockedAchievementId(entity.getId());

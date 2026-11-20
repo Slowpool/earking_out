@@ -6,7 +6,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
-import org.swetlokognatsk.earking_out.core.domain.model.identity.TestUserResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
@@ -20,6 +19,7 @@ import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
+import static org.swetlokognatsk.earking_out.TestHelper.*;
 
 @EOSpringBootTest
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
@@ -36,11 +36,6 @@ public final class InMemorySessionRepositoryTest {
     private PuzzleConfigTestHelper puzzleConfigHelper;
 
     private PuzzleConfigAggregate<?> puzzleConfig;
-
-    private void switchToUser(final UserId userId) {
-        DI.get(TestUserResolver.class)
-                .setCurrentUserId(userId);
-    }
 
     private void assertActiveSessionExists() {
         // if there's no exception, then some active session was returned, then active session does exist

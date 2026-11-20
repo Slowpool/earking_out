@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.core.ports.achievements;
 
+import java.util.Set;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.AchievementId;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementId;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementAggregate;
@@ -11,5 +12,7 @@ public interface UnlockedAchievementsRepository extends TypedAggregateRepository
 
     UnlockedAchievementAggregate get(UserId userId, AchievementId achievementId);
 
-    UnlockedAchievementId createAndSave(UnlockedAchievementAggregate aggregate);
+    Set<UnlockedAchievementAggregate> get(UserId userId);
+
+    UnlockedAchievementId saveAndGetId(UnlockedAchievementAggregate aggregate);
 }

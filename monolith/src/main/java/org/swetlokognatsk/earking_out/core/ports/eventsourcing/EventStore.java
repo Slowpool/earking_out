@@ -1,6 +1,8 @@
 package org.swetlokognatsk.earking_out.core.ports.eventsourcing;
 
+import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.events.EventStream;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.infrastructure.EventSavingException;
 
 // TODO add version to event.
@@ -9,4 +11,5 @@ public interface EventStore {
     // void append(final EventStream<?> eventStream) throws EventSavingException;
     void append(EventStream<?> eventStream);
     <ID> EventStream<ID> getAllEvents(ID streamId);
+    // DomainEvent[] getAllEvents(UserId userId);
 }
