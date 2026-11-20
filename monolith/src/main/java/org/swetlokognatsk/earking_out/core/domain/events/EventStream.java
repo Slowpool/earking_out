@@ -5,6 +5,11 @@ import java.util.Iterator;
 // TODO use immutable collection for events
 public record EventStream<ID>(ID id, DomainEvent[] events) implements Iterable<DomainEvent> {
 
+    // TODO use it everywhere
+    public static <T> EventStream<T> of(final T id, final DomainEvent... events) {
+        return new EventStream<>(id, events);
+    }
+
     public Iterator<DomainEvent> iterator() {
         return this.new EventStreamIterator();
     }

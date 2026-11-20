@@ -29,7 +29,11 @@ public class SpringJpaEventStoreTest {
     private SpringJpaEventStore store;
 
     private NewPuzzleCreatedEvent createSomeEvent() {
-        return new NewPuzzleCreatedEvent(USER_ID, LocalDateTime.now(), SessionId.random(), new AudioPerfectPitchPuzzle(AUDIO_PERFECT_PITCH_EXERCISE, new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER)));
+        return createSomeEvent(SessionId.random());
+    }
+
+    private NewPuzzleCreatedEvent createSomeEvent(final SessionId sessionId) {
+        return new NewPuzzleCreatedEvent(USER_ID, LocalDateTime.now(), sessionId, new AudioPerfectPitchPuzzle(AUDIO_PERFECT_PITCH_EXERCISE, new AudioPerfectPitchSolution(FIRST_NOTE_NUMBER)));
     }
 
     @BeforeEach
@@ -39,8 +43,15 @@ public class SpringJpaEventStoreTest {
     }
 
     @Test
-    void getAllEventsWhenNoEvents() {
+    void getAllEventsByUUIDWhenNoEvents() {
         var events = store.getAllEvents(UUID.randomUUID());
+
+        assertEquals(0, events.events().length);
+    }
+
+    @Test
+    void getAllEventsBySessionIdWhenNoEvents() {
+        var events = store.getAllEvents(SessionId.random());
 
         assertEquals(0, events.events().length);
     }
@@ -52,9 +63,28 @@ public class SpringJpaEventStoreTest {
 
         store.append(eventStream);
 
-        var events = store.getAllEvents(event.sessionId).events();
+        var events = store.getAllEvents(event.sessionId)
+                .events();
         assertEquals(1, events.length);
         var obtainedEvent = events[0];
         assertEquals(event, obtainedEvent);
+    }
+
+    @Test
+    void appendTwoEvents() {
+        var sessionId = SessionId.random();
+        var event1 = createSomeEvent(sessionId);
+        var event2 = createSomeEvent(sessionId);
+        var eventStream = EventStream.of(sessionId, event1, event2);
+
+        store.append(eventStream);
+
+        var events = store.getAllEvents(sessionId)
+                .events();
+        assertEquals(2, events.length);
+        var obtainedEvent1 = events[0];
+        assertEquals(event1, obtainedEvent1);
+        var obtainedEvent2 = events[1];
+        assertEquals(event2, obtainedEvent2);
     }
 }
