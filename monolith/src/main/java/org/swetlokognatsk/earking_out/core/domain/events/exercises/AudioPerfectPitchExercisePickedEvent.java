@@ -3,7 +3,11 @@ package org.swetlokognatsk.earking_out.core.domain.events.exercises;
 import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.perfectpitch.AudioPerfectPitchExercise;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public final class AudioPerfectPitchExercisePickedEvent extends ExercisePickedEvent<AudioPerfectPitchExercise> {
     private static final long serialVersionUID = 1L;
 

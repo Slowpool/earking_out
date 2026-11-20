@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.exercises.Exercise;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 abstract class ExercisePickedEvent<E extends Exercise> extends DomainEvent {
     private static final long serialVersionUID = 1L;
 

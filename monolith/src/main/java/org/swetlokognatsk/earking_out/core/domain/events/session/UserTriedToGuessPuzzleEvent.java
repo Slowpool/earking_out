@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.Solution;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public final class UserTriedToGuessPuzzleEvent extends SessionEvent {
     private static final long serialVersionUID = 1L;
 

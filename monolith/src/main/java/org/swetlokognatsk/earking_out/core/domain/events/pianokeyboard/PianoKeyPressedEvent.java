@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.keyboard.PianoKeyboardId;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public final class PianoKeyPressedEvent extends PianoKeyActionEvent {
     private static final long serialVersionUID = 1L;
 

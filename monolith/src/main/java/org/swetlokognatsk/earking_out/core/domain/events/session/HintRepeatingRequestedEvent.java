@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.Puzzle;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public final class HintRepeatingRequestedEvent extends SessionEvent {
     private static final long serialVersionUID = 1L;
 

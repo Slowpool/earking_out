@@ -4,8 +4,13 @@ import java.time.LocalDateTime;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.session.SessionId;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class SessionEvent extends DomainEvent {
+
     private static final long serialVersionUID = 1L;
 
     public final SessionId sessionId;
