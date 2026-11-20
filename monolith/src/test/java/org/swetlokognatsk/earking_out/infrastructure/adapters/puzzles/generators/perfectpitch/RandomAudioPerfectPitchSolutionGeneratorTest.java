@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.*;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.TestUserResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.PuzzleConfigAggregatesFactoryResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.factories.perfectpitch.AudioPerfectPitchConfigAggregatesFactory;
@@ -19,7 +20,7 @@ import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.confi
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.puzzles.configs.perfectpitch.AudioPerfectPitchConfigDTO;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.base.SerializationCloner;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.identity.TestUserResolver;
+
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;
 
 @EOSpringBootTest

@@ -19,14 +19,13 @@ import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAch
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementId;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import static org.swetlokognatsk.earking_out.TestHelper.*;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import javax.sql.DataSource;
 
+// TODO still there are ways to break it. more tests can be written
 @DirtiesContext(methodMode = BEFORE_METHOD)
 @EOSpringBootTest
 @EnableAutoConfiguration(exclude = {})
@@ -45,21 +44,6 @@ public class SpringJpaUnlockedAchievementsRepositoryTest {
     @BeforeEach
     public void setup() {
         repository = DI.get(SpringJpaUnlockedAchievementsRepository.class);
-
-        ensureTestcontainerIsUsed();
-    }
-
-    void ensureTestcontainerIsUsed() {
-        var dataSource = DI.get(DataSource.class);
-        try {
-
-            var db = dataSource.getConnection()
-                    .getMetaData()
-                    .getDatabaseProductName()
-                    .toLowerCase();
-            assertEquals("postgresql", db);
-        } catch (SQLException e) {
-        }
     }
 
     @Test

@@ -1,16 +1,18 @@
-package org.swetlokognatsk.earking_out.infrastructure.adapters.identity;
+package org.swetlokognatsk.earking_out.core.domain.model.identity;
 
+import static org.swetlokognatsk.earking_out.TestHelper.USER_ID;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserResolver;
 import org.swetlokognatsk.earking_out.infrastructure.annotations.TestComponent;
 import lombok.Getter;
+import java.util.UUID;
 
 @TestComponent
 public class TestUserResolver implements UserResolver {
-    private UserId userId = new UserId(1);
+    private UserId userId = USER_ID;
     @Getter
-    private UserUuid uuid = new UserUuid(java.util.UUID.fromString("00000000-0000-0000-0000-000000000001"));
+    private UserUuid uuid = new UserUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
     @Getter
     private String name = "desktop_user";
 

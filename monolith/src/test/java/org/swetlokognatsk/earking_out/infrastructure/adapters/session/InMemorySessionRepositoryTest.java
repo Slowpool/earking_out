@@ -6,6 +6,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.swetlokognatsk.earking_out.EOSpringBootTest;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.TestUserResolver;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.puzzles.configs.PuzzleConfigTestHelper;
@@ -15,7 +16,6 @@ import org.swetlokognatsk.earking_out.core.domain.model.session.factories.Sessio
 import org.swetlokognatsk.earking_out.core.domain.model.session.perfectpitch.AudioPerfectPitchSessionAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.AudioPerfectPitchSolution;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
-import org.swetlokognatsk.earking_out.infrastructure.adapters.identity.TestUserResolver;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.puzzles.generators.perfectpitch.FakeAudioPerfectPitchSolutionGenerator;
 import org.swetlokognatsk.earking_out.infrastructure.adapters.session.perfectpitch.InMemoryAudioPerfectPitchSessionRepository;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.*;

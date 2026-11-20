@@ -1,7 +1,34 @@
 package org.swetlokognatsk.earking_out;
 
+import static org.junit.jupiter.api.Assertions.*;
+import java.sql.SQLException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import javax.sql.DataSource;
 
 public final class TestHelper {
     public static final UserId USER_ID = new UserId(1);
+
+    public static void ensureH2IsUsed() {
+        ensureThisDatabaseIsUsed("H2");
+    }
+
+    public static void ensurePostgresIsUsed() {
+        ensureThisDatabaseIsUsed("postgresql");
+    }
+
+    private static void ensureThisDatabaseIsUsed(String thisDatabase) {
+        var dataSource = DI.get(DataSource.class);
+        thisDatabase = thisDatabase.toLowerCase();
+        try {
+            var db = dataSource.getConnection()
+                    .getMetaData()
+                    .getDatabaseProductName()
+                    .toLowerCase();
+            assertEquals(thisDatabase, db);
+        } catch (SQLException e) {
+            fail();
+        }
+    }
+
 }

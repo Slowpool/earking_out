@@ -21,7 +21,7 @@ import java.util.Map;
 @EOSpringBootTest
 public class NotesParsingServiceTest {
 
-    private static final NotesParsingService noteParser = DI.get(NotesParsingService.class);
+    private NotesParsingService noteParser;
 
     // TODO think about this arrays mess
     private static final String[] CORRECT_TEXT_NOTES = {
@@ -81,6 +81,11 @@ public class NotesParsingServiceTest {
 
             assertt.accept(textNote, parsedNote, i);
         }
+    }
+
+    @BeforeEach
+    public void setup() {
+        noteParser = DI.get(NotesParsingService.class);
     }
 
     @Test
