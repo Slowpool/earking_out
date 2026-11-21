@@ -7,13 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.swetlokognatsk.earking_out.core.domain.events.DomainEvent;
+import org.swetlokognatsk.earking_out.core.domain.model.achievements.Achievement;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.AchievementTypes;
+import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementDTO;
+import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementExtendedDTO;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.AchievementService;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
 import lombok.AllArgsConstructor;
 import static org.swetlokognatsk.earking_out.SpringProfiles.WEB;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -26,9 +30,9 @@ public class InnerApiController {
     private final EventStore eventStore;
 
     // TODO add api key check
-    @GetMapping("/achievements")
-    public ResponseEntity<?> getAchievements(@RequestParam final AchievementTypes type, @RequestParam(required = false) final UserId userId) {
-        var achievements = achievementService.get(type, userId);
+    @GetMapping("/unlocked-achievements")
+    public ResponseEntity<?> getUnlockedAchievements(@RequestParam final UserId userId) {
+        var achievements = achievementService.getUnlockedAchievements(userId, true);
         var body = new HashMap<String, Object>();
         body.put("achievements", achievements);
         return ok(body);

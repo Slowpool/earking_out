@@ -1,6 +1,7 @@
 package org.swetlokognatsk.earking_out.infrastructure.adapters.achievements;
 
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,9 +13,12 @@ import org.swetlokognatsk.earking_out.core.domain.model.achievements.Achievement
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.NewUnlockedAchievement;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementAggregatesFactory;
+import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementDTO;
+import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementExtendedDTO;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementId;
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.services.app.dto.achievements.UnlockedAchievementDTOAssembler;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.piano.asdf;
 import org.swetlokognatsk.earking_out.core.ports.achievements.UnlockedAchievementsRepository;
 import jakarta.persistence.EntityManager;
@@ -64,16 +68,20 @@ public class SpringJpaUnlockedAchievementsRepository implements UnlockedAchievem
     }
 
     public Set<UnlockedAchievementAggregate> get(final UserId userId) {
+        var entities = queryByUserId(userId)
+                .getResultList();
+        return mapToAggregates(entities);
+    }
+
+    private TypedQuery<UnlockedAchievementEntity> queryByUserId(final UserId userId) {
         var jpql = """
                 SELECT unlockedAchievement
                 FROM UnlockedAchievementEntity unlockedAchievement
                 WHERE unlockedAchievement.userId = :userId
                 """;
-        var entities = getEntityManager()
+        return getEntityManager()
                 .createQuery(jpql, UnlockedAchievementEntity.class)
-                .setParameter("userId", userId.id())
-                .getResultList();
-        return mapToAggregates(entities);
+                .setParameter("userId", userId.id());
     }
 
     private Set<UnlockedAchievementAggregate> mapToAggregates(final List<UnlockedAchievementEntity> entities) {
@@ -104,6 +112,17 @@ public class SpringJpaUnlockedAchievementsRepository implements UnlockedAchievem
         }
 
         return mapToAggregate(entity);
+    }
+
+    public Set<UnlockedAchievementDTO> getDto(final UserId userId) {
+        var aggregates = get(userId)
+                .toArray(UnlockedAchievementAggregate[]::new);
+        var dtos = UnlockedAchievementDTOAssembler.assemble(aggregates);
+        return new HashSet<>(Arrays.asList(dtos));
+    }
+
+    public Set<UnlockedAchievementExtendedDTO> getDtoWithAchievements(final UserId userId) {
+
     }
 
     @Transactional
