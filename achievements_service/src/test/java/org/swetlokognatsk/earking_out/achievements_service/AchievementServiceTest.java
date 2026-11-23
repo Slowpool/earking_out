@@ -12,7 +12,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.UserId;
-import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.Achievements;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements.UnlockedAchievement;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEvent;
 import org.swetlokognatsk.earking_out.achievements_service.core.domain.model.events.DomainEvents;

@@ -1,5 +1,7 @@
 package org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements;
 
-public record AchievementId(String id) {
-    
+import com.fasterxml.jackson.annotation.JsonValue;
+
+public record AchievementId(@JsonValue String id) {
+
 }

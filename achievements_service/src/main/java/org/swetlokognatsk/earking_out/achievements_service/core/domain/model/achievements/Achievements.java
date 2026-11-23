@@ -1,5 +1,6 @@
 package org.swetlokognatsk.earking_out.achievements_service.core.domain.model.achievements;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
