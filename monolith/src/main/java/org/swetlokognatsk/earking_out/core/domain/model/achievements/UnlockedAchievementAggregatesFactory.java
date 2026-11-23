@@ -14,6 +14,10 @@ public class UnlockedAchievementAggregatesFactory extends AggregatesFactory<Unlo
     }
 
     public UnlockedAchievementAggregate create(final UnlockedAchievementId id, final UserId userId, final AchievementId achievementId, final LocalDateTime unlockedOn) {
-        return new UnlockedAchievementAggregate(id, userId, achievementId, unlockedOn);
+        return create(id, userId, achievementId, unlockedOn, null);
+    }
+
+    public UnlockedAchievementAggregate create(final UnlockedAchievementId id, final UserId userId, final AchievementId achievementId, final LocalDateTime unlockedOn, final Achievement achievement) {
+        return new UnlockedAchievementAggregate(id, userId, achievementId, unlockedOn, achievement);
     }
 }

@@ -2,6 +2,7 @@ package org.swetlokognatsk.earking_out.core.ports.achievements;
 
 import java.util.Set;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.AchievementId;
+import org.swetlokognatsk.earking_out.core.domain.model.achievements.AchievementTechnicalName;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementId;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementDTO;
@@ -12,7 +13,11 @@ import org.swetlokognatsk.earking_out.core.ports.base.TypedAggregateRepository;
 public interface UnlockedAchievementsRepository extends TypedAggregateRepository<UnlockedAchievementId, UnlockedAchievementAggregate> {
     boolean exists(UserId userId, AchievementId achievementId);
 
+    boolean exists(UserId userId, AchievementTechnicalName technicalName);
+
     UnlockedAchievementAggregate get(UserId userId, AchievementId achievementId);
+
+    AchievementId getAchievementId(AchievementTechnicalName technicalName);
 
     Set<UnlockedAchievementAggregate> get(UserId userId);
 

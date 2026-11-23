@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.swetlokognatsk.earking_out.core.ports.achievements.UnlockedAchievementsRepository;
 import org.swetlokognatsk.earking_out.core.ports.events.messagebroker.MessageBroker;
 import org.swetlokognatsk.earking_out.core.ports.eventsourcing.EventStore;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import static org.swetlokognatsk.earking_out.SpringProfiles.TEST;
 import org.mockito.Mockito;
 
@@ -30,5 +31,11 @@ public class TestConfig {
     @ConditionalOnMissingBean
     MessageBroker messageBroker() {
         return Mockito.mock(MessageBroker.class);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    UserRepository userRepository() {
+        return Mockito.mock(UserRepository.class);
     }
 }

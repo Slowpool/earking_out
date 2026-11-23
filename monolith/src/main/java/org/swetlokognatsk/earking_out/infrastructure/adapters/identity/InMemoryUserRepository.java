@@ -5,7 +5,8 @@ import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.swetlokognatsk.earking_out.infrastructure.annotations.TestRepository;
 
-@TestRepository
+// @TestRepository
+@Deprecated(forRemoval = true)
 public class InMemoryUserRepository implements UserRepository {
 
     public UserAggregate createAndSaveGuestUser(final String namePrefix) {

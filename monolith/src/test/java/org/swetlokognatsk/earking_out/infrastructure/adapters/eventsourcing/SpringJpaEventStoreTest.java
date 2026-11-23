@@ -12,13 +12,11 @@ import org.swetlokognatsk.earking_out.core.domain.model.solutions.perfectpitch.A
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.swetlokognatsk.earking_out.SpringProfiles.*;
-import static org.swetlokognatsk.earking_out.TestHelper.USER_ID;
+import static org.swetlokognatsk.earking_out.TestHelper.*;
 import static org.swetlokognatsk.earking_out.core.domain.model.exercises.ExercisesFactory.AUDIO_PERFECT_PITCH_EXERCISE;
 import static org.swetlokognatsk.earking_out.core.domain.model.piano.key.PianoKeyNumber.FIRST_NOTE_NUMBER;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import javax.sql.DataSource;
 import org.junit.jupiter.api.*;
 
 @EOSpringBootTest

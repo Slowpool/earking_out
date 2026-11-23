@@ -32,4 +32,6 @@
 
     <include file="1795000561_add_some_achievements.xml" relativeToChangelogFile="true" />
 
+    <include file="1795461527_add_test_users.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

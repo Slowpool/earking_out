@@ -21,14 +21,16 @@ import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAch
 import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.TestUserResolver;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import static org.swetlokognatsk.earking_out.TestHelper.*;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 import javax.sql.DataSource;
 
-// TODO still there are ways to break it. more tests can be written
+// TODO still there are ways to fail some tests. more tests can be written
 @DirtiesContext(methodMode = BEFORE_METHOD)
 @EOSpringBootTest
 @EnableAutoConfiguration(exclude = {})
@@ -43,7 +45,8 @@ public class SpringJpaUnlockedAchievementsRepositoryTest {
     private TestUserResolver userResolver;
 
     private UnlockedAchievementAggregate newUnlockedAchievementAggregate() {
-        return new UnlockedAchievementAggregate(UnlockedAchievementId.empty(), userResolver.getCurrentUserId(), AchievementId.random(), LocalDateTime.now());
+        var achievementId = new AchievementId(UUID.fromString("251f5a5c-3611-41fd-9c4d-f6a7831ca5c6"));
+        return new UnlockedAchievementAggregate(UnlockedAchievementId.empty(), userResolver.getCurrentUserId(), achievementId, LocalDateTime.now(), null);
     }
 
     private void assertAchievementsEqual(final UnlockedAchievementAggregate expectedAchievement, final UnlockedAchievementAggregate achievement) {

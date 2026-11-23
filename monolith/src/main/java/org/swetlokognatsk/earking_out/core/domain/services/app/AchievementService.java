@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.AchievementTypes;
-import org.swetlokognatsk.earking_out.core.domain.model.achievements.NewUnlockedAchievement;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementAggregate;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAchievementDTO;
@@ -14,6 +13,9 @@ import org.swetlokognatsk.earking_out.core.domain.model.achievements.UnlockedAch
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
 import org.swetlokognatsk.earking_out.core.domain.services.app.dto.achievements.UnlockedAchievementDTOAssembler;
 import org.swetlokognatsk.earking_out.core.ports.achievements.UnlockedAchievementsRepository;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.events.messagebroker.NewUnlockedAchievementDTO;
+import org.swetlokognatsk.earking_out.core.domain.model.achievements.NewUnlockedAchievement;
+
 import lombok.AllArgsConstructor;
 
 @Service
@@ -24,9 +26,9 @@ public class AchievementService {
     final private UnlockedAchievementAggregatesFactory aggregatesFactory;
 
     public <UADTO extends UnlockedAchievementDTO> Set<UADTO> getUnlockedAchievements(final UserId userId, final boolean loadAchievements) {
-        return loadAchievements
+        return (Set<UADTO>) (loadAchievements
                 ? repository.getDto(userId)
-                : repository.getDtoWithAchievements(userId);
+                : repository.getDtoWithAchievements(userId));
     }
 
     public void handleNewUnlockedAchievement(final NewUnlockedAchievement newUnlockedAchievement) {
@@ -34,7 +36,8 @@ public class AchievementService {
             return;
         }
 
-        var aggregate = aggregatesFactory.create(UnlockedAchievementId.empty(), newUnlockedAchievement.userId(), newUnlockedAchievement.id(), newUnlockedAchievement.unlockedOn());
+        var achievementId = repository.getAchievementId(newUnlockedAchievement.id());
+        var aggregate = aggregatesFactory.create(UnlockedAchievementId.empty(), newUnlockedAchievement.userId(), achievementId, newUnlockedAchievement.unlockedOn());
         var unlockedAchievementId = repository.saveAndGetId(aggregate);
 
         // TODO send to websockets

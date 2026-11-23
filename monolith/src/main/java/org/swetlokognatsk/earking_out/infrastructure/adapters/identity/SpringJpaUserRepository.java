@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Repository
-@Profile({ DESKTOP, WEB })
+@Profile({ DESKTOP, WEB, JPA })
 @AllArgsConstructor
 public class SpringJpaUserRepository implements UserRepository {
 

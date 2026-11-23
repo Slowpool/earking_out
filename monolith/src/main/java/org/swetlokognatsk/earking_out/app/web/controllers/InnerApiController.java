@@ -39,7 +39,8 @@ public class InnerApiController {
     }
 
     @GetMapping("/domain-events")
-    public ResponseEntity<?> getDomainEvents(@RequestParam final AchievementTypes type, @RequestParam(required = false) final UserId userId) {
+    // TODO create custom orderBy and orderByDirection enums
+    public ResponseEntity<?> getDomainEvents(@RequestParam(required = false) final String eventTypes, @RequestParam(required = false) final UserId userId, @RequestParam(required = false) final String orderBy, @RequestParam(required = false) final String orderByDirection) {
         // var domainEvents = eventStore.getAll();
         DomainEvent[] domainEvents = null;
         var body = new HashMap<String, Object>();

@@ -18,13 +18,12 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "unlocked_achievements")
-@NamedEntityGraph (
-    name = "unlockedAchievements.withAchievements",
-    attributeNodes = @NamedAttributeNode("achievement")
-)
+@NamedEntityGraph(name = UnlockedAchievementEntity.ENTITY_GRAPH_WITH_ACHIEVEMENTS, attributeNodes = @NamedAttributeNode("achievement"))
 @NoArgsConstructor
 @Getter
 public class UnlockedAchievementEntity {
+
+    public static final String ENTITY_GRAPH_WITH_ACHIEVEMENTS = "unlockedAchievements.withAchievements";
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -44,7 +43,7 @@ public class UnlockedAchievementEntity {
     private boolean notificationIsSent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "achievement_id")
+    @JoinColumn(name = "achievement_id", insertable = false, updatable = false)
     private AchievementEntity achievement;
 
     public AchievementEntity getAchievement() {

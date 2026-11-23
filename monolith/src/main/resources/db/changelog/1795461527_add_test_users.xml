@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- yes, it's a dirty hack, but i'll remove it later and use more clean test approach with dynamic users creating -->
+    <changeSet id="17" author="slowpool">
+        <insert tableName="users">
+            <column name="id" value="1" />
+            <column name="uuid" value="00000000-0000-0000-0000-000000000001" />
+            <column name="name" value="user_1" />
+            <column name="lang" value="en" />
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="2" />
+            <column name="uuid" value="00000000-0000-0000-0000-000000000002" />
+            <column name="name" value="user_2" />
+            <column name="lang" value="en" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

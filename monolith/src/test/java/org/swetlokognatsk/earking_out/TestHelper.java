@@ -2,9 +2,19 @@ package org.swetlokognatsk.earking_out;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.sql.SQLException;
+import java.util.Set;
+import org.swetlokognatsk.earking_out.core.domain.model.base.AggregateNotFoundException;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.Languages;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.TestUserResolver;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserAggregatesFactory;
 import org.swetlokognatsk.earking_out.core.domain.model.identity.UserId;
+import org.swetlokognatsk.earking_out.core.domain.model.identity.UserUuid;
 import org.swetlokognatsk.earking_out.core.ports.di.DI;
+import org.swetlokognatsk.earking_out.core.ports.identity.UserRepository;
+import org.swetlokognatsk.earking_out.infrastructure.adapters.identity.SpringJpaUserRepository;
+import jakarta.persistence.EntityManager;
+import liquibase.exception.LiquibaseException;
+import liquibase.integration.spring.SpringLiquibase;
 import javax.sql.DataSource;
 
 public final class TestHelper {
@@ -46,5 +56,16 @@ public final class TestHelper {
     public static void switchToAnotherUser() {
         DI.get(TestUserResolver.class)
                 .setCurrentUserId(ANOTHER_USER_ID);
+    }
+
+    public static void rerunLiquibaseMigration() {
+        var liquibase = DI.get(SpringLiquibase.class);
+
+        liquibase.setDropFirst(true);
+        try {
+            liquibase.afterPropertiesSet();
+        } catch (LiquibaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

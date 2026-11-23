@@ -11,10 +11,13 @@ public class UnlockedAchievementAggregate extends AggregateRoot<UnlockedAchievem
     public final LocalDateTime unlockedOn;
     public boolean notificationIsSent;
 
-    public UnlockedAchievementAggregate(final UnlockedAchievementId id, final UserId userId, final AchievementId achievementId, final LocalDateTime unlockedOn) {
+    public final Achievement achievement;
+
+    public UnlockedAchievementAggregate(final UnlockedAchievementId id, final UserId userId, final AchievementId achievementId, final LocalDateTime unlockedOn, final Achievement achievement) {
         super(id);
         this.userId = userId;
         this.achievementId = achievementId;
         this.unlockedOn = unlockedOn;
+        this.achievement = achievement;
     }
 }
