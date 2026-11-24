@@ -44,9 +44,13 @@ public class SpringJpaUnlockedAchievementsRepositoryTest {
     private SpringJpaUnlockedAchievementsRepository repository;
     private TestUserResolver userResolver;
 
-    private UnlockedAchievementAggregate newUnlockedAchievementAggregate() {
-        var achievementId = new AchievementId(UUID.fromString("251f5a5c-3611-41fd-9c4d-f6a7831ca5c6"));
+    private UnlockedAchievementAggregate newUnlockedAchievementAggregate(final String uuid) {
+        var achievementId = new AchievementId(UUID.fromString(uuid));
         return new UnlockedAchievementAggregate(UnlockedAchievementId.empty(), userResolver.getCurrentUserId(), achievementId, LocalDateTime.now(), null);
+    }
+
+    private UnlockedAchievementAggregate newUnlockedAchievementAggregate() {
+        return newUnlockedAchievementAggregate(ACHIEVEMENT_ID_1);
     }
 
     private void assertAchievementsEqual(final UnlockedAchievementAggregate expectedAchievement, final UnlockedAchievementAggregate achievement) {
@@ -176,9 +180,9 @@ public class SpringJpaUnlockedAchievementsRepositoryTest {
 
     @Test
     void getByUserIdTwoAchievements() {
-        var unlockedAchievement1 = newUnlockedAchievementAggregate();
+        var unlockedAchievement1 = newUnlockedAchievementAggregate(ACHIEVEMENT_ID_1);
         repository.save(unlockedAchievement1);
-        var unlockedAchievement2 = newUnlockedAchievementAggregate();
+        var unlockedAchievement2 = newUnlockedAchievementAggregate(ACHIEVEMENT_ID_2);
         repository.save(unlockedAchievement2);
 
         var achievements = repository.get(USER_ID);

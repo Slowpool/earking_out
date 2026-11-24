@@ -21,6 +21,10 @@ public final class TestHelper {
     public static final UserId USER_ID = new UserId(1);
     public static final UserId ANOTHER_USER_ID = new UserId(2);
 
+    public static final String ACHIEVEMENT_ID_1 = "251f5a5c-3611-41fd-9c4d-f6a7831ca5c6";
+    public static final String ACHIEVEMENT_ID_2 = "59691901-a5d1-436a-afea-05f09ac42aad";
+    public static final String ACHIEVEMENT_ID_3 = "57c6cf73-d553-44f6-9aed-8f840cfb8d94";
+
     public static void ensureH2IsUsed() {
         ensureThisDatabaseIsUsed("H2");
     }
